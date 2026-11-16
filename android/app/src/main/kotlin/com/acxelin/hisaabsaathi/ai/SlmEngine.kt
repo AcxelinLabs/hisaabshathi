@@ -1,7 +1,6 @@
 package com.acxelin.hisaabsaathi.ai
 
 import android.content.Context
-import com.acxelin.hisaabsaathi.core.Slm
 import com.acxelin.hisaabsaathi.models.Catalog
 import com.acxelin.hisaabsaathi.models.PackManager
 import com.google.mediapipe.tasks.genai.llminference.LlmInference
@@ -11,10 +10,10 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /**
- * The on-device small language model (Qwen2.5 via MediaPipe/LiteRT). It is asked only to
- * label what the worker said as JSON; [Slm.choose] then rejects any answer containing a
- * number that was not spoken. Returns null whenever the model is missing or fails, and the
- * caller keeps the rule-based result.
+ * The on-device small language model (Qwen2.5 via MediaPipe/LiteRT). It labels what the
+ * worker said as JSON ([Slm.choose] rejects any answer containing a number that was not
+ * spoken) and answers questions the fixed replies do not cover. Returns null whenever the
+ * model is missing or fails, and the caller falls back to rules and fixed replies.
  */
 class SlmEngine(private val context: Context, private val packs: PackManager) {
     private val lock = Mutex()
@@ -24,7 +23,7 @@ class SlmEngine(private val context: Context, private val packs: PackManager) {
 
     fun available(): Boolean = installed() != null
 
-    suspend fun label(transcript: String): String? = withContext(Dispatchers.Default) {
+    suspend fun generate(prompt: String): String? = withContext(Dispatchers.Default) {
         lock.withLock {
             val pack = installed() ?: return@withLock null
             runCatching {
@@ -35,7 +34,7 @@ class SlmEngine(private val context: Context, private val packs: PackManager) {
                         .setMaxTokens(768)
                         .build(),
                 ).also { llm = it }
-                engine.generateResponse(Slm.prompt(transcript))
+                engine.generateResponse(prompt)
             }.getOrNull()
         }
     }

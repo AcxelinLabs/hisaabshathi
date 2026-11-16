@@ -43,10 +43,10 @@ object RuleBasedExtractor {
     ) + kw("expense")
     private val wage = words(
         "मजदूरी दिहाड़ी वेतन तनख्वाह पगार कमाया कमाई कमाए कमाये majdoori mazdoori majduri dihadi wage wages " +
-            "salary earned kamaya kamai kamaye ମଜୁରୀ ମଜୁରି ଦରମା ରୋଜଗାର",
+            "salary earned earn earnings kamaya kamai kamaye ମଜୁରୀ ମଜୁରି ଦରମା ରୋଜଗାର",
     ) + kw("wage")
     private val received = words(
-        "मिला मिली मिले पेमेंट भुगतान mila mili mile received paid payment ମିଳିଲା ମିଳିଲେ ପାଇଲି ପେମେଣ୍ଟ",
+        "मिला मिली मिले पेमेंट भुगतान mila mili mile received got get paid payment ମିଳିଲା ମିଳିଲେ ପାଇଲି ପେମେଣ୍ଟ",
     ) + kw("received")
     private val workContext = words("काम काम किया kaam work worked କାମ") + kw("workContext")
     private val separators = words("और फिर तथा and then aur phir ଆଉ ଏବଂ ଓ") + kw("separators")
@@ -158,6 +158,9 @@ object RuleBasedExtractor {
                 Kind.RECEIVED in kinds -> paid += value
                 earned == null && hasWorkContext -> earned = value
                 else -> {
+                    // "एक चुटकुला सुनाओ": a lone small number with no rupee word is just a word.
+                    val saysMoney = (toks.getOrNull(i + 1) as? Word)?.text in money || (toks.getOrNull(i - 1) as? Word)?.text in money
+                    if (value < 10 && !saysMoney) continue
                     // A bare amount: most often the day's wage. Ask the worker to check.
                     if (earned == null) earned = value
                     lowConfidence = true
@@ -232,7 +235,8 @@ object RuleBasedExtractor {
         if (!asksHowMuch) return null
         // "how much" with amounts in it is an entry, not a question.
         if (toks.any { it is Num && abs(it.value) > 1.0 }) return null
-        val period = periodWords.firstOrNull { (_, ws) -> wordSet.any { it in ws } }?.first ?: QueryPeriod.WEEK
+        val saidPeriod = periodWords.firstOrNull { (_, ws) -> wordSet.any { it in ws } }?.first
+        val period = saidPeriod ?: QueryPeriod.WEEK
         val topic = when {
             wordSet.any { it in dueWords } -> QueryTopic.DUE
             wordSet.any { it in advance } -> QueryTopic.ADVANCE
@@ -240,6 +244,8 @@ object RuleBasedExtractor {
             wordSet.any { it in wage } -> QueryTopic.EARNED
             else -> QueryTopic.ALL
         }
+        // "What is your name?" has a question word but nothing about the ledger: not ours.
+        if (topic == QueryTopic.ALL && saidPeriod == null) return null
         return Query(period, topic)
     }
 }

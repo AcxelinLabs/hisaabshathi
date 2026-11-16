@@ -20,6 +20,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -119,20 +121,20 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
     val level by vm.level.collectAsStateWithLifecycle()
 
     Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp).widthIn(max = 560.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Pill(settings.lang.nativeName)
-            if (settings.region.isNotEmpty()) Pill(settings.region)
-        }
         TotalsCard("${s.today}, ${LocalDate.now().format(dayFormat)}", vm.totals(QueryPeriod.DAY, entries), s)
 
         (capture as? Capture.Message)?.let {
-            Section(color = Color(0xFFFFF8E1)) {
-                Text(it.text, fontSize = 18.sp)
-                TextButton(onClick = vm::dismiss, modifier = Modifier.align(Alignment.End)) { Text(s.done) }
+            // The spoken answer, also in writing. Tap anywhere on it to put it away.
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Notice).clickable(onClickLabel = s.done, onClick = vm::dismiss).padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(it.text, fontSize = 19.sp, color = NoticeInk, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
+                Icon(Icons.Default.Close, s.done, tint = NoticeInk, modifier = Modifier.padding(start = 8.dp).size(28.dp))
             }
         }
 
@@ -205,14 +207,6 @@ fun TypeScreen(s: Strings, onBack: () -> Unit, onSubmit: (String) -> Unit) {
     }
 }
 
-@Composable
-private fun Pill(text: String) {
-    Text(
-        text, color = Ink, fontWeight = FontWeight.SemiBold, fontSize = 15.sp,
-        modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(Paper).padding(horizontal = 12.dp, vertical = 5.dp),
-    )
-}
-
 // ---------------------------------------------------------------- review (voice confirmation)
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -221,12 +215,16 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).systemBarsPadding().imePadding().padding(16.dp)) {
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(s.isThisRight, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
-            Section(color = Color(0xFFDDE1F2)) {
+            Section(color = InkWash) {
                 Text(s.youSaid, fontSize = 13.sp, color = InkSoft)
                 Text("“${r.transcript}”", fontSize = 17.sp)
             }
             if (r.lowConfidence) {
-                Section(color = Color(0xFFFFF8E1)) { Text("⚠ ${s.pleaseCheck}", fontSize = 16.sp, fontWeight = FontWeight.Medium) }
+                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Notice).padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Warning, null, tint = NoticeInk)
+                    Spacer(Modifier.width(10.dp))
+                    Text(s.pleaseCheck, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = NoticeInk)
+                }
             }
             r.drafts.forEachIndexed { i, d ->
                 Section {
@@ -240,7 +238,9 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                                         d.copy(type = type, category = if (type == EntryType.EXPENSE) d.category ?: ExpenseCategory.OTHER else null),
                                     )
                                 },
-                                label = { Text("${typeEmoji(type)} ${s.typeName(type)}", fontSize = 16.sp) },
+                                label = { Text(s.typeName(type), fontSize = 17.sp) },
+                                leadingIcon = { Icon(painterResource(typeIcon(type)), null, tint = Ink, modifier = Modifier.size(20.dp)) },
+                                modifier = Modifier.height(48.dp),
                             )
                         }
                     }
@@ -299,19 +299,19 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
 
 private val dayFormat = DateTimeFormatter.ofPattern("d MMM yyyy")
 
-/** A picture for each kind of line, for workers who do not read easily. */
-private fun typeEmoji(type: EntryType): String = when (type) {
-    EntryType.WORK -> "🧱"
-    EntryType.ADVANCE -> "🤝"
-    EntryType.PAYMENT -> "💵"
-    EntryType.EXPENSE -> "🛒"
+/** A drawn picture for each kind of line, for workers who do not read easily. */
+private fun typeIcon(type: EntryType): Int = when (type) {
+    EntryType.WORK -> R.drawable.ic_work
+    EntryType.ADVANCE -> R.drawable.ic_advance
+    EntryType.PAYMENT -> R.drawable.ic_payment
+    EntryType.EXPENSE -> R.drawable.ic_expense
 }
 
 private fun typeColor(type: EntryType): Color = when (type) {
     EntryType.WORK -> Leaf
     EntryType.ADVANCE -> Marigold
     EntryType.PAYMENT -> Ink
-    EntryType.EXPENSE -> Rule
+    EntryType.EXPENSE -> InkSoft
 }
 
 @Composable
@@ -322,8 +322,9 @@ fun LedgerScreen(vm: AppViewModel, s: Strings) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(s.noEntries, fontSize = 18.sp, color = InkSoft) }
         return
     }
+    val byDay = remember(entries) { entries.groupBy { it.epochDay } }
     LazyColumn(Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        entries.groupBy { it.epochDay }.forEach { (day, list) ->
+        byDay.forEach { (day, list) ->
             item(key = "d$day") {
                 Text(
                     LocalDate.ofEpochDay(day).format(dayFormat), fontWeight = FontWeight.SemiBold, color = InkSoft,
@@ -331,16 +332,16 @@ fun LedgerScreen(vm: AppViewModel, s: Strings) {
                 )
             }
             items(list, key = { it.id }) { e ->
-                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Paper).height(androidx.compose.foundation.layout.IntrinsicSize.Min)) {
-                    // The bar's colour says what kind of line this is.
-                    Box(Modifier.width(8.dp).fillMaxHeight().background(typeColor(e.type)))
+                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Paper)) {
                     Row(Modifier.padding(start = 12.dp, top = 10.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Box(Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)).background(typeColor(e.type)), contentAlignment = Alignment.Center) {
+                            Icon(painterResource(typeIcon(e.type)), null, tint = if (e.type == EntryType.ADVANCE) Ink else Color.White, modifier = Modifier.size(22.dp))
+                        }
+                        Spacer(Modifier.width(12.dp))
                         Column(Modifier.weight(1f)) {
                             Text(
-                                typeEmoji(e.type) + " " + (
-                                    if (e.type == EntryType.EXPENSE) "${s.typeName(e.type)}, ${s.categoryName(e.category ?: ExpenseCategory.OTHER)}"
-                                    else s.typeName(e.type)
-                                    ),
+                                if (e.type == EntryType.EXPENSE) "${s.typeName(e.type)}, ${s.categoryName(e.category ?: ExpenseCategory.OTHER)}"
+                                else s.typeName(e.type),
                                 fontSize = 17.sp, fontWeight = FontWeight.Medium,
                             )
                             val detail = s.workDetail(e.hours, e.pieces, e.ratePaise)
@@ -378,10 +379,10 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
     var editingGoal by remember { mutableStateOf(false) }
     val t = vm.totals(period, entries)
 
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp).widthIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             QueryPeriod.entries.forEach { p ->
-                FilterChip(selected = period == p, onClick = { period = p }, label = { Text(s.periodName(p)) })
+                FilterChip(selected = period == p, onClick = { period = p }, label = { Text(s.periodName(p), fontSize = 16.sp) }, modifier = Modifier.height(48.dp))
             }
         }
         TotalsCard(s.periodName(period), t, s)
@@ -396,7 +397,7 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
         }
 
         (capture as? Capture.Message)?.let {
-            Section(color = Color(0xFFFFF8E1)) { Text(it.text, fontSize = 17.sp) }
+            Section(color = Notice) { Text(it.text, fontSize = 18.sp, color = NoticeInk) }
         }
         BigButton(s.readAloud, Marigold, Modifier.fillMaxWidth()) { vm.speakSummary(period) }
         OutlinedButton(onClick = { vm.exportPdf(period) }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
@@ -465,7 +466,7 @@ fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
     val since = LocalDate.now().minusDays(30).toEpochDay()
     val recent = com.acxelin.hisaabsaathi.core.Ledger.totals(entries.filter { it.epochDay >= since })
 
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp).widthIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Section {
             Text(s.minWageTitle, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
             val hasStateRates = rates.any { it.region.equals(settings.region, ignoreCase = true) }
@@ -483,7 +484,11 @@ fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
                 Text("${s.source}: ${it.source}", fontSize = 13.sp, color = InkSoft)
             }
             Spacer(Modifier.height(8.dp))
-            Text("⚠ ${s.wageDataNote}", fontSize = 14.sp, color = Color(0xFF8D6E00))
+            Row(Modifier.clip(RoundedCornerShape(8.dp)).background(Notice).padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.Warning, null, tint = NoticeInk, modifier = Modifier.size(20.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(s.wageDataNote, fontSize = 14.sp, color = NoticeInk)
+            }
         }
 
         Section {
@@ -503,10 +508,11 @@ fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
             Text(s.evidenceBody, fontSize = 15.sp, color = InkSoft)
             Spacer(Modifier.height(8.dp))
             val intact = remember(entries) { vm.chainIntact() }
-            Text(
-                if (intact) "✔ ${s.recordIntact}" else "✖ ${s.recordBroken}",
-                color = if (intact) Green else Red, fontWeight = FontWeight.Medium,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(if (intact) Icons.Default.Check else Icons.Default.Close, null, tint = if (intact) Leaf else Sindoor)
+                Spacer(Modifier.width(6.dp))
+                Text(if (intact) s.recordIntact else s.recordBroken, color = if (intact) Leaf else Sindoor, fontWeight = FontWeight.SemiBold)
+            }
             Spacer(Modifier.height(8.dp))
             BigButton(s.exportEvidence, Ink, Modifier.fillMaxWidth()) { vm.exportEvidence() }
         }

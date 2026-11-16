@@ -4,6 +4,16 @@ package com.acxelin.hisaabsaathi.core.i18n
 internal object Ta {
     /** UI and spoken text, keyed by the exact English string used in Strings.kt. */
     val strings: Map<String, String> = mapOf(
+        "I am HisaabSaathi. I keep track of your earnings, advances and expenses." to "நான் ஹிசாப் சாத்தி. உங்க சம்பாத்தியம், அட்வான்ஸ், செலவு கணக்கை நான் வச்சுக்கிறேன்.",
+        "Hello! Tell me today's work, advance or expense." to "வணக்கம்! இன்னைக்கு வேலை, அட்வான்ஸ் இல்ல செலவு சொல்லுங்க.",
+        "Tap the mic and say how much you worked, what advance you took, or what you spent. For example: 120 pieces, rate 5 rupees, 300 advance. You can also ask: how much did I earn this week?" to "மைக்கை அழுத்தி சொல்லுங்க: எவ்வளவு வேலை செஞ்சீங்க, எவ்வளவு அட்வான்ஸ் வாங்கினீங்க, இல்ல எவ்வளவு செலவாச்சு. உதாரணம்: 120 பீஸ், 5 ரூபாய் ரேட், 300 அட்வான்ஸ். இந்த வாரம் எவ்வளவு சம்பாதிச்சேன்னு கேட்கவும் செய்யலாம்.",
+        "You are welcome." to "பரவாயில்லை, சந்தோஷம்.",
+        "I am fine. Shall we note today's work?" to "நான் நல்லா இருக்கேன். இன்னைக்கு கணக்கை எழுதலாமா?",
+        "Acxelin Labs made me for working people." to "என்னை Acxelin Labs கூலி வேலை செய்றவங்களுக்காக உருவாக்கியிருக்கு.",
+        "Your records stay locked on this phone only. No contractor, company or anyone else can see them." to "உங்க கணக்கு இந்த போன்லயே பூட்டி இருக்கும். காண்ட்ராக்டர், கம்பெனி, வேற யாரும் பார்க்க முடியாது.",
+        "All right, see you again." to "சரி, மறுபடி பார்க்கலாம்.",
+        "I did not understand that. I keep track of work, advances and expenses. Say it like this: got 500 rupees wages." to "அது எனக்கு புரியல. நான் வேலை, அட்வான்ஸ், செலவு கணக்கை வச்சுக்கிறேன். இப்படி சொல்லுங்க: 500 ரூபாய் கூலி கிடைச்சது.",
+        "Today is {0}." to "இன்னைக்கு {0}.",
         "HisaabSaathi" to "ஹிசாப் சாத்தி",
         "Next" to "அடுத்து",
         "Done" to "முடிஞ்சது",

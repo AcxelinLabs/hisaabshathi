@@ -4,6 +4,16 @@ package com.acxelin.hisaabsaathi.core.i18n
 internal object Te {
     /** UI and spoken text, keyed by the exact English string used in Strings.kt. */
     val strings: Map<String, String> = mapOf(
+        "I am HisaabSaathi. I keep track of your earnings, advances and expenses." to "నేను హిసాబ్ సాథీని. మీ సంపాదన, అడ్వాన్స్, ఖర్చుల లెక్క నేను రాసి పెడతాను.",
+        "Hello! Tell me today's work, advance or expense." to "నమస్కారం! ఈ రోజు పని, అడ్వాన్స్ లేదా ఖర్చు చెప్పండి.",
+        "Tap the mic and say how much you worked, what advance you took, or what you spent. For example: 120 pieces, rate 5 rupees, 300 advance. You can also ask: how much did I earn this week?" to "మైక్ నొక్కి చెప్పండి: ఎంత పని చేశారు, ఎంత అడ్వాన్స్ తీసుకున్నారు, లేదా ఎంత ఖర్చు అయింది. ఉదాహరణకు: 120 పీసులు, 5 రూపాయల రేటు, 300 అడ్వాన్స్. ఈ వారం ఎంత సంపాదించాను అని కూడా అడగవచ్చు.",
+        "You are welcome." to "పర్వాలేదు, సంతోషం.",
+        "I am fine. Shall we note today's work?" to "నేను బాగున్నాను. ఈ రోజు లెక్క రాద్దామా?",
+        "Acxelin Labs made me for working people." to "నన్ను Acxelin Labs కూలీ పని చేసే వారి కోసం తయారు చేసింది.",
+        "Your records stay locked on this phone only. No contractor, company or anyone else can see them." to "మీ లెక్క ఈ ఫోన్‌లోనే తాళం వేసి ఉంటుంది. కాంట్రాక్టర్, కంపెనీ లేదా ఇంకెవరూ చూడలేరు.",
+        "All right, see you again." to "సరే, మళ్ళీ కలుద్దాం.",
+        "I did not understand that. I keep track of work, advances and expenses. Say it like this: got 500 rupees wages." to "అది నాకు అర్థం కాలేదు. నేను పని, అడ్వాన్స్, ఖర్చుల లెక్క రాస్తాను. ఇలా చెప్పండి: 500 రూపాయల కూలీ వచ్చింది.",
+        "Today is {0}." to "ఈ రోజు {0}.",
         // ---- general
         "HisaabSaathi" to "హిసాబ్ సాథీ",
         "Next" to "తర్వాత",

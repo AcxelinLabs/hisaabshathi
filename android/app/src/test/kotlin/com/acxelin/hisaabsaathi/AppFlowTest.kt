@@ -103,7 +103,7 @@ class AppFlowTest {
         rule.waitUntil(15_000) { pump(); rule.onAllNodesWithText("₹600").fetchSemanticsNodes().isNotEmpty() }
         rule.onAllNodesWithText("₹300").fetchSemanticsNodes().let { check(it.size >= 2) { "advance and due should both be ₹300" } }
         shot("06-home-after-save")
-        click("हो गया")
+        rule.onNodeWithContentDescription("हो गया").performClick()
 
         // --- an expense, to prove more than one kind of entry
         click("लिखकर डालें")
@@ -113,7 +113,7 @@ class AppFlowTest {
         rule.onNode(hasSetTextAction() and hasText("80")).assertExists()
         click("सही है, सेव करें")
         waitFor("सेव हो गया")
-        click("हो गया")
+        rule.onNodeWithContentDescription("हो गया").performClick()
 
         // --- a question
         click("लिखकर डालें")
@@ -121,7 +121,18 @@ class AppFlowTest {
         click("आगे")
         waitFor("इस हफ्ते आपने 600 रुपये कमाए")
         shot("07-question-answer")
-        click("हो गया")
+
+        // --- simple questions always get an answer
+        click("लिखकर डालें")
+        rule.onNode(hasSetTextAction()).performTextInput("आपका नाम क्या है")
+        click("आगे")
+        waitFor("मैं हिसाब साथी हूँ")
+        shot("07b-name-answer")
+        click("लिखकर डालें")
+        rule.onNode(hasSetTextAction()).performTextInput("एक चुटकुला सुनाओ")
+        click("आगे")
+        waitFor("यह मैं नहीं समझा")
+        rule.onNodeWithContentDescription("हो गया").performClick()
 
         // --- other tabs
         click("खाता")

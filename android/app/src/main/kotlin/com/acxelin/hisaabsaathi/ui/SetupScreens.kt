@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -64,7 +65,8 @@ private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boole
                 Text("${s.downloading} ${(state.fraction * 100).toInt()}%")
             }
             PackState.Ready -> Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("✔ ${s.installed}", color = Green, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
+                Icon(Icons.Default.Check, null, tint = Leaf)
+                Text(s.installed, color = Leaf, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f).padding(start = 6.dp))
                 if (allowDelete) TextButton(onClick = { vm.deletePack(pack) }) { Text(s.delete, color = Red) }
             }
             is PackState.Failed -> {
@@ -80,7 +82,7 @@ private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boole
 private fun RegionPicker(vm: AppViewModel, settings: Settings) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         vm.wagePack.regions.forEach { r ->
-            FilterChip(selected = settings.region == r, onClick = { vm.setRegion(r) }, label = { Text(r, fontSize = 16.sp) })
+            FilterChip(selected = settings.region == r, onClick = { vm.setRegion(r) }, label = { Text(r, fontSize = 17.sp) }, modifier = Modifier.height(48.dp))
         }
     }
 }
@@ -95,7 +97,7 @@ private fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean
                     Button(
                         onClick = { vm.setLang(l) }, modifier = Modifier.weight(1f).height(72.dp), shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (selected) Marigold else if (onDark) Color(0xFF2C3C85) else Paper,
+                            containerColor = if (selected) Marigold else if (onDark) InkRaised else Paper,
                             contentColor = if (selected || !onDark) Ink else Color.White,
                         ),
                         // Each name is drawn in its own script's font, whatever the app language is.
@@ -135,7 +137,7 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
             }
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            if (step > 0) OutlinedButton(onClick = { step-- }, modifier = Modifier.height(64.dp)) { Text("←", fontSize = 22.sp) }
+            if (step > 0) OutlinedButton(onClick = { step-- }, modifier = Modifier.height(64.dp)) { Icon(Icons.AutoMirrored.Filled.ArrowBack, s.cancel, tint = Ink) }
             Button(
                 onClick = { if (step < 2) step++ else vm.finishOnboarding() },
                 enabled = step != 1 || settings.region.isNotEmpty(),

@@ -60,34 +60,43 @@ class LedgerTest {
 class SlmTest {
     private val said = "आज आठ घंटे काम किया एक सौ बीस पीस पांच रुपये रेट तीन सौ एडवांस लिया"
 
-    @Test fun acceptsFaithfulAnswerAndDoesTheMaths() {
-        val out = Slm.parse("""Sure: [{"type":"work","hours":8,"pieces":120,"rate":5},{"type":"advance","amount":300}] done""", said)!!
-        assertEquals(60000, out[0].amountPaise)
+    @Test fun promptListsTheSpokenNumbers() {
+        val p = Slm.prompt(said)!!
+        assertTrue(p, "in order: 8, 120, 5, 300" in p && p.trimEnd().endsWith("300="))
+        assertNull(Slm.prompt("नमस्ते"))
+    }
+
+    @Test fun buildsEntriesFromLabelsAndDoesTheMaths() {
+        val out = Slm.parse("8=hours\n120 = pieces\n5=rate\n300=advance", said)!!
+        assertEquals(DraftEntry(EntryType.WORK, 60000, hours = 8.0, pieces = 120, ratePaise = 500), out[0])
         assertEquals(DraftEntry(EntryType.ADVANCE, 30000), out[1])
     }
 
-    @Test fun rejectsInventedNumber() {
-        assertNull(Slm.parse("""[{"type":"advance","amount":3000}]""", said))
-        assertNull(Slm.parse("""[{"type":"work","pieces":120,"rate":5,"amount":700}]""", said))
-    }
-
-    @Test fun acceptsCorrectProduct() {
-        val out = Slm.parse("""[{"type":"work","pieces":120,"rate":5,"amount":600}]""", said)!!
-        assertEquals(60000, out.single().amountPaise)
-    }
-
-    @Test fun rejectsGarbage() {
+    @Test fun rejectsAnswersThatDoNotMatchWhatWasSaid() {
+        assertNull(Slm.parse("8=hours\n120=pieces\n5=rate\n3000=advance", said)) // invented number
+        assertNull(Slm.parse("8=hours\n120=pieces\n5=rate", said))                 // one missing
+        assertNull(Slm.parse("8=hours\n120=pieces\n5=rate\n300=loan", said))       // unknown label
         assertNull(Slm.parse("I cannot help with that", said))
-        assertNull(Slm.parse("""[{"type":"loan","amount":300}]""", said))
+    }
+
+    @Test fun expenseKeepsTheCategoryFromTheWords() {
+        val out = Slm.parse("80=expense", "सब्जी पर अस्सी रुपये खर्च किए")!!
+        assertEquals(DraftEntry(EntryType.EXPENSE, 8000, category = ExpenseCategory.FOOD), out.single())
     }
 
     @Test fun chooseKeepsRulesWhenModelFails() {
         val rules = RuleBasedExtractor.extract("पांच सौ")
         assertTrue(Slm.needed(rules))
         assertEquals(rules, Slm.choose(rules, "nonsense"))
-        val better = Slm.choose(rules, """[{"type":"advance","amount":500}]""")
+        val better = Slm.choose(rules, "500=advance")
         assertEquals(EntryType.ADVANCE, better.entries.single().type)
         assertTrue(!Slm.needed(RuleBasedExtractor.extract(said)))
+    }
+
+    @Test fun chatRepliesAreShortened() {
+        assertEquals("Delhi is the capital. It is big.", Slm.cleanChat("Delhi is the capital. It is big. It has many people.\nMore."))
+        assertNull(Slm.cleanChat("  "))
+        assertNull(Slm.cleanChat(null))
     }
 }
 

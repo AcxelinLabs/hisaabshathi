@@ -1,12 +1,12 @@
 package com.acxelin.hisaabsaathi.core
 
-enum class Lang(val code: String, val nativeName: String) {
-    HI("hi", "हिन्दी"),
-    OR("or", "ଓଡ଼ିଆ"),
-    TE("te", "తెలుగు"),
-    KN("kn", "ಕನ್ನಡ"),
-    TA("ta", "தமிழ்"),
-    EN("en", "English");
+enum class Lang(val code: String, val nativeName: String, val englishName: String) {
+    HI("hi", "हिन्दी", "Hindi"),
+    OR("or", "ଓଡ଼ିଆ", "Odia"),
+    TE("te", "తెలుగు", "Telugu"),
+    KN("kn", "ಕನ್ನಡ", "Kannada"),
+    TA("ta", "தமிழ்", "Tamil"),
+    EN("en", "English", "English");
 
     companion object {
         fun fromCode(code: String?): Lang = entries.firstOrNull { it.code == code } ?: HI

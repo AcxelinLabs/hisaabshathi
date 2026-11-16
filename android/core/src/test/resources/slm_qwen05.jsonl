@@ -1,0 +1,15 @@
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି 10 ଘଣ୍ଟା କାମ କଲି 700 ଟଙ୍କା ମଜୁରୀ", "output": "10 pieces\n700 hours"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ನೂರೈವತ್ತು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಹತ್ತು ರೂಪಾಯಿ ಸಾವಿರ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "12 hours\n150 pieces\n10 rate\n1000 wage\n12 expense"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఏడు గంటలు పని గంటకు అరవయ్ రూపాయలు", "output": "7= pieces\n60= hours"}
+{"task": "extract", "lang": "hi", "text": "बस में साठ रुपये खर्च हुए", "output": "60= pieces\n= wage\n= expense"}
+{"task": "extract", "lang": "en", "text": "yesterday worked 6 hours wage 650 rupees", "output": "6 hours\n650 rupees"}
+{"task": "extract", "lang": "hi-Latn", "text": "kal 6 ghante kaam 700 rupaye dihadi", "output": "hours = hours worked\npieces = pieces or items made\nrate = pay for one piece or one hour\nwage = money earned for the work\nreceived = wage money the worker was actually paid\nadvance = money taken early from the employer or contractor\nexpense = money the worker spent\nother"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ ನಾನೂರು ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "400= pieces\n1= hours\n200= advance\n300= expense\n100= other"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు పని చేశాను కూలి ఐదొందలు ఇంకా ఇవ్వలేదు", "output": "500=pieces\n=advance\n=expense\n=other"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 400 ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "output": "400= pieces or items made"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ಒಂದೂವರೆನೂರು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಮೂರ್ ರೂಪಾಯಿ ಮುನ್ನೂರು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "12 pieces\n150 hours\n3 pieces\n300 hours\nexpense\nadvance"}
+{"task": "extract", "lang": "hi", "text": "सब्जी पर 250 रुपये खर्च किए", "output": "250=pieces\nadvance=250=\nexpense=250=rupees"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ 400 ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "400=hours worked"}
+{"task": "extract", "lang": "hi", "text": "आज आठ घंटे काम किया दो सौ पीस आठ रुपये रेट पाँच सौ एडवांस लिया", "output": "8 hours\n200 pieces\n8 rate\n500 rate\nexpense"}
+{"task": "extract", "lang": "hi-Latn", "text": "thekedar se 100 rupaye advance liya", "output": "100=rates\npieces=work\nadvance=money\nexpense=money\nother=other"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு 12 மணி நேரம் வேலை மணிக்கு 80 ரூபாய்", "output": "12 pieces\n80 wage"}

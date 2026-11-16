@@ -42,6 +42,10 @@ val Marigold = Color(0xFFF2A900)
 val Sindoor = Color(0xFFD2302C)
 val Leaf = Color(0xFF1F7A4D)
 val Rule = Color(0xFFC9CEE0)
+val InkWash = Color(0xFFDDE1F2)      // quoted speech, selected-but-quiet surfaces
+val InkRaised = Color(0xFF2C3C85)    // a control sitting on the ink background
+val Notice = Color(0xFFFFF4D1)       // spoken answers and things to double-check
+val NoticeInk = Color(0xFF6B5200)    // text on Notice; 7:1 contrast
 
 // Names kept for the semantic roles used across the screens.
 val Green = Leaf

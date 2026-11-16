@@ -1,92 +1,93 @@
 package com.acxelin.hisaabsaathi.core
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.doubleOrNull
 import kotlin.math.abs
 
 /**
- * Prompt and answer handling for the on-device small language model. The model only
- * labels what was said. It never does arithmetic, and any number it returns that the
- * worker did not say makes the whole answer invalid.
+ * Prompt and answer handling for the on-device small language model.
+ *
+ * A model this small (0.5–1.5 billion parameters) invents numbers when asked to write a
+ * ledger entry itself. So the app's own code finds the numbers in what was said, and the
+ * model is asked only to say what each number is. It can therefore never add an amount
+ * the worker did not say, and all arithmetic stays in plain code.
  */
 object Slm {
-    fun prompt(transcript: String): String = """
-You convert one spoken sentence from an Indian daily-wage worker (Hindi, Odia, English or mixed) into JSON for a wage ledger.
-Output ONLY a JSON array. Each item: {"type":"work"|"advance"|"payment"|"expense","amount":number,"hours":number,"pieces":number,"rate":number,"category":"food"|"travel"|"rent"|"phone"|"health"|"home"|"other"}
-Rules:
-- work: wages earned. Give hours, pieces, rate if said. amount only if a total wage was said.
-- advance: money taken early from the employer or contractor (advance, kharchi, udhar).
-- payment: wages actually received.
-- expense: money the worker spent; set category.
-- Use only numbers that were spoken. Never calculate. Omit fields that were not said.
-- If nothing fits, output [].
-Example: "आज आठ घंटे काम किया एक सौ बीस पीस पांच रुपये रेट तीन सौ एडवांस लिया"
-[{"type":"work","hours":8,"pieces":120,"rate":5},{"type":"advance","amount":300}]
-Example: "sabzi par 80 rupaye kharch"
-[{"type":"expense","amount":80,"category":"food"}]
-Sentence: "${transcript.replace('"', ' ')}"
-JSON:""".trimStart()
+    val labels = listOf("hours", "pieces", "rate", "wage", "received", "advance", "expense", "other")
 
-    private val json = Json { isLenient = true; ignoreUnknownKeys = true }
+    private fun fmt(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
 
-    /** Returns null when the model output is unusable or names a number that was not spoken. */
-    fun parse(modelOutput: String, transcript: String, dayOffset: Int = 0): List<DraftEntry>? {
-        val start = modelOutput.indexOf('[')
-        val end = modelOutput.indexOf(']', start + 1)
-        if (start < 0 || end < 0) return null
-        val array = runCatching { json.parseToJsonElement(modelOutput.substring(start, end + 1)) }.getOrNull() as? JsonArray
-            ?: return null
-        val spoken = NumberWords.numbersIn(transcript)
-        fun said(v: Double) = spoken.any { abs(it - v) < 0.005 }
-
-        val out = ArrayList<DraftEntry>()
-        for (item in array) {
-            val o = item as? JsonObject ?: return null
-            val type = when (o.str("type")) {
-                "work" -> EntryType.WORK
-                "advance" -> EntryType.ADVANCE
-                "payment" -> EntryType.PAYMENT
-                "expense" -> EntryType.EXPENSE
-                else -> return null
-            }
-            val hours = o.num("hours")
-            val pieces = o.num("pieces")
-            val rate = o.num("rate")
-            var amount = o.num("amount")
-            if (listOfNotNull(hours, pieces, rate).any { !said(it) }) return null
-            val computed = if (rate != null) (pieces ?: hours)?.let { it * rate } else null
-            if (amount != null && !said(amount)) {
-                // The model multiplied for us; accept only if it matches our own arithmetic.
-                if (computed == null || abs(computed - amount) > 0.005) return null
-            }
-            if (type == EntryType.WORK && computed != null) amount = computed
-            if (type != EntryType.WORK && amount == null) return null
-            out += DraftEntry(
-                type = type,
-                amountPaise = Money.rupeesToPaise(amount ?: 0.0),
-                hours = hours.takeIf { type == EntryType.WORK },
-                pieces = pieces?.toInt().takeIf { type == EntryType.WORK },
-                ratePaise = rate?.let(Money::rupeesToPaise).takeIf { type == EntryType.WORK },
-                category = if (type == EntryType.EXPENSE) {
-                    ExpenseCategory.entries.firstOrNull { it.name.equals(o.str("category"), ignoreCase = true) }
-                        ?: ExpenseCategory.OTHER
-                } else null,
-                dayOffset = dayOffset,
-            )
-        }
-        return out
+    /** Null when nothing was said that could be labelled. */
+    fun prompt(transcript: String): String? {
+        val numbers = NumberWords.numbersIn(transcript)
+        if (numbers.isEmpty()) return null
+        return """
+A daily-wage worker in India said this (Hindi, Odia, Telugu, Kannada, Tamil or English):
+"${transcript.replace('"', ' ')}"
+The numbers in it, in order: ${numbers.joinToString(", ") { fmt(it) }}
+Say what each number is. Use exactly one of these words for each:
+hours = hours worked
+pieces = pieces or items made
+rate = pay for one piece or one hour
+wage = money earned for the work
+received = wage money the worker was actually paid
+advance = money taken early from the employer or contractor
+expense = money the worker spent
+other = anything else
+Answer with one line per number, in the same order, like this:
+${numbers.joinToString("\n") { fmt(it) + "=" }}
+""".trimStart()
     }
 
-    private fun JsonObject.str(key: String): String? = (this[key] as? JsonPrimitive)?.content?.lowercase()
+    /** For things that are neither a ledger entry nor one of the fixed simple questions. */
+    fun chatPrompt(question: String, languageName: String): String = """
+You are HisaabSaathi, a helper inside a wage-ledger phone app for daily-wage workers in India.
+Reply in $languageName, in one or two short, simple sentences.
+You note work, advances, wages and expenses, and tell totals. You cannot do anything else.
+If the question is simple general knowledge, answer it briefly. Otherwise say what you can do.
+Never state amounts of money the user did not say.
+User: ${question.replace('"', ' ')}
+Reply:""".trimStart()
 
-    private fun JsonObject.num(key: String): Double? {
-        val e: JsonElement = this[key] ?: return null
-        val v = (e as? JsonPrimitive)?.let { it.doubleOrNull ?: it.content.toDoubleOrNull() } ?: return null
-        return v.takeIf { it > 0 }
+    /** Trims a model reply to something short enough to speak; null if there is nothing usable. */
+    fun cleanChat(modelOutput: String?): String? {
+        val text = modelOutput?.lineSequence()?.map { it.trim() }?.firstOrNull { it.isNotEmpty() } ?: return null
+        if (text.startsWith("{") || text.startsWith("[")) return null
+        val sentences = text.split(Regex("(?<=[.!?।॥])\\s+")).take(2).joinToString(" ")
+        return sentences.take(280).trim().takeIf { it.length >= 2 }
+    }
+
+    private val line = Regex("(\\d+(?:\\.\\d+)?)\\s*[=:\\-]\\s*([a-z]+)")
+
+    /**
+     * Builds draft entries from the model's labels. Returns null when the answer does not
+     * label exactly the numbers that were spoken, in order.
+     */
+    fun parse(modelOutput: String, transcript: String, dayOffset: Int = 0): List<DraftEntry>? {
+        val spoken = NumberWords.numbersIn(transcript)
+        val found = line.findAll(modelOutput.lowercase()).map { it.groupValues[1].toDouble() to it.groupValues[2] }.toList()
+        if (spoken.isEmpty() || found.size != spoken.size) return null
+        for (i in spoken.indices) if (abs(found[i].first - spoken[i]) > 0.005 || found[i].second !in labels) return null
+
+        fun first(label: String) = found.firstOrNull { it.second == label }?.first
+        val hours = first("hours"); val pieces = first("pieces"); val rate = first("rate"); val wage = first("wage")
+        val out = ArrayList<DraftEntry>()
+        if (hours != null || pieces != null || wage != null) {
+            val earned = wage ?: if (rate != null) (pieces ?: hours)?.let { it * rate } else null
+            out += DraftEntry(
+                EntryType.WORK, Money.rupeesToPaise(earned ?: 0.0), hours = hours, pieces = pieces?.toInt(),
+                ratePaise = rate?.let(Money::rupeesToPaise), dayOffset = dayOffset,
+            )
+        }
+        // Expense categories come from the same word lists the rules use.
+        val category = RuleBasedExtractor.extract(transcript).entries.firstOrNull { it.type == EntryType.EXPENSE }?.category
+        for ((value, label) in found) {
+            val paise = Money.rupeesToPaise(value)
+            when (label) {
+                "advance" -> out += DraftEntry(EntryType.ADVANCE, paise, dayOffset = dayOffset)
+                "received" -> out += DraftEntry(EntryType.PAYMENT, paise, dayOffset = dayOffset)
+                "expense" -> out += DraftEntry(EntryType.EXPENSE, paise, category = category ?: ExpenseCategory.OTHER, dayOffset = dayOffset)
+            }
+        }
+        return out.takeIf { it.isNotEmpty() }
     }
 
     /**

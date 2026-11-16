@@ -15,7 +15,9 @@ import com.acxelin.hisaabsaathi.core.Query
 import com.acxelin.hisaabsaathi.core.QueryPeriod
 import com.acxelin.hisaabsaathi.core.QueryTopic
 import com.acxelin.hisaabsaathi.core.ReceiptReader
-import com.acxelin.hisaabsaathi.core.RuleBasedExtractor
+import com.acxelin.hisaabsaathi.core.Extraction
+import com.acxelin.hisaabsaathi.core.Understand
+import com.acxelin.hisaabsaathi.core.Understood
 import com.acxelin.hisaabsaathi.core.Slm
 import com.acxelin.hisaabsaathi.core.Strings
 import com.acxelin.hisaabsaathi.core.Wages
@@ -103,18 +105,33 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private suspend fun understand(text: String, source: String) {
         if (text.isBlank()) return say(strings.notUnderstood)
         capture.value = Capture.Thinking
-        var result = RuleBasedExtractor.extract(text)
-        if (Slm.needed(result) && app.slm.available()) {
-            app.stt.unload()
-            result = Slm.choose(result, app.slm.label(text))
-        }
-        val query = result.query
-        when {
-            query != null -> answer(query)
-            result.entries.isEmpty() -> say(strings.notUnderstood)
-            else -> review(Capture.Review(text, result.entries, result.lowConfidence, source))
+        when (val u = Understand.of(text)) {
+            is Understood.Ask -> answer(u.query)
+            is Understood.Talk -> say(strings.chat(u.chat, todayText()))
+            is Understood.Entries -> {
+                var result = u.extraction
+                // The rules were unsure: let the language model have a look, if it is installed.
+                if (result.lowConfidence && app.slm.available()) {
+                    app.stt.unload()
+                    result = Slm.choose(result, Slm.prompt(text)?.let { app.slm.generate(it) })
+                }
+                review(Capture.Review(text, result.entries, result.lowConfidence, source))
+            }
+            is Understood.Unknown -> {
+                if (app.slm.available()) {
+                    app.stt.unload()
+                    val found = Slm.choose(Extraction(text), Slm.prompt(text)?.let { app.slm.generate(it) })
+                    if (found.entries.isNotEmpty()) return review(Capture.Review(text, found.entries, true, source))
+                    Slm.cleanChat(app.slm.generate(Slm.chatPrompt(text, lang.englishName)))?.let { return say(it) }
+                }
+                // Never stay silent: say what the app can do and how to phrase it.
+                say(strings.chatFallback)
+            }
         }
     }
+
+    private fun todayText(): String =
+        LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("d MMMM yyyy", com.acxelin.hisaabsaathi.speech.locale(lang)))
 
     private fun review(r: Capture.Review) {
         capture.value = r

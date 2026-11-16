@@ -157,6 +157,31 @@ class Strings(val lang: Lang) {
     val reminderTitle get() = t("आज का हिसाब लिखा?", "ଆଜିର ହିସାବ ଲେଖିଲେ?", "Logged today's work?")
     val reminderBody get() = t("दबाएं और बोलकर काम, एडवांस या खर्च दर्ज करें।", "ଦବାଇ କହି କାମ, ଆଡଭାନ୍ସ କିମ୍ବା ଖର୍ଚ୍ଚ ଲେଖନ୍ତୁ।", "Tap and say your work, advance or expense.")
 
+
+    // ---- simple questions and greetings
+    val chatName get() = t("मैं हिसाब साथी हूँ। मैं आपकी कमाई, एडवांस और खर्च का हिसाब रखता हूँ।", "ମୁଁ ହିସାବ ସାଥୀ। ମୁଁ ଆପଣଙ୍କ ରୋଜଗାର, ଆଡଭାନ୍ସ ଓ ଖର୍ଚ୍ଚର ହିସାବ ରଖେ।", "I am HisaabSaathi. I keep track of your earnings, advances and expenses.")
+    val chatGreeting get() = t("नमस्ते! आज का काम, एडवांस या खर्च बोलिए।", "ନମସ୍କାର! ଆଜିର କାମ, ଆଡଭାନ୍ସ କିମ୍ବା ଖର୍ଚ୍ଚ କୁହନ୍ତୁ।", "Hello! Tell me today's work, advance or expense.")
+    val chatHelp get() = t("मैक दबाकर बोलिए: कितना काम किया, कितना एडवांस लिया, या कितना खर्च हुआ। जैसे: 120 पीस, 5 रुपये रेट, 300 एडवांस। आप पूछ भी सकते हैं: इस हफ्ते कितना कमाया?", "ମାଇକ୍ ଦବାଇ କୁହନ୍ତୁ: କେତେ କାମ କଲେ, କେତେ ଆଡଭାନ୍ସ ନେଲେ, କିମ୍ବା କେତେ ଖର୍ଚ୍ଚ ହେଲା। ଯେପରି: 120 ପିସ୍, 5 ଟଙ୍କା ଦର, 300 ଆଡଭାନ୍ସ। ଆପଣ ପଚାରି ପାରିବେ: ଏହି ସପ୍ତାହରେ କେତେ ରୋଜଗାର ହେଲା?", "Tap the mic and say how much you worked, what advance you took, or what you spent. For example: 120 pieces, rate 5 rupees, 300 advance. You can also ask: how much did I earn this week?")
+    val chatThanks get() = t("आपका स्वागत है।", "ଆପଣଙ୍କୁ ସ୍ୱାଗତ।", "You are welcome.")
+    val chatHowAreYou get() = t("मैं ठीक हूँ। आज का हिसाब लिख लें?", "ମୁଁ ଭଲ ଅଛି। ଆଜିର ହିସାବ ଲେଖିବା?", "I am fine. Shall we note today's work?")
+    val chatMaker get() = t("मुझे Acxelin Labs ने मजदूर भाई-बहनों के लिए बनाया है।", "ମୋତେ Acxelin Labs ଶ୍ରମିକ ଭାଇ-ଭଉଣୀଙ୍କ ପାଇଁ ତିଆରି କରିଛି।", "Acxelin Labs made me for working people.")
+    val chatPrivacy get() = t("आपका हिसाब सिर्फ़ इसी फोन में ताले में रहता है। ठेकेदार, कंपनी या कोई और इसे नहीं देख सकता।", "ଆପଣଙ୍କ ହିସାବ କେବଳ ଏହି ଫୋନ୍‌ରେ ତାଲା ଭିତରେ ରହେ। ଠିକାଦାର, କମ୍ପାନୀ କିମ୍ବା ଅନ୍ୟ କେହି ଦେଖିପାରିବେ ନାହିଁ।", "Your records stay locked on this phone only. No contractor, company or anyone else can see them.")
+    val chatBye get() = t("ठीक है, फिर मिलेंगे।", "ଠିକ୍ ଅଛି, ପୁଣି ଦେଖା ହେବ।", "All right, see you again.")
+    val chatFallback get() = t("यह मैं नहीं समझा। मैं काम, एडवांस और खर्च का हिसाब रखता हूँ। ऐसे बोलिए: 500 रुपये मजदूरी मिली।", "ଏହା ମୁଁ ବୁଝିଲି ନାହିଁ। ମୁଁ କାମ, ଆଡଭାନ୍ସ ଓ ଖର୍ଚ୍ଚର ହିସାବ ରଖେ। ଏପରି କୁହନ୍ତୁ: 500 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା।", "I did not understand that. I keep track of work, advances and expenses. Say it like this: got 500 rupees wages.")
+    fun chatDate(date: String): String = tp("आज $date है।", "ଆଜି $date।", "Today is $date.", "Today is {0}.", date)
+
+    fun chat(c: Chat, date: String): String = when (c) {
+        Chat.MAKER -> chatMaker
+        Chat.HOW_ARE_YOU -> chatHowAreYou
+        Chat.NAME -> chatName
+        Chat.PRIVACY -> chatPrivacy
+        Chat.DATE -> chatDate(date)
+        Chat.THANKS -> chatThanks
+        Chat.BYE -> chatBye
+        Chat.HELP -> chatHelp
+        Chat.GREETING -> chatGreeting
+    }
+
     // ---- formatting
     fun rupees(paise: Long): String = "₹" + Money.formatGrouped(paise)
 

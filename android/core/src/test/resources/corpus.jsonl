@@ -1,0 +1,638 @@
+{"lang": "hi", "kind": "entries", "form": "words", "template": "piece", "text": "आज आठ घंटे काम किया एक सौ बीस पीस छह रुपये रेट एक सौ एडवांस लिया", "entries": [{"type": "WORK", "amount": 720, "hours": 8, "pieces": 120, "rate": 6}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "piece", "text": "आज 8 घंटे काम किया 120 पीस 6 रुपये रेट 100 एडवांस लिया", "entries": [{"type": "WORK", "amount": 720, "hours": 8, "pieces": 120, "rate": 6}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "piece", "text": "आज छः घंटे काम किया दो सौ पचास पीस छह रुपये रेट एक सौ एडवांस लिया", "entries": [{"type": "WORK", "amount": 1500, "hours": 6, "pieces": 250, "rate": 6}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "piece", "text": "आज 6 घंटे काम किया 250 पीस 6 रुपये रेट 100 एडवांस लिया", "entries": [{"type": "WORK", "amount": 1500, "hours": 6, "pieces": 250, "rate": 6}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "piece", "text": "आज दस घंटे काम किया अस्सी पीस आठ रुपये रेट तीन सौ एडवांस लिया", "entries": [{"type": "WORK", "amount": 640, "hours": 10, "pieces": 80, "rate": 8}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "piece", "text": "आज 10 घंटे काम किया 80 पीस 8 रुपये रेट 300 एडवांस लिया", "entries": [{"type": "WORK", "amount": 640, "hours": 10, "pieces": 80, "rate": 8}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "piece", "text": "आज आठ घंटे काम किया दो सौ पीस आठ रुपये रेट पाँच सौ एडवांस लिया", "entries": [{"type": "WORK", "amount": 1600, "hours": 8, "pieces": 200, "rate": 8}, {"type": "ADVANCE", "amount": 500}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "piece", "text": "आज 8 घंटे काम किया 200 पीस 8 रुपये रेट 500 एडवांस लिया", "entries": [{"type": "WORK", "amount": 1600, "hours": 8, "pieces": 200, "rate": 8}, {"type": "ADVANCE", "amount": 500}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "piece", "text": "आज आठ घंटे काम किया दो सौ पचास पीस तीन रुपये रेट एक सौ एडवांस लिया", "entries": [{"type": "WORK", "amount": 750, "hours": 8, "pieces": 250, "rate": 3}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "piece", "text": "आज 8 घंटे काम किया 250 पीस 3 रुपये रेट 100 एडवांस लिया", "entries": [{"type": "WORK", "amount": 750, "hours": 8, "pieces": 250, "rate": 3}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "wage_recv", "text": "आज चार सौ रुपये मजदूरी मिली", "entries": [{"type": "WORK", "amount": 400}, {"type": "PAYMENT", "amount": 400}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "आज 400 रुपये मजदूरी मिली", "entries": [{"type": "WORK", "amount": 400}, {"type": "PAYMENT", "amount": 400}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "wage_recv", "text": "आज सात सौ रुपये मजदूरी मिली", "entries": [{"type": "WORK", "amount": 700}, {"type": "PAYMENT", "amount": 700}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "आज 700 रुपये मजदूरी मिली", "entries": [{"type": "WORK", "amount": 700}, {"type": "PAYMENT", "amount": 700}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "wage_recv", "text": "आज आठ सौ रुपये मजदूरी मिली", "entries": [{"type": "WORK", "amount": 800}, {"type": "PAYMENT", "amount": 800}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "आज 800 रुपये मजदूरी मिली", "entries": [{"type": "WORK", "amount": 800}, {"type": "PAYMENT", "amount": 800}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "wage_recv", "text": "आज छः सौ रुपये मजदूरी मिली", "entries": [{"type": "WORK", "amount": 600}, {"type": "PAYMENT", "amount": 600}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "आज 600 रुपये मजदूरी मिली", "entries": [{"type": "WORK", "amount": 600}, {"type": "PAYMENT", "amount": 600}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "आज की दिहाड़ी एक हजार पाँच सौ रुपये", "entries": [{"type": "WORK", "amount": 1500}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "आज की दिहाड़ी 1500 रुपये", "entries": [{"type": "WORK", "amount": 1500}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "आज की दिहाड़ी छः सौ पचास रुपये", "entries": [{"type": "WORK", "amount": 650}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "आज की दिहाड़ी 650 रुपये", "entries": [{"type": "WORK", "amount": 650}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "आज की दिहाड़ी छह सौ पचास रुपये", "entries": [{"type": "WORK", "amount": 650}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "आज की दिहाड़ी छह सौ रुपये", "entries": [{"type": "WORK", "amount": 600}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "आज की दिहाड़ी 600 रुपये", "entries": [{"type": "WORK", "amount": 600}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "आज की दिहाड़ी एक हजार पांच सौ रुपये", "entries": [{"type": "WORK", "amount": 1500}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_food", "text": "सब्जी पर अस्सी रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 80, "category": "FOOD"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_food", "text": "सब्जी पर 80 रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 80, "category": "FOOD"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_food", "text": "सब्जी पर साठ रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_food", "text": "सब्जी पर 60 रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_food", "text": "सब्जी पर बीस रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 20, "category": "FOOD"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_food", "text": "सब्जी पर 20 रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 20, "category": "FOOD"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_food", "text": "सब्जी पर दो सौ पचास रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_food", "text": "सब्जी पर 250 रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "adv", "text": "ठेकेदार से एक हजार रुपये एडवांस लिया", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "adv", "text": "ठेकेदार से 1000 रुपये एडवांस लिया", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "adv", "text": "ठेकेदार से तीन सौ रुपये एडवांस लिया", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "adv", "text": "ठेकेदार से 300 रुपये एडवांस लिया", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "adv", "text": "ठेकेदार से पाँच सौ रुपये एडवांस लिया", "entries": [{"type": "ADVANCE", "amount": 500}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "adv", "text": "ठेकेदार से 500 रुपये एडवांस लिया", "entries": [{"type": "ADVANCE", "amount": 500}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "yday", "text": "कल आठ घंटे काम किया आठ सौ रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 800, "hours": 8, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "yday", "text": "कल 8 घंटे काम किया 800 रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 800, "hours": 8, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "yday", "text": "कल छह घंटे काम किया छः सौ रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 600, "hours": 6, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "yday", "text": "कल 6 घंटे काम किया 600 रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 600, "hours": 6, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "yday", "text": "कल छह घंटे काम किया चार सौ रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 400, "hours": 6, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "yday", "text": "कल 6 घंटे काम किया 400 रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 400, "hours": 6, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "yday", "text": "कल दस घंटे काम किया तीन सौ पचास रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 350, "hours": 10, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "yday", "text": "कल 10 घंटे काम किया 350 रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 350, "hours": 10, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "yday", "text": "कल दस घंटे काम किया छह सौ रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 600, "hours": 10, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "yday", "text": "कल 10 घंटे काम किया 600 रुपये मजदूरी", "entries": [{"type": "WORK", "amount": 600, "hours": 10, "dayOffset": -1}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "hourly", "text": "छः घंटे काम रेट अस्सी रुपये", "entries": [{"type": "WORK", "amount": 480, "hours": 6, "rate": 80}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "hourly", "text": "6 घंटे काम रेट 80 रुपये", "entries": [{"type": "WORK", "amount": 480, "hours": 6, "rate": 80}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "hourly", "text": "छः घंटे काम रेट पचास रुपये", "entries": [{"type": "WORK", "amount": 300, "hours": 6, "rate": 50}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "hourly", "text": "6 घंटे काम रेट 50 रुपये", "entries": [{"type": "WORK", "amount": 300, "hours": 6, "rate": 50}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "hourly", "text": "नौ घंटे काम रेट पचास रुपये", "entries": [{"type": "WORK", "amount": 450, "hours": 9, "rate": 50}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "hourly", "text": "9 घंटे काम रेट 50 रुपये", "entries": [{"type": "WORK", "amount": 450, "hours": 9, "rate": 50}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "hourly", "text": "आठ घंटे काम रेट साठ रुपये", "entries": [{"type": "WORK", "amount": 480, "hours": 8, "rate": 60}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "hourly", "text": "8 घंटे काम रेट 60 रुपये", "entries": [{"type": "WORK", "amount": 480, "hours": 8, "rate": 60}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "hourly", "text": "बारह घंटे काम रेट साठ रुपये", "entries": [{"type": "WORK", "amount": 720, "hours": 12, "rate": 60}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "hourly", "text": "12 घंटे काम रेट 60 रुपये", "entries": [{"type": "WORK", "amount": 720, "hours": 12, "rate": 60}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_travel", "text": "बस में चालीस रुपये खर्च हुए", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "बस में 40 रुपये खर्च हुए", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_travel", "text": "बस में दो सौ पचास रुपये खर्च हुए", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "बस में 250 रुपये खर्च हुए", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_travel", "text": "बस में बीस रुपये खर्च हुए", "entries": [{"type": "EXPENSE", "amount": 20, "category": "TRAVEL"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "बस में 20 रुपये खर्च हुए", "entries": [{"type": "EXPENSE", "amount": 20, "category": "TRAVEL"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_travel", "text": "बस में साठ रुपये खर्च हुए", "entries": [{"type": "EXPENSE", "amount": 60, "category": "TRAVEL"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "बस में 60 रुपये खर्च हुए", "entries": [{"type": "EXPENSE", "amount": 60, "category": "TRAVEL"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_health", "text": "दवा पर चालीस रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_health", "text": "दवा पर 40 रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_health", "text": "दवा पर एक सौ पचास रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 150, "category": "HEALTH"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_health", "text": "दवा पर 150 रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 150, "category": "HEALTH"}]}
+{"lang": "hi", "kind": "entries", "form": "words", "template": "exp_health", "text": "दवा पर दो सौ पचास रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 250, "category": "HEALTH"}]}
+{"lang": "hi", "kind": "entries", "form": "digits", "template": "exp_health", "text": "दवा पर 250 रुपये खर्च किए", "entries": [{"type": "EXPENSE", "amount": 250, "category": "HEALTH"}]}
+{"lang": "hi", "kind": "query", "text": "इस हफ्ते कितना कमाया", "period": "WEEK", "topic": "EARNED"}
+{"lang": "hi", "kind": "query", "text": "इस महीने कितना एडवांस लिया", "period": "MONTH", "topic": "ADVANCE"}
+{"lang": "hi", "kind": "query", "text": "आज कितना बाकी है", "period": "DAY", "topic": "DUE"}
+{"lang": "hi", "kind": "query", "text": "इस महीने कितना खर्च हुआ", "period": "MONTH", "topic": "EXPENSE"}
+{"lang": "hi", "kind": "query", "text": "इस साल कितनी कमाई हुई", "period": "YEAR", "topic": "EARNED"}
+{"lang": "or", "kind": "entries", "form": "words", "template": "piece", "text": "ଆଜି ବାର ଘଣ୍ଟା କାମ କଲି ଗୋଟିଏ ଶହ କୋଡ଼ି ପିସ୍ ତିନି ଟଙ୍କା ଦର ଦୁଇ ଶହ ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 360, "hours": 12, "pieces": 120, "rate": 3}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "piece", "text": "ଆଜି 12 ଘଣ୍ଟା କାମ କଲି 120 ପିସ୍ 3 ଟଙ୍କା ଦର 200 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 360, "hours": 12, "pieces": 120, "rate": 3}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "piece", "text": "ଆଜି ଆଠ ଘଣ୍ଟା କାମ କଲି ଦୁଇ ଶହ ପଚାଶ ପିସ୍ ତିନି ଟଙ୍କା ଦର ତିନି ଶହ ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 750, "hours": 8, "pieces": 250, "rate": 3}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "piece", "text": "ଆଜି 8 ଘଣ୍ଟା କାମ କଲି 250 ପିସ୍ 3 ଟଙ୍କା ଦର 300 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 750, "hours": 8, "pieces": 250, "rate": 3}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "piece", "text": "ଆଜି ଆଠ ଘଣ୍ଟା କାମ କଲି ଅଶୀ ପିସ୍ ଛଅ ଟଙ୍କା ଦର ତିନି ଶହ ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 480, "hours": 8, "pieces": 80, "rate": 6}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "piece", "text": "ଆଜି 8 ଘଣ୍ଟା କାମ କଲି 80 ପିସ୍ 6 ଟଙ୍କା ଦର 300 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 480, "hours": 8, "pieces": 80, "rate": 6}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "piece", "text": "ଆଜି ଆଠ ଘଣ୍ଟା କାମ କଲି ଅଶୀ ପିସ୍ ଚାରି ଟଙ୍କା ଦର ଗୋଟିଏ ଶହ ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 320, "hours": 8, "pieces": 80, "rate": 4}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "piece", "text": "ଆଜି 8 ଘଣ୍ଟା କାମ କଲି 80 ପିସ୍ 4 ଟଙ୍କା ଦର 100 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 320, "hours": 8, "pieces": 80, "rate": 4}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "piece", "text": "ଆଜି ସାତ ଘଣ୍ଟା କାମ କଲି ଏକ ଶହ କୋଡ଼ିଏ ପିସ୍ ଚାରି ଟଙ୍କା ଦର ଏକ ହଜାର ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 480, "hours": 7, "pieces": 120, "rate": 4}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "piece", "text": "ଆଜି 7 ଘଣ୍ଟା କାମ କଲି 120 ପିସ୍ 4 ଟଙ୍କା ଦର 1000 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "WORK", "amount": 480, "hours": 7, "pieces": 120, "rate": 4}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ଆଜି ଚାରି ଶହ ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "entries": [{"type": "WORK", "amount": 400}, {"type": "PAYMENT", "amount": 400}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ଆଜି 400 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "entries": [{"type": "WORK", "amount": 400}, {"type": "PAYMENT", "amount": 400}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ଆଜି ଏକ ହଜାର ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "entries": [{"type": "WORK", "amount": 1500}, {"type": "PAYMENT", "amount": 1500}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ଆଜି 1500 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "entries": [{"type": "WORK", "amount": 1500}, {"type": "PAYMENT", "amount": 1500}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ଆଜି ସାତ ଶହ ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "entries": [{"type": "WORK", "amount": 700}, {"type": "PAYMENT", "amount": 700}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ଆଜି 700 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "entries": [{"type": "WORK", "amount": 700}, {"type": "PAYMENT", "amount": 700}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ଆଜି ଗୋଟିଏ ହଜାର ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "entries": [{"type": "WORK", "amount": 1500}, {"type": "PAYMENT", "amount": 1500}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ଆଜି ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "entries": [{"type": "WORK", "amount": 500}, {"type": "PAYMENT", "amount": 500}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ଆଜି 500 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "entries": [{"type": "WORK", "amount": 500}, {"type": "PAYMENT", "amount": 500}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ଆଜି ଚାରି ଶହ ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 400}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ଆଜି 400 ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 400}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ଆଜି ଗୋଟିଏ ହଜାର ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 1500}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ଆଜି 1500 ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 1500}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ଆଜି ତିନି ଶହ ପଚାଶ ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 350}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ଆଜି 350 ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 350}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ଆଜି ଛଅ ଶହ ପଚାଶ ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 650}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ଆଜି 650 ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 650}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_food", "text": "ପରିବା ପାଇଁ କୋଡ଼ି ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 20, "category": "FOOD"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_food", "text": "ପରିବା ପାଇଁ 20 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 20, "category": "FOOD"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_food", "text": "ପରିବା ପାଇଁ ଷାଠିଏ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_food", "text": "ପରିବା ପାଇଁ 60 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_food", "text": "ପରିବା ପାଇଁ ଚାଳିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 40, "category": "FOOD"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_food", "text": "ପରିବା ପାଇଁ 40 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 40, "category": "FOOD"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "adv", "text": "ଠିକାଦାର ଠାରୁ ତିନି ଶହ ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "adv", "text": "ଠିକାଦାର ଠାରୁ 300 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "adv", "text": "ଠିକାଦାର ଠାରୁ ଏକ ହଜାର ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "adv", "text": "ଠିକାଦାର ଠାରୁ 1000 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "adv", "text": "ଠିକାଦାର ଠାରୁ ଗୋଟିଏ ହଜାର ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "yday", "text": "ଗତକାଲି ନଅ ଘଣ୍ଟା କାମ କଲି ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 500, "hours": 9, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "yday", "text": "ଗତକାଲି 9 ଘଣ୍ଟା କାମ କଲି 500 ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 500, "hours": 9, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "yday", "text": "ଗତକାଲି ଆଠ ଘଣ୍ଟା କାମ କଲି ଚାରି ଶହ ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 400, "hours": 8, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "yday", "text": "ଗତକାଲି 8 ଘଣ୍ଟା କାମ କଲି 400 ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 400, "hours": 8, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "yday", "text": "ଗତକାଲି ଦଶ ଘଣ୍ଟା କାମ କଲି ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 500, "hours": 10, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "yday", "text": "ଗତକାଲି 10 ଘଣ୍ଟା କାମ କଲି 500 ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 500, "hours": 10, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "yday", "text": "ଗତକାଲି ନଅ ଘଣ୍ଟା କାମ କଲି ଛଅ ଶହ ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 600, "hours": 9, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "yday", "text": "ଗତକାଲି 9 ଘଣ୍ଟା କାମ କଲି 600 ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 600, "hours": 9, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "yday", "text": "ଗତକାଲି ଦଶ ଘଣ୍ଟା କାମ କଲି ସାତ ଶହ ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 700, "hours": 10, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "yday", "text": "ଗତକାଲି 10 ଘଣ୍ଟା କାମ କଲି 700 ଟଙ୍କା ମଜୁରୀ", "entries": [{"type": "WORK", "amount": 700, "hours": 10, "dayOffset": -1}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "hourly", "text": "ସାତ ଘଣ୍ଟା କାମ ଦର ସତୁରି ଟଙ୍କା", "entries": [{"type": "WORK", "amount": 490, "hours": 7, "rate": 70}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "hourly", "text": "7 ଘଣ୍ଟା କାମ ଦର 70 ଟଙ୍କା", "entries": [{"type": "WORK", "amount": 490, "hours": 7, "rate": 70}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "hourly", "text": "ଛଅ ଘଣ୍ଟା କାମ ଦର ଅଶୀ ଟଙ୍କା", "entries": [{"type": "WORK", "amount": 480, "hours": 6, "rate": 80}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "hourly", "text": "6 ଘଣ୍ଟା କାମ ଦର 80 ଟଙ୍କା", "entries": [{"type": "WORK", "amount": 480, "hours": 6, "rate": 80}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "hourly", "text": "ଆଠ ଘଣ୍ଟା କାମ ଦର ସତୁରି ଟଙ୍କା", "entries": [{"type": "WORK", "amount": 560, "hours": 8, "rate": 70}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "hourly", "text": "8 ଘଣ୍ଟା କାମ ଦର 70 ଟଙ୍କା", "entries": [{"type": "WORK", "amount": 560, "hours": 8, "rate": 70}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "hourly", "text": "ନଅ ଘଣ୍ଟା କାମ ଦର ଅଶୀ ଟଙ୍କା", "entries": [{"type": "WORK", "amount": 720, "hours": 9, "rate": 80}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "hourly", "text": "9 ଘଣ୍ଟା କାମ ଦର 80 ଟଙ୍କା", "entries": [{"type": "WORK", "amount": 720, "hours": 9, "rate": 80}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_travel", "text": "ବସ୍ ଭଡ଼ା ଚାଳିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "ବସ୍ ଭଡ଼ା 40 ଟଙ୍କା ଖର୍ଚ୍ଚ", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_travel", "text": "ବସ୍ ଭଡ଼ା ତିରିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ", "entries": [{"type": "EXPENSE", "amount": 30, "category": "TRAVEL"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "ବସ୍ ଭଡ଼ା 30 ଟଙ୍କା ଖର୍ଚ୍ଚ", "entries": [{"type": "EXPENSE", "amount": 30, "category": "TRAVEL"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_travel", "text": "ବସ୍ ଭଡ଼ା ଦୁଇ ଶହ ପଚାଶ ଟଙ୍କା ଖର୍ଚ୍ଚ", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "ବସ୍ ଭଡ଼ା 250 ଟଙ୍କା ଖର୍ଚ୍ଚ", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ ଚାଳିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ 40 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ କୋଡ଼ିଏ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ 20 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ ଦୁଇ ଶହ ପଚାଶ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 250, "category": "HEALTH"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ 250 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 250, "category": "HEALTH"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ ଷାଠିଏ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 60, "category": "HEALTH"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ 60 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 60, "category": "HEALTH"}]}
+{"lang": "or", "kind": "entries", "form": "words", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ ଏକ ଶହ ପଚାଶ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 150, "category": "HEALTH"}]}
+{"lang": "or", "kind": "entries", "form": "digits", "template": "exp_health", "text": "ଔଷଧ ପାଇଁ 150 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "entries": [{"type": "EXPENSE", "amount": 150, "category": "HEALTH"}]}
+{"lang": "or", "kind": "query", "text": "ଏହି ସପ୍ତାହରେ କେତେ ରୋଜଗାର ହେଲା", "period": "WEEK", "topic": "EARNED"}
+{"lang": "or", "kind": "query", "text": "ଏହି ମାସରେ କେତେ ଆଡଭାନ୍ସ ନେଲି", "period": "MONTH", "topic": "ADVANCE"}
+{"lang": "or", "kind": "query", "text": "ଏହି ମାସରେ କେତେ ଖର୍ଚ୍ଚ ହେଲା", "period": "MONTH", "topic": "EXPENSE"}
+{"lang": "or", "kind": "query", "text": "ଆଜି କେତେ ବାକି ଅଛି", "period": "DAY", "topic": "DUE"}
+{"lang": "en", "kind": "entries", "form": "words", "template": "piece", "text": "today I worked ten hours eighty pieces at ten rupees and took five hundred rupees advance", "entries": [{"type": "WORK", "amount": 800, "hours": 10, "pieces": 80, "rate": 10}, {"type": "ADVANCE", "amount": 500}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "piece", "text": "today I worked 10 hours 80 pieces at 10 rupees and took 500 rupees advance", "entries": [{"type": "WORK", "amount": 800, "hours": 10, "pieces": 80, "rate": 10}, {"type": "ADVANCE", "amount": 500}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "piece", "text": "today I worked six hours one hundred twenty pieces at three rupees and took two hundred rupees advance", "entries": [{"type": "WORK", "amount": 360, "hours": 6, "pieces": 120, "rate": 3}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "piece", "text": "today I worked 6 hours 120 pieces at 3 rupees and took 200 rupees advance", "entries": [{"type": "WORK", "amount": 360, "hours": 6, "pieces": 120, "rate": 3}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "piece", "text": "today I worked ten hours two hundred fifty pieces at six rupees and took three hundred rupees advance", "entries": [{"type": "WORK", "amount": 1500, "hours": 10, "pieces": 250, "rate": 6}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "piece", "text": "today I worked 10 hours 250 pieces at 6 rupees and took 300 rupees advance", "entries": [{"type": "WORK", "amount": 1500, "hours": 10, "pieces": 250, "rate": 6}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "piece", "text": "today I worked nine hours eighty pieces at eight rupees and took two hundred rupees advance", "entries": [{"type": "WORK", "amount": 640, "hours": 9, "pieces": 80, "rate": 8}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "piece", "text": "today I worked 9 hours 80 pieces at 8 rupees and took 200 rupees advance", "entries": [{"type": "WORK", "amount": 640, "hours": 9, "pieces": 80, "rate": 8}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "piece", "text": "today I worked ten hours one hundred twenty pieces at five rupees and took two hundred rupees advance", "entries": [{"type": "WORK", "amount": 600, "hours": 10, "pieces": 120, "rate": 5}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "piece", "text": "today I worked 10 hours 120 pieces at 5 rupees and took 200 rupees advance", "entries": [{"type": "WORK", "amount": 600, "hours": 10, "pieces": 120, "rate": 5}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "wage_recv", "text": "got seven hundred rupees wages today", "entries": [{"type": "WORK", "amount": 700}, {"type": "PAYMENT", "amount": 700}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "got 700 rupees wages today", "entries": [{"type": "WORK", "amount": 700}, {"type": "PAYMENT", "amount": 700}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "wage_recv", "text": "got three hundred fifty rupees wages today", "entries": [{"type": "WORK", "amount": 350}, {"type": "PAYMENT", "amount": 350}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "got 350 rupees wages today", "entries": [{"type": "WORK", "amount": 350}, {"type": "PAYMENT", "amount": 350}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "wage_recv", "text": "got six hundred rupees wages today", "entries": [{"type": "WORK", "amount": 600}, {"type": "PAYMENT", "amount": 600}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "got 600 rupees wages today", "entries": [{"type": "WORK", "amount": 600}, {"type": "PAYMENT", "amount": 600}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "wage_recv", "text": "got five hundred rupees wages today", "entries": [{"type": "WORK", "amount": 500}, {"type": "PAYMENT", "amount": 500}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "got 500 rupees wages today", "entries": [{"type": "WORK", "amount": 500}, {"type": "PAYMENT", "amount": 500}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "wage_recv", "text": "got eight hundred rupees wages today", "entries": [{"type": "WORK", "amount": 800}, {"type": "PAYMENT", "amount": 800}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "got 800 rupees wages today", "entries": [{"type": "WORK", "amount": 800}, {"type": "PAYMENT", "amount": 800}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "today's wage is three hundred fifty rupees", "entries": [{"type": "WORK", "amount": 350}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "today's wage is 350 rupees", "entries": [{"type": "WORK", "amount": 350}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "today's wage is eight hundred rupees", "entries": [{"type": "WORK", "amount": 800}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "today's wage is 800 rupees", "entries": [{"type": "WORK", "amount": 800}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_food", "text": "spent two hundred fifty rupees on food", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_food", "text": "spent 250 rupees on food", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_food", "text": "spent sixty rupees on food", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_food", "text": "spent 60 rupees on food", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_food", "text": "spent thirty rupees on food", "entries": [{"type": "EXPENSE", "amount": 30, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_food", "text": "spent 30 rupees on food", "entries": [{"type": "EXPENSE", "amount": 30, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_food", "text": "spent eighty rupees on food", "entries": [{"type": "EXPENSE", "amount": 80, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_food", "text": "spent 80 rupees on food", "entries": [{"type": "EXPENSE", "amount": 80, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_food", "text": "spent one hundred fifty rupees on food", "entries": [{"type": "EXPENSE", "amount": 150, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_food", "text": "spent 150 rupees on food", "entries": [{"type": "EXPENSE", "amount": 150, "category": "FOOD"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "adv", "text": "took five hundred rupees advance from the contractor", "entries": [{"type": "ADVANCE", "amount": 500}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "adv", "text": "took 500 rupees advance from the contractor", "entries": [{"type": "ADVANCE", "amount": 500}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "adv", "text": "took three hundred rupees advance from the contractor", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "adv", "text": "took 300 rupees advance from the contractor", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "adv", "text": "took two hundred rupees advance from the contractor", "entries": [{"type": "ADVANCE", "amount": 200}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "adv", "text": "took 200 rupees advance from the contractor", "entries": [{"type": "ADVANCE", "amount": 200}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "yday", "text": "yesterday worked six hours wage three hundred fifty rupees", "entries": [{"type": "WORK", "amount": 350, "hours": 6, "dayOffset": -1}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "yday", "text": "yesterday worked 6 hours wage 350 rupees", "entries": [{"type": "WORK", "amount": 350, "hours": 6, "dayOffset": -1}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "yday", "text": "yesterday worked six hours wage six hundred fifty rupees", "entries": [{"type": "WORK", "amount": 650, "hours": 6, "dayOffset": -1}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "yday", "text": "yesterday worked 6 hours wage 650 rupees", "entries": [{"type": "WORK", "amount": 650, "hours": 6, "dayOffset": -1}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "yday", "text": "yesterday worked nine hours wage four hundred rupees", "entries": [{"type": "WORK", "amount": 400, "hours": 9, "dayOffset": -1}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "yday", "text": "yesterday worked 9 hours wage 400 rupees", "entries": [{"type": "WORK", "amount": 400, "hours": 9, "dayOffset": -1}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "yday", "text": "yesterday worked eight hours wage five hundred rupees", "entries": [{"type": "WORK", "amount": 500, "hours": 8, "dayOffset": -1}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "yday", "text": "yesterday worked 8 hours wage 500 rupees", "entries": [{"type": "WORK", "amount": 500, "hours": 8, "dayOffset": -1}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "hourly", "text": "six hours work rate seventy rupees", "entries": [{"type": "WORK", "amount": 420, "hours": 6, "rate": 70}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "hourly", "text": "6 hours work rate 70 rupees", "entries": [{"type": "WORK", "amount": 420, "hours": 6, "rate": 70}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "hourly", "text": "nine hours work rate sixty rupees", "entries": [{"type": "WORK", "amount": 540, "hours": 9, "rate": 60}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "hourly", "text": "9 hours work rate 60 rupees", "entries": [{"type": "WORK", "amount": 540, "hours": 9, "rate": 60}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "hourly", "text": "ten hours work rate sixty rupees", "entries": [{"type": "WORK", "amount": 600, "hours": 10, "rate": 60}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "hourly", "text": "10 hours work rate 60 rupees", "entries": [{"type": "WORK", "amount": 600, "hours": 10, "rate": 60}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "hourly", "text": "eight hours work rate fifty rupees", "entries": [{"type": "WORK", "amount": 400, "hours": 8, "rate": 50}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "hourly", "text": "8 hours work rate 50 rupees", "entries": [{"type": "WORK", "amount": 400, "hours": 8, "rate": 50}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "hourly", "text": "nine hours work rate fifty rupees", "entries": [{"type": "WORK", "amount": 450, "hours": 9, "rate": 50}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "hourly", "text": "9 hours work rate 50 rupees", "entries": [{"type": "WORK", "amount": 450, "hours": 9, "rate": 50}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_travel", "text": "spent two hundred fifty rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "spent 250 rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_travel", "text": "spent sixty rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 60, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "spent 60 rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 60, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_travel", "text": "spent thirty rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 30, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "spent 30 rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 30, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_travel", "text": "spent twenty rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 20, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "spent 20 rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 20, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_travel", "text": "spent one hundred fifty rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 150, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "spent 150 rupees on bus ticket", "entries": [{"type": "EXPENSE", "amount": 150, "category": "TRAVEL"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_health", "text": "spent forty rupees on medicine", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_health", "text": "spent 40 rupees on medicine", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_health", "text": "spent thirty rupees on medicine", "entries": [{"type": "EXPENSE", "amount": 30, "category": "HEALTH"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_health", "text": "spent 30 rupees on medicine", "entries": [{"type": "EXPENSE", "amount": 30, "category": "HEALTH"}]}
+{"lang": "en", "kind": "entries", "form": "words", "template": "exp_health", "text": "spent twenty rupees on medicine", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "en", "kind": "entries", "form": "digits", "template": "exp_health", "text": "spent 20 rupees on medicine", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "en", "kind": "query", "text": "how much did I earn this week", "period": "WEEK", "topic": "EARNED"}
+{"lang": "en", "kind": "query", "text": "how much advance this month", "period": "MONTH", "topic": "ADVANCE"}
+{"lang": "en", "kind": "query", "text": "how much is due today", "period": "DAY", "topic": "DUE"}
+{"lang": "en", "kind": "query", "text": "how much did I spend this month", "period": "MONTH", "topic": "EXPENSE"}
+{"lang": "te", "kind": "entries", "form": "words", "template": "piece", "text": "ఈరోజు తొమ్మిది గంటలు పని రెండొందల పీసులు పీసుకు మూడు రూపాయలు రెండొందల అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 600, "hours": 9, "pieces": 200, "rate": 3}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "piece", "text": "ఈరోజు 9 గంటలు పని 200 పీసులు పీసుకు 3 రూపాయలు 200 అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 600, "hours": 9, "pieces": 200, "rate": 3}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "piece", "text": "ఈరోజు ఏడు గంటలు పని నూటిరవై పీసులు పీసుకు మూడు రూపాయలు ఐదొందలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 360, "hours": 7, "pieces": 120, "rate": 3}, {"type": "ADVANCE", "amount": 500}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "piece", "text": "ఈరోజు 7 గంటలు పని 120 పీసులు పీసుకు 3 రూపాయలు 500 అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 360, "hours": 7, "pieces": 120, "rate": 3}, {"type": "ADVANCE", "amount": 500}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "piece", "text": "ఈరోజు ఆరు గంటలు పని రెండొందలు యాబై పీసులు పీసుకు ఐదు రూపాయలు రెండొందలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 1250, "hours": 6, "pieces": 250, "rate": 5}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "piece", "text": "ఈరోజు 6 గంటలు పని 250 పీసులు పీసుకు 5 రూపాయలు 200 అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 1250, "hours": 6, "pieces": 250, "rate": 5}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "piece", "text": "ఈరోజు ఏడు గంటలు పని రెండొందలు యాభై పీసులు పీసుకు మూడు రూపాయలు వంద అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 750, "hours": 7, "pieces": 250, "rate": 3}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "piece", "text": "ఈరోజు 7 గంటలు పని 250 పీసులు పీసుకు 3 రూపాయలు 100 అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 750, "hours": 7, "pieces": 250, "rate": 3}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "piece", "text": "ఈరోజు పన్నెండు గంటలు పని ఎనభై పీసులు పీసుకు ఎనమిది రూపాయలు మూడొందల అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 640, "hours": 12, "pieces": 80, "rate": 8}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "piece", "text": "ఈరోజు 12 గంటలు పని 80 పీసులు పీసుకు 8 రూపాయలు 300 అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "WORK", "amount": 640, "hours": 12, "pieces": 80, "rate": 8}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ఈరోజు కూలి ఐదొందల రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 500}, {"type": "PAYMENT", "amount": 500}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ఈరోజు కూలి 500 రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 500}, {"type": "PAYMENT", "amount": 500}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ఈరోజు కూలి ఆరొందలు యాభై రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 650}, {"type": "PAYMENT", "amount": 650}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ఈరోజు కూలి 650 రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 650}, {"type": "PAYMENT", "amount": 650}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ఈరోజు కూలి మూడొందలు యాబై రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 350}, {"type": "PAYMENT", "amount": 350}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ఈరోజు కూలి 350 రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 350}, {"type": "PAYMENT", "amount": 350}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ఈరోజు కూలి నాలుగొందల రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 400}, {"type": "PAYMENT", "amount": 400}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ఈరోజు కూలి 400 రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 400}, {"type": "PAYMENT", "amount": 400}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ఈరోజు కూలి వెయ్యిన్నర రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 1500}, {"type": "PAYMENT", "amount": 1500}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ఈరోజు కూలి 1500 రూపాయలు వచ్చింది", "entries": [{"type": "WORK", "amount": 1500}, {"type": "PAYMENT", "amount": 1500}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ఈరోజు పని చేశాను కూలి ఏడొందలు ఇంకా ఇవ్వలేదు", "entries": [{"type": "WORK", "amount": 700}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ఈరోజు పని చేశాను కూలి 700 ఇంకా ఇవ్వలేదు", "entries": [{"type": "WORK", "amount": 700}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ఈరోజు పని చేశాను కూలి ఐదొందలు ఇంకా ఇవ్వలేదు", "entries": [{"type": "WORK", "amount": 500}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ఈరోజు పని చేశాను కూలి 500 ఇంకా ఇవ్వలేదు", "entries": [{"type": "WORK", "amount": 500}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ఈరోజు పని చేశాను కూలి ఆరొందలు యాబై ఇంకా ఇవ్వలేదు", "entries": [{"type": "WORK", "amount": 650}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ఈరోజు పని చేశాను కూలి 650 ఇంకా ఇవ్వలేదు", "entries": [{"type": "WORK", "amount": 650}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ఈరోజు పని చేశాను కూలి ఐదొందల ఇంకా ఇవ్వలేదు", "entries": [{"type": "WORK", "amount": 500}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_food", "text": "కూరగాయలకు ముప్పై రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 30, "category": "FOOD"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_food", "text": "కూరగాయలకు 30 రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 30, "category": "FOOD"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_food", "text": "కూరగాయలకు నలభై రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 40, "category": "FOOD"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_food", "text": "కూరగాయలకు 40 రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 40, "category": "FOOD"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_food", "text": "కూరగాయలకు నూటయాబై రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 150, "category": "FOOD"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_food", "text": "కూరగాయలకు 150 రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 150, "category": "FOOD"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_food", "text": "కూరగాయలకు రెండొందలు యాబై రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_food", "text": "కూరగాయలకు 250 రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "adv", "text": "కాంట్రాక్టర్ దగ్గర ఐదొందలు రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "ADVANCE", "amount": 500}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "adv", "text": "కాంట్రాక్టర్ దగ్గర 500 రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "ADVANCE", "amount": 500}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "adv", "text": "కాంట్రాక్టర్ దగ్గర వంద రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "ADVANCE", "amount": 100}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "adv", "text": "కాంట్రాక్టర్ దగ్గర 100 రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "ADVANCE", "amount": 100}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "adv", "text": "కాంట్రాక్టర్ దగ్గర మూడొందల రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "adv", "text": "కాంట్రాక్టర్ దగ్గర 300 రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "adv", "text": "కాంట్రాక్టర్ దగ్గర వేయి రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "adv", "text": "కాంట్రాక్టర్ దగ్గర 1000 రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "yday", "text": "నిన్న ఎనమిది గంటలు పని చేశాను ఎనిమిదొందలు కూలి", "entries": [{"type": "WORK", "amount": 800, "hours": 8, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "yday", "text": "నిన్న 8 గంటలు పని చేశాను 800 కూలి", "entries": [{"type": "WORK", "amount": 800, "hours": 8, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "yday", "text": "నిన్న ఏడు గంటలు పని చేశాను ఆరొందలు యాభై కూలి", "entries": [{"type": "WORK", "amount": 650, "hours": 7, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "yday", "text": "నిన్న 7 గంటలు పని చేశాను 650 కూలి", "entries": [{"type": "WORK", "amount": 650, "hours": 7, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "yday", "text": "నిన్న ఏడు గంటలు పని చేశాను ఎనిమిదొందల కూలి", "entries": [{"type": "WORK", "amount": 800, "hours": 7, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "yday", "text": "నిన్న 7 గంటలు పని చేశాను 800 కూలి", "entries": [{"type": "WORK", "amount": 800, "hours": 7, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "yday", "text": "నిన్న పండ్రెండు గంటలు పని చేశాను ఏడొందల కూలి", "entries": [{"type": "WORK", "amount": 700, "hours": 12, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "yday", "text": "నిన్న 12 గంటలు పని చేశాను 700 కూలి", "entries": [{"type": "WORK", "amount": 700, "hours": 12, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "yday", "text": "నిన్న ఆరు గంటలు పని చేశాను ఆరొందల కూలి", "entries": [{"type": "WORK", "amount": 600, "hours": 6, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "yday", "text": "నిన్న 6 గంటలు పని చేశాను 600 కూలి", "entries": [{"type": "WORK", "amount": 600, "hours": 6, "dayOffset": -1}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "hourly", "text": "ఈరోజు ఆరు గంటలు పని గంటకు డెబ్బై రూపాయలు", "entries": [{"type": "WORK", "amount": 420, "hours": 6, "rate": 70}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "hourly", "text": "ఈరోజు 6 గంటలు పని గంటకు 70 రూపాయలు", "entries": [{"type": "WORK", "amount": 420, "hours": 6, "rate": 70}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "hourly", "text": "ఈరోజు ఎనిమిది గంటలు పని గంటకు డెబ్భై రూపాయలు", "entries": [{"type": "WORK", "amount": 560, "hours": 8, "rate": 70}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "hourly", "text": "ఈరోజు 8 గంటలు పని గంటకు 70 రూపాయలు", "entries": [{"type": "WORK", "amount": 560, "hours": 8, "rate": 70}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "hourly", "text": "ఈరోజు ఎనమిది గంటలు పని గంటకు డెబ్బై రూపాయలు", "entries": [{"type": "WORK", "amount": 560, "hours": 8, "rate": 70}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "hourly", "text": "ఈరోజు ఏడు గంటలు పని గంటకు అరవయ్ రూపాయలు", "entries": [{"type": "WORK", "amount": 420, "hours": 7, "rate": 60}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "hourly", "text": "ఈరోజు 7 గంటలు పని గంటకు 60 రూపాయలు", "entries": [{"type": "WORK", "amount": 420, "hours": 7, "rate": 60}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "hourly", "text": "ఈరోజు తొమ్మిది గంటలు పని గంటకు అరవయ్ రూపాయలు", "entries": [{"type": "WORK", "amount": 540, "hours": 9, "rate": 60}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "hourly", "text": "ఈరోజు 9 గంటలు పని గంటకు 60 రూపాయలు", "entries": [{"type": "WORK", "amount": 540, "hours": 9, "rate": 60}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_travel", "text": "బస్సు చార్జీ నూటయాబై రూపాయలు ఖర్చు", "entries": [{"type": "EXPENSE", "amount": 150, "category": "TRAVEL"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "బస్సు చార్జీ 150 రూపాయలు ఖర్చు", "entries": [{"type": "EXPENSE", "amount": 150, "category": "TRAVEL"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_travel", "text": "బస్సు చార్జీ నలబై రూపాయలు ఖర్చు", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "బస్సు చార్జీ 40 రూపాయలు ఖర్చు", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_travel", "text": "బస్సు చార్జీ నూటయాభై రూపాయలు ఖర్చు", "entries": [{"type": "EXPENSE", "amount": 150, "category": "TRAVEL"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_travel", "text": "బస్సు చార్జీ రెండొందల యాబై రూపాయలు ఖర్చు", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "బస్సు చార్జీ 250 రూపాయలు ఖర్చు", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_health", "text": "మందులకు రెండొందలు యాబై రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 250, "category": "HEALTH"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_health", "text": "మందులకు 250 రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 250, "category": "HEALTH"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_health", "text": "మందులకు నలభై రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_health", "text": "మందులకు 40 రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_health", "text": "మందులకు ఇరవై రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_health", "text": "మందులకు 20 రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "te", "kind": "entries", "form": "words", "template": "exp_health", "text": "మందులకు ముప్పై రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 30, "category": "HEALTH"}]}
+{"lang": "te", "kind": "entries", "form": "digits", "template": "exp_health", "text": "మందులకు 30 రూపాయలు ఖర్చు అయింది", "entries": [{"type": "EXPENSE", "amount": 30, "category": "HEALTH"}]}
+{"lang": "te", "kind": "query", "text": "ఈ వారం ఎంత సంపాదించాను", "period": "WEEK", "topic": "EARNED"}
+{"lang": "te", "kind": "query", "text": "ఈ నెల అడ్వాన్స్ ఎంత తీసుకున్నాను", "period": "MONTH", "topic": "ADVANCE"}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "piece", "text": "ಇವತ್ತು ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ಒಂದೂವರೆನೂರು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಮೂರ್ ರೂಪಾಯಿ ಮುನ್ನೂರು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 450, "hours": 12, "pieces": 150, "rate": 3}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "piece", "text": "ಇವತ್ತು 12 ಗಂಟೆ ಕೆಲಸ 150 ಪೀಸ್ ಪೀಸ್‌ಗೆ 3 ರೂಪಾಯಿ 300 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 450, "hours": 12, "pieces": 150, "rate": 3}, {"type": "ADVANCE", "amount": 300}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "piece", "text": "ಇವತ್ತು ಆರ್ ಗಂಟೆ ಕೆಲಸ ನೂರಿಪ್ಪತ್ತು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಐದು ರೂಪಾಯಿ ಐನೂರು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 600, "hours": 6, "pieces": 120, "rate": 5}, {"type": "ADVANCE", "amount": 500}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "piece", "text": "ಇವತ್ತು 6 ಗಂಟೆ ಕೆಲಸ 120 ಪೀಸ್ ಪೀಸ್‌ಗೆ 5 ರೂಪಾಯಿ 500 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 600, "hours": 6, "pieces": 120, "rate": 5}, {"type": "ADVANCE", "amount": 500}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "piece", "text": "ಇವತ್ತು ಆರ್ ಗಂಟೆ ಕೆಲಸ ಒಂದೂವರೆನೂರು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಹತ್ತು ರೂಪಾಯಿ ಸಾವ್ರ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 1500, "hours": 6, "pieces": 150, "rate": 10}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "piece", "text": "ಇವತ್ತು 6 ಗಂಟೆ ಕೆಲಸ 150 ಪೀಸ್ ಪೀಸ್‌ಗೆ 10 ರೂಪಾಯಿ 1000 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 1500, "hours": 6, "pieces": 150, "rate": 10}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "piece", "text": "ಇವತ್ತು ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ನೂರೈವತ್ತು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಹತ್ತು ರೂಪಾಯಿ ಸಾವಿರ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 1500, "hours": 12, "pieces": 150, "rate": 10}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "piece", "text": "ಇವತ್ತು 12 ಗಂಟೆ ಕೆಲಸ 150 ಪೀಸ್ ಪೀಸ್‌ಗೆ 10 ರೂಪಾಯಿ 1000 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 1500, "hours": 12, "pieces": 150, "rate": 10}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "piece", "text": "ಇವತ್ತು ಯೆಂಟು ಗಂಟೆ ಕೆಲಸ ನೂರಿಪ್ಪತ್ತು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಹತ್ತು ರೂಪಾಯಿ ಸಾವ್ರ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 1200, "hours": 8, "pieces": 120, "rate": 10}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "piece", "text": "ಇವತ್ತು 8 ಗಂಟೆ ಕೆಲಸ 120 ಪೀಸ್ ಪೀಸ್‌ಗೆ 10 ರೂಪಾಯಿ 1000 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "WORK", "amount": 1200, "hours": 8, "pieces": 120, "rate": 10}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ಇವತ್ತು ಕೂಲಿ ಆರುನೂರ ರೂಪಾಯಿ ಸಿಕ್ತು", "entries": [{"type": "WORK", "amount": 600}, {"type": "PAYMENT", "amount": 600}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ಇವತ್ತು ಕೂಲಿ 600 ರೂಪಾಯಿ ಸಿಕ್ತು", "entries": [{"type": "WORK", "amount": 600}, {"type": "PAYMENT", "amount": 600}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ಇವತ್ತು ಕೂಲಿ ನಾನೂರು ರೂಪಾಯಿ ಸಿಕ್ತು", "entries": [{"type": "WORK", "amount": 400}, {"type": "PAYMENT", "amount": 400}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ಇವತ್ತು ಕೂಲಿ 400 ರೂಪಾಯಿ ಸಿಕ್ತು", "entries": [{"type": "WORK", "amount": 400}, {"type": "PAYMENT", "amount": 400}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ಇವತ್ತು ಕೂಲಿ ಮುನ್ನೂರೈವತ್ತು ರೂಪಾಯಿ ಸಿಕ್ತು", "entries": [{"type": "WORK", "amount": 350}, {"type": "PAYMENT", "amount": 350}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ಇವತ್ತು ಕೂಲಿ 350 ರೂಪಾಯಿ ಸಿಕ್ತು", "entries": [{"type": "WORK", "amount": 350}, {"type": "PAYMENT", "amount": 350}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "wage_recv", "text": "ಇವತ್ತು ಕೂಲಿ ಐನೂರ ರೂಪಾಯಿ ಸಿಕ್ತು", "entries": [{"type": "WORK", "amount": 500}, {"type": "PAYMENT", "amount": 500}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "ಇವತ್ತು ಕೂಲಿ 500 ರೂಪಾಯಿ ಸಿಕ್ತು", "entries": [{"type": "WORK", "amount": 500}, {"type": "PAYMENT", "amount": 500}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಆರುನೂರ ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "entries": [{"type": "WORK", "amount": 600}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 600 ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "entries": [{"type": "WORK", "amount": 600}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಐನೂರ ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "entries": [{"type": "WORK", "amount": 500}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 500 ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "entries": [{"type": "WORK", "amount": 500}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ನಾನೂರು ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "entries": [{"type": "WORK", "amount": 400}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 400 ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "entries": [{"type": "WORK", "amount": 400}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಆರುನೂರು ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "entries": [{"type": "WORK", "amount": 600}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_food", "text": "ತರಕಾರಿಗೆ ಇನ್ನೂರೈವತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_food", "text": "ತರಕಾರಿಗೆ 250 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_food", "text": "ತರಕಾರಿಗೆ ಇಪ್ಪತ್ ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 20, "category": "FOOD"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_food", "text": "ತರಕಾರಿಗೆ 20 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 20, "category": "FOOD"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_food", "text": "ತರಕಾರಿಗೆ ಮೂವತ್ ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 30, "category": "FOOD"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_food", "text": "ತರಕಾರಿಗೆ 30 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 30, "category": "FOOD"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_food", "text": "ತರಕಾರಿಗೆ ನಲವತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 40, "category": "FOOD"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_food", "text": "ತರಕಾರಿಗೆ 40 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 40, "category": "FOOD"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "adv", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ ಸಾವ್ರ ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "adv", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ 1000 ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "adv", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ ನೂರು ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "ADVANCE", "amount": 100}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "adv", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ 100 ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "ADVANCE", "amount": 100}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "adv", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ ಇನ್ನೂರ ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "ADVANCE", "amount": 200}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "adv", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ 200 ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "entries": [{"type": "ADVANCE", "amount": 200}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "yday", "text": "ನಿನ್ನೆ ಎಂಟು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಏಳುನೂರ ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 700, "hours": 8, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "yday", "text": "ನಿನ್ನೆ 8 ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 700 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 700, "hours": 8, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "yday", "text": "ನಿನ್ನೆ ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಐನೂರು ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 500, "hours": 12, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "yday", "text": "ನಿನ್ನೆ 12 ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 500 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 500, "hours": 12, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "yday", "text": "ನಿನ್ನೆ ಒಂಬತ್ತು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಆರುನೂರೈವತ್ತು ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 650, "hours": 9, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "yday", "text": "ನಿನ್ನೆ 9 ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 650 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 650, "hours": 9, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "yday", "text": "ನಿನ್ನೆ ಹತ್ತು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಮುನ್ನೂರೈವತ್ತು ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 350, "hours": 10, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "yday", "text": "ನಿನ್ನೆ 10 ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 350 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 350, "hours": 10, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "yday", "text": "ನಿನ್ನೆ ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಏಳುನೂರ ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 700, "hours": 12, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "yday", "text": "ನಿನ್ನೆ 12 ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 700 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 700, "hours": 12, "dayOffset": -1}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "hourly", "text": "ಇವತ್ತು ಒಂಭತ್ತು ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ ಎಂಬತ್ತು ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 720, "hours": 9, "rate": 80}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "hourly", "text": "ಇವತ್ತು 9 ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ 80 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 720, "hours": 9, "rate": 80}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "hourly", "text": "ಇವತ್ತು ಹತ್ ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ ಅರ್ವತ್ತು ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 600, "hours": 10, "rate": 60}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "hourly", "text": "ಇವತ್ತು 10 ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ 60 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 600, "hours": 10, "rate": 60}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "hourly", "text": "ಇವತ್ತು ಹತ್ತು ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ ಎಪ್ಪತ್ ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 700, "hours": 10, "rate": 70}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "hourly", "text": "ಇವತ್ತು 10 ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ 70 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 700, "hours": 10, "rate": 70}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "hourly", "text": "ಇವತ್ತು ಆರು ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ ಅರವತ್ತು ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 360, "hours": 6, "rate": 60}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "hourly", "text": "ಇವತ್ತು 6 ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ 60 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 360, "hours": 6, "rate": 60}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "hourly", "text": "ಇವತ್ತು ಯೆಂಟು ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ ಎಪ್ಪತ್ತು ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 560, "hours": 8, "rate": 70}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "hourly", "text": "ಇವತ್ತು 8 ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ 70 ರೂಪಾಯಿ", "entries": [{"type": "WORK", "amount": 560, "hours": 8, "rate": 70}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_travel", "text": "ಬಸ್ ಚಾರ್ಜ್ ಮೂವತ್ತು ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "entries": [{"type": "EXPENSE", "amount": 30, "category": "TRAVEL"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "ಬಸ್ ಚಾರ್ಜ್ 30 ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "entries": [{"type": "EXPENSE", "amount": 30, "category": "TRAVEL"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_travel", "text": "ಬಸ್ ಚಾರ್ಜ್ ನಲವತ್ತು ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "ಬಸ್ ಚಾರ್ಜ್ 40 ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_travel", "text": "ಬಸ್ ಚಾರ್ಜ್ ಅರವತ್ತು ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "entries": [{"type": "EXPENSE", "amount": 60, "category": "TRAVEL"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "ಬಸ್ ಚಾರ್ಜ್ 60 ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "entries": [{"type": "EXPENSE", "amount": 60, "category": "TRAVEL"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_travel", "text": "ಬಸ್ ಚಾರ್ಜ್ ಎರಡೂವರೆನೂರು ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "ಬಸ್ ಚಾರ್ಜ್ 250 ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_health", "text": "ಔಷಧಿಗೆ ಇಪ್ಪತ್ ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_health", "text": "ಔಷಧಿಗೆ 20 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_health", "text": "ಔಷಧಿಗೆ ಇಪ್ಪತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_health", "text": "ಔಷಧಿಗೆ ನೂರೈವತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 150, "category": "HEALTH"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_health", "text": "ಔಷಧಿಗೆ 150 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 150, "category": "HEALTH"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_health", "text": "ಔಷಧಿಗೆ ನಲ್ವತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_health", "text": "ಔಷಧಿಗೆ 40 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "kn", "kind": "entries", "form": "words", "template": "exp_health", "text": "ಔಷಧಿಗೆ ಅರ್ವತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 60, "category": "HEALTH"}]}
+{"lang": "kn", "kind": "entries", "form": "digits", "template": "exp_health", "text": "ಔಷಧಿಗೆ 60 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "entries": [{"type": "EXPENSE", "amount": 60, "category": "HEALTH"}]}
+{"lang": "kn", "kind": "query", "text": "ಈ ವಾರ ನಾನು ಎಷ್ಟು ದುಡಿದೆ", "period": "WEEK", "topic": "EARNED"}
+{"lang": "kn", "kind": "query", "text": "ಈ ತಿಂಗಳು ಎಷ್ಟು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡಿದ್ದೀನಿ", "period": "MONTH", "topic": "ADVANCE"}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "piece", "text": "இன்னைக்கு ஏழு மணி நேரம் வேலை எம்பது பீஸ் பீஸுக்கு மூணு ரூபாய் ஓராயிரம் ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 240, "hours": 7, "pieces": 80, "rate": 3}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "piece", "text": "இன்னைக்கு 7 மணி நேரம் வேலை 80 பீஸ் பீஸுக்கு 3 ரூபாய் 1000 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 240, "hours": 7, "pieces": 80, "rate": 3}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "piece", "text": "இன்னைக்கு பத்து மணி நேரம் வேலை இரநூறு அம்பது பீஸ் பீஸுக்கு ஆறு ரூபாய் இருநூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 1500, "hours": 10, "pieces": 250, "rate": 6}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "piece", "text": "இன்னைக்கு 10 மணி நேரம் வேலை 250 பீஸ் பீஸுக்கு 6 ரூபாய் 200 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 1500, "hours": 10, "pieces": 250, "rate": 6}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "piece", "text": "இன்னைக்கு பன்னிரண்டு மணி நேரம் வேலை நூறு அம்பது பீஸ் பீஸுக்கு எட்டு ரூபாய் ஆயிரம் ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 1200, "hours": 12, "pieces": 150, "rate": 8}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "piece", "text": "இன்னைக்கு 12 மணி நேரம் வேலை 150 பீஸ் பீஸுக்கு 8 ரூபாய் 1000 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 1200, "hours": 12, "pieces": 150, "rate": 8}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "piece", "text": "இன்னைக்கு பன்னிரெண்டு மணி நேரம் வேலை இருநூறு பீஸ் பீஸுக்கு நாலு ரூபாய் நூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 800, "hours": 12, "pieces": 200, "rate": 4}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "piece", "text": "இன்னைக்கு 12 மணி நேரம் வேலை 200 பீஸ் பீஸுக்கு 4 ரூபாய் 100 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 800, "hours": 12, "pieces": 200, "rate": 4}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "piece", "text": "இன்னைக்கு எட்டு மணி நேரம் வேலை நூரு அம்பது பீஸ் பீஸுக்கு பத்து ரூபாய் ஆயிரம் ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 1500, "hours": 8, "pieces": 150, "rate": 10}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "piece", "text": "இன்னைக்கு 8 மணி நேரம் வேலை 150 பீஸ் பீஸுக்கு 10 ரூபாய் 1000 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "WORK", "amount": 1500, "hours": 8, "pieces": 150, "rate": 10}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "wage_recv", "text": "இன்னைக்கு கூலி அறுநூறு ரூபாய் கிடைச்சது", "entries": [{"type": "WORK", "amount": 600}, {"type": "PAYMENT", "amount": 600}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "இன்னைக்கு கூலி 600 ரூபாய் கிடைச்சது", "entries": [{"type": "WORK", "amount": 600}, {"type": "PAYMENT", "amount": 600}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "wage_recv", "text": "இன்னைக்கு கூலி அறுநூறு ஐம்பது ரூபாய் கிடைச்சது", "entries": [{"type": "WORK", "amount": 650}, {"type": "PAYMENT", "amount": 650}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "இன்னைக்கு கூலி 650 ரூபாய் கிடைச்சது", "entries": [{"type": "WORK", "amount": 650}, {"type": "PAYMENT", "amount": 650}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "wage_recv", "text": "இன்னைக்கு கூலி ஓராயிரம் ஐநூறு ரூபாய் கிடைச்சது", "entries": [{"type": "WORK", "amount": 1500}, {"type": "PAYMENT", "amount": 1500}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "இன்னைக்கு கூலி 1500 ரூபாய் கிடைச்சது", "entries": [{"type": "WORK", "amount": 1500}, {"type": "PAYMENT", "amount": 1500}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "wage_recv", "text": "இன்னைக்கு கூலி ஏழுநூறு ரூபாய் கிடைச்சது", "entries": [{"type": "WORK", "amount": 700}, {"type": "PAYMENT", "amount": 700}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "இன்னைக்கு கூலி 700 ரூபாய் கிடைச்சது", "entries": [{"type": "WORK", "amount": 700}, {"type": "PAYMENT", "amount": 700}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "wage_recv", "text": "இன்னைக்கு கூலி ஓராயிரம் ஐந்நூறு ரூபாய் கிடைச்சது", "entries": [{"type": "WORK", "amount": 1500}, {"type": "PAYMENT", "amount": 1500}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் அறுநூறு ரூபாய் இன்னும் கொடுக்கல", "entries": [{"type": "WORK", "amount": 600}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் 600 ரூபாய் இன்னும் கொடுக்கல", "entries": [{"type": "WORK", "amount": 600}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் ஆயிரம் ஐந்நூறு ரூபாய் இன்னும் கொடுக்கல", "entries": [{"type": "WORK", "amount": 1500}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் 1500 ரூபாய் இன்னும் கொடுக்கல", "entries": [{"type": "WORK", "amount": 1500}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் ஆறுநூறு ரூபாய் இன்னும் கொடுக்கல", "entries": [{"type": "WORK", "amount": 600}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "wage_unpaid", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் முன்னூறு ஐம்பது ரூபாய் இன்னும் கொடுக்கல", "entries": [{"type": "WORK", "amount": 350}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் 350 ரூபாய் இன்னும் கொடுக்கல", "entries": [{"type": "WORK", "amount": 350}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_food", "text": "காய்கறி வாங்க இருநூறு ஐம்பது ரூபாய் செலவாச்சு", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_food", "text": "காய்கறி வாங்க 250 ரூபாய் செலவாச்சு", "entries": [{"type": "EXPENSE", "amount": 250, "category": "FOOD"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_food", "text": "காய்கறி வாங்க முப்பத்தி ரூபாய் செலவாச்சு", "entries": [{"type": "EXPENSE", "amount": 30, "category": "FOOD"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_food", "text": "காய்கறி வாங்க 30 ரூபாய் செலவாச்சு", "entries": [{"type": "EXPENSE", "amount": 30, "category": "FOOD"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_food", "text": "காய்கறி வாங்க அறுவது ரூபாய் செலவாச்சு", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_food", "text": "காய்கறி வாங்க 60 ரூபாய் செலவாச்சு", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_food", "text": "காய்கறி வாங்க அறுபது ரூபாய் செலவாச்சு", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "adv", "text": "கான்ட்ராக்டர் கிட்ட நூரு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "ADVANCE", "amount": 100}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "adv", "text": "கான்ட்ராக்டர் கிட்ட 100 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "ADVANCE", "amount": 100}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "adv", "text": "கான்ட்ராக்டர் கிட்ட முன்னூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "adv", "text": "கான்ட்ராக்டர் கிட்ட 300 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "adv", "text": "கான்ட்ராக்டர் கிட்ட நூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "entries": [{"type": "ADVANCE", "amount": 100}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "yday", "text": "நேத்து ஆறு மணி நேரம் வேலை செஞ்சேன் ஓராயிரம் ஐந்நூறு ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 1500, "hours": 6, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "yday", "text": "நேத்து 6 மணி நேரம் வேலை செஞ்சேன் 1500 ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 1500, "hours": 6, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "yday", "text": "நேத்து ஒன்பது மணி நேரம் வேலை செஞ்சேன் அறுநூறு ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 600, "hours": 9, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "yday", "text": "நேத்து 9 மணி நேரம் வேலை செஞ்சேன் 600 ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 600, "hours": 9, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "yday", "text": "நேத்து ஏழு மணி நேரம் வேலை செஞ்சேன் எண்ணூறு ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 800, "hours": 7, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "yday", "text": "நேத்து 7 மணி நேரம் வேலை செஞ்சேன் 800 ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 800, "hours": 7, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "yday", "text": "நேத்து ஆறு மணி நேரம் வேலை செஞ்சேன் முந்நூறு அம்பது ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 350, "hours": 6, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "yday", "text": "நேத்து 6 மணி நேரம் வேலை செஞ்சேன் 350 ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 350, "hours": 6, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "yday", "text": "நேத்து ஆறு மணி நேரம் வேலை செஞ்சேன் ஐந்நூறு ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 500, "hours": 6, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "yday", "text": "நேத்து 6 மணி நேரம் வேலை செஞ்சேன் 500 ரூபாய் கூலி", "entries": [{"type": "WORK", "amount": 500, "hours": 6, "dayOffset": -1}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "hourly", "text": "இன்னைக்கு ஒன்பது மணி நேரம் வேலை மணிக்கு ஐம்பது ரூபாய்", "entries": [{"type": "WORK", "amount": 450, "hours": 9, "rate": 50}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "hourly", "text": "இன்னைக்கு 9 மணி நேரம் வேலை மணிக்கு 50 ரூபாய்", "entries": [{"type": "WORK", "amount": 450, "hours": 9, "rate": 50}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "hourly", "text": "இன்னைக்கு ஒன்பது மணி நேரம் வேலை மணிக்கு எண்பது ரூபாய்", "entries": [{"type": "WORK", "amount": 720, "hours": 9, "rate": 80}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "hourly", "text": "இன்னைக்கு 9 மணி நேரம் வேலை மணிக்கு 80 ரூபாய்", "entries": [{"type": "WORK", "amount": 720, "hours": 9, "rate": 80}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "hourly", "text": "இன்னைக்கு ஏழு மணி நேரம் வேலை மணிக்கு அம்பது ரூபாய்", "entries": [{"type": "WORK", "amount": 350, "hours": 7, "rate": 50}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "hourly", "text": "இன்னைக்கு 7 மணி நேரம் வேலை மணிக்கு 50 ரூபாய்", "entries": [{"type": "WORK", "amount": 350, "hours": 7, "rate": 50}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "hourly", "text": "இன்னைக்கு பன்னிரண்டு மணி நேரம் வேலை மணிக்கு எம்பது ரூபாய்", "entries": [{"type": "WORK", "amount": 960, "hours": 12, "rate": 80}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "hourly", "text": "இன்னைக்கு 12 மணி நேரம் வேலை மணிக்கு 80 ரூபாய்", "entries": [{"type": "WORK", "amount": 960, "hours": 12, "rate": 80}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "hourly", "text": "இன்னைக்கு பத்து மணி நேரம் வேலை மணிக்கு எண்பது ரூபாய்", "entries": [{"type": "WORK", "amount": 800, "hours": 10, "rate": 80}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "hourly", "text": "இன்னைக்கு 10 மணி நேரம் வேலை மணிக்கு 80 ரூபாய்", "entries": [{"type": "WORK", "amount": 800, "hours": 10, "rate": 80}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_travel", "text": "பஸ்ஸுக்கு இருநூறு அம்பது ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "பஸ்ஸுக்கு 250 ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 250, "category": "TRAVEL"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_travel", "text": "பஸ்ஸுக்கு முப்பத்தி ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 30, "category": "TRAVEL"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "பஸ்ஸுக்கு 30 ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 30, "category": "TRAVEL"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_travel", "text": "பஸ்ஸுக்கு அறுபது ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 60, "category": "TRAVEL"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "பஸ்ஸுக்கு 60 ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 60, "category": "TRAVEL"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_travel", "text": "பஸ்ஸுக்கு நாற்பது ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "பஸ்ஸுக்கு 40 ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 40, "category": "TRAVEL"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_health", "text": "மருந்துக்கு அறுவது ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 60, "category": "HEALTH"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_health", "text": "மருந்துக்கு 60 ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 60, "category": "HEALTH"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_health", "text": "மருந்துக்கு நூரு அம்பது ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 150, "category": "HEALTH"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_health", "text": "மருந்துக்கு 150 ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 150, "category": "HEALTH"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_health", "text": "மருந்துக்கு நூறு ஐம்பது ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 150, "category": "HEALTH"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_health", "text": "மருந்துக்கு இருவது ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_health", "text": "மருந்துக்கு 20 ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "ta", "kind": "entries", "form": "words", "template": "exp_health", "text": "மருந்துக்கு நாப்பது ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "ta", "kind": "entries", "form": "digits", "template": "exp_health", "text": "மருந்துக்கு 40 ரூபாய் செலவு", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "ta", "kind": "query", "text": "இந்த வாரம் எவ்வளவு சம்பாதிச்சேன்", "period": "WEEK", "topic": "EARNED"}
+{"lang": "ta", "kind": "query", "text": "இந்த மாசம் எவ்வளவு அட்வான்ஸ் வாங்கினேன்", "period": "MONTH", "topic": "ADVANCE"}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "piece", "text": "aaj 6 ghante kaam kiya 250 piece 3 rupaye rate 1000 advance liya", "entries": [{"type": "WORK", "amount": 750, "hours": 6, "pieces": 250, "rate": 3}, {"type": "ADVANCE", "amount": 1000}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "piece", "text": "aaj 8 ghante kaam kiya 120 piece 10 rupaye rate 200 advance liya", "entries": [{"type": "WORK", "amount": 1200, "hours": 8, "pieces": 120, "rate": 10}, {"type": "ADVANCE", "amount": 200}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "piece", "text": "aaj 9 ghante kaam kiya 150 piece 6 rupaye rate 500 advance liya", "entries": [{"type": "WORK", "amount": 900, "hours": 9, "pieces": 150, "rate": 6}, {"type": "ADVANCE", "amount": 500}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "piece", "text": "aaj 7 ghante kaam kiya 120 piece 5 rupaye rate 100 advance liya", "entries": [{"type": "WORK", "amount": 600, "hours": 7, "pieces": 120, "rate": 5}, {"type": "ADVANCE", "amount": 100}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "aaj 800 rupaye majdoori mili", "entries": [{"type": "WORK", "amount": 800}, {"type": "PAYMENT", "amount": 800}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "aaj 600 rupaye majdoori mili", "entries": [{"type": "WORK", "amount": 600}, {"type": "PAYMENT", "amount": 600}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "aaj 650 rupaye majdoori mili", "entries": [{"type": "WORK", "amount": 650}, {"type": "PAYMENT", "amount": 650}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "wage_recv", "text": "aaj 400 rupaye majdoori mili", "entries": [{"type": "WORK", "amount": 400}, {"type": "PAYMENT", "amount": 400}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "aaj ki dihadi 700 rupaye", "entries": [{"type": "WORK", "amount": 700}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "aaj ki dihadi 350 rupaye", "entries": [{"type": "WORK", "amount": 350}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "aaj ki dihadi 1500 rupaye", "entries": [{"type": "WORK", "amount": 1500}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "wage_unpaid", "text": "aaj ki dihadi 600 rupaye", "entries": [{"type": "WORK", "amount": 600}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_food", "text": "sabzi par 20 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 20, "category": "FOOD"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_food", "text": "sabzi par 60 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 60, "category": "FOOD"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_food", "text": "sabzi par 150 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 150, "category": "FOOD"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "adv", "text": "thekedar se 1000 rupaye advance liya", "entries": [{"type": "ADVANCE", "amount": 1000}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "adv", "text": "thekedar se 200 rupaye advance liya", "entries": [{"type": "ADVANCE", "amount": 200}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "adv", "text": "thekedar se 100 rupaye advance liya", "entries": [{"type": "ADVANCE", "amount": 100}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "adv", "text": "thekedar se 300 rupaye advance liya", "entries": [{"type": "ADVANCE", "amount": 300}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "yday", "text": "kal 6 ghante kaam 800 rupaye dihadi", "entries": [{"type": "WORK", "amount": 800, "hours": 6, "dayOffset": -1}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "yday", "text": "kal 6 ghante kaam 700 rupaye dihadi", "entries": [{"type": "WORK", "amount": 700, "hours": 6, "dayOffset": -1}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "yday", "text": "kal 9 ghante kaam 1500 rupaye dihadi", "entries": [{"type": "WORK", "amount": 1500, "hours": 9, "dayOffset": -1}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "yday", "text": "kal 8 ghante kaam 800 rupaye dihadi", "entries": [{"type": "WORK", "amount": 800, "hours": 8, "dayOffset": -1}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "hourly", "text": "7 ghante kaam rate 60 rupaye", "entries": [{"type": "WORK", "amount": 420, "hours": 7, "rate": 60}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "hourly", "text": "12 ghante kaam rate 50 rupaye", "entries": [{"type": "WORK", "amount": 600, "hours": 12, "rate": 50}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "hourly", "text": "9 ghante kaam rate 70 rupaye", "entries": [{"type": "WORK", "amount": 630, "hours": 9, "rate": 70}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "hourly", "text": "8 ghante kaam rate 60 rupaye", "entries": [{"type": "WORK", "amount": 480, "hours": 8, "rate": 60}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "hourly", "text": "6 ghante kaam rate 50 rupaye", "entries": [{"type": "WORK", "amount": 300, "hours": 6, "rate": 50}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "bus ticket 80 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 80, "category": "TRAVEL"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "bus ticket 30 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 30, "category": "TRAVEL"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_travel", "text": "bus ticket 150 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 150, "category": "TRAVEL"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_health", "text": "dawa par 60 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 60, "category": "HEALTH"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_health", "text": "dawa par 40 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 40, "category": "HEALTH"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_health", "text": "dawa par 250 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 250, "category": "HEALTH"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_health", "text": "dawa par 20 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 20, "category": "HEALTH"}]}
+{"lang": "hi-Latn", "kind": "entries", "form": "digits", "template": "exp_health", "text": "dawa par 80 rupaye kharch", "entries": [{"type": "EXPENSE", "amount": 80, "category": "HEALTH"}]}
+{"lang": "hi-Latn", "kind": "query", "text": "is hafte kitna kamaya", "period": "WEEK", "topic": "EARNED"}
+{"lang": "hi-Latn", "kind": "query", "text": "is mahine kitna advance liya", "period": "MONTH", "topic": "ADVANCE"}
+{"lang": "hi-Latn", "kind": "query", "text": "aaj kitna baaki hai", "period": "DAY", "topic": "DUE"}
+{"lang": "hi", "kind": "chat", "text": "आपका नाम क्या है", "chat": "NAME"}
+{"lang": "hi", "kind": "chat", "text": "तुम्हारा नाम क्या है", "chat": "NAME"}
+{"lang": "hi", "kind": "chat", "text": "तुम कौन हो", "chat": "NAME"}
+{"lang": "hi", "kind": "chat", "text": "नमस्ते", "chat": "GREETING"}
+{"lang": "hi", "kind": "chat", "text": "हेलो", "chat": "GREETING"}
+{"lang": "hi", "kind": "chat", "text": "राम राम भाई", "chat": "GREETING"}
+{"lang": "hi", "kind": "chat", "text": "तुम क्या कर सकते हो", "chat": "HELP"}
+{"lang": "hi", "kind": "chat", "text": "इसे कैसे इस्तेमाल करूं", "chat": "HELP"}
+{"lang": "hi", "kind": "chat", "text": "मदद करो", "chat": "HELP"}
+{"lang": "hi", "kind": "chat", "text": "धन्यवाद", "chat": "THANKS"}
+{"lang": "hi", "kind": "chat", "text": "शुक्रिया भाई", "chat": "THANKS"}
+{"lang": "hi", "kind": "chat", "text": "कैसे हो", "chat": "HOW_ARE_YOU"}
+{"lang": "hi", "kind": "chat", "text": "क्या हाल है", "chat": "HOW_ARE_YOU"}
+{"lang": "hi", "kind": "chat", "text": "मेरा डेटा सुरक्षित है क्या", "chat": "PRIVACY"}
+{"lang": "hi", "kind": "chat", "text": "क्या ठेकेदार मेरा हिसाब देख सकता है", "chat": "PRIVACY"}
+{"lang": "hi", "kind": "chat", "text": "आज क्या तारीख है", "chat": "DATE"}
+{"lang": "hi", "kind": "chat", "text": "तुम्हें किसने बनाया", "chat": "MAKER"}
+{"lang": "hi", "kind": "chat", "text": "बाय", "chat": "BYE"}
+{"lang": "hi", "kind": "chat", "text": "अच्छा फिर मिलेंगे", "chat": "BYE"}
+{"lang": "or", "kind": "chat", "text": "ତୁମ ନାମ କଣ", "chat": "NAME"}
+{"lang": "or", "kind": "chat", "text": "ଆପଣଙ୍କ ନାଁ କଣ", "chat": "NAME"}
+{"lang": "or", "kind": "chat", "text": "ତୁମେ କିଏ", "chat": "NAME"}
+{"lang": "or", "kind": "chat", "text": "ନମସ୍କାର", "chat": "GREETING"}
+{"lang": "or", "kind": "chat", "text": "ହେଲୋ", "chat": "GREETING"}
+{"lang": "or", "kind": "chat", "text": "ତୁମେ କଣ କରିପାରିବ", "chat": "HELP"}
+{"lang": "or", "kind": "chat", "text": "ମୋତେ ସାହାଯ୍ୟ କର", "chat": "HELP"}
+{"lang": "or", "kind": "chat", "text": "ଏହାକୁ କିପରି ବ୍ୟବହାର କରିବି", "chat": "HELP"}
+{"lang": "or", "kind": "chat", "text": "ଧନ୍ୟବାଦ", "chat": "THANKS"}
+{"lang": "or", "kind": "chat", "text": "କେମିତି ଅଛ", "chat": "HOW_ARE_YOU"}
+{"lang": "or", "kind": "chat", "text": "ମୋ ଡାଟା ସୁରକ୍ଷିତ କି", "chat": "PRIVACY"}
+{"lang": "or", "kind": "chat", "text": "ଆଜି କି ତାରିଖ", "chat": "DATE"}
+{"lang": "or", "kind": "chat", "text": "ତୁମକୁ କିଏ ତିଆରି କଲା", "chat": "MAKER"}
+{"lang": "or", "kind": "chat", "text": "ବାଏ", "chat": "BYE"}
+{"lang": "en", "kind": "chat", "text": "what is your name", "chat": "NAME"}
+{"lang": "en", "kind": "chat", "text": "who are you", "chat": "NAME"}
+{"lang": "en", "kind": "chat", "text": "tell me your name", "chat": "NAME"}
+{"lang": "en", "kind": "chat", "text": "hello", "chat": "GREETING"}
+{"lang": "en", "kind": "chat", "text": "hi", "chat": "GREETING"}
+{"lang": "en", "kind": "chat", "text": "good morning", "chat": "GREETING"}
+{"lang": "en", "kind": "chat", "text": "what can you do", "chat": "HELP"}
+{"lang": "en", "kind": "chat", "text": "how do I use this", "chat": "HELP"}
+{"lang": "en", "kind": "chat", "text": "help me", "chat": "HELP"}
+{"lang": "en", "kind": "chat", "text": "thank you", "chat": "THANKS"}
+{"lang": "en", "kind": "chat", "text": "thanks a lot", "chat": "THANKS"}
+{"lang": "en", "kind": "chat", "text": "how are you", "chat": "HOW_ARE_YOU"}
+{"lang": "en", "kind": "chat", "text": "is my data safe", "chat": "PRIVACY"}
+{"lang": "en", "kind": "chat", "text": "who can see my records", "chat": "PRIVACY"}
+{"lang": "en", "kind": "chat", "text": "what is the date today", "chat": "DATE"}
+{"lang": "en", "kind": "chat", "text": "who made you", "chat": "MAKER"}
+{"lang": "en", "kind": "chat", "text": "bye", "chat": "BYE"}
+{"lang": "en", "kind": "chat", "text": "goodbye", "chat": "BYE"}
+{"lang": "te", "kind": "chat", "text": "నీ పేరు ఏమిటి", "chat": "NAME"}
+{"lang": "te", "kind": "chat", "text": "మీ పేరేంటి", "chat": "NAME"}
+{"lang": "te", "kind": "chat", "text": "నువ్వు ఎవరు", "chat": "NAME"}
+{"lang": "te", "kind": "chat", "text": "నమస్కారం", "chat": "GREETING"}
+{"lang": "te", "kind": "chat", "text": "హలో", "chat": "GREETING"}
+{"lang": "te", "kind": "chat", "text": "నువ్వు ఏం చేయగలవు", "chat": "HELP"}
+{"lang": "te", "kind": "chat", "text": "నాకు సహాయం చెయ్యి", "chat": "HELP"}
+{"lang": "te", "kind": "chat", "text": "ఇది ఎలా వాడాలి", "chat": "HELP"}
+{"lang": "te", "kind": "chat", "text": "ధన్యవాదాలు", "chat": "THANKS"}
+{"lang": "te", "kind": "chat", "text": "థాంక్స్", "chat": "THANKS"}
+{"lang": "te", "kind": "chat", "text": "ఎలా ఉన్నావు", "chat": "HOW_ARE_YOU"}
+{"lang": "te", "kind": "chat", "text": "నా డేటా సురక్షితమేనా", "chat": "PRIVACY"}
+{"lang": "te", "kind": "chat", "text": "ఈ రోజు తేదీ ఎంత", "chat": "DATE"}
+{"lang": "te", "kind": "chat", "text": "నిన్ను ఎవరు తయారు చేశారు", "chat": "MAKER"}
+{"lang": "te", "kind": "chat", "text": "బై", "chat": "BYE"}
+{"lang": "kn", "kind": "chat", "text": "ನಿನ್ನ ಹೆಸರು ಏನು", "chat": "NAME"}
+{"lang": "kn", "kind": "chat", "text": "ನಿಮ್ಮ ಹೆಸರೇನು", "chat": "NAME"}
+{"lang": "kn", "kind": "chat", "text": "ನೀನು ಯಾರು", "chat": "NAME"}
+{"lang": "kn", "kind": "chat", "text": "ನಮಸ್ಕಾರ", "chat": "GREETING"}
+{"lang": "kn", "kind": "chat", "text": "ಹಲೋ", "chat": "GREETING"}
+{"lang": "kn", "kind": "chat", "text": "ನೀನು ಏನು ಮಾಡಬಲ್ಲೆ", "chat": "HELP"}
+{"lang": "kn", "kind": "chat", "text": "ನನಗೆ ಸಹಾಯ ಮಾಡು", "chat": "HELP"}
+{"lang": "kn", "kind": "chat", "text": "ಇದನ್ನು ಹೇಗೆ ಬಳಸೋದು", "chat": "HELP"}
+{"lang": "kn", "kind": "chat", "text": "ಧನ್ಯವಾದ", "chat": "THANKS"}
+{"lang": "kn", "kind": "chat", "text": "ಥ್ಯಾಂಕ್ಸ್", "chat": "THANKS"}
+{"lang": "kn", "kind": "chat", "text": "ಹೇಗಿದ್ದೀಯ", "chat": "HOW_ARE_YOU"}
+{"lang": "kn", "kind": "chat", "text": "ನನ್ನ ಡೇಟಾ ಸುರಕ್ಷಿತವಾ", "chat": "PRIVACY"}
+{"lang": "kn", "kind": "chat", "text": "ಇವತ್ತು ದಿನಾಂಕ ಎಷ್ಟು", "chat": "DATE"}
+{"lang": "kn", "kind": "chat", "text": "ನಿನ್ನನ್ನು ಯಾರು ಮಾಡಿದ್ದು", "chat": "MAKER"}
+{"lang": "kn", "kind": "chat", "text": "ಬೈ", "chat": "BYE"}
+{"lang": "ta", "kind": "chat", "text": "உன் பெயர் என்ன", "chat": "NAME"}
+{"lang": "ta", "kind": "chat", "text": "உங்க பேர் என்ன", "chat": "NAME"}
+{"lang": "ta", "kind": "chat", "text": "நீ யார்", "chat": "NAME"}
+{"lang": "ta", "kind": "chat", "text": "வணக்கம்", "chat": "GREETING"}
+{"lang": "ta", "kind": "chat", "text": "ஹலோ", "chat": "GREETING"}
+{"lang": "ta", "kind": "chat", "text": "நீ என்ன செய்ய முடியும்", "chat": "HELP"}
+{"lang": "ta", "kind": "chat", "text": "எனக்கு உதவி பண்ணு", "chat": "HELP"}
+{"lang": "ta", "kind": "chat", "text": "இதை எப்படி பயன்படுத்துறது", "chat": "HELP"}
+{"lang": "ta", "kind": "chat", "text": "நன்றி", "chat": "THANKS"}
+{"lang": "ta", "kind": "chat", "text": "எப்படி இருக்கீங்க", "chat": "HOW_ARE_YOU"}
+{"lang": "ta", "kind": "chat", "text": "என் டேட்டா பாதுகாப்பா இருக்கா", "chat": "PRIVACY"}
+{"lang": "ta", "kind": "chat", "text": "இன்னைக்கு தேதி என்ன", "chat": "DATE"}
+{"lang": "ta", "kind": "chat", "text": "உன்னை யார் உருவாக்கினாங்க", "chat": "MAKER"}
+{"lang": "ta", "kind": "chat", "text": "பை", "chat": "BYE"}
+{"lang": "hi-Latn", "kind": "chat", "text": "tumhara naam kya hai", "chat": "NAME"}
+{"lang": "hi-Latn", "kind": "chat", "text": "aap kaun ho", "chat": "NAME"}
+{"lang": "hi-Latn", "kind": "chat", "text": "namaste", "chat": "GREETING"}
+{"lang": "hi-Latn", "kind": "chat", "text": "hello bhai", "chat": "GREETING"}
+{"lang": "hi-Latn", "kind": "chat", "text": "madad karo", "chat": "HELP"}
+{"lang": "hi-Latn", "kind": "chat", "text": "ye kaise chalta hai", "chat": "HELP"}
+{"lang": "hi-Latn", "kind": "chat", "text": "dhanyavad", "chat": "THANKS"}
+{"lang": "hi-Latn", "kind": "chat", "text": "shukriya", "chat": "THANKS"}
+{"lang": "hi-Latn", "kind": "chat", "text": "kaise ho", "chat": "HOW_ARE_YOU"}
+{"lang": "hi-Latn", "kind": "chat", "text": "mera data safe hai kya", "chat": "PRIVACY"}
+{"lang": "hi-Latn", "kind": "chat", "text": "aaj ki tarikh kya hai", "chat": "DATE"}
+{"lang": "hi-Latn", "kind": "chat", "text": "tumhe kisne banaya", "chat": "MAKER"}
+{"lang": "hi", "kind": "unknown", "text": "भारत की राजधानी क्या है"}
+{"lang": "hi", "kind": "unknown", "text": "एक चुटकुला सुनाओ"}
+{"lang": "hi", "kind": "unknown", "text": "कल बारिश होगी क्या"}
+{"lang": "hi", "kind": "unknown", "text": "गाना सुनाओ"}
+{"lang": "hi", "kind": "unknown", "text": "मुझे नौकरी चाहिए"}
+{"lang": "or", "kind": "unknown", "text": "ଭାରତର ରାଜଧାନୀ କଣ"}
+{"lang": "or", "kind": "unknown", "text": "ଗୋଟେ ଗୀତ ଗାଅ"}
+{"lang": "or", "kind": "unknown", "text": "ମୋତେ ଚାକିରି ଦରକାର"}
+{"lang": "en", "kind": "unknown", "text": "what is the capital of India"}
+{"lang": "en", "kind": "unknown", "text": "tell me a joke"}
+{"lang": "en", "kind": "unknown", "text": "will it rain tomorrow"}
+{"lang": "en", "kind": "unknown", "text": "sing a song"}
+{"lang": "en", "kind": "unknown", "text": "I need a job"}
+{"lang": "te", "kind": "unknown", "text": "భారతదేశ రాజధాని ఏది"}
+{"lang": "te", "kind": "unknown", "text": "ఒక జోక్ చెప్పు"}
+{"lang": "te", "kind": "unknown", "text": "రేపు వర్షం పడుతుందా"}
+{"lang": "kn", "kind": "unknown", "text": "ಭಾರತದ ರಾಜಧಾನಿ ಯಾವುದು"}
+{"lang": "kn", "kind": "unknown", "text": "ಒಂದು ಜೋಕ್ ಹೇಳು"}
+{"lang": "kn", "kind": "unknown", "text": "ನಾಳೆ ಮಳೆ ಬರುತ್ತಾ"}
+{"lang": "ta", "kind": "unknown", "text": "இந்தியாவின் தலைநகரம் எது"}
+{"lang": "ta", "kind": "unknown", "text": "ஒரு ஜோக் சொல்லு"}
+{"lang": "ta", "kind": "unknown", "text": "நாளைக்கு மழை வருமா"}
+{"lang": "hi-Latn", "kind": "unknown", "text": "bharat ki rajdhani kya hai"}
+{"lang": "hi-Latn", "kind": "unknown", "text": "ek chutkula sunao"}
+{"lang": "hi-Latn", "kind": "unknown", "text": "gaana sunao"}
