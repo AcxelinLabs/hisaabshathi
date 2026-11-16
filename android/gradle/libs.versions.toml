@@ -1,0 +1,43 @@
+[versions]
+agp = "8.11.1"
+kotlin = "2.1.21"
+ksp = "2.1.21-2.0.2"
+composeBom = "2025.06.01"
+room = "2.7.2"
+sqlcipher = "4.9.0"
+sherpa = "v1.12.14"
+mediapipe = "0.10.24"
+
+[libraries]
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-icons = { module = "androidx.compose.material:material-icons-extended" }
+compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+activity-compose = "androidx.activity:activity-compose:1.10.1"
+lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1"
+lifecycle-runtime-compose = "androidx.lifecycle:lifecycle-runtime-compose:2.9.1"
+navigation-compose = "androidx.navigation:navigation-compose:2.9.0"
+datastore = "androidx.datastore:datastore-preferences:1.1.7"
+work = "androidx.work:work-runtime-ktx:2.10.2"
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+sqlcipher = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher" }
+sqlite = "androidx.sqlite:sqlite-ktx:2.5.2"
+sherpa-onnx = { module = "com.github.k2-fsa:sherpa-onnx", version.ref = "sherpa" }
+mediapipe-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "mediapipe" }
+mlkit-text = "com.google.mlkit:text-recognition:16.0.1"
+mlkit-text-devanagari = "com.google.mlkit:text-recognition-devanagari:16.0.1"
+coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
+coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
+serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1"
+junit = "junit:junit:4.13.2"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
