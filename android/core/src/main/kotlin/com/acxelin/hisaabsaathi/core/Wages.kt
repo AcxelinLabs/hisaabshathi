@@ -13,6 +13,10 @@ data class WageRate(
     val effectiveFrom: String,
     val source: String,
     val url: String = "",
+    /** Area or zone inside the region, when rates differ by place. */
+    val zone: String = "",
+    /** "high", "medium" or "low": how well the figure was verified when the pack was made. */
+    val confidence: String = "",
 )
 
 @Serializable

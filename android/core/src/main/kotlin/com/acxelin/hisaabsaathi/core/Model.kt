@@ -60,4 +60,16 @@ object Money {
         val s = if (frac == 0L) whole.toString() else "$whole.${frac.toString().padStart(2, '0')}"
         return if (neg) "-$s" else s
     }
+
+    /** For the screen: Indian digit grouping, "1,20,000". Speech uses [format] so voices read it right. */
+    fun formatGrouped(paise: Long): String {
+        val plain = format(paise)
+        val neg = plain.startsWith("-")
+        val body = plain.removePrefix("-")
+        val whole = body.substringBefore('.')
+        val frac = if ('.' in body) "." + body.substringAfter('.') else ""
+        if (whole.length <= 3) return plain
+        val head = whole.dropLast(3).reversed().chunked(2).joinToString(",").reversed()
+        return (if (neg) "-" else "") + head + "," + whole.takeLast(3) + frac
+    }
 }

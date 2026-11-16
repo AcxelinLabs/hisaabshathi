@@ -50,6 +50,10 @@ class LedgerTest {
         assertEquals("600", Money.format(60000))
         assertEquals("12.50", Money.format(1250))
         assertEquals("-300", Money.format(-30000))
+        assertEquals("1,20,000", Money.formatGrouped(12000000))
+        assertEquals("12,345.50", Money.formatGrouped(1234550))
+        assertEquals("999", Money.formatGrouped(99900))
+        assertEquals("-1,000", Money.formatGrouped(-100000))
     }
 }
 
@@ -131,7 +135,7 @@ class StringsTest {
             val sum = s.summary(QueryPeriod.WEEK, Totals(earnedPaise = 360000, advancePaise = 90000))
             assertTrue(sum, "3600" in sum && "2700" in sum)
         }
-        assertEquals("120 pieces × ₹5 · 8 hours", Strings(Lang.EN).workDetail(8.0, 120, 500))
+        assertEquals("120 pieces × ₹5, 8 hours", Strings(Lang.EN).workDetail(8.0, 120, 500))
     }
 
     @Test fun confirmWords() {

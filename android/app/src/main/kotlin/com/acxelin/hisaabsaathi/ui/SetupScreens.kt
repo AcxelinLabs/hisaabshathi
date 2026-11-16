@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -110,7 +111,7 @@ private fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean
 @Composable
 fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     var step by rememberSaveable { mutableIntStateOf(0) }
-    Column(Modifier.fillMaxSize().background(if (step == 0) Ink else Chalk).padding(24.dp)) {
+    Column(Modifier.fillMaxSize().background(if (step == 0) Ink else Chalk).systemBarsPadding().padding(24.dp)) {
         Text(s.appName, fontSize = 40.sp, fontWeight = FontWeight.ExtraBold, color = if (step == 0) Color.White else Ink)
         Spacer(Modifier.height(24.dp))
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -150,7 +151,7 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
 @Composable
 fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () -> Unit) {
     var confirmErase by remember { mutableStateOf(false) }
-    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+    Column(Modifier.fillMaxSize().background(Ink).systemBarsPadding().background(MaterialTheme.colorScheme.background)) {
         Row(Modifier.fillMaxWidth().background(Ink).padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, s.done, tint = Color.White) }
             Text(s.settings, color = Color.White, fontSize = 20.sp)

@@ -88,13 +88,13 @@ class AppFlowTest {
 
         // --- an entry (typed here; spoken on a phone)
         click("लिखकर डालें")
-        rule.onNode(hasSetTextAction()).performScrollTo()
+        rule.onNode(hasSetTextAction())
             .performTextInput("आज आठ घंटे काम किया एक सौ बीस पीस पांच रुपये रेट तीन सौ एडवांस लिया")
         click("आगे")
         waitFor("क्या यह सही है?")
         rule.onNode(hasSetTextAction() and hasText("600")).assertIsDisplayed()
         rule.onNode(hasSetTextAction() and hasText("300")).assertExists()
-        rule.onNodeWithText("120 पीस × ₹5 · 8 घंटे").assertExists()
+        rule.onNodeWithText("120 पीस × ₹5, 8 घंटे").assertExists()
         shot("05-confirm")
         click("सही है, सेव करें")
 
@@ -107,7 +107,7 @@ class AppFlowTest {
 
         // --- an expense, to prove more than one kind of entry
         click("लिखकर डालें")
-        rule.onNode(hasSetTextAction()).performScrollTo().performTextInput("सब्जी पर अस्सी रुपये खर्च किए")
+        rule.onNode(hasSetTextAction()).performTextInput("सब्जी पर अस्सी रुपये खर्च किए")
         click("आगे")
         waitFor("क्या यह सही है?")
         rule.onNode(hasSetTextAction() and hasText("80")).assertExists()
@@ -117,7 +117,7 @@ class AppFlowTest {
 
         // --- a question
         click("लिखकर डालें")
-        rule.onNode(hasSetTextAction()).performScrollTo().performTextInput("इस हफ्ते कितना कमाया")
+        rule.onNode(hasSetTextAction()).performTextInput("इस हफ्ते कितना कमाया")
         click("आगे")
         waitFor("इस हफ्ते आपने 600 रुपये कमाए")
         shot("07-question-answer")
@@ -139,6 +139,15 @@ class AppFlowTest {
         rule.onNodeWithContentDescription("सेटिंग").performClick()
         waitFor("ऑफ़लाइन पैक")
         shot("11-settings")
+        // --- Telugu, Kannada and Tamil home screens
+        for ((name, done, home, prompt, file) in listOf(
+            listOf("తెలుగు", "", "", "", "14-home-telugu"), listOf("ಕನ್ನಡ", "", "", "", "15-home-kannada"), listOf("தமிழ்", "", "", "", "16-home-tamil"),
+        )) {
+            click(name)
+            pump()
+            rule.waitForIdle()
+            shot(file.replace("home", "settings"))
+        }
         click("ଓଡ଼ିଆ")
         waitFor("ସେଟିଂ")
         rule.onNodeWithContentDescription("ହୋଇଗଲା").performClick()

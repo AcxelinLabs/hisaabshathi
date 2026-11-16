@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -111,15 +114,14 @@ private fun BigButton(text: String, color: Color, modifier: Modifier = Modifier,
 // ---------------------------------------------------------------- home
 
 @Composable
-fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Capture, onMic: () -> Unit, onScan: () -> Unit) {
+fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Capture, onMic: () -> Unit, onScan: () -> Unit, onType: () -> Unit) {
     val entries by vm.entries.collectAsStateWithLifecycle()
     val level by vm.level.collectAsStateWithLifecycle()
-    var typing by rememberSaveable { mutableStateOf(false) }
 
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Pill(settings.lang.nativeName)
@@ -137,7 +139,7 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
         val listening = capture == Capture.Listening
         val thinking = capture == Capture.Thinking
         val pulse by animateFloatAsState(if (listening) 1f + level * 0.35f else 1f, label = "mic")
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(210.dp)) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(188.dp)) {
             // The ring swells with the worker's voice while listening.
             Box(Modifier.size(176.dp).scale(pulse).clip(CircleShape).background(if (listening) Sindoor.copy(alpha = 0.22f) else Marigold.copy(alpha = 0.28f)))
             Box(
@@ -157,6 +159,7 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
             },
             fontSize = 20.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold,
         )
+        if (!listening && !thinking) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
             OutlinedButton(onClick = onScan, modifier = Modifier.weight(1f).height(56.dp)) {
@@ -164,13 +167,41 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
                 Spacer(Modifier.width(8.dp))
                 Text(s.scanBill)
             }
-            OutlinedButton(onClick = { typing = !typing }, modifier = Modifier.weight(1f).height(56.dp)) { Text(s.typeInstead) }
+            OutlinedButton(onClick = onType, modifier = Modifier.weight(1f).height(56.dp)) { Text(s.typeInstead) }
         }
-        if (typing) {
-            var text by rememberSaveable { mutableStateOf("") }
-            OutlinedTextField(text, { text = it }, Modifier.fillMaxWidth(), placeholder = { Text(s.typeHint) })
-            Button(onClick = { vm.submitText(text); text = ""; typing = false }, enabled = text.isNotBlank()) { Text(s.next) }
+    }
+}
+
+/**
+ * Typing gets a screen of its own: the box sits at the top where the keyboard cannot cover
+ * it, the letters are large, and the button stays just above the keyboard.
+ */
+@Composable
+fun TypeScreen(s: Strings, onBack: () -> Unit, onSubmit: (String) -> Unit) {
+    var text by rememberSaveable { mutableStateOf("") }
+    val focus = remember { androidx.compose.ui.focus.FocusRequester() }
+    androidx.compose.runtime.LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
+    Column(
+        Modifier.fillMaxSize().background(Chalk).systemBarsPadding().imePadding().padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onBack) { Icon(Icons.Default.Close, s.cancel, tint = Ink) }
+            Text(s.typeInstead, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
         }
+        OutlinedTextField(
+            value = text, onValueChange = { text = it },
+            modifier = Modifier.fillMaxWidth().weight(1f, fill = false).focusRequester(focus),
+            textStyle = MaterialTheme.typography.headlineSmall.copy(color = Ink, fontWeight = FontWeight.SemiBold),
+            minLines = 3,
+            colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = Paper, unfocusedContainerColor = Paper, focusedTextColor = Ink, unfocusedTextColor = Ink,
+                focusedBorderColor = Ink, cursorColor = Ink,
+            ),
+        )
+        Text(s.typeHint, fontSize = 16.sp, color = InkSoft)
+        Spacer(Modifier.weight(1f))
+        BigButton(s.next, Marigold, Modifier.fillMaxWidth()) { if (text.isNotBlank()) onSubmit(text) }
     }
 }
 
@@ -187,7 +218,7 @@ private fun Pill(text: String) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer: () -> Unit) {
-    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(16.dp)) {
+    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).systemBarsPadding().imePadding().padding(16.dp)) {
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(s.isThisRight, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
             Section(color = Color(0xFFDDE1F2)) {
@@ -209,7 +240,7 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                                         d.copy(type = type, category = if (type == EntryType.EXPENSE) d.category ?: ExpenseCategory.OTHER else null),
                                     )
                                 },
-                                label = { Text(s.typeName(type)) },
+                                label = { Text("${typeEmoji(type)} ${s.typeName(type)}", fontSize = 16.sp) },
                             )
                         }
                     }
@@ -268,6 +299,14 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
 
 private val dayFormat = DateTimeFormatter.ofPattern("d MMM yyyy")
 
+/** A picture for each kind of line, for workers who do not read easily. */
+private fun typeEmoji(type: EntryType): String = when (type) {
+    EntryType.WORK -> "🧱"
+    EntryType.ADVANCE -> "🤝"
+    EntryType.PAYMENT -> "💵"
+    EntryType.EXPENSE -> "🛒"
+}
+
 private fun typeColor(type: EntryType): Color = when (type) {
     EntryType.WORK -> Leaf
     EntryType.ADVANCE -> Marigold
@@ -298,8 +337,10 @@ fun LedgerScreen(vm: AppViewModel, s: Strings) {
                     Row(Modifier.padding(start = 12.dp, top = 10.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
                             Text(
-                                if (e.type == EntryType.EXPENSE) "${s.typeName(e.type)} · ${s.categoryName(e.category ?: ExpenseCategory.OTHER)}"
-                                else s.typeName(e.type),
+                                typeEmoji(e.type) + " " + (
+                                    if (e.type == EntryType.EXPENSE) "${s.typeName(e.type)}, ${s.categoryName(e.category ?: ExpenseCategory.OTHER)}"
+                                    else s.typeName(e.type)
+                                    ),
                                 fontSize = 17.sp, fontWeight = FontWeight.Medium,
                             )
                             val detail = s.workDetail(e.hours, e.pieces, e.ratePaise)
@@ -431,7 +472,8 @@ fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
             Text(if (hasStateRates) settings.region else s.centralRates, color = InkSoft)
             Spacer(Modifier.height(8.dp))
             rates.forEach { r ->
-                LeaderRow(s.skillName(r.skill), "₹${Money.format(Money.rupeesToPaise(r.dailyRupees))}")
+                LeaderRow(s.skillName(r.skill), s.rupees(Money.rupeesToPaise(r.dailyRupees)))
+                if (r.zone.isNotEmpty()) Text(r.zone, fontSize = 13.sp, color = InkSoft)
             }
             Text(s.perDay, fontSize = 13.sp, color = InkSoft, modifier = Modifier.align(Alignment.End))
             floor?.let {

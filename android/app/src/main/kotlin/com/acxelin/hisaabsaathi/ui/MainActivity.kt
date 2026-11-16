@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
@@ -41,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,6 +54,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Draw behind the system bars; each screen pads for them and for the keyboard itself.
+        enableEdgeToEdge(statusBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT))
         setContent { Root(vm) }
     }
 }
@@ -77,6 +81,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
 
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
+    var typing by rememberSaveable { mutableStateOf(false) }
 
     // Microphone permission, asked the first time the mic is tapped.
     val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -108,6 +113,11 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         ReviewScreen(vm, review, s, onSpeakAnswer = onMic)
         return
     }
+    if (typing) {
+        BackHandler { typing = false }
+        TypeScreen(s, onBack = { typing = false }, onSubmit = { typing = false; vm.submitText(it) })
+        return
+    }
     if (showSettings) {
         BackHandler { showSettings = false }
         SettingsScreen(vm, settings, s, onBack = { showSettings = false })
@@ -135,7 +145,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
                 tabs.forEachIndexed { i, (label, icon) ->
                     NavigationBarItem(
                         selected = tab == i, onClick = { tab = i },
-                        icon = { Icon(icon, label) }, label = { Text(label, maxLines = 1, color = Color.White) },
+                        icon = { Icon(icon, label) }, label = { Text(label, maxLines = 1, color = Color.White, fontSize = 12.sp, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) },
                         colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
                             selectedIconColor = Ink, indicatorColor = Marigold, unselectedIconColor = Color(0xFFB9C0E0),
                         ),
@@ -146,7 +156,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
     ) { pad ->
         Box(Modifier.fillMaxSize().padding(pad)) {
             when (tab) {
-                0 -> HomeScreen(vm, settings, s, capture, onMic, onScan)
+                0 -> HomeScreen(vm, settings, s, capture, onMic, onScan, onType = { typing = true })
                 1 -> LedgerScreen(vm, s)
                 2 -> SummaryScreen(vm, settings, s)
                 else -> WageScreen(vm, settings, s)

@@ -1,12 +1,23 @@
 {
-  "version": 1,
-  "updated": "2024-10-01",
-  "note": "Central-sphere minimum wages (Area A) from the Chief Labour Commissioner (Central) notification effective 1 October 2024, as announced by the Ministry of Labour & Employment on 26 September 2024. Rates are revised every April and October: THIS PACK IS OUT OF DATE and must be refreshed, and state rates added, before the pilot.",
-  "regions": ["Odisha", "Telangana", "Karnataka", "Andhra Pradesh", "Maharashtra", "Gujarat", "Tamil Nadu", "Kerala", "Delhi", "West Bengal", "Other"],
+  "version": 2,
+  "updated": "2026-11-16",
+  "note": "Compiled on 16 Nov 2026 from compliance-aggregator summaries of government notifications, not from the gazette PDFs themselves. Every figure must be checked against the original notification before the pilot. States not listed here had no figure that two sources agreed on.",
+  "regions": ["Odisha", "Telangana", "Karnataka", "Andhra Pradesh", "Tamil Nadu", "Kerala", "Maharashtra", "Gujarat", "Delhi", "West Bengal", "Other"],
   "rates": [
-    {"region": "CENTRAL", "sector": "Construction, loading/unloading, sweeping, watch and ward (Area A)", "skill": "Unskilled", "dailyRupees": 783, "effectiveFrom": "2024-10-01", "source": "Ministry of Labour & Employment, Govt of India (CLC Central VDA notification)", "url": "https://clc.gov.in/clc/min-wages"},
-    {"region": "CENTRAL", "sector": "Construction, loading/unloading, sweeping, watch and ward (Area A)", "skill": "Semi-skilled", "dailyRupees": 868, "effectiveFrom": "2024-10-01", "source": "Ministry of Labour & Employment, Govt of India (CLC Central VDA notification)", "url": "https://clc.gov.in/clc/min-wages"},
-    {"region": "CENTRAL", "sector": "Construction, loading/unloading, sweeping, watch and ward (Area A)", "skill": "Skilled", "dailyRupees": 954, "effectiveFrom": "2024-10-01", "source": "Ministry of Labour & Employment, Govt of India (CLC Central VDA notification)", "url": "https://clc.gov.in/clc/min-wages"},
-    {"region": "CENTRAL", "sector": "Construction, loading/unloading, sweeping, watch and ward (Area A)", "skill": "Highly skilled", "dailyRupees": 1035, "effectiveFrom": "2024-10-01", "source": "Ministry of Labour & Employment, Govt of India (CLC Central VDA notification)", "url": "https://clc.gov.in/clc/min-wages"}
+    {"region": "CENTRAL", "zone": "Area A (big cities)", "sector": "Construction (central-sphere sites: railways, ports, central government works)", "skill": "Unskilled", "dailyRupees": 840, "effectiveFrom": "2026-10-01", "confidence": "medium", "source": "Labour Bureau VDA order, File No. 6/1/2026-VDA, 30 Sep 2026", "url": "https://clc.gov.in/clc/min-wages"},
+    {"region": "CENTRAL", "zone": "Area B", "sector": "Construction (central-sphere sites: railways, ports, central government works)", "skill": "Unskilled", "dailyRupees": 704, "effectiveFrom": "2026-10-01", "confidence": "medium", "source": "Labour Bureau VDA order, File No. 6/1/2026-VDA, 30 Sep 2026", "url": "https://clc.gov.in/clc/min-wages"},
+    {"region": "CENTRAL", "zone": "Area C", "sector": "Construction (central-sphere sites: railways, ports, central government works)", "skill": "Unskilled", "dailyRupees": 565, "effectiveFrom": "2026-10-01", "confidence": "medium", "source": "Labour Bureau VDA order, File No. 6/1/2026-VDA, 30 Sep 2026", "url": "https://clc.gov.in/clc/min-wages"},
+
+    {"region": "Odisha", "zone": "", "sector": "All scheduled employments", "skill": "Unskilled", "dailyRupees": 478, "effectiveFrom": "2026-10-01", "confidence": "medium", "source": "Labour Commissioner, Odisha, Notification No. 8393/LC, 8 Oct 2026", "url": "https://labour.odisha.gov.in"},
+    {"region": "Odisha", "zone": "", "sector": "All scheduled employments", "skill": "Semi-skilled", "dailyRupees": 528, "effectiveFrom": "2026-10-01", "confidence": "medium", "source": "Labour Commissioner, Odisha, Notification No. 8393/LC, 8 Oct 2026", "url": "https://labour.odisha.gov.in"},
+    {"region": "Odisha", "zone": "", "sector": "All scheduled employments", "skill": "Skilled", "dailyRupees": 578, "effectiveFrom": "2026-10-01", "confidence": "medium", "source": "Labour Commissioner, Odisha, Notification No. 8393/LC, 8 Oct 2026", "url": "https://labour.odisha.gov.in"},
+    {"region": "Odisha", "zone": "", "sector": "All scheduled employments", "skill": "Highly skilled", "dailyRupees": 628, "effectiveFrom": "2026-10-01", "confidence": "medium", "source": "Labour Commissioner, Odisha, Notification No. 8393/LC, 8 Oct 2026", "url": "https://labour.odisha.gov.in"},
+
+    {"region": "Telangana", "zone": "Zone II (municipalities)", "sector": "General scheduled employments (monthly wage ÷ 26)", "skill": "Unskilled", "dailyRupees": 577, "effectiveFrom": "2026-06-01", "confidence": "low", "source": "Telangana Labour Dept, G.O.Ms.No.6, 30 May 2026 (single secondary source)", "url": "https://labour.telangana.gov.in"},
+    {"region": "Telangana", "zone": "Zone I (municipal corporations)", "sector": "General scheduled employments (monthly wage ÷ 26)", "skill": "Unskilled", "dailyRupees": 615, "effectiveFrom": "2026-06-01", "confidence": "low", "source": "Telangana Labour Dept, G.O.Ms.No.6, 30 May 2026 (single secondary source)", "url": "https://labour.telangana.gov.in"},
+    {"region": "Telangana", "zone": "Zone II (municipalities)", "sector": "General scheduled employments (monthly wage ÷ 26)", "skill": "Skilled", "dailyRupees": 673, "effectiveFrom": "2026-06-01", "confidence": "low", "source": "Telangana Labour Dept, G.O.Ms.No.6, 30 May 2026 (single secondary source)", "url": "https://labour.telangana.gov.in"},
+    {"region": "Telangana", "zone": "Zone I (municipal corporations)", "sector": "General scheduled employments (monthly wage ÷ 26)", "skill": "Skilled", "dailyRupees": 712, "effectiveFrom": "2026-06-01", "confidence": "low", "source": "Telangana Labour Dept, G.O.Ms.No.6, 30 May 2026 (single secondary source)", "url": "https://labour.telangana.gov.in"},
+
+    {"region": "Delhi", "zone": "", "sector": "All scheduled employments", "skill": "Unskilled", "dailyRupees": 710, "effectiveFrom": "2025-04-01", "confidence": "medium", "source": "Delhi Labour Department (latest confirmed order; no later revision confirmed as of Nov 2026)", "url": "https://labour.delhi.gov.in"}
   ]
 }

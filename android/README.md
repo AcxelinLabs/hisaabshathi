@@ -1,6 +1,6 @@
 # HisaabSaathi — Android MVP
 
-Voice-first, offline wage ledger for daily-wage and piece-rate workers (Hindi, Odia, English).
+Voice-first, offline wage ledger for daily-wage and piece-rate workers (Hindi, Odia, Telugu, Kannada, Tamil, English).
 Design notes: `../docs/superpowers/specs/2026-11-16-android-mvp-design.md`.
 
 ## What works
@@ -19,7 +19,7 @@ Design notes: `../docs/superpowers/specs/2026-11-16-android-mvp-design.md`.
 | Job | Model | Size | Licence |
 |---|---|---|---|
 | Voice activity | Silero VAD v5 | 2 MB | MIT |
-| Speech-to-text | AI4Bharat IndicConformer (Hindi, Odia), int8, via sherpa-onnx | ~197 MB each | MIT |
+| Speech-to-text | AI4Bharat IndicConformer (Hindi, Odia, Telugu, Kannada, Tamil), int8, via sherpa-onnx | ~197 MB each | MIT |
 | Understanding (optional) | Qwen2.5-0.5B / 1.5B Instruct, 8-bit, via MediaPipe LLM Inference | 547 MB / 1.6 GB | Apache-2.0 |
 | OCR | ML Kit text recognition (Latin + Devanagari), bundled | in APK | Google ML Kit terms |
 | Text-to-speech | The phone's own TTS engine | — | — |
@@ -28,6 +28,11 @@ Entries are extracted by a rule-based grammar (`core/RuleBasedExtractor.kt`). Wh
 language-model pack is installed it is consulted for sentences the rules are unsure about,
 and its answer is discarded if it contains any number the worker did not say (`core/Slm.kt`).
 All arithmetic is plain code.
+
+## Look
+
+Ink blue and marigold, styled after a hand-written wage slip; type is Anek (SIL OFL), one
+family covering all six scripts (`app/src/main/res/font`).
 
 ## Build and test
 
@@ -53,9 +58,12 @@ language model, camera/OCR, notifications and text-to-speech voices need testing
 
 ## Known gaps
 
-- Odia strings and number words need a native-speaker review.
-- `app/src/main/assets/wage_pack_in.json` holds central rates from October 2024 only. It is
-  out of date and has no state rates.
+- Odia, Telugu, Kannada and Tamil strings and number words (`core/i18n`) need native-speaker review.
+- `app/src/main/assets/wage_pack_in.json` has central (unskilled, Oct 2026), Odisha (Oct 2026),
+  Telangana (June 2026, low confidence) and Delhi (unskilled) rates, taken from secondary
+  summaries of the notifications. Karnataka, Tamil Nadu, Andhra Pradesh, Kerala, Maharashtra,
+  Gujarat and West Bengal have no confirmed figure yet and fall back to the central rate.
+  Check every figure against the gazette notification before the pilot.
 - No open-licence Odia text-to-speech voice was found; Odia readback depends on the phone
   having an Odia voice. No Odia-script OCR.
 - Release build is signed with the debug key. No Play Store listing yet.

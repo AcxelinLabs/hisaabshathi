@@ -158,7 +158,7 @@ class Strings(val lang: Lang) {
     val reminderBody get() = t("दबाएं और बोलकर काम, एडवांस या खर्च दर्ज करें।", "ଦବାଇ କହି କାମ, ଆଡଭାନ୍ସ କିମ୍ବା ଖର୍ଚ୍ଚ ଲେଖନ୍ତୁ।", "Tap and say your work, advance or expense.")
 
     // ---- formatting
-    fun rupees(paise: Long): String = "₹" + Money.format(paise)
+    fun rupees(paise: Long): String = "₹" + Money.formatGrouped(paise)
 
     private fun spokenRupees(paise: Long): String =
         tp("${Money.format(paise)} रुपये", "${Money.format(paise)} ଟଙ୍କା", "${Money.format(paise)} rupees", "{0} rupees", Money.format(paise))
@@ -198,7 +198,7 @@ class Strings(val lang: Lang) {
         val parts = ArrayList<String>()
         if (pieces != null) parts += if (ratePaise != null) "${piecesText(pieces)} × ${rupees(ratePaise)}" else piecesText(pieces)
         if (hours != null) parts += if (pieces == null && ratePaise != null) "${hoursText(hours)} × ${rupees(ratePaise)}" else hoursText(hours)
-        return parts.joinToString(" · ")
+        return parts.joinToString(", ")
     }
 
     /** What the phone says before the worker confirms. */
