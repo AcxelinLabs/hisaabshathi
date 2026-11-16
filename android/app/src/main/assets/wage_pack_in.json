@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "updated": "2024-10-01",
+  "note": "Central-sphere minimum wages (Area A) from the Chief Labour Commissioner (Central) notification effective 1 October 2024, as announced by the Ministry of Labour & Employment on 26 September 2024. Rates are revised every April and October: THIS PACK IS OUT OF DATE and must be refreshed, and state rates added, before the pilot.",
+  "regions": ["Odisha", "Telangana", "Karnataka", "Andhra Pradesh", "Maharashtra", "Gujarat", "Tamil Nadu", "Kerala", "Delhi", "West Bengal", "Other"],
+  "rates": [
+    {"region": "CENTRAL", "sector": "Construction, loading/unloading, sweeping, watch and ward (Area A)", "skill": "Unskilled", "dailyRupees": 783, "effectiveFrom": "2024-10-01", "source": "Ministry of Labour & Employment, Govt of India (CLC Central VDA notification)", "url": "https://clc.gov.in/clc/min-wages"},
+    {"region": "CENTRAL", "sector": "Construction, loading/unloading, sweeping, watch and ward (Area A)", "skill": "Semi-skilled", "dailyRupees": 868, "effectiveFrom": "2024-10-01", "source": "Ministry of Labour & Employment, Govt of India (CLC Central VDA notification)", "url": "https://clc.gov.in/clc/min-wages"},
+    {"region": "CENTRAL", "sector": "Construction, loading/unloading, sweeping, watch and ward (Area A)", "skill": "Skilled", "dailyRupees": 954, "effectiveFrom": "2024-10-01", "source": "Ministry of Labour & Employment, Govt of India (CLC Central VDA notification)", "url": "https://clc.gov.in/clc/min-wages"},
+    {"region": "CENTRAL", "sector": "Construction, loading/unloading, sweeping, watch and ward (Area A)", "skill": "Highly skilled", "dailyRupees": 1035, "effectiveFrom": "2024-10-01", "source": "Ministry of Labour & Employment, Govt of India (CLC Central VDA notification)", "url": "https://clc.gov.in/clc/min-wages"}
+  ]
+}

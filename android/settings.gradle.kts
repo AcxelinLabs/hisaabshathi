@@ -14,4 +14,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "HisaabSaathi"
-include(":core")
+include(":core", ":app")

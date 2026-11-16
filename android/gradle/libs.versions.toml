@@ -12,7 +12,7 @@ mediapipe = "0.10.24"
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-icons = { module = "androidx.compose.material:material-icons-extended" }
+compose-icons = { module = "androidx.compose.material:material-icons-core" }
 compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 activity-compose = "androidx.activity:activity-compose:1.10.1"
 lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1"
@@ -33,6 +33,13 @@ coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
 coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1"
 junit = "junit:junit:4.13.2"
+robolectric = "org.robolectric:robolectric:4.15.1"
+roborazzi = "io.github.takahirom.roborazzi:roborazzi:1.46.1"
+roborazzi-compose = "io.github.takahirom.roborazzi:roborazzi-compose:1.46.1"
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-test-ext-junit = "androidx.test.ext:junit:1.2.1"
+coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

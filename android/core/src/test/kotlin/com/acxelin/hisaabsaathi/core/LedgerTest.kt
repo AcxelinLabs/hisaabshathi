@@ -101,3 +101,43 @@ class WagesTest {
         assertEquals(18300, Wages.shortfallPaise(60000, floor))
     }
 }
+
+class ReceiptReaderTest {
+    @Test fun totalLineWins() {
+        val d = ReceiptReader.read("Sri Ganesh Stores\nPh 9876543210\nRice 2kg 120.00\nDal 95.00\nTOTAL 215.00\nThank you")!!
+        assertEquals(EntryType.EXPENSE, d.type)
+        assertEquals(21500, d.amountPaise)
+    }
+
+    @Test fun advanceSlip() {
+        val d = ReceiptReader.read("एडवांस पर्ची\nनाम: रमेश\nराशि ₹ 1,500\nदिनांक 12/11/2026")!!
+        assertEquals(EntryType.ADVANCE, d.type)
+        assertEquals(150000, d.amountPaise)
+    }
+
+    @Test fun largestAmountWhenNoTotal() {
+        assertEquals(34000, ReceiptReader.read("Bus ticket\n9876543210\n340")!!.amountPaise)
+        assertNull(ReceiptReader.read("no numbers here"))
+    }
+}
+
+class StringsTest {
+    @Test fun readbackAndSummaryInEachLanguage() {
+        val drafts = RuleBasedExtractor.extract("120 piece, 5 rupaye rate, 300 advance").entries
+        for (lang in Lang.entries) {
+            val s = Strings(lang)
+            val text = s.readback(drafts)
+            assertTrue(text, "120" in text && "600" in text && "300" in text)
+            val sum = s.summary(QueryPeriod.WEEK, Totals(earnedPaise = 360000, advancePaise = 90000))
+            assertTrue(sum, "3600" in sum && "2700" in sum)
+        }
+        assertEquals("120 pieces × ₹5 · 8 hours", Strings(Lang.EN).workDetail(8.0, 120, 500))
+    }
+
+    @Test fun confirmWords() {
+        assertEquals(true, Confirm.parse("हाँ सही है"))
+        assertEquals(false, Confirm.parse("नहीं गलत है"))
+        assertEquals(true, Confirm.parse("ହଁ"))
+        assertNull(Confirm.parse("पांच सौ"))
+    }
+}
