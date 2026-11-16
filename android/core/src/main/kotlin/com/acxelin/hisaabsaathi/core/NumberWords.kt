@@ -1,5 +1,9 @@
 package com.acxelin.hisaabsaathi.core
 
+import com.acxelin.hisaabsaathi.core.i18n.Kn
+import com.acxelin.hisaabsaathi.core.i18n.Ta
+import com.acxelin.hisaabsaathi.core.i18n.Te
+
 /**
  * Reads spoken numbers ("एक सौ बीस", "ଦୁଇ ଶହ", "do hazaar", "twenty five", "120") out of a
  * token list. Speech models write numbers as words, so this is what turns a transcript
@@ -76,8 +80,12 @@ object NumberWords {
         "1.5=dedh; 2.5=dhai",
     )
 
+    private val extraLangs = listOf(Te.numbers to Te.multipliers, Kn.numbers to Kn.multipliers, Ta.numbers to Ta.multipliers)
+
     private val units: Map<String, Double> = HashMap<String, Double>().apply {
-        putAll(english); putAll(roman); putAll(odia); putAll(hindi)
+        putAll(english); putAll(roman)
+        for ((numbers, _) in extraLangs) putAll(table(*numbers.toTypedArray()))
+        putAll(odia); putAll(hindi)
     }
 
     private val englishTens = english.filterValues { it >= 20 }.keys
@@ -86,6 +94,7 @@ object NumberWords {
         "100=सौ|सो|ଶହ|ଶହେ|ଶ|sau|hundred",
         "1000=हजार|ହଜାର|hazaar|hazar|hajar|thousand",
         "100000=लाख|ଲକ୍ଷ|lakh|lac",
+        *extraLangs.map { it.second }.toTypedArray(),
     )
 
     /** Words that add or subtract a fraction of the following count: "साढ़े तीन सौ" = 350. */
@@ -93,6 +102,7 @@ object NumberWords {
         "0.5=साढ़े|ସାଢ଼େ|sadhe|saadhe",
         "0.25=सवा|ସବା|sava",
         "-0.25=पौने|ପଉଣେ|paune",
+        Te.fractionPrefix, Kn.fractionPrefix, Ta.fractionPrefix,
     )
 
     private val odiaHundredSuffixes = listOf("ଶହେ", "ଶହ")
@@ -145,6 +155,9 @@ object NumberWords {
         return out
     }
 
+    private fun addsTo(cur: Double, unit: Double): Boolean =
+        (cur >= 1000 && cur % 1000 == 0.0 && unit < 1000 && unit >= 1) || (cur >= 100 && cur % 100 == 0.0 && unit < 100 && unit >= 1)
+
     private fun readNumber(tokens: List<String>, start: Int): Num? {
         var acc = 0.0
         var cur: Double? = null
@@ -174,6 +187,9 @@ object NumberWords {
                     if (curIsEnglishTens && digit == null && unit < 10 && unit >= 1) {
                         cur += unit
                         curIsEnglishTens = false
+                    } else if (digit == null && addsTo(cur, unit)) {
+                        // Telugu/Kannada/Tamil say hundreds and thousands as one word: "ஐநூறு இருபது" = 500 + 20.
+                        cur += unit
                     } else {
                         break
                     }

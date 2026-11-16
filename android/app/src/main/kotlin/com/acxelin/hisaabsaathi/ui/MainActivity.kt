@@ -47,22 +47,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.acxelin.hisaabsaathi.core.Strings
 import java.io.File
 
-val Green = Color(0xFF1B5E20)
-val GreenLight = Color(0xFFE8F5E9)
-val Red = Color(0xFFC62828)
-val Amber = Color(0xFFF9A825)
-
-private val colors = lightColorScheme(
-    primary = Green, onPrimary = Color.White, primaryContainer = GreenLight, onPrimaryContainer = Green,
-    secondary = Amber, error = Red, background = Color(0xFFFAFAF5), surface = Color.White,
-)
-
 class MainActivity : ComponentActivity() {
     private val vm: AppViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MaterialTheme(colorScheme = colors) { Root(vm) } }
+        setContent { Root(vm) }
     }
 }
 
@@ -70,6 +60,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun Root(vm: AppViewModel) {
     val settings = vm.settings.collectAsStateWithLifecycle().value ?: return
+    HisaabTheme(settings.lang) { Screens(vm, settings) }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Settings) {
     val s = remember(settings.lang) { Strings(settings.lang) }
     val capture by vm.capture.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -121,9 +117,9 @@ private fun Root(vm: AppViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(s.appName) },
+                title = { Text(s.appName, fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold, color = Color.White) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Green, titleContentColor = Color.White, actionIconContentColor = Color.White,
+                    containerColor = Ink, titleContentColor = Color.White, actionIconContentColor = Color.White,
                 ),
                 actions = {
                     IconButton(onClick = { showSettings = true }) { Icon(Icons.Default.Settings, s.settings) }
@@ -131,7 +127,7 @@ private fun Root(vm: AppViewModel) {
             )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(containerColor = Ink) {
                 val tabs = listOf(
                     s.tabHome to Icons.Default.Home, s.tabLedger to Icons.AutoMirrored.Filled.List,
                     s.tabSummary to Icons.Default.Star, s.tabWage to Icons.Default.Info,
@@ -139,7 +135,10 @@ private fun Root(vm: AppViewModel) {
                 tabs.forEachIndexed { i, (label, icon) ->
                     NavigationBarItem(
                         selected = tab == i, onClick = { tab = i },
-                        icon = { Icon(icon, label) }, label = { Text(label, maxLines = 1) },
+                        icon = { Icon(icon, label) }, label = { Text(label, maxLines = 1, color = Color.White) },
+                        colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                            selectedIconColor = Ink, indicatorColor = Marigold, unselectedIconColor = Color(0xFFB9C0E0),
+                        ),
                     )
                 }
             }

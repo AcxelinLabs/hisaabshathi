@@ -216,11 +216,7 @@ class SystemOnDeviceStt(private val context: Context) {
     }
 }
 
-fun locale(lang: Lang): Locale = when (lang) {
-    Lang.HI -> Locale("hi", "IN")
-    Lang.OR -> Locale("or", "IN")
-    Lang.EN -> Locale("en", "IN")
-}
+fun locale(lang: Lang): Locale = Locale(lang.code, "IN")
 
 /**
  * Reads text aloud with the phone's own text-to-speech engine. If the phone has no voice

@@ -55,7 +55,7 @@ private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boole
     val state = states[pack.id] ?: PackState.Missing
     Column(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
         Text(pack.title, fontSize = 16.sp, fontWeight = FontWeight.Medium)
-        Text("${pack.bytes / 1_000_000} MB · ${pack.licence}", fontSize = 12.sp, color = Color.DarkGray)
+        Text("${pack.bytes / 1_000_000} MB · ${pack.licence}", fontSize = 12.sp, color = InkSoft)
         when (state) {
             PackState.Missing -> Button(onClick = { vm.download(pack) }) { Text(s.download) }
             is PackState.Downloading -> {
@@ -85,16 +85,22 @@ private fun RegionPicker(vm: AppViewModel, settings: Settings) {
 }
 
 @Composable
-private fun LanguagePicker(vm: AppViewModel, settings: Settings) {
+private fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean = false) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Lang.entries.forEach { l ->
-            val selected = settings.lang == l
-            Button(
-                onClick = { vm.setLang(l) }, modifier = Modifier.fillMaxWidth().height(64.dp), shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selected) Green else GreenLight, contentColor = if (selected) Color.White else Green,
-                ),
-            ) { Text(l.nativeName, fontSize = 24.sp) }
+        Lang.entries.chunked(2).forEach { pair ->
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                pair.forEach { l ->
+                    val selected = settings.lang == l
+                    Button(
+                        onClick = { vm.setLang(l) }, modifier = Modifier.weight(1f).height(72.dp), shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (selected) Marigold else if (onDark) Color(0xFF2C3C85) else Paper,
+                            contentColor = if (selected || !onDark) Ink else Color.White,
+                        ),
+                        // Each name is drawn in its own script's font, whatever the app language is.
+                    ) { Text(l.nativeName, fontSize = 24.sp, fontWeight = FontWeight.SemiBold, fontFamily = fontFor(l), color = if (selected || !onDark) Ink else Color.White) }
+                }
+            }
         }
     }
 }
@@ -104,14 +110,14 @@ private fun LanguagePicker(vm: AppViewModel, settings: Settings) {
 @Composable
 fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     var step by rememberSaveable { mutableIntStateOf(0) }
-    Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(24.dp)) {
-        Text(s.appName, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Green)
+    Column(Modifier.fillMaxSize().background(if (step == 0) Ink else Chalk).padding(24.dp)) {
+        Text(s.appName, fontSize = 40.sp, fontWeight = FontWeight.ExtraBold, color = if (step == 0) Color.White else Ink)
         Spacer(Modifier.height(24.dp))
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             when (step) {
                 0 -> {
-                    Text(s.chooseLanguage, fontSize = 22.sp)
-                    LanguagePicker(vm, settings)
+                    Text(s.chooseLanguage, fontSize = 22.sp, color = Color.White)
+                    LanguagePicker(vm, settings, onDark = true)
                 }
                 1 -> {
                     Text(s.chooseState, fontSize = 22.sp)
@@ -132,8 +138,9 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
             Button(
                 onClick = { if (step < 2) step++ else vm.finishOnboarding() },
                 enabled = step != 1 || settings.region.isNotEmpty(),
-                modifier = Modifier.weight(1f).height(64.dp), shape = RoundedCornerShape(16.dp),
-            ) { Text(if (step < 2) s.next else s.start, fontSize = 20.sp) }
+                modifier = Modifier.weight(1f).height(64.dp), shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Marigold, contentColor = Ink),
+            ) { Text(if (step < 2) s.next else s.start, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Ink) }
         }
     }
 }
@@ -144,7 +151,7 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
 fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () -> Unit) {
     var confirmErase by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        Row(Modifier.fillMaxWidth().background(Green).padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().background(Ink).padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, s.done, tint = Color.White) }
             Text(s.settings, color = Color.White, fontSize = 20.sp)
         }
@@ -165,7 +172,7 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
 
             Text(s.modelPacks, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             PackRow(vm, vm.sttPack(), s)
-            Text(s.smartPack, fontSize = 15.sp, color = Color.DarkGray)
+            Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
             PackRow(vm, vm.slmPack, s)
             HorizontalDivider()
 

@@ -8,11 +8,35 @@ package com.acxelin.hisaabsaathi.core
  * The Odia text is best-effort and must be reviewed by a native speaker before the pilot.
  */
 class Strings(val lang: Lang) {
+    /** Telugu, Kannada and Tamil text lives in the i18n tables, keyed by the English text. */
+    private val extra: Map<String, String> = when (lang) {
+        Lang.TE -> com.acxelin.hisaabsaathi.core.i18n.Te.strings
+        Lang.KN -> com.acxelin.hisaabsaathi.core.i18n.Kn.strings
+        Lang.TA -> com.acxelin.hisaabsaathi.core.i18n.Ta.strings
+        else -> emptyMap()
+    }
+
     private fun t(hi: String, or: String, en: String): String = when (lang) {
         Lang.HI -> hi
         Lang.OR -> or
         Lang.EN -> en
+        else -> extra[en] ?: en.also { missing += it }
     }
+
+    /** Like [t] for sentences with values in them: [key] is the English text with {0}, {1}… placeholders. */
+    private fun tp(hi: String, or: String, en: String, key: String, vararg args: Any): String = when (lang) {
+        Lang.HI -> hi
+        Lang.OR -> or
+        Lang.EN -> en
+        else -> {
+            var out = extra[key] ?: return en.also { missing += key }
+            args.forEachIndexed { i, a -> out = out.replace("{$i}", a.toString()) }
+            out
+        }
+    }
+
+    /** English keys that had no translation; checked by a test. */
+    val missing = LinkedHashSet<String>()
 
     // ---- general
     val appName get() = t("हिसाब साथी", "ହିସାବ ସାଥୀ", "HisaabSaathi")
@@ -111,11 +135,6 @@ class Strings(val lang: Lang) {
     val exportEvidence get() = t("सबूत फ़ाइल बनाएं", "ପ୍ରମାଣ ଫାଇଲ୍ ତିଆରି କରନ୍ତୁ", "Create evidence pack")
     val recordIntact get() = t("रिकॉर्ड से छेड़छाड़ नहीं हुई", "ରେକର୍ଡରେ କୌଣସି ଛେଡ଼ଛାଡ଼ ହୋଇନାହିଁ", "Record has not been altered")
     val recordBroken get() = t("रिकॉर्ड में बदलाव मिला", "ରେକର୍ଡରେ ପରିବର୍ତ୍ତନ ମିଳିଲା", "Record shows a change")
-    fun shortfall(paise: Long): String = t(
-        "आपको न्यूनतम मजदूरी से रोज़ ${rupees(paise)} कम मिल रहा है।",
-        "ଆପଣଙ୍କୁ ସର୍ବନିମ୍ନ ମଜୁରୀଠାରୁ ଦିନକୁ ${rupees(paise)} କମ୍ ମିଳୁଛି।",
-        "You are getting ${rupees(paise)} a day less than the minimum wage.",
-    )
     val atOrAbove get() = t("आपकी कमाई न्यूनतम मजदूरी के बराबर या ज़्यादा है।", "ଆପଣଙ୍କ ରୋଜଗାର ସର୍ବନିମ୍ନ ମଜୁରୀ ସହ ସମାନ କିମ୍ବା ଅଧିକ।", "Your earning is at or above the minimum wage.")
 
     // ---- settings / privacy
@@ -142,7 +161,7 @@ class Strings(val lang: Lang) {
     fun rupees(paise: Long): String = "₹" + Money.format(paise)
 
     private fun spokenRupees(paise: Long): String =
-        t("${Money.format(paise)} रुपये", "${Money.format(paise)} ଟଙ୍କା", "${Money.format(paise)} rupees")
+        tp("${Money.format(paise)} रुपये", "${Money.format(paise)} ଟଙ୍କା", "${Money.format(paise)} rupees", "{0} rupees", Money.format(paise))
 
     private fun num(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
 
@@ -163,17 +182,22 @@ class Strings(val lang: Lang) {
         ExpenseCategory.OTHER -> t("अन्य", "ଅନ୍ୟ", "Other")
     }
 
-    /** "120 पीस × ₹5 · 8 घंटे" — the detail line under a work entry. */
+    fun skillName(skill: String): String = when (skill.lowercase()) {
+        "unskilled" -> t("अकुशल", "ଅଣକୁଶଳୀ", "Unskilled")
+        "semi-skilled" -> t("अर्ध-कुशल", "ଅର୍ଦ୍ଧ-କୁଶଳୀ", "Semi-skilled")
+        "skilled" -> t("कुशल", "କୁଶଳୀ", "Skilled")
+        "highly skilled" -> t("अति कुशल", "ଅତି କୁଶଳୀ", "Highly skilled")
+        else -> skill
+    }
+
+    private fun piecesText(n: Int) = tp("$n पीस", "$n ପିସ୍", "$n pieces", "{0} pieces", n)
+    private fun hoursText(h: Double) = tp("${num(h)} घंटे", "${num(h)} ଘଣ୍ଟା", "${num(h)} hours", "{0} hours", num(h))
+
+    /** "120 पीस × ₹5, 8 घंटे" — the detail line under a work entry. */
     fun workDetail(hours: Double?, pieces: Int?, ratePaise: Long?): String {
         val parts = ArrayList<String>()
-        if (pieces != null) {
-            val p = t("$pieces पीस", "$pieces ପିସ୍", "$pieces pieces")
-            parts += if (ratePaise != null) "$p × ${rupees(ratePaise)}" else p
-        }
-        if (hours != null) {
-            val h = t("${num(hours)} घंटे", "${num(hours)} ଘଣ୍ଟା", "${num(hours)} hours")
-            parts += if (pieces == null && ratePaise != null) "$h × ${rupees(ratePaise)}" else h
-        }
+        if (pieces != null) parts += if (ratePaise != null) "${piecesText(pieces)} × ${rupees(ratePaise)}" else piecesText(pieces)
+        if (hours != null) parts += if (pieces == null && ratePaise != null) "${hoursText(hours)} × ${rupees(ratePaise)}" else hoursText(hours)
         return parts.joinToString(" · ")
     }
 
@@ -183,18 +207,24 @@ class Strings(val lang: Lang) {
         for (e in entries) {
             when (e.type) {
                 EntryType.WORK -> {
-                    e.hours?.let { sb.append(t("${num(it)} घंटे काम। ", "${num(it)} ଘଣ୍ଟା କାମ। ", "${num(it)} hours of work. ")) }
-                    e.pieces?.let { sb.append(t("$it पीस। ", "$it ପିସ୍। ", "$it pieces. ")) }
-                    e.ratePaise?.let { sb.append(t("रेट ${spokenRupees(it)}। ", "ଦର ${spokenRupees(it)}। ", "Rate ${spokenRupees(it)}. ")) }
+                    e.hours?.let { sb.append(tp("${num(it)} घंटे काम। ", "${num(it)} ଘଣ୍ଟା କାମ। ", "${num(it)} hours of work. ", "{0} hours of work. ", num(it))) }
+                    e.pieces?.let { sb.append(tp("$it पीस। ", "$it ପିସ୍। ", "$it pieces. ", "{0} pieces. ", it)) }
+                    e.ratePaise?.let { sb.append(tp("रेट ${spokenRupees(it)}। ", "ଦର ${spokenRupees(it)}। ", "Rate ${spokenRupees(it)}. ", "Rate {0}. ", spokenRupees(it))) }
                     if (e.amountPaise > 0) {
-                        sb.append(t("कमाई ${spokenRupees(e.amountPaise)}। ", "ରୋଜଗାର ${spokenRupees(e.amountPaise)}। ", "Earned ${spokenRupees(e.amountPaise)}. "))
+                        val a = spokenRupees(e.amountPaise)
+                        sb.append(tp("कमाई $a। ", "ରୋଜଗାର $a। ", "Earned $a. ", "Earned {0}. ", a))
                     }
                 }
-                EntryType.ADVANCE -> sb.append(t("एडवांस लिया ${spokenRupees(e.amountPaise)}। ", "ଆଡଭାନ୍ସ ନେଲେ ${spokenRupees(e.amountPaise)}। ", "Advance taken ${spokenRupees(e.amountPaise)}. "))
-                EntryType.PAYMENT -> sb.append(t("मजदूरी मिली ${spokenRupees(e.amountPaise)}। ", "ମଜୁରୀ ମିଳିଲା ${spokenRupees(e.amountPaise)}। ", "Wages received ${spokenRupees(e.amountPaise)}. "))
+                EntryType.ADVANCE -> spokenRupees(e.amountPaise).let { a ->
+                    sb.append(tp("एडवांस लिया $a। ", "ଆଡଭାନ୍ସ ନେଲେ $a। ", "Advance taken $a. ", "Advance taken {0}. ", a))
+                }
+                EntryType.PAYMENT -> spokenRupees(e.amountPaise).let { a ->
+                    sb.append(tp("मजदूरी मिली $a। ", "ମଜୁରୀ ମିଳିଲା $a। ", "Wages received $a. ", "Wages received {0}. ", a))
+                }
                 EntryType.EXPENSE -> {
                     val c = categoryName(e.category ?: ExpenseCategory.OTHER)
-                    sb.append(t("$c पर खर्च ${spokenRupees(e.amountPaise)}। ", "$c ପାଇଁ ଖର୍ଚ୍ଚ ${spokenRupees(e.amountPaise)}। ", "Spent ${spokenRupees(e.amountPaise)} on $c. "))
+                    val a = spokenRupees(e.amountPaise)
+                    sb.append(tp("$c पर खर्च $a। ", "$c ପାଇଁ ଖର୍ଚ୍ଚ $a। ", "Spent $a on $c. ", "Spent {0} on {1}. ", a, c))
                 }
             }
         }
@@ -212,10 +242,14 @@ class Strings(val lang: Lang) {
     /** The spoken report for a period. */
     fun summary(period: QueryPeriod, s: Totals): String {
         val p = spokenPeriod(period)
-        return t(
-            "$p आपने ${spokenRupees(s.earnedPaise)} कमाए। एडवांस लिया ${spokenRupees(s.advancePaise)}। मजदूरी मिली ${spokenRupees(s.paidPaise)}। खर्च किया ${spokenRupees(s.expensePaise)}। मालिक पर बाकी है ${spokenRupees(s.duePaise)}।",
-            "$p ଆପଣ ${spokenRupees(s.earnedPaise)} ରୋଜଗାର କଲେ। ଆଡଭାନ୍ସ ନେଲେ ${spokenRupees(s.advancePaise)}। ମଜୁରୀ ମିଳିଲା ${spokenRupees(s.paidPaise)}। ଖର୍ଚ୍ଚ କଲେ ${spokenRupees(s.expensePaise)}। ମାଲିକ ପାଖରେ ବାକି ଅଛି ${spokenRupees(s.duePaise)}।",
-            "$p you earned ${spokenRupees(s.earnedPaise)}. Advance taken ${spokenRupees(s.advancePaise)}. Wages received ${spokenRupees(s.paidPaise)}. Spent ${spokenRupees(s.expensePaise)}. Your employer still owes you ${spokenRupees(s.duePaise)}.",
+        val e = spokenRupees(s.earnedPaise); val a = spokenRupees(s.advancePaise); val r = spokenRupees(s.paidPaise)
+        val x = spokenRupees(s.expensePaise); val d = spokenRupees(s.duePaise)
+        return tp(
+            "$p आपने $e कमाए। एडवांस लिया $a। मजदूरी मिली $r। खर्च किया $x। मालिक पर बाकी है $d।",
+            "$p ଆପଣ $e ରୋଜଗାର କଲେ। ଆଡଭାନ୍ସ ନେଲେ $a। ମଜୁରୀ ମିଳିଲା $r। ଖର୍ଚ୍ଚ କଲେ $x। ମାଲିକ ପାଖରେ ବାକି ଅଛି $d।",
+            "$p you earned $e. Advance taken $a. Wages received $r. Spent $x. Your employer still owes you $d.",
+            "{0} you earned {1}. Advance taken {2}. Wages received {3}. Spent {4}. Your employer still owes you {5}.",
+            p, e, a, r, x, d,
         )
     }
 
@@ -224,41 +258,60 @@ class Strings(val lang: Lang) {
         val p = spokenPeriod(q.period)
         return when (q.topic) {
             QueryTopic.ALL, QueryTopic.MIN_WAGE -> summary(q.period, s)
-            QueryTopic.EARNED -> t("$p आपने ${spokenRupees(s.earnedPaise)} कमाए।", "$p ଆପଣ ${spokenRupees(s.earnedPaise)} ରୋଜଗାର କଲେ।", "$p you earned ${spokenRupees(s.earnedPaise)}.")
-            QueryTopic.ADVANCE -> t("$p आपने ${spokenRupees(s.advancePaise)} एडवांस लिया।", "$p ଆପଣ ${spokenRupees(s.advancePaise)} ଆଡଭାନ୍ସ ନେଲେ।", "$p you took ${spokenRupees(s.advancePaise)} in advances.")
-            QueryTopic.EXPENSE -> t("$p आपने ${spokenRupees(s.expensePaise)} खर्च किए।", "$p ଆପଣ ${spokenRupees(s.expensePaise)} ଖର୍ଚ୍ଚ କଲେ।", "$p you spent ${spokenRupees(s.expensePaise)}.")
-            QueryTopic.DUE -> t("$p का बाकी ${spokenRupees(s.duePaise)} है।", "$p ବାକି ${spokenRupees(s.duePaise)} ଅଛି।", "$p ${spokenRupees(s.duePaise)} is still due to you.")
+            QueryTopic.EARNED -> spokenRupees(s.earnedPaise).let { tp("$p आपने $it कमाए।", "$p ଆପଣ $it ରୋଜଗାର କଲେ।", "$p you earned $it.", "{0} you earned {1}.", p, it) }
+            QueryTopic.ADVANCE -> spokenRupees(s.advancePaise).let { tp("$p आपने $it एडवांस लिया।", "$p ଆପଣ $it ଆଡଭାନ୍ସ ନେଲେ।", "$p you took $it in advances.", "{0} you took {1} in advances.", p, it) }
+            QueryTopic.EXPENSE -> spokenRupees(s.expensePaise).let { tp("$p आपने $it खर्च किए।", "$p ଆପଣ $it ଖର୍ଚ୍ଚ କଲେ।", "$p you spent $it.", "{0} you spent {1}.", p, it) }
+            QueryTopic.DUE -> spokenRupees(s.duePaise).let { tp("$p का बाकी $it है।", "$p ବାକି $it ଅଛି।", "$p $it is still due to you.", "{0} {1} is still due to you.", p, it) }
         }
     }
 
     fun minWageSpoken(rate: WageRate): String {
         val amount = spokenRupees(Money.rupeesToPaise(rate.dailyRupees))
-        return t(
-            "${rate.skill} काम की सरकारी न्यूनतम मजदूरी $amount प्रति दिन है।",
-            "${rate.skill} କାମର ସରକାରୀ ସର୍ବନିମ୍ନ ମଜୁରୀ ଦିନକୁ $amount।",
-            "The official minimum wage for ${rate.skill} work is $amount per day.",
+        val skill = skillName(rate.skill)
+        return tp(
+            "$skill काम की सरकारी न्यूनतम मजदूरी $amount प्रति दिन है।",
+            "$skill କାମର ସରକାରୀ ସର୍ବନିମ୍ନ ମଜୁରୀ ଦିନକୁ $amount।",
+            "The official minimum wage for $skill work is $amount per day.",
+            "The official minimum wage for {0} work is {1} per day.", skill, amount,
         )
     }
 
-    fun goalProgress(savedPaise: Long, goalPaise: Long): String = t(
+    fun shortfall(paise: Long): String = rupees(paise).let {
+        tp(
+            "आपको न्यूनतम मजदूरी से रोज़ $it कम मिल रहा है।",
+            "ଆପଣଙ୍କୁ ସର୍ବନିମ୍ନ ମଜୁରୀଠାରୁ ଦିନକୁ $it କମ୍ ମିଳୁଛି।",
+            "You are getting $it a day less than the minimum wage.",
+            "You are getting {0} a day less than the minimum wage.", it,
+        )
+    }
+
+    fun goalProgress(savedPaise: Long, goalPaise: Long): String = tp(
         "इस महीने ${rupees(savedPaise)} बचे, लक्ष्य ${rupees(goalPaise)}",
         "ଏହି ମାସ ${rupees(savedPaise)} ବଳିଲା, ଲକ୍ଷ୍ୟ ${rupees(goalPaise)}",
         "${rupees(savedPaise)} left this month, goal ${rupees(goalPaise)}",
+        "{0} left this month, goal {1}", rupees(savedPaise), rupees(goalPaise),
     )
 
     /** Advice for irregular income: how much to put aside per working day left this month. */
-    fun goalAdvice(perDayPaise: Long): String = t(
-        "लक्ष्य के लिए हर काम के दिन ${rupees(perDayPaise)} अलग रखें।",
-        "ଲକ୍ଷ୍ୟ ପାଇଁ ପ୍ରତି କାମ ଦିନ ${rupees(perDayPaise)} ଅଲଗା ରଖନ୍ତୁ।",
-        "To reach your goal, put aside ${rupees(perDayPaise)} on each working day.",
-    )
+    fun goalAdvice(perDayPaise: Long): String = rupees(perDayPaise).let {
+        tp(
+            "लक्ष्य के लिए हर काम के दिन $it अलग रखें।",
+            "ଲକ୍ଷ୍ୟ ପାଇଁ ପ୍ରତି କାମ ଦିନ $it ଅଲଗା ରଖନ୍ତୁ।",
+            "To reach your goal, put aside $it on each working day.",
+            "To reach your goal, put aside {0} on each working day.", it,
+        )
+    }
     val goalReached get() = t("शाबाश! इस महीने का लक्ष्य पूरा।", "ସାବାସ୍! ଏହି ମାସର ଲକ୍ଷ୍ୟ ପୂରା ହେଲା।", "Well done! This month's goal is reached.")
 }
 
 /** Yes/no words for confirming by voice. */
 object Confirm {
-    private val yes = setOf("हां", "हाँ", "जी", "सही", "ठीक", "haan", "han", "yes", "sahi", "theek", "ok", "ହଁ", "ଠିକ୍", "ଠିକ").map(Text::normalize).toSet()
-    private val no = setOf("नहीं", "नही", "गलत", "ना", "nahi", "nahin", "no", "galat", "wrong", "ନା", "ନାହିଁ", "ଭୁଲ୍", "ଭୁଲ").map(Text::normalize).toSet()
+    private fun extraWords(role: String): Set<String> =
+        listOf(com.acxelin.hisaabsaathi.core.i18n.Te.keywords, com.acxelin.hisaabsaathi.core.i18n.Kn.keywords, com.acxelin.hisaabsaathi.core.i18n.Ta.keywords)
+            .mapNotNull { it[role] }.flatMap { it.split(' ') }.filter { it.isNotBlank() }.map(Text::normalize).toSet()
+
+    private val yes = setOf("हां", "हाँ", "जी", "सही", "ठीक", "haan", "han", "yes", "sahi", "theek", "ok", "ହଁ", "ଠିକ୍", "ଠିକ").map(Text::normalize).toSet() + extraWords("yes")
+    private val no = setOf("नहीं", "नही", "गलत", "ना", "nahi", "nahin", "no", "galat", "wrong", "ନା", "ନାହିଁ", "ଭୁଲ୍", "ଭୁଲ").map(Text::normalize).toSet() + extraWords("no")
 
     /** true = yes, false = no, null = neither. "No" wins when both are said. */
     fun parse(transcript: String): Boolean? {

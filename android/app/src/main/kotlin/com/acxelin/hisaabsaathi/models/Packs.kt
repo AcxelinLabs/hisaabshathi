@@ -50,6 +50,9 @@ object Catalog {
 
     val sttHindi = indic("hi", "Hindi", 197_595_593)
     val sttOdia = indic("or", "Odia", 197_584_928)
+    val sttTelugu = indic("te", "Telugu", 197_595_693)
+    val sttKannada = indic("kn", "Kannada", 197_595_728)
+    val sttTamil = indic("ta", "Tamil", 197_595_513)
     val sttEnglish = Pack(
         id = "stt-en",
         title = "English speech (NVIDIA NeMo fast-conformer)",
@@ -88,6 +91,9 @@ object Catalog {
     fun stt(lang: Lang): Pack = when (lang) {
         Lang.HI -> sttHindi
         Lang.OR -> sttOdia
+        Lang.TE -> sttTelugu
+        Lang.KN -> sttKannada
+        Lang.TA -> sttTamil
         Lang.EN -> sttEnglish
     }
 
@@ -98,7 +104,7 @@ object Catalog {
         return if (info.totalMem >= 5_500_000_000L) slmLarge else slmSmall
     }
 
-    val all = listOf(sttHindi, sttOdia, sttEnglish, slmSmall, slmLarge)
+    val all = listOf(sttHindi, sttOdia, sttTelugu, sttKannada, sttTamil, sttEnglish, slmSmall, slmLarge)
 }
 
 class PackManager(context: Context, private val scope: CoroutineScope) {

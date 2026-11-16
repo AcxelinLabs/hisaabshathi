@@ -3,6 +3,9 @@ package com.acxelin.hisaabsaathi.core
 import com.acxelin.hisaabsaathi.core.NumberWords.Num
 import com.acxelin.hisaabsaathi.core.NumberWords.Tok
 import com.acxelin.hisaabsaathi.core.NumberWords.Word
+import com.acxelin.hisaabsaathi.core.i18n.Kn
+import com.acxelin.hisaabsaathi.core.i18n.Ta
+import com.acxelin.hisaabsaathi.core.i18n.Te
 import kotlin.math.abs
 
 /**
@@ -16,66 +19,70 @@ object RuleBasedExtractor {
     private fun words(vararg w: String): Set<String> =
         w.flatMap { it.split(' ') }.filter { it.isNotBlank() }.map { Text.normalize(it) }.toSet()
 
+    /** Telugu, Kannada and Tamil words for a role, from the i18n tables. */
+    private fun kw(role: String): Set<String> =
+        words(*listOf(Te.keywords, Kn.keywords, Ta.keywords).mapNotNull { it[role] }.toTypedArray())
+
     private val hours = words(
         "घंटे घंटा घंटों घण्टे घण्टा ghante ghanta ghanto hour hours hrs hr ଘଣ୍ଟା ଘଂଟା ଘଣ୍ଟେ",
-    )
+    ) + kw("hours")
     private val pieces = words(
         "पीस पीसेस पिस नग दाना दाने अदद piece pieces pcs pis peece ପିସ୍ ପିସ ଖଣ୍ଡ ଗୋଟା ପିସି",
-    )
+    ) + kw("pieces")
     private val money = words(
         "रुपये रुपया रुपए रुपय रुपयों रूपये रूपया रूपए rupaye rupay rupaya rupees rupee rs inr ଟଙ୍କା ଟଂକା ଟଙ୍କାର taka tanka",
-    )
-    private val rate = words("रेट दर भाव हिसाब प्रति rate per bhav dar ଦର ରେଟ୍ ରେଟ ହିସାବ ପ୍ରତି")
+    ) + kw("money")
+    private val rate = words("रेट दर भाव हिसाब प्रति rate per bhav dar ଦର ରେଟ୍ ରେଟ ହିସାବ ପ୍ରତି") + kw("rate")
     private val atWords = setOf("at", "@")
     private val advance = words(
         "एडवांस अडवांस एडवान्स एडवांस्ड खर्ची उधार बयाना अग्रिम advance kharchi udhar udhaar " +
             "ଆଡଭାନ୍ସ ଆଡ୍ଭାନ୍ସ ଅଗ୍ରୀମ ଅଗ୍ରିମ ଆଗୁଆ ଉଧାର ବଇନା",
-    )
+    ) + kw("advance")
     private val expense = words(
         "खर्च खर्चा खर्चे खरीदा खरीदी खरीदे kharch kharcha spent spend bought expense ଖର୍ଚ୍ଚ ଖର୍ଚ କିଣିଲି କିଣିଲା କିଣିଲେ",
-    )
+    ) + kw("expense")
     private val wage = words(
         "मजदूरी दिहाड़ी वेतन तनख्वाह पगार कमाया कमाई कमाए कमाये majdoori mazdoori majduri dihadi wage wages " +
             "salary earned kamaya kamai kamaye ମଜୁରୀ ମଜୁରି ଦରମା ରୋଜଗାର",
-    )
+    ) + kw("wage")
     private val received = words(
         "मिला मिली मिले पेमेंट भुगतान mila mili mile received paid payment ମିଳିଲା ମିଳିଲେ ପାଇଲି ପେମେଣ୍ଟ",
-    )
-    private val workContext = words("काम काम किया kaam work worked କାମ")
-    private val separators = words("और फिर तथा and then aur phir ଆଉ ଏବଂ ଓ")
+    ) + kw("received")
+    private val workContext = words("काम काम किया kaam work worked କାମ") + kw("workContext")
+    private val separators = words("और फिर तथा and then aur phir ଆଉ ଏବଂ ଓ") + kw("separators")
 
     private val categories: List<Pair<ExpenseCategory, Set<String>>> = listOf(
         ExpenseCategory.FOOD to words(
             "खाना खाने सब्जी राशन चाय नाश्ता दूध चावल आटा दाल khana sabzi sabji ration chai nashta food milk rice " +
                 "ଖାଇବା ପରିବା ଚାଉଳ ଚା ଜଳଖିଆ ଡାଲି କ୍ଷୀର",
-        ),
+        ) + kw("food"),
         ExpenseCategory.TRAVEL to words(
             "बस ऑटो टिकट पेट्रोल भाड़ा रिक्शा ट्रेन bus auto ticket petrol bhada train ବସ୍ ବସ ଅଟୋ ଟିକେଟ୍ ଭଡ଼ା ପେଟ୍ରୋଲ",
-        ),
-        ExpenseCategory.RENT to words("किराया किराये kiraya rent ଘରଭଡ଼ା"),
-        ExpenseCategory.PHONE to words("रिचार्ज मोबाइल फोन recharge mobile phone ରିଚାର୍ଜ ମୋବାଇଲ୍ ମୋବାଇଲ ଫୋନ୍"),
+        ) + kw("travel"),
+        ExpenseCategory.RENT to words("किराया किराये kiraya rent ଘରଭଡ଼ା") + kw("rent"),
+        ExpenseCategory.PHONE to words("रिचार्ज मोबाइल फोन recharge mobile phone ରିଚାର୍ଜ ମୋବାଇଲ୍ ମୋବାଇଲ ଫୋନ୍") + kw("phone"),
         ExpenseCategory.HEALTH to words(
             "दवा दवाई डॉक्टर अस्पताल dawa dawai medicine doctor hospital ଔଷଧ ଡାକ୍ତର ଡାକ୍ତରଖାନା",
-        ),
-        ExpenseCategory.HOME to words("भेजा भेजे भेजी bheja bheje sent ପଠାଇଲି ପଠେଇଲି"),
+        ) + kw("health"),
+        ExpenseCategory.HOME to words("भेजा भेजे भेजी bheja bheje sent ପଠାଇଲି ପଠେଇଲି") + kw("home"),
     )
     private val categoryWords: Map<String, ExpenseCategory> =
         categories.flatMap { (c, ws) -> ws.map { it to c } }.toMap()
 
-    private val yesterday = words("कल kal yesterday ଗତକାଲି କାଲି")
-    private val dayBefore = words("परसों parso ପଅରଦିନ")
+    private val yesterday = words("कल kal yesterday ଗତକାଲି କାଲି") + kw("yesterday")
+    private val dayBefore = words("परसों parso ପଅରଦିନ") + kw("dayBefore")
 
     private val questionWords = words(
         "कितना कितनी कितने कितनी kitna kitni kitne how what बताओ batao କେତେ କେତେଟା",
-    )
+    ) + kw("question")
     private val periodWords: List<Pair<QueryPeriod, Set<String>>> = listOf(
-        QueryPeriod.DAY to words("आज aaj today ଆଜି"),
-        QueryPeriod.WEEK to words("हफ्ते हफ्ता सप्ताह hafte hafta week ସପ୍ତାହ ସପ୍ତାହରେ"),
-        QueryPeriod.MONTH to words("महीने महीना माह mahine mahina month ମାସ ମାସରେ"),
-        QueryPeriod.YEAR to words("साल वर्ष saal year ବର୍ଷ ବର୍ଷରେ"),
+        QueryPeriod.DAY to words("आज aaj today ଆଜି") + kw("day"),
+        QueryPeriod.WEEK to words("हफ्ते हफ्ता सप्ताह hafte hafta week ସପ୍ତାହ ସପ୍ତାହରେ") + kw("week"),
+        QueryPeriod.MONTH to words("महीने महीना माह mahine mahina month ମାସ ମାସରେ") + kw("month"),
+        QueryPeriod.YEAR to words("साल वर्ष saal year ବର୍ଷ ବର୍ଷରେ") + kw("year"),
     )
-    private val dueWords = words("बाकी बकाया baaki baki due balance ବାକି ବକେୟା")
-    private val minWageWords = words("न्यूनतम minimum ସର୍ବନିମ୍ନ")
+    private val dueWords = words("बाकी बकाया baaki baki due balance ବାକି ବକେୟା") + kw("due")
+    private val minWageWords = words("न्यूनतम minimum ସର୍ବନିମ୍ନ") + kw("minWage")
 
     private enum class Kind { ADVANCE, EXPENSE, WAGE, RECEIVED }
 

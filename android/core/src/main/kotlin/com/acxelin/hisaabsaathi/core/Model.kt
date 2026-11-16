@@ -3,6 +3,9 @@ package com.acxelin.hisaabsaathi.core
 enum class Lang(val code: String, val nativeName: String) {
     HI("hi", "हिन्दी"),
     OR("or", "ଓଡ଼ିଆ"),
+    TE("te", "తెలుగు"),
+    KN("kn", "ಕನ್ನಡ"),
+    TA("ta", "தமிழ்"),
     EN("en", "English");
 
     companion object {
