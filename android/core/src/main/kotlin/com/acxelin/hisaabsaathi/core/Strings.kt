@@ -91,6 +91,7 @@ class Strings(val lang: Lang) {
 
     // ---- wage & help
     val minWageTitle get() = t("सरकारी न्यूनतम मजदूरी", "ସରକାରୀ ସର୍ବନିମ୍ନ ମଜୁରୀ", "Official minimum wage")
+    val centralRates get() = t("केंद्र सरकार की दरें (इस राज्य की दरें अभी ऐप में नहीं हैं)", "କେନ୍ଦ୍ର ସରକାରଙ୍କ ଦର (ଏହି ରାଜ୍ୟର ଦର ଏବେ ଆପ୍‌ରେ ନାହିଁ)", "Central government rates (this state's rates are not in the app yet)")
     val perDay get() = t("प्रति दिन", "ପ୍ରତି ଦିନ", "per day")
     val effectiveFrom get() = t("लागू", "ଲାଗୁ", "Effective")
     val source get() = t("स्रोत", "ଉତ୍ସ", "Source")

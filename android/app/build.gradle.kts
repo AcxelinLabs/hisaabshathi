@@ -40,7 +40,11 @@ android {
             isUniversalApk = false
         }
     }
-    testOptions { unitTests.isIncludeAndroidResources = true }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        // Save a screenshot of every screen the flow test visits to app/build/screens.
+        unitTests.all { it.systemProperty("roborazzi.test.record", "true") }
+    }
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
         jniLibs.useLegacyPackaging = false

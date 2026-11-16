@@ -431,7 +431,8 @@ fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Section {
             Text(s.minWageTitle, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Green)
-            if (settings.region.isNotEmpty()) Text(settings.region, color = Color.DarkGray)
+            val hasStateRates = rates.any { it.region.equals(settings.region, ignoreCase = true) }
+            Text(if (hasStateRates) settings.region else s.centralRates, color = Color.DarkGray)
             Spacer(Modifier.height(8.dp))
             rates.forEach { r ->
                 Row(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
