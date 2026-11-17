@@ -15,6 +15,8 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.printToString
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.acxelin.hisaabsaathi.core.Lang
+import com.acxelin.hisaabsaathi.core.Strings
 import com.acxelin.hisaabsaathi.data.LedgerDb
 import com.acxelin.hisaabsaathi.ui.MainActivity
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -38,7 +40,7 @@ class TestApp : HisaabApp() {
  */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(application = TestApp::class, qualifiers = "w360dp-h780dp-xhdpi")
+@Config(application = TestApp::class, qualifiers = "w360dp-h780dp-xxhdpi")
 class AppFlowTest {
     @get:Rule val rule = createAndroidComposeRule<MainActivity>()
 
@@ -132,6 +134,7 @@ class AppFlowTest {
         click("आगे")
         waitFor("इस हफ्ते आपने 600 रुपये कमाए")
         shot("07-question-answer")
+        rule.onNodeWithContentDescription("हो गया").performClick()
 
         // --- simple questions always get an answer
         click("लिखकर डालें")
@@ -139,6 +142,7 @@ class AppFlowTest {
         click("आगे")
         waitFor("मैं हिसाब साथी हूँ")
         shot("07b-name-answer")
+        rule.onNodeWithContentDescription("हो गया").performClick()
         click("लिखकर डालें")
         rule.onNode(hasSetTextAction()).performTextInput("एक चुटकुला सुनाओ")
         click("आगे")
@@ -161,27 +165,36 @@ class AppFlowTest {
         rule.onNodeWithContentDescription("सेटिंग").performClick()
         waitFor("ऑफ़लाइन पैक")
         shot("11-settings")
-        // --- Telugu, Kannada and Tamil home screens
-        for ((name, done, home, prompt, file) in listOf(
-            listOf("తెలుగు", "", "", "", "14-home-telugu"), listOf("ಕನ್ನಡ", "", "", "", "15-home-kannada"), listOf("தமிழ்", "", "", "", "16-home-tamil"),
-        )) {
-            click(name)
-            pump()
-            rule.waitForIdle()
-            shot(file.replace("home", "settings"))
+        // --- a question and its answer in every language (home screen, typed; spoken on a phone)
+        val questions = listOf(
+            Lang.OR to "ଏହି ସପ୍ତାହରେ କେତେ ରୋଜଗାର ହେଲା",
+            Lang.TE to "ఈ వారం ఎంత సంపాదించాను",
+            Lang.KN to "ಈ ವಾರ ನಾನು ಎಷ್ಟು ದುಡಿದೆ",
+            Lang.TA to "இந்த வாரம் எவ்வளவு சம்பாதிச்சேன்",
+            Lang.EN to "how much did I earn this week",
+            Lang.HI to "इस हफ्ते कितना कमाया",
+        )
+        var current = Strings(Lang.HI)
+        for ((lang, question) in questions) {
+            val s = Strings(lang)
+            click(lang.nativeName)
+            waitFor(s.settings)
+            rule.onNodeWithContentDescription(s.done).performClick()
+            click(s.tabHome)
+            waitFor(s.tapAndSpeak)
+            shot("20-home-${lang.code}")
+            click(s.typeInstead)
+            rule.onNode(hasSetTextAction()).performTextInput(question)
+            shot("21-typing-${lang.code}")
+            click(s.next)
+            waitFor("600")
+            waitFor(question)
+            shot("22-answer-${lang.code}")
+            rule.onNodeWithContentDescription(s.done).performClick()
+            rule.onNodeWithContentDescription(s.settings).performClick()
+            current = s
         }
-        click("ଓଡ଼ିଆ")
-        waitFor("ସେଟିଂ")
-        rule.onNodeWithContentDescription("ହୋଇଗଲା").performClick()
-        click("ହୋମ୍")
-        waitFor("ଦବାଇ କାମ କିମ୍ବା ଖର୍ଚ୍ଚ କୁହନ୍ତୁ")
-        shot("12-home-odia")
-        rule.onNodeWithContentDescription("ସେଟିଂ").performClick()
-        click("English")
-        waitFor("Settings")
-        rule.onNodeWithContentDescription("Done").performClick()
-        click("Home")
-        waitFor("Tap and speak")
-        shot("13-home-english")
+        // --- a simple question in English, and the other tabs in English
+        rule.onNodeWithContentDescription(current.done).performClick()
     }
 }

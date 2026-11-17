@@ -49,7 +49,8 @@ sealed interface Capture {
     ) : Capture
 
     /** A spoken answer or a problem, also shown as text on the home screen. */
-    data class Message(val text: String) : Capture
+    /** [asked] is what the worker said, shown above the answer so they can see what was understood. */
+    data class Message(val text: String, val asked: String? = null) : Capture
 }
 
 class AppViewModel(application: Application) : AndroidViewModel(application) {
@@ -170,8 +171,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         if (text.isBlank()) return say(strings.notUnderstood)
         capture.value = Capture.Thinking
         when (val u = Understand.of(text)) {
-            is Understood.Ask -> answer(u.query)
-            is Understood.Talk -> say(strings.chat(u.chat, todayText()))
+            is Understood.Ask -> answer(u.query, text)
+            is Understood.Talk -> say(strings.chat(u.chat, todayText()), asked = text)
             is Understood.Entries -> {
                 var result = u.extraction
                 // The rules were unsure: let the language model have a look, if it is installed.
@@ -188,7 +189,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     if (found.entries.isNotEmpty()) return review(Capture.Review(text, found.entries, true, source))
                 }
                 // Never stay silent: say what the app can do and how to phrase it.
-                say(strings.chatFallback)
+                say(strings.chatFallback, asked = text)
             }
         }
     }
@@ -205,12 +206,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         (capture.value as? Capture.Review)?.let { app.speaker.speak(strings.readback(it.drafts), lang) }
     }
 
-    private fun answer(q: Query) {
+    private fun answer(q: Query, asked: String? = null) {
         if (q.topic == QueryTopic.MIN_WAGE) {
             val rate = Wages.floor(Wages.forRegion(wagePack, settings.value?.region.orEmpty()))
-            return say(rate?.let { strings.minWageSpoken(it) + " " + strings.wageDataNote } ?: strings.notUnderstood)
+            return say(rate?.let { strings.minWageSpoken(it) + " " + strings.wageDataNote } ?: strings.notUnderstood, asked)
         }
-        say(strings.answer(q, totals(q.period)))
+        say(strings.answer(q, totals(q.period)), asked)
     }
 
     fun totals(period: QueryPeriod, list: List<Entry> = entries.value) =
@@ -221,8 +222,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         return list.filter { it.epochDay in range }
     }
 
-    private fun say(text: String) {
-        capture.value = Capture.Message(text)
+    private fun say(text: String, asked: String? = null) {
+        capture.value = Capture.Message(text, asked)
         app.speaker.speak(text, lang)
     }
 

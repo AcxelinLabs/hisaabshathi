@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -89,7 +91,7 @@ private fun Section(modifier: Modifier = Modifier, color: Color = Paper, content
 
 /** The slip every screen shares: what was earned, what was taken, what is still owed. */
 @Composable
-private fun TotalsCard(title: String, t: Totals, s: Strings) {
+private fun TotalsCard(title: String, t: Totals, s: Strings, compact: Boolean = false) {
     Slip {
         Text(title, fontSize = 15.sp, color = InkSoft)
         LeaderRow(s.earned, s.rupees(t.earnedPaise), Leaf)
@@ -97,10 +99,12 @@ private fun TotalsCard(title: String, t: Totals, s: Strings) {
         LeaderRow(s.received, s.rupees(t.paidPaise))
         DashedRule()
         LeaderRow(s.due, s.rupees(t.duePaise), if (t.duePaise > 0) Sindoor else Ink, big = true, top = 2.dp)
-        Spacer(Modifier.height(10.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("${s.spent} ${s.rupees(t.expensePaise)}", fontSize = 15.sp, color = InkSoft)
-            Text("${s.inHand} ${s.rupees(t.inHandPaise)}", fontSize = 15.sp, color = InkSoft)
+        if (!compact) {
+            Spacer(Modifier.height(10.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("${s.spent} ${s.rupees(t.expensePaise)}", fontSize = 15.sp, color = InkSoft)
+                Text("${s.inHand} ${s.rupees(t.inHandPaise)}", fontSize = 15.sp, color = InkSoft)
+            }
         }
     }
 }
@@ -121,36 +125,43 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
     val level by vm.level.collectAsStateWithLifecycle()
 
     Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp).widthIn(max = 560.dp),
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp).widthIn(max = 560.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        TotalsCard("${s.today}, ${LocalDate.now().format(dayFormat)}", vm.totals(QueryPeriod.DAY, entries), s)
+        TotalsCard("${s.today}, ${LocalDate.now().format(dayFormat)}", vm.totals(QueryPeriod.DAY, entries), s, compact = true)
 
         (capture as? Capture.Message)?.let {
             // The spoken answer, also in writing. Tap anywhere on it to put it away.
             Row(
-                Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Notice).clickable(onClickLabel = s.done, onClick = vm::dismiss).padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Notice).clickable(onClickLabel = s.done, onClick = vm::dismiss).padding(14.dp),
+                verticalAlignment = Alignment.Top,
             ) {
-                Text(it.text, fontSize = 19.sp, color = NoticeInk, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
-                Icon(Icons.Default.Close, s.done, tint = NoticeInk, modifier = Modifier.padding(start = 8.dp).size(28.dp))
+                Column(Modifier.weight(1f)) {
+                    it.asked?.let { q ->
+                        Text(s.youSaid, fontSize = 13.sp, color = NoticeInk.copy(alpha = 0.75f))
+                        Text("“$q”", fontSize = 16.sp, color = NoticeInk, modifier = Modifier.padding(bottom = 6.dp))
+                    }
+                    Text(it.text, fontSize = 18.sp, color = NoticeInk, fontWeight = FontWeight.SemiBold)
+                }
+                Icon(Icons.Default.Close, s.done, tint = NoticeInk, modifier = Modifier.padding(start = 8.dp).size(26.dp))
             }
         }
 
         val listening = capture == Capture.Listening
         val thinking = capture == Capture.Thinking
         val pulse by animateFloatAsState(if (listening) 1f + level * 0.35f else 1f, label = "mic")
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(160.dp)) {
+        val compact = capture is Capture.Message
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(if (compact) 96.dp else 156.dp)) {
             // The ring swells with the worker's voice while listening.
-            Box(Modifier.size(148.dp).scale(pulse).clip(CircleShape).background(if (listening) Sindoor.copy(alpha = 0.22f) else Marigold.copy(alpha = 0.28f)))
+            Box(Modifier.size(if (compact) 92.dp else 146.dp).scale(pulse).clip(CircleShape).background(if (listening) Sindoor.copy(alpha = 0.22f) else Marigold.copy(alpha = 0.28f)))
             Box(
-                Modifier.size(128.dp).clip(CircleShape).background(if (listening) Sindoor else Marigold)
+                Modifier.size(if (compact) 78.dp else 126.dp).clip(CircleShape).background(if (listening) Sindoor else Marigold)
                     .clickable(enabled = !thinking, onClick = onMic),
                 contentAlignment = Alignment.Center,
             ) {
                 if (thinking) CircularProgressIndicator(color = Ink)
-                else Icon(painterResource(R.drawable.ic_mic), s.tapAndSpeak, tint = if (listening) Color.White else Ink, modifier = Modifier.size(64.dp))
+                else Icon(painterResource(R.drawable.ic_mic), s.tapAndSpeak, tint = if (listening) Color.White else Ink, modifier = Modifier.size(if (compact) 40.dp else 62.dp))
             }
         }
         Text(
@@ -159,17 +170,21 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
                 thinking -> s.thinking
                 else -> s.tapAndSpeak
             },
-            fontSize = 20.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold,
+            fontSize = if (compact) 17.sp else 19.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold,
+            maxLines = 2, lineHeight = if (compact) 22.sp else 25.sp,
         )
-        if (!listening && !thinking) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
+        if (!listening && !thinking && !compact) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
 
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-            OutlinedButton(onClick = onScan, modifier = Modifier.weight(1f).height(52.dp)) {
-                Icon(painterResource(R.drawable.ic_camera), null, tint = Ink)
-                Spacer(Modifier.width(8.dp))
-                Text(s.scanBill)
+        // While an answer is showing, the answer takes this space; the buttons return when it is closed.
+        if (!compact) Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+            OutlinedButton(onClick = onScan, modifier = Modifier.weight(1f).height(52.dp), contentPadding = PaddingValues(horizontal = 10.dp)) {
+                Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(20.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(s.scanBill, fontSize = 14.sp, lineHeight = 16.sp, maxLines = 2, textAlign = TextAlign.Center)
             }
-            OutlinedButton(onClick = onType, modifier = Modifier.weight(1f).height(52.dp)) { Text(s.typeInstead) }
+            OutlinedButton(onClick = onType, modifier = Modifier.weight(1f).height(52.dp), contentPadding = PaddingValues(horizontal = 10.dp)) {
+                Text(s.typeInstead, fontSize = 14.sp, lineHeight = 16.sp, maxLines = 2, textAlign = TextAlign.Center)
+            }
         }
     }
 }
@@ -228,7 +243,7 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
             }
             r.drafts.forEachIndexed { i, d ->
                 Section {
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         EntryType.entries.forEach { type ->
                             FilterChip(
                                 selected = d.type == type,
@@ -238,8 +253,8 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                                         d.copy(type = type, category = if (type == EntryType.EXPENSE) d.category ?: ExpenseCategory.OTHER else null),
                                     )
                                 },
-                                label = { Text(s.typeName(type), fontSize = 17.sp) },
-                                leadingIcon = { Icon(painterResource(typeIcon(type)), null, tint = Ink, modifier = Modifier.size(20.dp)) },
+                                label = { Text(s.typeName(type), fontSize = 16.sp) },
+                                leadingIcon = { Icon(painterResource(typeIcon(type)), null, tint = Ink, modifier = Modifier.size(18.dp)) },
                                 modifier = Modifier.height(48.dp),
                             )
                         }
@@ -256,7 +271,7 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                             v.toDoubleOrNull()?.let { vm.updateDraft(i, d.copy(amountPaise = Money.rupeesToPaise(it))) }
                         },
                         label = { Text(s.amountLabel) },
-                        textStyle = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                        textStyle = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         singleLine = true, modifier = Modifier.fillMaxWidth(),
                     )
@@ -399,9 +414,12 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
         (capture as? Capture.Message)?.let {
             Section(color = Notice) { Text(it.text, fontSize = 18.sp, color = NoticeInk) }
         }
-        BigButton(s.readAloud, Marigold, Modifier.fillMaxWidth()) { vm.speakSummary(period) }
-        OutlinedButton(onClick = { vm.exportPdf(period) }, modifier = Modifier.fillMaxWidth().height(52.dp)) {
-            Icon(Icons.Default.Share, null); Spacer(Modifier.width(8.dp)); Text(s.exportPdf)
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            BigButton(s.readAloud, Marigold, Modifier.weight(1f)) { vm.speakSummary(period) }
+            OutlinedButton(onClick = { vm.exportPdf(period) }, modifier = Modifier.weight(1f).height(52.dp), contentPadding = PaddingValues(horizontal = 10.dp)) {
+                Icon(Icons.Default.Share, null, modifier = Modifier.size(20.dp)); Spacer(Modifier.width(6.dp))
+                Text(s.exportPdf, fontSize = 14.sp, lineHeight = 16.sp, maxLines = 2, textAlign = TextAlign.Center)
+            }
         }
 
         // Savings goal: based on this month's cash in hand, whatever period is shown above.
