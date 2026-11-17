@@ -84,16 +84,23 @@ def encode(text, numbers, labels):
     h = tok(head, add_special_tokens=False)["input_ids"]; a = tok(answer, add_special_tokens=False)["input_ids"]
     return h + a, [-100] * len(h) + a  # learn only the answer
 
+# Memory: one example at a time (gradients accumulated over ACCUM), activation
+# checkpointing, and the 151k-word output layer evaluated only on the answer tokens.
+model.gradient_checkpointing_enable(); model.enable_input_require_grads()
 opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=2e-4)
-BATCH = 4; steps = len(train) // BATCH; t0 = time.time(); model.train()
+ACCUM = 4; steps = len(train) // ACCUM; t0 = time.time(); model.train()
+base = model.get_base_model()
 for step in range(steps):
-    batch = [encode(*ex) for ex in train[step * BATCH:(step + 1) * BATCH]]
-    width = max(len(i) for i, _ in batch)
-    ids = torch.tensor([i + [tok.pad_token_id] * (width - len(i)) for i, _ in batch])
-    lab = torch.tensor([l + [-100] * (width - len(l)) for _, l in batch])
-    loss = model(input_ids=ids, attention_mask=(ids != tok.pad_token_id).long(), labels=lab).loss
-    loss.backward(); opt.step(); opt.zero_grad()
-    if step % 20 == 0: print(f"step {step}/{steps} loss {loss.item():.3f} {(time.time() - t0) / (step + 1):.1f}s/step", flush=True)
+    total = 0.0
+    for ex in train[step * ACCUM:(step + 1) * ACCUM]:
+        ids, lab = encode(*ex)
+        start = next(i for i, l in enumerate(lab) if l != -100)
+        hidden = base.model(input_ids=torch.tensor([ids])).last_hidden_state[:, start - 1:-1]
+        logits = base.lm_head(hidden).float()
+        loss = torch.nn.functional.cross_entropy(logits.view(-1, logits.size(-1)), torch.tensor(lab[start:])) / ACCUM
+        loss.backward(); total += loss.item()
+    opt.step(); opt.zero_grad()
+    if step % 20 == 0: print(f"step {step}/{steps} loss {total:.3f} {(time.time() - t0) / (step + 1):.1f}s/step", flush=True)
 model.save_pretrained(out_dir)
 
 model.eval(); right = 0; by = {}

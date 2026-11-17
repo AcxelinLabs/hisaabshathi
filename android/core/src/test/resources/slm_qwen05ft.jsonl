@@ -1,0 +1,2 @@
+{"task": "extract", "lang": "or", "text": "ପରିବା ପାଇଁ 20 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "20=earnings"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 8 ghante kaam kiya 120 piece 10 rupaye rate 200 advance liya", "output": "8=hour\n120=piece\n10=rate\n200=advance"}
