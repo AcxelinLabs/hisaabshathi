@@ -86,6 +86,12 @@ class Strings(val lang: Lang) {
     val notUnderstood get() = t("समझ नहीं आया। फिर से बोलिए।", "ବୁଝି ହେଲା ନାହିଁ। ପୁଣି କୁହନ୍ତୁ।", "I did not understand. Please say it again.")
     val noSpeechEngine get() = t("आवाज़ पैक नहीं है। सेटिंग में डाउनलोड करें या लिखकर डालें।", "ଭଏସ୍ ପ୍ୟାକ୍ ନାହିଁ। ସେଟିଂରେ ଡାଉନଲୋଡ୍ କରନ୍ତୁ କିମ୍ବା ଲେଖି ଦିଅନ୍ତୁ।", "No voice pack yet. Download it in Settings, or type the entry.")
 
+    val heardNothing get() = t("कुछ सुनाई नहीं दिया। माइक दबाकर फोन के पास बोलिए।", "କିଛି ଶୁଣାଗଲା ନାହିଁ। ମାଇକ୍ ଦବାଇ ଫୋନ୍ ପାଖରେ କୁହନ୍ତୁ।", "I didn't hear anything. Tap the mic and speak close to the phone.")
+    val micFailed get() = t("माइक चालू नहीं हुआ। माइक इस्तेमाल करने वाले दूसरे ऐप बंद करके फिर कोशिश करें।", "ମାଇକ୍ ଚାଲୁ ହେଲା ନାହିଁ। ମାଇକ୍ ବ୍ୟବହାର କରୁଥିବା ଅନ୍ୟ ଆପ୍ ବନ୍ଦ କରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।", "The microphone did not start. Close other apps using it and try again.")
+    val voiceFailed get() = t("आवाज़ समझने में दिक्कत आई। फिर से कोशिश करें या लिखकर डालें।", "ସ୍ୱର ବୁଝିବାରେ ଅସୁବିଧା ହେଲା। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ କିମ୍ବା ଲେଖି ଦିଅନ୍ତୁ।", "Something went wrong understanding your voice. Try again, or type instead.")
+    val lastProblemLabel get() = t("पिछली दिक्कत (जाँच के लिए)", "ପୂର୍ବ ଅସୁବିଧା (ଯାଞ୍ଚ ପାଇଁ)", "Last problem (for testing)")
+    fun voicePackDownloading(pct: Int): String = tp("आवाज़ पैक अभी डाउनलोड हो रहा है ($pct%)। थोड़ा रुकिए, या लिखकर डालें।", "ଭଏସ୍ ପ୍ୟାକ୍ ଏବେ ଡାଉନଲୋଡ୍ ହେଉଛି ($pct%)। ଟିକେ ଅପେକ୍ଷା କରନ୍ତୁ, କିମ୍ବା ଲେଖି ଦିଅନ୍ତୁ।", "The voice pack is still downloading ($pct%). Please wait, or type instead.", "The voice pack is still downloading ({0}%). Please wait, or type instead.", pct)
+
     // ---- confirm
     val youSaid get() = t("आपने कहा", "ଆପଣ କହିଲେ", "You said")
     val isThisRight get() = t("क्या यह सही है?", "ଏହା ଠିକ୍ କି?", "Is this right?")

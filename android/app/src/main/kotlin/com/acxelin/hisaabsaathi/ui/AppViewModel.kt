@@ -24,6 +24,8 @@ import com.acxelin.hisaabsaathi.core.Wages
 import com.acxelin.hisaabsaathi.data.Settings
 import com.acxelin.hisaabsaathi.models.Catalog
 import com.acxelin.hisaabsaathi.models.Pack
+import com.acxelin.hisaabsaathi.models.PackState
+import com.acxelin.hisaabsaathi.speech.Heard
 import com.acxelin.hisaabsaathi.work.Reminders
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -78,26 +80,47 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         understand(text, "voice")
     }
 
-    /** Returns null (after showing a message) when there is no on-device recogniser. */
+    /** Technical note about the last listening problem, shown in Settings for testers. */
+    val lastProblem = MutableStateFlow("")
+
+    /** Returns null (after showing a message that says what went wrong) when nothing usable was heard. */
     private suspend fun listenOnce(): String? {
         val l = lang
         app.speaker.stop()
-        return try {
-            when {
-                app.stt.available(l) -> {
-                    app.slm.unload() // keep peak memory low on 3 GB phones
-                    capture.value = Capture.Listening
-                    app.stt.listen(l, onLevel = { level.value = it }, onRecorded = { capture.value = Capture.Thinking })
-                }
-                app.systemStt.available() -> {
-                    capture.value = Capture.Listening
-                    app.systemStt.listen(l, onRecorded = { capture.value = Capture.Thinking })
-                }
-                else -> { say(strings.noSpeechEngine); null }
-            }
+        val usePack = app.stt.available(l)
+        if (!usePack && !app.systemStt.available()) { voicePackMessage(); return null }
+        app.slm.unload() // keep peak memory low on 3 GB phones
+        capture.value = Capture.Listening
+        val heard = try {
+            if (usePack) app.stt.listen(l, onLevel = { level.value = it }, onRecorded = { capture.value = Capture.Thinking })
+            else app.systemStt.listen(l, onRecorded = { capture.value = Capture.Thinking })
         } catch (e: Exception) {
-            say(strings.notUnderstood)
-            null
+            Heard.Failed(Heard.Kind.ENGINE, e.message ?: e.javaClass.simpleName)
+        } finally {
+            level.value = 0f
+        }
+        return when (heard) {
+            is Heard.Text -> heard.text
+            Heard.Silence -> { say(strings.heardNothing); null }
+            is Heard.Failed -> {
+                lastProblem.value = "${java.time.LocalTime.now().withNano(0)} ${if (usePack) "voice pack" else "phone recogniser"}: ${heard.detail}"
+                android.util.Log.w("HisaabSaathi", "listen failed: ${lastProblem.value}")
+                when {
+                    heard.kind == Heard.Kind.MIC -> say(strings.micFailed)
+                    // The phone's own recogniser has no offline model for this language: the voice pack is the answer.
+                    !usePack -> voicePackMessage()
+                    else -> say(strings.voiceFailed)
+                }
+                null
+            }
+        }
+    }
+
+    /** Says whether the voice pack is downloading (with progress) or still needs downloading. */
+    private fun voicePackMessage() {
+        when (val st = app.packs.states.value[Catalog.stt(lang).id]) {
+            is PackState.Downloading -> say(strings.voicePackDownloading((st.fraction * 100).toInt()))
+            else -> say(strings.noSpeechEngine)
         }
     }
 

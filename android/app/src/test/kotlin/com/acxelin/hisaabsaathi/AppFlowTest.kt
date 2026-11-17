@@ -86,6 +86,17 @@ class AppFlowTest {
         waitFor("दबाएं और काम या खर्च बोलें")
         shot("04-home-empty")
 
+        // --- mic before the voice pack is downloaded: say so, never "not understood"
+        org.robolectric.Shadows.shadowOf(rule.activity.application).grantPermissions(android.Manifest.permission.RECORD_AUDIO)
+        rule.onNodeWithContentDescription("दबाएं और काम या खर्च बोलें").performClick()
+        // The phone's own recogniser has no offline Hindi model: it fails at once with "language unavailable".
+        rule.waitUntil(10_000) { pump(); org.robolectric.shadows.ShadowSpeechRecognizer.getLatestSpeechRecognizer() != null }
+        org.robolectric.Shadows.shadowOf(org.robolectric.shadows.ShadowSpeechRecognizer.getLatestSpeechRecognizer()).triggerOnError(13)
+        waitFor("आवाज़ पैक नहीं है")
+        check(rule.onAllNodesWithText("समझ नहीं आया", substring = true).fetchSemanticsNodes().isEmpty())
+        shot("04b-mic-without-voice-pack")
+        rule.onNodeWithContentDescription("हो गया").performClick()
+
         // --- an entry (typed here; spoken on a phone)
         click("लिखकर डालें")
         rule.onNode(hasSetTextAction())

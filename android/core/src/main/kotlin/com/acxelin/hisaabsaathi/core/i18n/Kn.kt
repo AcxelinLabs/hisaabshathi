@@ -4,6 +4,11 @@ package com.acxelin.hisaabsaathi.core.i18n
 internal object Kn {
     /** UI and spoken text, keyed by the exact English string used in Strings.kt. */
     val strings: Map<String, String> = mapOf(
+        "I didn't hear anything. Tap the mic and speak close to the phone." to "ಏನೂ ಕೇಳಿಸಲಿಲ್ಲ. ಮೈಕ್ ಒತ್ತಿ ಫೋನ್ ಹತ್ತಿರ ಮಾತಾಡಿ.",
+        "The microphone did not start. Close other apps using it and try again." to "ಮೈಕ್ ಆನ್ ಆಗಲಿಲ್ಲ. ಮೈಕ್ ಬಳಸುವ ಬೇರೆ ಆಪ್ ಮುಚ್ಚಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+        "Something went wrong understanding your voice. Try again, or type instead." to "ನಿಮ್ಮ ಮಾತು ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳುವಲ್ಲಿ ತೊಂದರೆ ಆಯ್ತು. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಟೈಪ್ ಮಾಡಿ.",
+        "Last problem (for testing)" to "ಹಿಂದಿನ ತೊಂದರೆ (ಪರೀಕ್ಷೆಗಾಗಿ)",
+        "The voice pack is still downloading ({0}%). Please wait, or type instead." to "ವಾಯ್ಸ್ ಪ್ಯಾಕ್ ಇನ್ನೂ ಡೌನ್‌ಲೋಡ್ ಆಗ್ತಿದೆ ({0}%). ಸ್ವಲ್ಪ ಕಾಯಿರಿ, ಅಥವಾ ಟೈಪ್ ಮಾಡಿ.",
         "Smart model: understands sentences the app is unsure about" to "ಸ್ಮಾರ್ಟ್ ಮಾಡೆಲ್: ಆಪ್‌ಗೆ ಅರ್ಥವಾಗದ ಮಾತುಗಳನ್ನೂ ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳುತ್ತೆ",
         "Add model file from phone" to "ಫೋನ್‌ನಿಂದ ಮಾಡೆಲ್ ಫೈಲ್ ಸೇರಿಸಿ",
         "I am HisaabSaathi. I keep track of your earnings, advances and expenses." to "ನಾನು ಹಿಸಾಬ್ ಸಾಥಿ. ನಿಮ್ಮ ಸಂಪಾದನೆ, ಅಡ್ವಾನ್ಸ್, ಖರ್ಚಿನ ಲೆಕ್ಕ ನಾನು ಇಡುತ್ತೇನೆ.",

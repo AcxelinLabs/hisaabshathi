@@ -190,6 +190,13 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             }
             HorizontalDivider()
 
+            val problem by vm.lastProblem.collectAsStateWithLifecycle()
+            if (problem.isNotEmpty()) {
+                Text(s.lastProblemLabel, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(problem, fontSize = 13.sp, color = InkSoft)
+                HorizontalDivider()
+            }
+
             Text(s.privacyTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(s.privacyBody, fontSize = 15.sp)
             OutlinedButton(onClick = { confirmErase = true }) { Text(s.eraseAll, color = Red) }

@@ -32,6 +32,16 @@ import kotlin.coroutines.resume
 import kotlin.math.sqrt
 
 private const val SAMPLE_RATE = 16_000
+
+/** How one attempt to listen ended. Each case gets its own message, so a failure is never reported as "not understood". */
+sealed interface Heard {
+    data class Text(val text: String) : Heard
+    /** The microphone worked but nobody spoke (or nothing recognisable was said). */
+    data object Silence : Heard
+    /** Something went wrong; [detail] is technical and shown only in Settings. */
+    data class Failed(val kind: Kind, val detail: String) : Heard
+    enum class Kind { MIC, ENGINE, NO_LANGUAGE }
+}
 private const val WINDOW = 512 // Silero VAD v5 requires exactly 512 samples at 16 kHz.
 
 /**
@@ -61,12 +71,12 @@ class OnDeviceStt(private val packs: PackManager) {
         maxSeconds: Int = 20,
         onLevel: (Float) -> Unit = {},
         onRecorded: () -> Unit = {},
-    ): String = withContext(Dispatchers.Default) {
+    ): Heard = withContext(Dispatchers.Default) {
         lock.withLock {
             stopRequested = false
             val pack = Catalog.stt(lang)
             val vadFile = packs.file(pack.files.first { it.path.endsWith("silero_vad_v5.onnx") })
-            val vad = Vad(
+            val vad = try { Vad(
                 null,
                 VadModelConfig().apply {
                     sileroVadModelConfig = SileroVadModelConfig().apply {
@@ -80,22 +90,30 @@ class OnDeviceStt(private val packs: PackManager) {
                     sampleRate = SAMPLE_RATE
                     numThreads = 1
                 },
-            )
+            ) } catch (e: Throwable) {
+                return@withLock Heard.Failed(Heard.Kind.ENGINE, "VAD: ${e.message ?: e.javaClass.simpleName}")
+            }
             val samples = try {
                 record(vad, maxSeconds, onLevel)
+            } catch (e: Exception) {
+                return@withLock Heard.Failed(Heard.Kind.MIC, e.message ?: e.javaClass.simpleName)
             } finally {
                 vad.release()
             }
             onRecorded()
-            if (samples.size < SAMPLE_RATE / 4) return@withLock ""
-            val rec = recognizerFor(lang)
-            val stream = rec.createStream()
+            if (samples.size < SAMPLE_RATE / 4) return@withLock Heard.Silence
             try {
-                stream.acceptWaveform(samples, SAMPLE_RATE)
-                rec.decode(stream)
-                rec.getResult(stream).text.trim()
-            } finally {
-                stream.release()
+                val rec = recognizerFor(lang)
+                val stream = rec.createStream()
+                try {
+                    stream.acceptWaveform(samples, SAMPLE_RATE)
+                    rec.decode(stream)
+                    rec.getResult(stream).text.trim().let { if (it.isEmpty()) Heard.Silence else Heard.Text(it) }
+                } finally {
+                    stream.release()
+                }
+            } catch (e: Throwable) {
+                Heard.Failed(Heard.Kind.ENGINE, "STT: ${e.message ?: e.javaClass.simpleName}")
             }
         }
     }
@@ -103,11 +121,12 @@ class OnDeviceStt(private val packs: PackManager) {
     @SuppressLint("MissingPermission")
     private fun record(vad: Vad, maxSeconds: Int, onLevel: (Float) -> Unit): FloatArray {
         val minBuf = AudioRecord.getMinBufferSize(SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
-        val recorder = AudioRecord(
-            MediaRecorder.AudioSource.VOICE_RECOGNITION, SAMPLE_RATE,
-            AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, maxOf(minBuf, WINDOW * 8),
-        )
-        check(recorder.state == AudioRecord.STATE_INITIALIZED) { "microphone unavailable" }
+        // Some phones refuse the speech-tuned source; fall back to the plain microphone.
+        val recorder = listOf(MediaRecorder.AudioSource.VOICE_RECOGNITION, MediaRecorder.AudioSource.MIC).firstNotNullOfOrNull { source ->
+            runCatching {
+                AudioRecord(source, SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, maxOf(minBuf, WINDOW * 8))
+            }.getOrNull()?.takeIf { it.state == AudioRecord.STATE_INITIALIZED || run { it.release(); false } }
+        } ?: error("microphone could not start (minBuffer=$minBuf)")
         val all = FloatArray(maxSeconds * SAMPLE_RATE)
         var count = 0
         val pcm = ShortArray(WINDOW)
@@ -123,7 +142,8 @@ class OnDeviceStt(private val packs: PackManager) {
                 var got = 0
                 while (got < WINDOW) {
                     val n = recorder.read(pcm, got, WINDOW - got)
-                    if (n <= 0) return all.copyOf(count)
+                    if (n < 0) error("microphone read failed ($n)")
+                    if (n == 0) continue
                     got += n
                 }
                 var energy = 0.0
@@ -186,18 +206,27 @@ class SystemOnDeviceStt(private val context: Context) {
     fun available(): Boolean =
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && SpeechRecognizer.isOnDeviceRecognitionAvailable(context)
 
-    suspend fun listen(lang: Lang, onRecorded: () -> Unit = {}): String = withContext(Dispatchers.Main) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return@withContext ""
-        suspendCancellableCoroutine { cont ->
+    suspend fun listen(lang: Lang, onRecorded: () -> Unit = {}): Heard = withContext(Dispatchers.Main) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return@withContext Heard.Failed(Heard.Kind.NO_LANGUAGE, "Android < 12")
+        suspendCancellableCoroutine<Heard> { cont ->
             val sr = SpeechRecognizer.createOnDeviceSpeechRecognizer(context)
-            fun finish(text: String) {
+            fun finish(result: Heard) {
                 sr.destroy()
-                if (cont.isActive) cont.resume(text)
+                if (cont.isActive) cont.resume(result)
             }
             sr.setRecognitionListener(object : RecognitionListener {
-                override fun onResults(results: Bundle?) =
-                    finish(results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull().orEmpty())
-                override fun onError(error: Int) = finish("")
+                override fun onResults(results: Bundle?) {
+                    val text = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull().orEmpty()
+                    finish(if (text.isBlank()) Heard.Silence else Heard.Text(text))
+                }
+                override fun onError(error: Int) = finish(
+                    when (error) {
+                        SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> Heard.Silence
+                        SpeechRecognizer.ERROR_AUDIO -> Heard.Failed(Heard.Kind.MIC, "system recogniser error $error")
+                        // 12 language not supported, 13 language unavailable, others: no usable offline model
+                        else -> Heard.Failed(Heard.Kind.NO_LANGUAGE, "system recogniser error $error")
+                    },
+                )
                 override fun onEndOfSpeech() = onRecorded()
                 override fun onReadyForSpeech(params: Bundle?) {}
                 override fun onBeginningOfSpeech() {}
