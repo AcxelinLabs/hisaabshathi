@@ -98,13 +98,13 @@ private fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean
                 pair.forEach { l ->
                     val selected = settings.lang == l
                     Button(
-                        onClick = { vm.setLang(l) }, modifier = Modifier.weight(1f).height(72.dp), shape = RoundedCornerShape(10.dp),
+                        onClick = { vm.setLang(l) }, modifier = Modifier.weight(1f).height(60.dp), shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (selected) Marigold else if (onDark) InkRaised else Paper,
                             contentColor = if (selected || !onDark) Ink else Color.White,
                         ),
                         // Each name is drawn in its own script's font, whatever the app language is.
-                    ) { Text(l.nativeName, fontSize = 24.sp, fontWeight = FontWeight.SemiBold, fontFamily = fontFor(l), color = if (selected || !onDark) Ink else Color.White) }
+                    ) { Text(l.nativeName, fontSize = 21.sp, fontWeight = FontWeight.SemiBold, fontFamily = fontFor(l), color = if (selected || !onDark) Ink else Color.White) }
                 }
             }
         }
@@ -140,13 +140,13 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
             }
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            if (step > 0) OutlinedButton(onClick = { step-- }, modifier = Modifier.height(64.dp)) { Icon(Icons.AutoMirrored.Filled.ArrowBack, s.cancel, tint = Ink) }
+            if (step > 0) OutlinedButton(onClick = { step-- }, modifier = Modifier.height(52.dp)) { Icon(Icons.AutoMirrored.Filled.ArrowBack, s.cancel, tint = Ink) }
             Button(
                 onClick = { if (step < 2) step++ else vm.finishOnboarding() },
                 enabled = step != 1 || settings.region.isNotEmpty(),
-                modifier = Modifier.weight(1f).height(64.dp), shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.weight(1f).height(52.dp), shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Marigold, contentColor = Ink),
-            ) { Text(if (step < 2) s.next else s.start, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Ink) }
+            ) { Text(if (step < 2) s.next else s.start, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Ink) }
         }
     }
 }

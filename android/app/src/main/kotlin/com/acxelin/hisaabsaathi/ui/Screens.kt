@@ -108,9 +108,9 @@ private fun TotalsCard(title: String, t: Totals, s: Strings) {
 @Composable
 private fun BigButton(text: String, color: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
-        onClick = onClick, modifier = modifier.height(64.dp), shape = RoundedCornerShape(10.dp),
+        onClick = onClick, modifier = modifier.height(52.dp), shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(containerColor = color, contentColor = if (color == Marigold) Ink else Color.White),
-    ) { Text(text, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center) }
+    ) { Text(text, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center) }
 }
 
 // ---------------------------------------------------------------- home
@@ -141,16 +141,16 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
         val listening = capture == Capture.Listening
         val thinking = capture == Capture.Thinking
         val pulse by animateFloatAsState(if (listening) 1f + level * 0.35f else 1f, label = "mic")
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(188.dp)) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(160.dp)) {
             // The ring swells with the worker's voice while listening.
-            Box(Modifier.size(176.dp).scale(pulse).clip(CircleShape).background(if (listening) Sindoor.copy(alpha = 0.22f) else Marigold.copy(alpha = 0.28f)))
+            Box(Modifier.size(148.dp).scale(pulse).clip(CircleShape).background(if (listening) Sindoor.copy(alpha = 0.22f) else Marigold.copy(alpha = 0.28f)))
             Box(
-                Modifier.size(156.dp).clip(CircleShape).background(if (listening) Sindoor else Marigold)
+                Modifier.size(128.dp).clip(CircleShape).background(if (listening) Sindoor else Marigold)
                     .clickable(enabled = !thinking, onClick = onMic),
                 contentAlignment = Alignment.Center,
             ) {
                 if (thinking) CircularProgressIndicator(color = Ink)
-                else Icon(painterResource(R.drawable.ic_mic), s.tapAndSpeak, tint = if (listening) Color.White else Ink, modifier = Modifier.size(84.dp))
+                else Icon(painterResource(R.drawable.ic_mic), s.tapAndSpeak, tint = if (listening) Color.White else Ink, modifier = Modifier.size(64.dp))
             }
         }
         Text(
@@ -164,12 +164,12 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
         if (!listening && !thinking) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-            OutlinedButton(onClick = onScan, modifier = Modifier.weight(1f).height(56.dp)) {
+            OutlinedButton(onClick = onScan, modifier = Modifier.weight(1f).height(52.dp)) {
                 Icon(painterResource(R.drawable.ic_camera), null, tint = Ink)
                 Spacer(Modifier.width(8.dp))
                 Text(s.scanBill)
             }
-            OutlinedButton(onClick = onType, modifier = Modifier.weight(1f).height(56.dp)) { Text(s.typeInstead) }
+            OutlinedButton(onClick = onType, modifier = Modifier.weight(1f).height(52.dp)) { Text(s.typeInstead) }
         }
     }
 }
@@ -274,20 +274,20 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
         }
         Row(Modifier.fillMaxWidth().padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Button(
-                onClick = vm::retry, modifier = Modifier.weight(1f).height(88.dp), shape = RoundedCornerShape(12.dp),
+                onClick = vm::retry, modifier = Modifier.weight(1f).height(68.dp), shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Red),
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.Close, null, modifier = Modifier.size(36.dp))
+                    Icon(Icons.Default.Close, null, modifier = Modifier.size(26.dp))
                     Text(s.fixByVoice, fontSize = 13.sp, textAlign = TextAlign.Center)
                 }
             }
             Button(
-                onClick = { vm.confirmSave() }, modifier = Modifier.weight(1f).height(88.dp), shape = RoundedCornerShape(12.dp),
+                onClick = { vm.confirmSave() }, modifier = Modifier.weight(1f).height(68.dp), shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Green),
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.Check, null, modifier = Modifier.size(36.dp))
+                    Icon(Icons.Default.Check, null, modifier = Modifier.size(26.dp))
                     Text(s.save, fontSize = 13.sp, textAlign = TextAlign.Center)
                 }
             }
@@ -400,7 +400,7 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
             Section(color = Notice) { Text(it.text, fontSize = 18.sp, color = NoticeInk) }
         }
         BigButton(s.readAloud, Marigold, Modifier.fillMaxWidth()) { vm.speakSummary(period) }
-        OutlinedButton(onClick = { vm.exportPdf(period) }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+        OutlinedButton(onClick = { vm.exportPdf(period) }, modifier = Modifier.fillMaxWidth().height(52.dp)) {
             Icon(Icons.Default.Share, null); Spacer(Modifier.width(8.dp)); Text(s.exportPdf)
         }
 
