@@ -5,7 +5,7 @@ ksp = "2.1.21-2.0.2"
 composeBom = "2025.06.01"
 room = "2.7.2"
 sqlcipher = "4.9.0"
-sherpa = "v1.12.14"
+sherpa = "v1.13.8"
 mediapipe = "0.10.24"
 
 [libraries]
@@ -25,7 +25,7 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 sqlcipher = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher" }
 sqlite = "androidx.sqlite:sqlite-ktx:2.5.2"
-sherpa-onnx = { module = "com.github.k2-fsa:sherpa-onnx", version.ref = "sherpa" }
+sherpa-onnx = { module = "com.github.k2-fsa.sherpa-onnx:sherpa-onnx", version.ref = "sherpa" }
 mediapipe-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "mediapipe" }
 mlkit-text = "com.google.mlkit:text-recognition:16.0.1"
 mlkit-text-devanagari = "com.google.mlkit:text-recognition-devanagari:16.0.1"

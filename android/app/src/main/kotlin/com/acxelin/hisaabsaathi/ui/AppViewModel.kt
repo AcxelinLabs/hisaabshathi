@@ -75,13 +75,54 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         if (capture.value == Capture.Listening) app.stt.stop() else listenForEntry()
     }
 
-    private fun listenForEntry() = viewModelScope.launch {
+    private fun listenForEntry() = viewModelScope.launch(guard) {
         val text = listenOnce() ?: return@launch
         understand(text, "voice")
     }
 
-    /** Technical note about the last listening problem, shown in Settings for testers. */
-    val lastProblem = MutableStateFlow("")
+    /** Technical note about the last problem, shown in Settings for testers. */
+    val lastProblem = MutableStateFlow(lastExitProblem().ifEmpty { app.slm.problem })
+
+    private fun note(what: String) {
+        lastProblem.value = "${java.time.LocalTime.now().withNano(0)} $what"
+        android.util.Log.w("HisaabSaathi", what)
+    }
+
+    /** An unexpected error while answering shows a message instead of closing the app. */
+    private val guard = kotlinx.coroutines.CoroutineExceptionHandler { _, e ->
+        note("error: ${e.javaClass.simpleName}: ${e.message}")
+        capture.value = Capture.Message(strings.voiceFailed)
+    }
+
+    /**
+     * Why the app last closed, if it crashed or was killed for memory (Android 11+). Read
+     * once per crash so testers can report it without a computer.
+     */
+    private fun lastExitProblem(): String {
+        if (android.os.Build.VERSION.SDK_INT < 30) return ""
+        return runCatching {
+            val am = app.getSystemService(android.app.ActivityManager::class.java)
+            val exit = am.getHistoricalProcessExitReasons(app.packageName, 0, 5).firstOrNull() ?: return ""
+            val prefs = app.getSharedPreferences("diagnostics", android.content.Context.MODE_PRIVATE)
+            if (prefs.getLong("seen", 0) >= exit.timestamp) return prefs.getString("last", "").orEmpty()
+            val why = when (exit.reason) {
+                android.app.ApplicationExitInfo.REASON_CRASH -> "app crashed (Java)"
+                android.app.ApplicationExitInfo.REASON_CRASH_NATIVE -> "app crashed (native)"
+                android.app.ApplicationExitInfo.REASON_LOW_MEMORY -> "closed by Android: low memory"
+                android.app.ApplicationExitInfo.REASON_ANR -> "app froze (not responding)"
+                android.app.ApplicationExitInfo.REASON_SIGNALED -> "app was killed"
+                else -> return ""
+            }
+            // Name the native libraries in the crash report: shows which part failed.
+            val libs = runCatching {
+                exit.traceInputStream?.use { String(it.readBytes().take(400_000).toByteArray(), Charsets.ISO_8859_1) }
+                    ?.let { Regex("lib[A-Za-z0-9_\\-]+\\.so").findAll(it).map { m -> m.value }.distinct().take(4).joinToString(", ") }
+            }.getOrNull().orEmpty()
+            val text = "${java.time.Instant.ofEpochMilli(exit.timestamp)} [${exit.processName}] $why. ${exit.description.orEmpty()} $libs".trim()
+            prefs.edit().putLong("seen", exit.timestamp).putString("last", text).apply()
+            text
+        }.getOrDefault("")
+    }
 
     /** Returns null (after showing a message that says what went wrong) when nothing usable was heard. */
     private suspend fun listenOnce(): String? {
@@ -103,8 +144,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             is Heard.Text -> heard.text
             Heard.Silence -> { say(strings.heardNothing); null }
             is Heard.Failed -> {
-                lastProblem.value = "${java.time.LocalTime.now().withNano(0)} ${if (usePack) "voice pack" else "phone recogniser"}: ${heard.detail}"
-                android.util.Log.w("HisaabSaathi", "listen failed: ${lastProblem.value}")
+                note("${if (usePack) "voice pack" else "phone recogniser"}: ${heard.detail}")
                 when {
                     heard.kind == Heard.Kind.MIC -> say(strings.micFailed)
                     // The phone's own recogniser has no offline model for this language: the voice pack is the answer.
@@ -124,7 +164,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun submitText(text: String) = viewModelScope.launch { understand(text, "typed") }
+    fun submitText(text: String) = viewModelScope.launch(guard) { understand(text, "typed") }
 
     private suspend fun understand(text: String, source: String) {
         if (text.isBlank()) return say(strings.notUnderstood)
@@ -195,7 +235,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         capture.value = r.copy(drafts = r.drafts.toMutableList().also { it[index] = draft })
     }
 
-    fun confirmSave() = viewModelScope.launch {
+    fun confirmSave() = viewModelScope.launch(guard) {
         val r = capture.value as? Capture.Review ?: return@launch
         val today = LocalDate.now()
         val now = System.currentTimeMillis()
@@ -205,7 +245,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /** "Say yes or no": yes saves, no starts a new recording. */
-    fun confirmByVoice() = viewModelScope.launch {
+    fun confirmByVoice() = viewModelScope.launch(guard) {
         val r = capture.value as? Capture.Review ?: return@launch
         val heard = listenOnce() ?: return@launch
         when (Confirm.parse(heard)) {
@@ -228,7 +268,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     // ---- scan
 
-    fun scanned(photo: Uri, path: String) = viewModelScope.launch {
+    fun scanned(photo: Uri, path: String) = viewModelScope.launch(guard) {
         capture.value = Capture.Thinking
         val text = app.scanner.text(photo)
         val draft = ReceiptReader.read(text)
@@ -238,19 +278,19 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     // ---- ledger, settings, export
 
-    fun delete(id: Long) = viewModelScope.launch { app.ledger.delete(id) }
-    fun eraseAll() = viewModelScope.launch { app.ledger.eraseAll() }
+    fun delete(id: Long) = viewModelScope.launch(guard) { app.ledger.delete(id) }
+    fun eraseAll() = viewModelScope.launch(guard) { app.ledger.eraseAll() }
 
-    fun setLang(l: Lang) = viewModelScope.launch { app.settings.setLang(l) }
-    fun setRegion(r: String) = viewModelScope.launch { app.settings.setRegion(r) }
-    fun setGoal(paise: Long) = viewModelScope.launch { app.settings.setGoal(paise) }
+    fun setLang(l: Lang) = viewModelScope.launch(guard) { app.settings.setLang(l) }
+    fun setRegion(r: String) = viewModelScope.launch(guard) { app.settings.setRegion(r) }
+    fun setGoal(paise: Long) = viewModelScope.launch(guard) { app.settings.setGoal(paise) }
 
-    fun setReminders(on: Boolean) = viewModelScope.launch {
+    fun setReminders(on: Boolean) = viewModelScope.launch(guard) {
         app.settings.setReminders(on)
         if (on) Reminders.schedule(app) else Reminders.cancel(app)
     }
 
-    fun finishOnboarding() = viewModelScope.launch {
+    fun finishOnboarding() = viewModelScope.launch(guard) {
         app.settings.setOnboarded()
         Reminders.schedule(app)
     }
@@ -259,7 +299,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun deletePack(pack: Pack) = app.packs.delete(pack)
     fun sttPack(): Pack = Catalog.stt(lang)
 
-    fun exportPdf(period: QueryPeriod) = viewModelScope.launch {
+    fun exportPdf(period: QueryPeriod) = viewModelScope.launch(guard) {
         val s = strings
         val file = app.exporter.pdf(s.periodName(period), inPeriod(period), s)
         app.exporter.share(listOf(file), s.share)
@@ -267,7 +307,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun chainIntact(): Boolean = HashChain.firstBroken(entries.value.sortedBy { it.id }) < 0
 
-    fun exportEvidence() = viewModelScope.launch {
+    fun exportEvidence() = viewModelScope.launch(guard) {
         val s = strings
         val all = app.ledger.oldestFirst()
         val note = if (HashChain.firstBroken(all) < 0) s.recordIntact else s.recordBroken

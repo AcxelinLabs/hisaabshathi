@@ -16,11 +16,11 @@ import kotlin.math.abs
  */
 object RuleBasedExtractor {
 
-    private fun words(vararg w: String): Set<String> =
-        w.flatMap { it.split(' ') }.filter { it.isNotBlank() }.map { Text.normalize(it) }.toSet()
+    private fun words(vararg w: String): Keywords =
+        Keywords(w.flatMap { it.split(' ') }.filter { it.isNotBlank() }.map { Text.normalize(it) }.toSet())
 
     /** Telugu, Kannada and Tamil words for a role, from the i18n tables. */
-    private fun kw(role: String): Set<String> =
+    private fun kw(role: String): Keywords =
         words(*listOf(Te.keywords, Kn.keywords, Ta.keywords).mapNotNull { it[role] }.toTypedArray())
 
     private val hours = words(
@@ -36,7 +36,7 @@ object RuleBasedExtractor {
     private val atWords = setOf("at", "@")
     private val advance = words(
         "एडवांस अडवांस एडवान्स एडवांस्ड खर्ची उधार बयाना अग्रिम advance kharchi udhar udhaar " +
-            "ଆଡଭାନ୍ସ ଆଡ୍ଭାନ୍ସ ଅଗ୍ରୀମ ଅଗ୍ରିମ ଆଗୁଆ ଉଧାର ବଇନା",
+            "ଆଡଭାନ୍ସ ଆଡ୍ଭାନ୍ସ ଆଭାଂସ ଆଡଭାଂସ ଆଡ୍ଭାଂସ ଆଭାନ୍ସ ଏଡଭାନ୍ସ ଅଗ୍ରୀମ ଅଗ୍ରିମ ଆଗୁଆ ଉଧାର ବଇନା",
     ) + kw("advance")
     private val expense = words(
         "खर्च खर्चा खर्चे खरीदा खरीदी खरीदे kharch kharcha spent spend bought expense ଖର୍ଚ୍ଚ ଖର୍ଚ କିଣିଲି କିଣିଲା କିଣିଲେ",
@@ -88,14 +88,21 @@ object RuleBasedExtractor {
 
     private fun kindOf(word: String): Kind? = when (word) {
         in advance -> Kind.ADVANCE
-        in expense, in categoryWords -> Kind.EXPENSE
+        in expense -> Kind.EXPENSE
+        else -> if (categoryOf(word) != null) Kind.EXPENSE else kindOfRest(word)
+    }
+
+    private fun categoryOf(word: String): ExpenseCategory? =
+        categoryWords[word] ?: categories.firstOrNull { (_, ws) -> word in ws }?.first
+
+    private fun kindOfRest(word: String): Kind? = when (word) {
         in wage -> Kind.WAGE
         in received -> Kind.RECEIVED
         else -> null
     }
 
     fun extract(transcript: String): Extraction {
-        val tokens = NumberWords.expand(Text.tokens(transcript))
+        val tokens = NumberWords.expand(Text.tokens(transcript)) { it in money || it in hours || it in pieces }
         val toks = NumberWords.parse(tokens)
         val wordSet = tokens.toSet()
 
@@ -112,14 +119,25 @@ object RuleBasedExtractor {
         var rateValue: Double? = null
         val amounts = ArrayList<Int>() // indices into toks of money amounts
 
+        var lowConfidence = false
+        val claimedRateWords = HashSet<Int>()
         for ((i, tok) in toks.withIndex()) {
             if (tok !is Num) continue
             val next = (toks.getOrNull(i + 1) as? Word)?.text
             val next2 = (toks.getOrNull(i + 2) as? Word)?.text
             val prev = (toks.getOrNull(i - 1) as? Word)?.text
             val prev2 = (toks.getOrNull(i - 2) as? Word)?.text
-            val isRate = prev in rate || next in rate || prev in atWords || (prev in money && prev2 in atWords) ||
-                (next in money && (next2 in rate || next2 in pieces || next2 in hours || isPerWord(next2)))
+            // "5 रुपये रेट": the rate word belongs to the number before it, so a number after
+            // it ("रेट 100 एडवांस") is not also a rate.
+            val rateWordAfter = when {
+                next in rate -> i + 1
+                next in money && next2 in rate -> i + 2
+                else -> -1
+            }
+            if (rateWordAfter >= 0 && rateValue == null) claimedRateWords += rateWordAfter
+            val isRate = rateWordAfter >= 0 || (prev in rate && (i - 1) !in claimedRateWords) ||
+                prev in atWords || (prev in money && prev2 in atWords) ||
+                (next in money && (next2 in pieces || next2 in hours || isPerWord(next2)))
             when {
                 next in hours && hoursValue == null -> hoursValue = tok.value
                 next in pieces && piecesValue == null -> piecesValue = tok.value.toInt()
@@ -129,7 +147,6 @@ object RuleBasedExtractor {
         }
 
         val entries = ArrayList<DraftEntry>()
-        var lowConfidence = false
         var earned: Double? = null
         var paid = ArrayList<Double>()
         val hasWorkContext = hoursValue != null || piecesValue != null || wordSet.any { it in workContext }
@@ -138,6 +155,8 @@ object RuleBasedExtractor {
             val p = piecesValue
             val h = hoursValue
             if (p != null) earned = p * rateValue else if (h != null) earned = h * rateValue
+            // Implausible for one day's work: almost certainly a misheard number.
+            if (rateValue > 2000 || (earned ?: 0.0) > 20000) lowConfidence = true
         }
 
         for (i in amounts) {
@@ -227,15 +246,15 @@ object RuleBasedExtractor {
     }
 
     private fun categoryNear(toks: List<Tok>, i: Int): ExpenseCategory? =
-        window(toks, i).mapNotNull { (w, d) -> categoryWords[w]?.let { it to d } }.minByOrNull { it.second }?.first
+        window(toks, i).mapNotNull { (w, d) -> categoryOf(w)?.let { it to d } }.minByOrNull { it.second }?.first
 
     private fun query(wordSet: Set<String>, toks: List<Tok>): Query? {
-        if (wordSet.any { it in minWageWords }) return Query(QueryPeriod.DAY, QueryTopic.MIN_WAGE)
-        val asksHowMuch = wordSet.any { it in questionWords }
+        if (wordSet.any { it in minWageWords.exact }) return Query(QueryPeriod.DAY, QueryTopic.MIN_WAGE)
+        val asksHowMuch = wordSet.any { it in questionWords.exact }
         if (!asksHowMuch) return null
         // "how much" with amounts in it is an entry, not a question.
         if (toks.any { it is Num && abs(it.value) > 1.0 }) return null
-        val saidPeriod = periodWords.firstOrNull { (_, ws) -> wordSet.any { it in ws } }?.first
+        val saidPeriod = periodWords.firstOrNull { (_, ws) -> wordSet.any { it in (ws as Keywords).exact } }?.first
         val period = saidPeriod ?: QueryPeriod.WEEK
         val topic = when {
             wordSet.any { it in dueWords } -> QueryTopic.DUE

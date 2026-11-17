@@ -41,6 +41,12 @@
             </intent-filter>
         </activity>
 
+        <!-- The language model runs in its own process so a native crash cannot close the app. -->
+        <service
+            android:name=".ai.LlmService"
+            android:exported="false"
+            android:process=":llm" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.files"

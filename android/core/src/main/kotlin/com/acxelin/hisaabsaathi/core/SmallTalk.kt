@@ -13,7 +13,7 @@ object SmallTalk {
     // Order matters: the first match wins ("कैसे हो" is HOW_ARE_YOU, not the "कैसे" of HELP).
     private val patterns: List<Pair<Chat, List<String>>> = listOf(
         Chat.MAKER to listOf(
-            "किसने बनाया", "कौन बनाया", "who made", "who built", "who created", "kisne banaya", "କିଏ ତିଆରି", "କିଏ ବନେଇ",
+            "किसने बनाया", "कौन बनाया", "who made", "who make", "who makes", "who built", "who created", "who developed", "who designed", "kisne banaya", "କିଏ ତିଆରି", "କିଏ ବନେଇ",
             "ఎవరు తయారు", "ఎవరు చేశారు", "ಯಾರು ಮಾಡಿ", "ಯಾರು ತಯಾರ", "யார் உருவாக்க", "யார் செய்த",
         ),
         Chat.HOW_ARE_YOU to listOf(
@@ -59,6 +59,20 @@ object SmallTalk {
                 // Latin words must match whole ("hi" is not inside "this"); Indian-script stems may carry endings.
                 val latin = p.all { it.code < 128 }
                 if (if (latin) " $p " in joined || joined.startsWith(" $p ") else p in joined) return chat
+            }
+        }
+        // Misheard: one long word one letter off ("నమస్కారం" heard as "నమస్కరం"), or a phrase of
+        // three or more words with one word misheard ("who make you").
+        for ((chat, list) in compiled) {
+            for (p in list) {
+                val words = p.split(' ')
+                if (words.size == 1 && tokens.any { Fuzzy.matches(it, listOf(p)) }) return chat
+                if (words.size >= 3) {
+                    for (start in 0..tokens.size - words.size) {
+                        val misses = words.indices.count { k -> tokens[start + k] != words[k] }
+                        if (misses <= 1) return chat
+                    }
+                }
             }
         }
         return null

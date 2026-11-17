@@ -10,7 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://jitpack.io") { content { includeGroup("com.github.k2-fsa") } }
+        maven("https://jitpack.io") { content { includeGroupByRegex("com\\.github\\.k2-fsa.*") } }
     }
 }
 rootProject.name = "HisaabSaathi"

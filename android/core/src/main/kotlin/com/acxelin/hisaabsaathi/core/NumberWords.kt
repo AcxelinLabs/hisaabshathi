@@ -108,10 +108,24 @@ object NumberWords {
     private val odiaHundredSuffixes = listOf("ଶହେ", "ଶହ")
     private val digits = Regex("\\d+(\\.\\d+)?")
 
-    /** Splits joined Odia forms such as "ପାଞ୍ଚଶହ" into "ପାଞ୍ଚ", "ଶହ". */
-    fun expand(tokens: List<String>): List<String> {
+    /**
+     * Splits joined forms such as "ପାଞ୍ଚଶହ" (five-hundred) and "ତିନିଟଙ୍କା" (three-rupees) into
+     * their parts. [glue] says which words may follow a number inside one written word.
+     */
+    fun expand(tokens: List<String>, glue: (String) -> Boolean = { false }): List<String> {
         val out = ArrayList<String>(tokens.size)
         for (t in tokens) {
+            if (t !in units && t !in multipliers) {
+                val cps = t.codePoints().toArray()
+                val split = (cps.size - 2 downTo 2).firstOrNull { k ->
+                    val head = String(cps, 0, k); val tail = String(cps, k, cps.size - k)
+                    head in units && (tail in multipliers || tail in units || glue(tail))
+                }
+                if (split != null) {
+                    out += String(cps, 0, split); out += String(cps, split, cps.size - split)
+                    continue
+                }
+            }
             val suffix = odiaHundredSuffixes.firstOrNull { t.length > it.length && t.endsWith(it) }
             val head = suffix?.let { t.dropLast(it.length) }
             if (suffix != null && head in units && t !in units) {
@@ -127,6 +141,8 @@ object NumberWords {
     private fun unitValue(tokens: List<String>, i: Int): Double? {
         val t = tokens[i]
         units[t]?.let { return it }
+        // A misheard number word ("ಅರುವತ್ತು" for "ಅರವತ್ತು"): accept only an unambiguous match.
+        if (t !in multipliers && t !in fractionPrefix) Fuzzy.unique(t, units)?.let { return it }
         if (t == "do") {
             val next = tokens.getOrNull(i + 1) ?: return null
             if (next in multipliers || next in romanDoFollowers) return 2.0

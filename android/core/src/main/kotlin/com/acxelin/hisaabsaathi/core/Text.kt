@@ -16,11 +16,23 @@ object Text {
                 c == 'ଁ' -> sb.append('ଂ')
                 c == '₹' -> sb.append(" rs ")
                 c == '‌' || c == '‍' -> {}
-                else -> sb.append(c.lowercaseChar())
+                // Long and short vowel signs are often confused by speech recognition.
+                else -> sb.append(shortVowel[c] ?: c.lowercaseChar())
             }
         }
-        return sb.toString()
+        return sb.toString().replace(finalVirama, "")
     }
+
+    private val shortVowel: Map<Char, Char> = mapOf(
+        'ी' to 'ि', 'ू' to 'ु', 'ई' to 'इ', 'ऊ' to 'उ', // Devanagari
+        'ୀ' to 'ି', 'ୂ' to 'ୁ', 'ଈ' to 'ଇ', 'ଊ' to 'ଉ', // Odia
+        'ీ' to 'ి', 'ూ' to 'ు', 'ఈ' to 'ఇ', 'ఊ' to 'ఉ', // Telugu
+        'ೀ' to 'ಿ', 'ೂ' to 'ು', 'ಈ' to 'ಇ', 'ಊ' to 'ಉ', // Kannada
+        'ீ' to 'ி', 'ூ' to 'ு', 'ஈ' to 'இ', 'ஊ' to 'உ', // Tamil
+    )
+
+    /** A virama at the end of a word is written inconsistently ("ହଜାର୍" / "ହଜାର"). */
+    private val finalVirama = Regex("[\\u094D\\u0B4D\\u0C4D\\u0CCD\\u0BCD](?=[\\s,.;:!?।॥()\"'/|\\-]|$)")
 
     private val thousands = Regex("(?<=\\d),(?=\\d{2,3}(\\D|$))")
     private val looseDot = Regex("(?<!\\d)\\.|\\.(?!\\d)")
