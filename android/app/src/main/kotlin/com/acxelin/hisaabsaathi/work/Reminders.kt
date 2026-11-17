@@ -33,7 +33,10 @@ object Reminders {
     private const val CHANNEL = "reminders"
     private val times = listOf("reminder_15" to LocalTime.of(15, 0), "reminder_21" to LocalTime.of(21, 0))
 
-    fun schedule(context: Context) {
+    /** Never throws: a reminder problem must not interrupt the worker. */
+    fun schedule(context: Context) = runCatching { scheduleOrThrow(context) }.let { }
+
+    private fun scheduleOrThrow(context: Context) {
         val wm = WorkManager.getInstance(context)
         val now = LocalDateTime.now()
         for ((name, time) in times) {
@@ -47,8 +50,10 @@ object Reminders {
     }
 
     fun cancel(context: Context) {
-        val wm = WorkManager.getInstance(context)
-        times.forEach { wm.cancelUniqueWork(it.first) }
+        runCatching {
+            val wm = WorkManager.getInstance(context)
+            times.forEach { wm.cancelUniqueWork(it.first) }
+        }
     }
 
     fun notify(context: Context, strings: Strings) {

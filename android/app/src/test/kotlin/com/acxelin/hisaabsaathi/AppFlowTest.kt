@@ -72,6 +72,7 @@ class AppFlowTest {
     }
 
     @Test fun firstSession() {
+        org.robolectric.shadows.ShadowLog.stream = System.out
         // --- setup (Hindi is the default language)
         waitFor("अपनी भाषा चुनें")
         shot("01-language")
