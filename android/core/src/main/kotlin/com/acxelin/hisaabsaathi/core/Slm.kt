@@ -11,16 +11,6 @@ import kotlin.math.abs
  * the worker did not say, and all arithmetic stays in plain code.
  */
 object Slm {
-    /**
-     * Whether the app consults the language model at all. Off: measured on 16 Nov 2026 with
-     * the stock Qwen2.5 models (tools/eval_slm.py, 638-prompt corpus), the 0.5B model
-     * labelled 7% of entry sentences correctly and the 1.5B model 28%, against 100% for the
-     * rules, and both gave wrong or meaningless answers to simple questions in Indian
-     * languages. Turn on only for a model that beats the rules on the corpus, such as a
-     * fine-tuned one (tools/finetune_slm.py).
-     */
-    const val TRUSTED = false
-
     val labels = listOf("hours", "pieces", "rate", "wage", "received", "advance", "expense", "other")
 
     private fun fmt(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()

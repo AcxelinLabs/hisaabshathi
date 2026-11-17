@@ -60,13 +60,30 @@ keywords, not real speech-recognition output.
 
 The fine-tuned model was trained on sentences built from the same templates as the corpus
 (with no overlapping sentences), so 95% shows it can learn the task, not how it does on real
-speech. It is still below the rules on this corpus, so the app keeps the model switched off
-(`Slm.TRUSTED = false`). To ship it, the LoRA adapter must be merged and converted to a
-MediaPipe `.task` file (ai-edge-torch); that conversion has not been done.
+speech.
+
+### The fine-tuned model in the app
+
+- Merged and converted to 8-bit LiteRT with litert-torch (Qwen2.5 0.5B recipe), then packed
+  as a MediaPipe `.task` (`tools/make_task.py`, tokenizer and chat template reused from
+  Google's published Qwen2.5-0.5B bundle). File: `hisaabsaathi-qwen05-ft-q8.task`, 514 MB,
+  sha256 `43fd871b0aec440f288d23685cf4e26f0f1e66804241ff4273db67f638b509a1`.
+- After conversion it labels 37/40 held-out prompts right (`tools/check_tflite.py`), the
+  same as before conversion.
+- The app asks it only when the rules are unsure or found nothing, and keeps its answer only
+  if it labels exactly the numbers that were said, so it cannot override a confident rule
+  result or add an amount.
+- Two builds: **full** (`./gradlew :app:assembleFullDebug`, ~600 MB) carries the model and
+  unpacks it on first launch; **lite** (`assembleLiteDebug`, ~90 MB) offers "Add model file
+  from phone" in Settings, and a download button once `HISAAB_MODEL_URL` in
+  `app/build.gradle.kts` points at a hosted copy. The model file is not kept in git; put it
+  in `app/src/full/assets/` before building full.
+- Not yet checked on a phone: MediaPipe loading this bundle, speed and memory on 3–4 GB
+  devices.
 
 ## Look
 
-Ink blue and marigold, styled after a hand-written wage slip; type is Anek (SIL OFL), one
+Deep ledger green and marigold, styled after a hand-written wage slip; type is Anek (SIL OFL), one
 family covering all six scripts (`app/src/main/res/font`).
 
 ## Build and test
@@ -76,11 +93,11 @@ family covering all six scripts (`app/src/main/res/font`).
 ```
 
 ```bash
-./gradlew :app:testDebugUnitTest     # drives the real screens end to end; screenshots in app/build/screens
+./gradlew :app:testLiteDebugUnitTest     # drives the real screens end to end; screenshots in app/build/screens
 ```
 
 ```bash
-./gradlew :app:assembleDebug         # APKs in app/build/outputs/apk/debug (use arm64-v8a for most phones)
+./gradlew :app:assembleLiteDebug     # APKs in app/build/outputs/apk/lite/debug (use arm64-v8a for most phones)
 ```
 
 Needs JDK 17+ and the Android SDK (platform 35). Set `sdk.dir` in `local.properties`.

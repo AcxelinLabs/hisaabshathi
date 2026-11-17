@@ -143,7 +143,8 @@ class Strings(val lang: Lang) {
     val workState get() = t("काम का राज्य", "କାମର ରାଜ୍ୟ", "Work state")
     val reminders get() = t("रोज़ 3 बजे और 9 बजे याद दिलाएं", "ପ୍ରତିଦିନ 3ଟା ଓ 9ଟାରେ ମନେ ପକାନ୍ତୁ", "Remind me daily at 3 PM and 9 PM")
     val modelPacks get() = t("ऑफ़लाइन पैक", "ଅଫ୍‌ଲାଇନ୍ ପ୍ୟାକ୍", "Offline packs")
-    val smartPack get() = t("समझदार मॉडल (बेहतर समझ)", "ସ୍ମାର୍ଟ ମଡେଲ୍ (ଭଲ ବୁଝାମଣା)", "Smart model (better understanding)")
+    val smartPack get() = t("समझदार मॉडल: अधूरी बात भी समझने के लिए", "ସ୍ମାର୍ଟ ମଡେଲ୍: ଅଧା କଥା ବି ବୁଝିବା ପାଇଁ", "Smart model: understands sentences the app is unsure about")
+    val addFromPhone get() = t("फोन से मॉडल फ़ाइल जोड़ें", "ଫୋନ୍‌ରୁ ମଡେଲ୍ ଫାଇଲ୍ ଯୋଡ଼ନ୍ତୁ", "Add model file from phone")
     val privacyTitle get() = t("आपका डेटा, आपके पास", "ଆପଣଙ୍କ ଡାଟା, ଆପଣଙ୍କ ପାଖରେ", "Your data stays with you")
     val privacyBody get() = t(
         "• आपका हिसाब इसी फोन में ताले (एन्क्रिप्शन) में रहता है।\n• आवाज़ फोन में ही समझी जाती है और सेव नहीं होती।\n• ठेकेदार, कंपनी या हम — कोई आपका हिसाब नहीं देख सकता।\n• इंटरनेट सिर्फ़ पैक डाउनलोड करने के लिए लगता है।\n• आप जब चाहें सब कुछ मिटा सकते हैं।",

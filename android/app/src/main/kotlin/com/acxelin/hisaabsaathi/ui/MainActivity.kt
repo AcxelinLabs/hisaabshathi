@@ -147,7 +147,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
                         selected = tab == i, onClick = { tab = i },
                         icon = { Icon(icon, label) }, label = { Text(label, maxLines = 1, color = Color.White, fontSize = 12.sp, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) },
                         colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
-                            selectedIconColor = Ink, indicatorColor = Marigold, unselectedIconColor = Color(0xFFB9C0E0),
+                            selectedIconColor = Ink, indicatorColor = Marigold, unselectedIconColor = Color(0xFFB5CDBB),
                         ),
                     )
                 }

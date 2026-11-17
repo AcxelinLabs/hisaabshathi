@@ -1,6 +1,6 @@
 package com.acxelin.hisaabsaathi.models
 
-import android.app.ActivityManager
+import com.acxelin.hisaabsaathi.BuildConfig
 import android.content.Context
 import com.acxelin.hisaabsaathi.core.Lang
 import kotlinx.coroutines.CoroutineScope
@@ -64,29 +64,20 @@ object Catalog {
         ),
     )
 
-    private const val QWEN = "$HF/litert-community"
-    val slmSmall = Pack(
-        id = "slm-small",
-        title = "Qwen2.5-0.5B-Instruct (8-bit)",
-        licence = "Apache-2.0",
-        files = listOf(
-            PackFile(
-                "$QWEN/Qwen2.5-0.5B-Instruct/resolve/main/Qwen2.5-0.5B-Instruct_multi-prefill-seq_q8_ekv1280.task",
-                "slm/qwen2.5-0.5b-q8.task", 546_660_344,
-            ),
-        ),
+    /**
+     * Qwen2.5-0.5B-Instruct fine-tuned to label the numbers in a worker's sentence
+     * (tools/finetune_slm.py), converted to 8-bit LiteRT and packed for MediaPipe
+     * (tools/make_task.py). 133/140 held-out corpus prompts labelled right before
+     * conversion, 37/40 after.
+     */
+    val slmHisaab = Pack(
+        id = "slm-hisaab",
+        title = "HisaabSaathi Qwen2.5-0.5B, fine-tuned (8-bit)",
+        licence = "Apache-2.0 (Qwen2.5); fine-tune by Acxelin Labs",
+        files = listOf(PackFile(BuildConfig.HISAAB_MODEL_URL, "slm/hisaabsaathi-qwen05-ft-q8.task", 513_718_731)),
     )
-    val slmLarge = Pack(
-        id = "slm-large",
-        title = "Qwen2.5-1.5B-Instruct (8-bit)",
-        licence = "Apache-2.0",
-        files = listOf(
-            PackFile(
-                "$QWEN/Qwen2.5-1.5B-Instruct/resolve/main/Qwen2.5-1.5B-Instruct_multi-prefill-seq_q8_ekv1280.task",
-                "slm/qwen2.5-1.5b-q8.task", 1_597_913_616,
-            ),
-        ),
-    )
+
+    val canDownloadSlm: Boolean get() = BuildConfig.HISAAB_MODEL_URL.isNotBlank()
 
     fun stt(lang: Lang): Pack = when (lang) {
         Lang.HI -> sttHindi
@@ -97,14 +88,7 @@ object Catalog {
         Lang.EN -> sttEnglish
     }
 
-    /** Bigger model only on phones with 6 GB RAM or more. */
-    fun slmFor(context: Context): Pack {
-        val info = ActivityManager.MemoryInfo()
-        (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(info)
-        return if (info.totalMem >= 5_500_000_000L) slmLarge else slmSmall
-    }
-
-    val all = listOf(sttHindi, sttOdia, sttTelugu, sttKannada, sttTamil, sttEnglish, slmSmall, slmLarge)
+    val all = listOf(sttHindi, sttOdia, sttTelugu, sttKannada, sttTamil, sttEnglish, slmHisaab)
 }
 
 class PackManager(context: Context, private val scope: CoroutineScope) {
@@ -134,6 +118,73 @@ class PackManager(context: Context, private val scope: CoroutineScope) {
                 }
                 set(pack, if (isReady(pack)) PackState.Ready else PackState.Failed("size mismatch"))
             } catch (e: Exception) {
+                set(pack, PackState.Failed(e.message ?: e.javaClass.simpleName))
+            }
+        }
+    }
+
+    /**
+     * Copies a single-file pack the worker or field team picked on the phone (for example
+     * a model shared over Bluetooth or a USB cable) into app storage. Rejects a file whose
+     * size does not match, so a wrong or half-copied file is never loaded.
+     */
+    fun importFrom(context: Context, pack: Pack, uri: android.net.Uri) {
+        val f = pack.files.single()
+        if (jobs[pack.id]?.isActive == true) return
+        set(pack, PackState.Downloading(0f))
+        jobs[pack.id] = scope.launch(Dispatchers.IO) {
+            val target = file(f)
+            val part = File(target.path + ".part")
+            try {
+                target.parentFile?.mkdirs()
+                var copied = 0L
+                context.contentResolver.openInputStream(uri).use { input ->
+                    requireNotNull(input) { "cannot open file" }
+                    part.outputStream().use { out ->
+                        val buf = ByteArray(1 shl 16)
+                        while (scope.isActive) {
+                            val n = input.read(buf)
+                            if (n < 0) break
+                            out.write(buf, 0, n); copied += n
+                            if (copied % (8L shl 20) < n) set(pack, PackState.Downloading(copied.toFloat() / f.bytes))
+                        }
+                    }
+                }
+                if (copied != f.bytes) error("wrong file")
+                if (!part.renameTo(target)) error("could not save file")
+                set(pack, PackState.Ready)
+            } catch (e: Exception) {
+                part.delete()
+                set(pack, PackState.Failed(e.message ?: e.javaClass.simpleName))
+            }
+        }
+    }
+
+    /** Unpacks a model that ships inside the APK ("full" build) into app storage. */
+    fun installBundled(context: Context, pack: Pack, assetName: String) {
+        if (isReady(pack) || jobs[pack.id]?.isActive == true) return
+        val f = pack.files.single()
+        set(pack, PackState.Downloading(0f))
+        jobs[pack.id] = scope.launch(Dispatchers.IO) {
+            val target = file(f); val part = File(target.path + ".part")
+            try {
+                target.parentFile?.mkdirs()
+                var copied = 0L
+                context.assets.open(assetName).use { input ->
+                    part.outputStream().use { out ->
+                        val buf = ByteArray(1 shl 16)
+                        while (true) {
+                            val n = input.read(buf)
+                            if (n < 0) break
+                            out.write(buf, 0, n); copied += n
+                            if (copied % (8L shl 20) < n) set(pack, PackState.Downloading(copied.toFloat() / f.bytes))
+                        }
+                    }
+                }
+                if (copied != f.bytes || !part.renameTo(target)) error("could not unpack model")
+                set(pack, PackState.Ready)
+            } catch (e: Exception) {
+                part.delete()
                 set(pack, PackState.Failed(e.message ?: e.javaClass.simpleName))
             }
         }

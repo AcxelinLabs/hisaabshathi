@@ -4,6 +4,8 @@ package com.acxelin.hisaabsaathi.core.i18n
 internal object Ta {
     /** UI and spoken text, keyed by the exact English string used in Strings.kt. */
     val strings: Map<String, String> = mapOf(
+        "Smart model: understands sentences the app is unsure about" to "ஸ்மார்ட் மாடல்: ஆப்புக்கு புரியாத வாக்கியங்களையும் புரிஞ்சுக்கும்",
+        "Add model file from phone" to "போன்ல இருந்து மாடல் ஃபைல் சேர்க்கவும்",
         "I am HisaabSaathi. I keep track of your earnings, advances and expenses." to "நான் ஹிசாப் சாத்தி. உங்க சம்பாத்தியம், அட்வான்ஸ், செலவு கணக்கை நான் வச்சுக்கிறேன்.",
         "Hello! Tell me today's work, advance or expense." to "வணக்கம்! இன்னைக்கு வேலை, அட்வான்ஸ் இல்ல செலவு சொல்லுங்க.",
         "Tap the mic and say how much you worked, what advance you took, or what you spent. For example: 120 pieces, rate 5 rupees, 300 advance. You can also ask: how much did I earn this week?" to "மைக்கை அழுத்தி சொல்லுங்க: எவ்வளவு வேலை செஞ்சீங்க, எவ்வளவு அட்வான்ஸ் வாங்கினீங்க, இல்ல எவ்வளவு செலவாச்சு. உதாரணம்: 120 பீஸ், 5 ரூபாய் ரேட், 300 அட்வான்ஸ். இந்த வாரம் எவ்வளவு சம்பாதிச்சேன்னு கேட்கவும் செய்யலாம்.",
@@ -98,7 +100,6 @@ internal object Ta {
         "Work state" to "வேலை செய்ற மாநிலம்",
         "Remind me daily at 3 PM and 9 PM" to "தினமும் மதியம் 3 மணிக்கும் ராத்திரி 9 மணிக்கும் ஞாபகப்படுத்துங்க",
         "Offline packs" to "ஆஃப்லைன் பேக்",
-        "Smart model (better understanding)" to "ஸ்மார்ட் மாடல் (இன்னும் நல்லா புரிஞ்சுக்கும்)",
         "Your data stays with you" to "உங்க தகவல் உங்ககிட்டயே இருக்கும்",
         "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone and is not saved.\n• No contractor, company, or we ourselves can see your records.\n• The internet is used only to download packs.\n• You can erase everything whenever you want." to
             "• உங்க கணக்கு இந்த போன்ல மட்டும், பூட்டு போட்டு (என்க்ரிப்ஷன்) பத்திரமா இருக்கும்.\n• உங்க குரலை போனே புரிஞ்சுக்கும்; அது சேவ் ஆகாது.\n• கான்ட்ராக்டர், கம்பெனி, நாங்க — யாரும் உங்க கணக்கைப் பார்க்க முடியாது.\n• பேக் டவுன்லோட் பண்ண மட்டும்தான் இன்டர்நெட் தேவை.\n• நீங்க எப்போ வேணும்னாலும் எல்லாத்தையும் அழிச்சுடலாம்.",

@@ -4,6 +4,8 @@ package com.acxelin.hisaabsaathi.core.i18n
 internal object Te {
     /** UI and spoken text, keyed by the exact English string used in Strings.kt. */
     val strings: Map<String, String> = mapOf(
+        "Smart model: understands sentences the app is unsure about" to "స్మార్ట్ మోడల్: యాప్‌కు అర్థం కాని మాటలు కూడా అర్థం చేసుకుంటుంది",
+        "Add model file from phone" to "ఫోన్ నుండి మోడల్ ఫైల్ జోడించండి",
         "I am HisaabSaathi. I keep track of your earnings, advances and expenses." to "నేను హిసాబ్ సాథీని. మీ సంపాదన, అడ్వాన్స్, ఖర్చుల లెక్క నేను రాసి పెడతాను.",
         "Hello! Tell me today's work, advance or expense." to "నమస్కారం! ఈ రోజు పని, అడ్వాన్స్ లేదా ఖర్చు చెప్పండి.",
         "Tap the mic and say how much you worked, what advance you took, or what you spent. For example: 120 pieces, rate 5 rupees, 300 advance. You can also ask: how much did I earn this week?" to "మైక్ నొక్కి చెప్పండి: ఎంత పని చేశారు, ఎంత అడ్వాన్స్ తీసుకున్నారు, లేదా ఎంత ఖర్చు అయింది. ఉదాహరణకు: 120 పీసులు, 5 రూపాయల రేటు, 300 అడ్వాన్స్. ఈ వారం ఎంత సంపాదించాను అని కూడా అడగవచ్చు.",
@@ -109,7 +111,6 @@ internal object Te {
         "Work state" to "పని చేసే రాష్ట్రం",
         "Remind me daily at 3 PM and 9 PM" to "రోజూ మధ్యాహ్నం 3 గంటలకు, రాత్రి 9 గంటలకు గుర్తు చేయి",
         "Offline packs" to "ఆఫ్‌లైన్ ప్యాక్‌లు",
-        "Smart model (better understanding)" to "స్మార్ట్ మోడల్ (ఇంకా బాగా అర్థం చేసుకుంటుంది)",
         "Your data stays with you" to "మీ డేటా మీ దగ్గరే",
         "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone and is not saved.\n• No contractor, company, or we ourselves can see your records.\n• The internet is used only to download packs.\n• You can erase everything whenever you want." to
             "• మీ లెక్కలు ఈ ఫోన్ లోనే తాళం వేసి (ఎన్‌క్రిప్షన్) ఉంటాయి.\n• మీ మాట ఫోన్ లోనే అర్థం అవుతుంది, సేవ్ కాదు.\n• కాంట్రాక్టర్, కంపెనీ, మేము — ఎవరూ మీ లెక్కలు చూడలేరు.\n• ఇంటర్నెట్ ప్యాక్‌లు డౌన్‌లోడ్ చేయడానికి మాత్రమే కావాలి.\n• మీరు ఎప్పుడు కావాలంటే అప్పుడు అన్నీ తుడిచేయవచ్చు.",

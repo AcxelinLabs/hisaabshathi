@@ -48,18 +48,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.acxelin.hisaabsaathi.core.Lang
 import com.acxelin.hisaabsaathi.core.Strings
 import com.acxelin.hisaabsaathi.data.Settings
+import com.acxelin.hisaabsaathi.models.Catalog
 import com.acxelin.hisaabsaathi.models.Pack
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.acxelin.hisaabsaathi.models.PackState
 
 @Composable
-private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boolean = true) {
+private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boolean = true, canDownload: Boolean = true) {
     val states by vm.packStates.collectAsStateWithLifecycle()
     val state = states[pack.id] ?: PackState.Missing
     Column(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
         Text(pack.title, fontSize = 16.sp, fontWeight = FontWeight.Medium)
         Text("${pack.bytes / 1_000_000} MB · ${pack.licence}", fontSize = 12.sp, color = InkSoft)
         when (state) {
-            PackState.Missing -> Button(onClick = { vm.download(pack) }) { Text(s.download) }
+            PackState.Missing -> if (canDownload) Button(onClick = { vm.download(pack) }) { Text(s.download) }
             is PackState.Downloading -> {
                 LinearProgressIndicator(progress = { state.fraction }, modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp), color = Green)
                 Text("${s.downloading} ${(state.fraction * 100).toInt()}%")
@@ -71,7 +74,7 @@ private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boole
             }
             is PackState.Failed -> {
                 Text(s.downloadFailed, color = Red)
-                Button(onClick = { vm.download(pack) }) { Text(s.download) }
+                if (canDownload) Button(onClick = { vm.download(pack) }) { Text(s.download) }
             }
         }
     }
@@ -175,10 +178,12 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
 
             Text(s.modelPacks, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             PackRow(vm, vm.sttPack(), s)
-            // Offered only once a language model has earned its place (see Slm.TRUSTED).
-            if (com.acxelin.hisaabsaathi.core.Slm.TRUSTED) {
-                Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
-                PackRow(vm, vm.slmPack, s)
+            Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
+            PackRow(vm, vm.slmPack, s, canDownload = Catalog.canDownloadSlm)
+            val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::importModel) }
+            val states by vm.packStates.collectAsStateWithLifecycle()
+            if (states[vm.slmPack.id] !is PackState.Ready && states[vm.slmPack.id] !is PackState.Downloading) {
+                OutlinedButton(onClick = { pick.launch(arrayOf("*/*")) }, modifier = Modifier.height(52.dp)) { Text(s.addFromPhone) }
             }
             HorizontalDivider()
 

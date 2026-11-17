@@ -4,6 +4,8 @@ package com.acxelin.hisaabsaathi.core.i18n
 internal object Kn {
     /** UI and spoken text, keyed by the exact English string used in Strings.kt. */
     val strings: Map<String, String> = mapOf(
+        "Smart model: understands sentences the app is unsure about" to "ಸ್ಮಾರ್ಟ್ ಮಾಡೆಲ್: ಆಪ್‌ಗೆ ಅರ್ಥವಾಗದ ಮಾತುಗಳನ್ನೂ ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳುತ್ತೆ",
+        "Add model file from phone" to "ಫೋನ್‌ನಿಂದ ಮಾಡೆಲ್ ಫೈಲ್ ಸೇರಿಸಿ",
         "I am HisaabSaathi. I keep track of your earnings, advances and expenses." to "ನಾನು ಹಿಸಾಬ್ ಸಾಥಿ. ನಿಮ್ಮ ಸಂಪಾದನೆ, ಅಡ್ವಾನ್ಸ್, ಖರ್ಚಿನ ಲೆಕ್ಕ ನಾನು ಇಡುತ್ತೇನೆ.",
         "Hello! Tell me today's work, advance or expense." to "ನಮಸ್ಕಾರ! ಇವತ್ತಿನ ಕೆಲಸ, ಅಡ್ವಾನ್ಸ್ ಅಥವಾ ಖರ್ಚು ಹೇಳಿ.",
         "Tap the mic and say how much you worked, what advance you took, or what you spent. For example: 120 pieces, rate 5 rupees, 300 advance. You can also ask: how much did I earn this week?" to "ಮೈಕ್ ಒತ್ತಿ ಹೇಳಿ: ಎಷ್ಟು ಕೆಲಸ ಮಾಡಿದ್ರಿ, ಎಷ್ಟು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡ್ರಿ, ಅಥವಾ ಎಷ್ಟು ಖರ್ಚಾಯ್ತು. ಉದಾಹರಣೆಗೆ: 120 ಪೀಸ್, 5 ರೂಪಾಯಿ ರೇಟ್, 300 ಅಡ್ವಾನ್ಸ್. ಈ ವಾರ ಎಷ್ಟು ಸಂಪಾದಿಸಿದೆ ಅಂತ ಕೂಡ ಕೇಳಬಹುದು.",
@@ -107,7 +109,6 @@ internal object Kn {
         "Work state" to "ಕೆಲಸದ ರಾಜ್ಯ",
         "Remind me daily at 3 PM and 9 PM" to "ದಿನಾ ಮಧ್ಯಾಹ್ನ 3 ಗಂಟೆಗೆ ಮತ್ತು ರಾತ್ರಿ 9 ಗಂಟೆಗೆ ನೆನಪಿಸಿ",
         "Offline packs" to "ಆಫ್‌ಲೈನ್ ಪ್ಯಾಕ್‌ಗಳು",
-        "Smart model (better understanding)" to "ಸ್ಮಾರ್ಟ್ ಮಾಡೆಲ್ (ಇನ್ನೂ ಚೆನ್ನಾಗಿ ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳುತ್ತದೆ)",
         "Your data stays with you" to "ನಿಮ್ಮ ಲೆಕ್ಕ ನಿಮ್ಮ ಹತ್ತಿರವೇ",
         "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone and is not saved.\n• No contractor, company, or we ourselves can see your records.\n• The internet is used only to download packs.\n• You can erase everything whenever you want." to
             "• ನಿಮ್ಮ ಲೆಕ್ಕ ಈ ಫೋನ್‌ನಲ್ಲಿ ಮಾತ್ರ, ಬೀಗ ಹಾಕಿ (ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಿ) ಇಡಲಾಗುತ್ತದೆ.\n• ನಿಮ್ಮ ಮಾತನ್ನು ಫೋನ್‌ನಲ್ಲೇ ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳಲಾಗುತ್ತದೆ, ಸೇವ್ ಆಗುವುದಿಲ್ಲ.\n• ಮೇಸ್ತ್ರಿ, ಕಂಪನಿ ಅಥವಾ ನಾವು — ಯಾರೂ ನಿಮ್ಮ ಲೆಕ್ಕ ನೋಡಲು ಆಗುವುದಿಲ್ಲ.\n• ಇಂಟರ್ನೆಟ್ ಬೇಕಾಗುವುದು ಪ್ಯಾಕ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಮಾತ್ರ.\n• ನಿಮಗೆ ಬೇಕಾದಾಗ ಎಲ್ಲವನ್ನೂ ಅಳಿಸಬಹುದು.",

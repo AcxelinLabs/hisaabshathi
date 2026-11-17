@@ -10,18 +10,19 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /**
- * The on-device small language model (Qwen2.5 via MediaPipe/LiteRT). It labels what the
- * worker said as JSON ([Slm.choose] rejects any answer containing a number that was not
- * spoken) and answers questions the fixed replies do not cover. Returns null whenever the
- * model is missing or fails, and the caller falls back to rules and fixed replies.
+ * The on-device fine-tuned language model (Qwen2.5-0.5B via MediaPipe/LiteRT). It is asked
+ * only to say what each number in a sentence is; [Slm.parse] rejects any answer that does
+ * not label exactly the numbers that were spoken. It is consulted only when the rules were
+ * unsure or found nothing, so it can never override a confident rule result. Returns null
+ * whenever the model is missing or fails, and the caller keeps the rule result.
  */
 class SlmEngine(private val context: Context, private val packs: PackManager) {
     private val lock = Mutex()
     private var llm: LlmInference? = null
 
-    private fun installed() = listOf(Catalog.slmLarge, Catalog.slmSmall).firstOrNull { packs.isReady(it) }
+    private fun installed() = Catalog.slmHisaab.takeIf { packs.isReady(it) }
 
-    fun available(): Boolean = com.acxelin.hisaabsaathi.core.Slm.TRUSTED && installed() != null
+    fun available(): Boolean = installed() != null
 
     suspend fun generate(prompt: String): String? = withContext(Dispatchers.Default) {
         lock.withLock {

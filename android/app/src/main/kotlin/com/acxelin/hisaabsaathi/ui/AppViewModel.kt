@@ -64,7 +64,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val lang: Lang get() = settings.value?.lang ?: Lang.HI
     private val strings: Strings get() = Strings(lang)
 
-    val slmPack: Pack get() = Catalog.slmFor(app)
+    val slmPack: Pack get() = Catalog.slmHisaab
+    fun importModel(uri: android.net.Uri) = app.packs.importFrom(app, Catalog.slmHisaab, uri)
 
     // ---- voice
 
@@ -122,7 +123,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     app.stt.unload()
                     val found = Slm.choose(Extraction(text), Slm.prompt(text)?.let { app.slm.generate(it) })
                     if (found.entries.isNotEmpty()) return review(Capture.Review(text, found.entries, true, source))
-                    Slm.cleanChat(app.slm.generate(Slm.chatPrompt(text, lang.englishName)))?.let { return say(it) }
                 }
                 // Never stay silent: say what the app can do and how to phrase it.
                 say(strings.chatFallback)

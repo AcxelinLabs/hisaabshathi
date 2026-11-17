@@ -30,20 +30,20 @@ import com.acxelin.hisaabsaathi.R
 import com.acxelin.hisaabsaathi.core.Lang
 
 /*
- * Look: a wage slip ("parchi") written in blue ballpoint ink. Ink blue carries structure
- * and text, marigold is reserved for the one thing to press (the mic), and red/green are
- * used only for money owed / money earned so colour always means something.
+ * Look: a wage slip ("parchi") kept in a green ledger book. Deep green carries structure
+ * and text, marigold is reserved for the one thing to press (the mic), and red is used
+ * only for money still owed, so colour always means something.
  */
-val Ink = Color(0xFF1B2A6B)
-val InkSoft = Color(0xFF5A6390)
-val Chalk = Color(0xFFEEF0F6)
+val Ink = Color(0xFF14432A)          // deep ledger green: bars, headings, body text
+val InkSoft = Color(0xFF4F6B5A)      // secondary text, 5.6:1 on Paper
+val Chalk = Color(0xFFEFF4EE)        // screen background, a faint green-grey
 val Paper = Color(0xFFFFFFFF)
 val Marigold = Color(0xFFF2A900)
-val Sindoor = Color(0xFFD2302C)
-val Leaf = Color(0xFF1F7A4D)
-val Rule = Color(0xFFC9CEE0)
-val InkWash = Color(0xFFDDE1F2)      // quoted speech, selected-but-quiet surfaces
-val InkRaised = Color(0xFF2C3C85)    // a control sitting on the ink background
+val Sindoor = Color(0xFFC62828)
+val Leaf = Color(0xFF1E7B3C)         // money earned
+val Rule = Color(0xFFC5D3C8)
+val InkWash = Color(0xFFDCEADF)      // quoted speech, quiet surfaces
+val InkRaised = Color(0xFF235C3B)    // a control sitting on the green background
 val Notice = Color(0xFFFFF4D1)       // spoken answers and things to double-check
 val NoticeInk = Color(0xFF6B5200)    // text on Notice; 7:1 contrast
 
@@ -51,13 +51,13 @@ val NoticeInk = Color(0xFF6B5200)    // text on Notice; 7:1 contrast
 val Green = Leaf
 val Red = Sindoor
 val Amber = Marigold
-val GreenLight = Color(0xFFE3F1EA)
+val GreenLight = InkWash
 
 val AppColors = lightColorScheme(
-    primary = Ink, onPrimary = Color.White, primaryContainer = Color(0xFFDDE1F2), onPrimaryContainer = Ink,
+    primary = Ink, onPrimary = Color.White, primaryContainer = InkWash, onPrimaryContainer = Ink,
     secondary = Marigold, onSecondary = Ink, secondaryContainer = Marigold, onSecondaryContainer = Ink,
     error = Sindoor, background = Chalk, onBackground = Ink, surface = Paper, onSurface = Ink,
-    surfaceVariant = Color(0xFFE3E6F0), onSurfaceVariant = InkSoft, outline = Rule,
+    surfaceVariant = Color(0xFFE2ECE4), onSurfaceVariant = InkSoft, outline = Rule,
 )
 
 /** Anek is one type family drawn for every script the app speaks, so all six languages look alike. */
@@ -78,7 +78,8 @@ fun fontFor(lang: Lang): FontFamily = when (lang) {
 fun typographyFor(lang: Lang): Typography {
     val f = fontFor(lang)
     val base = Typography()
-    fun TextStyle.with() = copy(fontFamily = f, color = Ink)
+    // No colour here: text takes the colour of what it sits on (white on buttons, ink on paper).
+    fun TextStyle.with() = copy(fontFamily = f)
     return Typography(
         displayLarge = base.displayLarge.with(), displayMedium = base.displayMedium.with(), displaySmall = base.displaySmall.with(),
         headlineLarge = base.headlineLarge.with(), headlineMedium = base.headlineMedium.with(), headlineSmall = base.headlineSmall.with(),

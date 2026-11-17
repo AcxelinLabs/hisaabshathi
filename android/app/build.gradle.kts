@@ -13,9 +13,30 @@ android {
         applicationId = "com.acxelin.hisaabsaathi"
         minSdk = 29 // Android 10
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 4
+        versionName = "0.4.0"
+        // Where phones download the fine-tuned model from. Upload
+        // hisaabsaathi-qwen05-ft-q8.task (tools/make_task.py) somewhere public and set the URL
+        // here; while it is empty the app offers only "Add from phone".
+        buildConfigField("String", "HISAAB_MODEL_URL", "\"\"")
     }
+
+    // "lite": the model is downloaded or added from the phone later (smaller APK).
+    // "full": the fine-tuned model ships inside the APK and is unpacked on first launch.
+    // Put hisaabsaathi-qwen05-ft-q8.task in app/src/full/assets/ before building "full".
+    flavorDimensions += "model"
+    productFlavors {
+        create("lite") {
+            dimension = "model"
+            buildConfigField("Boolean", "BUNDLED_MODEL", "false")
+        }
+        create("full") {
+            dimension = "model"
+            versionNameSuffix = "-full"
+            buildConfigField("Boolean", "BUNDLED_MODEL", "true")
+        }
+    }
+    androidResources { noCompress += "task" }
 
     buildTypes {
         release {
@@ -29,7 +50,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions { jvmTarget = "17" }
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
 
     // One APK per processor type keeps each download small (most phones need arm64-v8a).
     splits {
