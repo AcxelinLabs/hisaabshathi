@@ -21,7 +21,7 @@ class SlmEngine(private val context: Context, private val packs: PackManager) {
 
     private fun installed() = listOf(Catalog.slmLarge, Catalog.slmSmall).firstOrNull { packs.isReady(it) }
 
-    fun available(): Boolean = installed() != null
+    fun available(): Boolean = com.acxelin.hisaabsaathi.core.Slm.TRUSTED && installed() != null
 
     suspend fun generate(prompt: String): String? = withContext(Dispatchers.Default) {
         lock.withLock {

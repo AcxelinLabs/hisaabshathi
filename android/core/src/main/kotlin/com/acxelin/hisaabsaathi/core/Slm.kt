@@ -11,6 +11,16 @@ import kotlin.math.abs
  * the worker did not say, and all arithmetic stays in plain code.
  */
 object Slm {
+    /**
+     * Whether the app consults the language model at all. Off: measured on 16 Nov 2026 with
+     * the stock Qwen2.5 models (tools/eval_slm.py, 638-prompt corpus), the 0.5B model
+     * labelled 7% of entry sentences correctly and the 1.5B model 28%, against 100% for the
+     * rules, and both gave wrong or meaningless answers to simple questions in Indian
+     * languages. Turn on only for a model that beats the rules on the corpus, such as a
+     * fine-tuned one (tools/finetune_slm.py).
+     */
+    const val TRUSTED = false
+
     val labels = listOf("hours", "pieces", "rate", "wage", "received", "advance", "expense", "other")
 
     private fun fmt(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
@@ -78,12 +88,19 @@ Reply:""".trimStart()
             )
         }
         // Expense categories come from the same word lists the rules use.
-        val category = RuleBasedExtractor.extract(transcript).entries.firstOrNull { it.type == EntryType.EXPENSE }?.category
+        val rules = RuleBasedExtractor.extract(transcript).entries
+        val category = rules.firstOrNull { it.type == EntryType.EXPENSE }?.category
         for ((value, label) in found) {
             val paise = Money.rupeesToPaise(value)
             when (label) {
                 "advance" -> out += DraftEntry(EntryType.ADVANCE, paise, dayOffset = dayOffset)
-                "received" -> out += DraftEntry(EntryType.PAYMENT, paise, dayOffset = dayOffset)
+                "received" -> {
+                    // "Got 500 wages": earned and paid. The rules know whether a wage word was said.
+                    if (out.none { it.type == EntryType.WORK } && rules.any { it.type == EntryType.WORK && it.amountPaise == paise }) {
+                        out.add(0, DraftEntry(EntryType.WORK, paise, dayOffset = dayOffset))
+                    }
+                    out += DraftEntry(EntryType.PAYMENT, paise, dayOffset = dayOffset)
+                }
                 "expense" -> out += DraftEntry(EntryType.EXPENSE, paise, category = category ?: ExpenseCategory.OTHER, dayOffset = dayOffset)
             }
         }

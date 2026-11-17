@@ -1,0 +1,252 @@
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି 10 ଘଣ୍ଟା କାମ କଲି 700 ଟଙ୍କା ମଜୁରୀ", "output": "10= hours worked\n700= pieces or items made"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ನೂರೈವತ್ತು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಹತ್ತು ರೂಪಾಯಿ ಸಾವಿರ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "12= hours worked\n150= pieces or items made\n10= rate\n1000= wage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఏడు గంటలు పని గంటకు అరవయ్ రూపాయలు", "output": "7= hours worked\n60= pieces or items made"}
+{"task": "extract", "lang": "hi", "text": "बस में साठ रुपये खर्च हुए", "output": "60= wage"}
+{"task": "extract", "lang": "en", "text": "yesterday worked 6 hours wage 650 rupees", "output": "6= hours worked\n650= wage"}
+{"task": "extract", "lang": "hi-Latn", "text": "kal 6 ghante kaam 700 rupaye dihadi", "output": "6= hours worked\n700= wage"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ ನಾನೂರು ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "400= hours worked"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు పని చేశాను కూలి ఐదొందలు ఇంకా ఇవ్వలేదు", "output": "500= hours worked"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 400 ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "output": "400= wage"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ಒಂದೂವರೆನೂರು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಮೂರ್ ರೂಪಾಯಿ ಮುನ್ನೂರು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "12= hours worked\n150= pieces or items made\n3= rate\n300= wage"}
+{"task": "extract", "lang": "hi", "text": "सब्जी पर 250 रुपये खर्च किए", "output": "250= expense"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ 400 ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "400= wage"}
+{"task": "extract", "lang": "hi", "text": "आज आठ घंटे काम किया दो सौ पीस आठ रुपये रेट पाँच सौ एडवांस लिया", "output": "8= hours worked\n200= pieces or items made\n8= pay for one piece or one hour\n500= wage money the worker was actually paid"}
+{"task": "extract", "lang": "hi-Latn", "text": "thekedar se 100 rupaye advance liya", "output": "100=advance"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு 12 மணி நேரம் வேலை மணிக்கு 80 ரூபாய்", "output": "12= hours worked\n80= wage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు పని చేశాను కూలి ఏడొందలు ఇంకా ఇవ్వలేదు", "output": "700= hours worked"}
+{"task": "extract", "lang": "or", "text": "ବସ୍ ଭଡ଼ା ତିରିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ", "output": "30= hours worked"}
+{"task": "extract", "lang": "te", "text": "బస్సు చార్జీ నూటయాబై రూపాయలు ఖర్చు", "output": "150= hours worked"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି 9 ଘଣ୍ଟା କାମ କଲି 600 ଟଙ୍କା ମଜୁରୀ", "output": "9= hours worked\n600= pieces or items made"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 350 ଟଙ୍କା ମଜୁରୀ", "output": "350= pieces of work the worker was actually paid"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ ನೂರೈವತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "150= hours worked"}
+{"task": "extract", "lang": "hi-Latn", "text": "bus ticket 150 rupaye kharch", "output": "150= wage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 8 గంటలు పని గంటకు 70 రూపాయలు", "output": "8= hours worked\n70= wage"}
+{"task": "extract", "lang": "hi-Latn", "text": "kal 9 ghante kaam 1500 rupaye dihadi", "output": "9= hours worked\n1500= wage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 9 గంటలు పని గంటకు 60 రూపాయలు", "output": "9= hours worked\n60= wage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు పని చేశాను కూలి 500 ఇంకా ఇవ్వలేదు", "output": "500= pieces or items made"}
+{"task": "extract", "lang": "en", "text": "9 hours work rate 50 rupees", "output": "9= hours worked\n50= wage"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ 30 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "30= hours worked"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு 60 ரூபாய் செலவு", "output": "60= wage"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 8 ଘଣ୍ଟା କାମ କଲି 250 ପିସ୍ 3 ଟଙ୍କା ଦର 300 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "8= hours worked\n250= pieces or items made\n3= rate\n300= wage"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି ନଅ ଘଣ୍ଟା କାମ କଲି ଛଅ ଶହ ଟଙ୍କା ମଜୁରୀ", "output": "9= hours worked\n600= wage"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ 20 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "20= hours worked"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 650 rupaye majdoori mili", "output": "650 = wage"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு இருவது ரூபாய் செலவு", "output": "20= hours worked"}
+{"task": "extract", "lang": "te", "text": "నిన్న ఏడు గంటలు పని చేశాను ఎనిమిదొందల కూలి", "output": "7= hours worked\n800= wage"}
+{"task": "extract", "lang": "en", "text": "10 hours work rate 60 rupees", "output": "10= hours worked\n60= wage"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு பன்னிரெண்டு மணி நேரம் வேலை இருநூறு பீஸ் பீஸுக்கு நாலு ரூபாய் நூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "12= hours worked\n200= pieces or items made\n4= rate\n100= wage"}
+{"task": "extract", "lang": "hi", "text": "आज 8 घंटे काम किया 200 पीस 8 रुपये रेट 500 एडवांस लिया", "output": "8= hours worked\n200= pieces or items made\n8= pay for one piece or one hour\n500= advance taken early from the employer"}
+{"task": "extract", "lang": "kn", "text": "ನಿನ್ನೆ 10 ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 350 ರೂಪಾಯಿ", "output": "10= hours worked\n350= wage"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் முன்னூறு ஐம்பது ரூபாய் இன்னும் கொடுக்கல", "output": "350= hours worked"}
+{"task": "extract", "lang": "hi", "text": "सब्जी पर दो सौ पचास रुपये खर्च किए", "output": "250= expense"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 8 ଘଣ୍ଟା କାମ କଲି 80 ପିସ୍ 4 ଟଙ୍କା ଦର 100 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "8= hours worked\n80= pieces or items made\n4= rate\n100= wage"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு கூலி 1500 ரூபாய் கிடைச்சது", "output": "1500= wage"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು 6 ಗಂಟೆ ಕೆಲಸ 150 ಪೀಸ್ ಪೀಸ್‌ಗೆ 10 ರೂಪಾಯಿ 1000 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "6= hours worked\n150= pieces made\n10= rate per piece\n1000= wage earned"}
+{"task": "extract", "lang": "hi", "text": "आज की दिहाड़ी 650 रुपये", "output": "650= wage"}
+{"task": "extract", "lang": "en", "text": "today I worked ten hours one hundred twenty pieces at five rupees and took two hundred rupees advance", "output": "10= hours worked\n120= pieces or items made\n5= rate\n200= wage"}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க இருநூறு ஐம்பது ரூபாய் செலவாச்சு", "output": "250= hours worked"}
+{"task": "extract", "lang": "hi", "text": "आज 800 रुपये मजदूरी मिली", "output": "800= wage"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு ஒன்பது மணி நேரம் வேலை மணிக்கு ஐம்பது ரூபாய்", "output": "9= hours worked\n50= wage"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ 40 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "40= hours worked"}
+{"task": "extract", "lang": "hi-Latn", "text": "bus ticket 80 rupaye kharch", "output": "80= wage"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು 12 ಗಂಟೆ ಕೆಲಸ 150 ಪೀಸ್ ಪೀಸ್‌ಗೆ 10 ರೂಪಾಯಿ 1000 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "12= hours worked\n150= pieces made\n10= rate per piece\n1000= wage earned"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ 150 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "150= pieces or items made"}
+{"task": "extract", "lang": "en", "text": "ten hours work rate sixty rupees", "output": "10= hours worked\n60= pay for one hour"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ 20 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "20= hours worked"}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க அறுவது ரூபாய் செலவாச்சு", "output": "60= hours worked"}
+{"task": "extract", "lang": "en", "text": "spent twenty rupees on medicine", "output": "20= expense"}
+{"task": "extract", "lang": "en", "text": "nine hours work rate fifty rupees", "output": "9= hours worked\n50= wage"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ 60 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "60= hours worked"}
+{"task": "extract", "lang": "ta", "text": "கான்ட்ராக்டர் கிட்ட நூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "100= hours worked"}
+{"task": "extract", "lang": "te", "text": "మందులకు ముప్పై రూపాయలు ఖర్చు అయింది", "output": "30= hours worked"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 7 గంటలు పని 250 పీసులు పీసుకు 3 రూపాయలు 100 అడ్వాన్స్ తీసుకున్నాను", "output": "7= hours worked\n250= pieces or items made\n3= rate\n100= wage"}
+{"task": "extract", "lang": "hi", "text": "दवा पर चालीस रुपये खर्च किए", "output": "40= expense"}
+{"task": "extract", "lang": "en", "text": "yesterday worked 6 hours wage 350 rupees", "output": "6= hours worked\n350= wage"}
+{"task": "extract", "lang": "hi", "text": "कल 10 घंटे काम किया 600 रुपये मजदूरी", "output": "10= hours worked\n600= wage"}
+{"task": "extract", "lang": "hi", "text": "आज की दिहाड़ी एक हजार पाँच सौ रुपये", "output": "1500= wage received"}
+{"task": "extract", "lang": "hi", "text": "दवा पर 40 रुपये खर्च किए", "output": "40= expense"}
+{"task": "extract", "lang": "te", "text": "కూరగాయలకు రెండొందలు యాబై రూపాయలు ఖర్చు అయింది", "output": "250= hours worked"}
+{"task": "extract", "lang": "or", "text": "ଠିକାଦାର ଠାରୁ ଗୋଟିଏ ହଜାର ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "1000= hours worked"}
+{"task": "extract", "lang": "hi-Latn", "text": "kal 6 ghante kaam 800 rupaye dihadi", "output": "6= hours worked\n800= wage"}
+{"task": "extract", "lang": "kn", "text": "ನಿನ್ನೆ ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಏಳುನೂರ ರೂಪಾಯಿ", "output": "12= hours worked\n700= wage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 7 గంటలు పని 120 పీసులు పీసుకు 3 రూపాయలు 500 అడ్వాన్స్ తీసుకున్నాను", "output": "7= hours worked\n120= pieces or items made\n3= rate\n500= wage"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் 350 ரூபாய் இன்னும் கொடுக்கல", "output": "350= wage"}
+{"task": "extract", "lang": "hi-Latn", "text": "6 ghante kaam rate 50 rupaye", "output": "6= hours worked\n50= pay for one hour"}
+{"task": "extract", "lang": "ta", "text": "பஸ்ஸுக்கு 40 ரூபாய் செலவு", "output": "40= wage"}
+{"task": "extract", "lang": "en", "text": "spent 40 rupees on medicine", "output": "40= expense"}
+{"task": "extract", "lang": "te", "text": "కాంట్రాక్టర్ దగ్గర మూడొందల రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "output": "300= hours worked"}
+{"task": "extract", "lang": "en", "text": "9 hours work rate 60 rupees", "output": "9= hours worked\n60= wage"}
+{"task": "extract", "lang": "te", "text": "మందులకు ఇరవై రూపాయలు ఖర్చు అయింది", "output": "20= hours worked"}
+{"task": "extract", "lang": "en", "text": "spent 150 rupees on food", "output": "150=expense"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఆరు గంటలు పని గంటకు డెబ్బై రూపాయలు", "output": "6= hours worked\n70= wage"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಆರ್ ಗಂಟೆ ಕೆಲಸ ನೂರಿಪ್ಪತ್ತು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಐದು ರೂಪಾಯಿ ಐನೂರು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "6= hours worked\n120= pieces or items made\n5= rate\n500= wage"}
+{"task": "extract", "lang": "en", "text": "spent thirty rupees on bus ticket", "output": "30= expense"}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க 30 ரூபாய் செலவாச்சு", "output": "30= pieces or items made"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 600 rupaye majdoori mili", "output": "600= wage"}
+{"task": "extract", "lang": "en", "text": "spent sixty rupees on food", "output": "60= expense"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು 10 ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ 60 ರೂಪಾಯಿ", "output": "10= hours worked\n60= wage"}
+{"task": "extract", "lang": "hi", "text": "आज आठ सौ रुपये मजदूरी मिली", "output": "800= wage"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ 60 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "60= hours worked"}
+{"task": "extract", "lang": "hi-Latn", "text": "12 ghante kaam rate 50 rupaye", "output": "12= hours worked\n50= pay for one hour"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு 20 ரூபாய் செலவு", "output": "20= wage"}
+{"task": "extract", "lang": "kn", "text": "ಬಸ್ ಚಾರ್ಜ್ ಮೂವತ್ತು ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "output": "30= hours worked"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 7 ଘଣ୍ଟା କାମ କଲି 120 ପିସ୍ 4 ଟଙ୍କା ଦର 1000 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "7= hours worked\n120= pieces or items made\n4= rate\n1000= wage"}
+{"task": "extract", "lang": "kn", "text": "ಬಸ್ ಚಾರ್ಜ್ 30 ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "output": "30= pieces or items made"}
+{"task": "extract", "lang": "en", "text": "today's wage is 350 rupees", "output": "350 = wage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఎనమిది గంటలు పని గంటకు డెబ్బై రూపాయలు", "output": "8= hours worked\n70= wage"}
+{"task": "extract", "lang": "te", "text": "మందులకు 40 రూపాయలు ఖర్చు అయింది", "output": "40= hours worked"}
+{"task": "extract", "lang": "te", "text": "మందులకు నలభై రూపాయలు ఖర్చు అయింది", "output": "40= hours worked"}
+{"task": "extract", "lang": "hi", "text": "6 घंटे काम रेट 50 रुपये", "output": "6= hours worked\n50= rate"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு பத்து மணி நேரம் வேலை மணிக்கு எண்பது ரூபாய்", "output": "10= hours worked\n80= wage"}
+{"task": "extract", "lang": "kn", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ 200 ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "200= pieces or items made"}
+{"task": "extract", "lang": "or", "text": "ଠିକାଦାର ଠାରୁ 300 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "300= pieces or items made"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ ಇಪ್ಪತ್ ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "20= hours worked"}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க அறுபது ரூபாய் செலவாச்சு", "output": "60= hours worked"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ ଚାଳିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "40= hours worked"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ 150 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "150= pieces or items made"}
+{"task": "extract", "lang": "hi", "text": "बस में 250 रुपये खर्च हुए", "output": "250= expense"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு நூறு ஐம்பது ரூபாய் செலவு", "output": "150= hours worked"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు పని చేశాను కూలి ఐదొందల ఇంకా ఇవ్వలేదు", "output": "500= hours worked"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj ki dihadi 700 rupaye", "output": "700 = wage"}
+{"task": "extract", "lang": "te", "text": "కూరగాయలకు ముప్పై రూపాయలు ఖర్చు అయింది", "output": "30= hours worked"}
+{"task": "extract", "lang": "hi", "text": "कल 6 घंटे काम किया 400 रुपये मजदूरी", "output": "6= hours worked\n400= wage"}
+{"task": "extract", "lang": "en", "text": "spent eighty rupees on food", "output": "80=expense"}
+{"task": "extract", "lang": "hi", "text": "ठेकेदार से एक हजार रुपये एडवांस लिया", "output": "1000= pieces or items made"}
+{"task": "extract", "lang": "en", "text": "spent twenty rupees on bus ticket", "output": "20= expense"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 7 ghante kaam kiya 120 piece 5 rupaye rate 100 advance liya", "output": "7= hours worked\n120= pieces made\n5= rate\n100= advance received\n"}
+{"task": "extract", "lang": "hi", "text": "आज चार सौ रुपये मजदूरी मिली", "output": "400= wage"}
+{"task": "extract", "lang": "en", "text": "today I worked ten hours two hundred fifty pieces at six rupees and took three hundred rupees advance", "output": "10= hours worked\n250= pieces or items made\n6= rate\n300= wage"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு பன்னிரண்டு மணி நேரம் வேலை மணிக்கு எம்பது ரூபாய்", "output": "12= hours worked\n80= pieces or items made"}
+{"task": "extract", "lang": "en", "text": "spent one hundred fifty rupees on bus ticket", "output": "150= expense"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "आपका नाम क्या है", "output": "हाँ, मैं अपना नाम जानता हूँ."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "तुम्हारा नाम क्या है", "output": "हाँ, मैं अपना नाम जानता हूँ."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "तुम कौन हो", "output": "हाँ, मैं अपने नाम हो।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "नमस्ते", "output": "नमस्ते, मैं अपने व्यक्तिगत व्यवस्था अनुसार काम करता हूँ।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "हेलो", "output": "हाँ, मैं अपने व्यापार को देखना और अंकित करना सकता हूं।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "राम राम भाई", "output": "मैं राम राम भाई के लिए यहाँ हूँ। आप किसी भी विषय का सवाल दे रहा हूँ तो मैं उसे जव"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "तुम क्या कर सकते हो", "output": "हाँ, मैं तुम्हारे व्यवस्थित विक्रम, बढाव, वेतन और अपयस्क व्यवस्थित करता हूँ और तो"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "इसे कैसे इस्तेमाल करूं", "output": "इसे इन्हें देखें और इसे इस्तेमाल करें।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "मदद करो", "output": "हाँ, मदद करूं। आपकी जानकारी दें।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "धन्यवाद", "output": "धन्यवाद! आपको किस विषय का सवाल है?"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "शुक्रिया भाई", "output": "आपका विचार नहीं मैं समझ सकता। मैं यहाँ कुछ नहीं कर सकता।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "कैसे हो", "output": "आप कैसे हो? आपको कुछ बातें जानना चाहिए।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "क्या हाल है", "output": "आप क्या जानते हैं?"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "मेरा डेटा सुरक्षित है क्या", "output": "मुझे डेटा सुरक्षित करने की क्षमता है।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "क्या ठेकेदार मेरा हिसाब देख सकता है", "output": "हाँ, मैं ठेकेदार का हिसाब देख सकता हूं।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "आज क्या तारीख है", "output": "आज का तारीख नहीं जानता।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "तुम्हें किसने बनाया", "output": "मैं तुम्हें किसने बनाया नहीं कह सकता।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "बाय", "output": "बाय क्या है?"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "अच्छा फिर मिलेंगे", "output": "हाँ, मिलेंगे। अच्छा फिर।"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ତୁମ ନାମ କଣ", "output": "ତୁମ ନାମ କଣ କିଛି କାର୍ଯ୍ୟରୁ ନାମ କଣ କିଛି କାର୍"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ଆପଣଙ୍କ ନାଁ କଣ", "output": "ଆପଣଙ୍କ ନାଁ କଣ କରିଥିଲେ, ତାଙ୍କ ନାଁ କଣ କରିଥିଲେ"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ତୁମେ କିଏ", "output": "ତୁମେ କିଏ କାର୍ଯ୍ୟରୁ କିଏ, ବାହ୍ନ୍ଯରୁ କିଏ, ପ"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ନମସ୍କାର", "output": "ନମସ୍କାର କରିଛି କେନିକ କାର୍ଯ୍ୟରେ କାର୍ଯ୍ୟକ"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ହେଲୋ", "output": "ହେଲୋ କୁହାନ୍ତିରେ କାମାକୁ କରିଛିଏଛାରେ କାମାକ"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ତୁମେ କଣ କରିପାରିବ", "output": "ତୁମେ କଣ କରିପାରିବ କିନ୍ତୁ ତାଙ୍କ କଣ କରିପାରିବ"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ମୋତେ ସାହାଯ୍ୟ କର", "output": "ମୋତେ ସାହାଯ୍ୟ କରିବା ଆବିଷ୍ଟ କରୁଛି. ତାଙ୍କ ମୋ"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ଏହାକୁ କିପରି ବ୍ୟବହାର କରିବି", "output": "ଏହାକୁ କିପରି ବ୍ୟବହାର କରିବି ନିର୍ଣୟତା କରିବା"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ଧନ୍ୟବାଦ", "output": "ଧନ୍ୟବାଦ ଅନୁକ୍ରିତ ଅଧିକାରରେ ଅନୁକ୍ରିତ ଅଧିକ"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "କେମିତି ଅଛ", "output": "କେମିତି ଅଛ କେମିତି ଅଧିକାରରେ କାର୍ଯ୍ୟ କରିଥିଲ"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ମୋ ଡାଟା ସୁରକ୍ଷିତ କି", "output": "ମୋ ଡାଟା ସୁରକ୍ଷିତ କି କି କାର୍ଯ୍ୟରୁ ମୋ ଡାଟା"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ଆଜି କି ତାରିଖ", "output": "ଆଜି କି ତାରିଖ କି ପ୍ରଥମ କାର୍ଯ୍ୟ ହେବ। ତାରିଖର ପ"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ତୁମକୁ କିଏ ତିଆରି କଲା", "output": "ତୁମକୁ କିଏ ତିଆରି କଲା କରିଥିଲେ, ତିଆରି କଲା କରିଥି"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ବାଏ", "output": "ବାଏ କିଛି କାର୍ଯ୍ୟରୁ ବାଇଲାକୁ ବିଷୟିତ କରିବା ହ"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "what is your name", "output": "I am HisaabSaathi, a helper inside a wage-ledger phone app for daily-wage workers in India."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "who are you", "output": "I am HisaabSaathi, a helper inside a wage-ledger phone app for daily-wage workers in India."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "tell me your name", "output": "HisaabSaathi, your personal assistant in the wage-ledger app."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "hello", "output": "Hello! How can I assist you with your wage ledger?"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "hi", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "good morning", "output": "Good morning! How can I assist you today?"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "what can you do", "output": "I can record work hours, advances, wages, and expenses, and calculate totals."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "how do I use this", "output": "This app helps you record your work, advances, wages, and expenses. It calculates totals for you."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "help me", "output": "I can assist you with your wage ledger tasks. Please provide the details."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "thank you", "output": "You're welcome."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "thanks a lot", "output": "You're welcome!"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "how are you", "output": "I am a helper in the wage-ledger app for daily-wage workers in India. I assist with recording work, advances, wages, and expenses."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "is my data safe", "output": "I am a helper in a wage-ledger app for daily-wage workers in India. I cannot store or process any data."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "who can see my records", "output": "Your records are private. Only you can see them."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "what is the date today", "output": "I cannot provide the current date as I am a virtual assistant and do not have access to real-time information."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "who made you", "output": "I am a helper inside a wage-ledger phone app for daily-wage workers in India."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "bye", "output": "Goodbye!"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "goodbye", "output": "Goodbye!"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నీ పేరు ఏమిటి", "output": "మీరు పేరు ముందు ప్రాథమిక ప్రశ్నాలను సరైన సమాధానాలను తె"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "మీ పేరేంటి", "output": "నేను పేరేంటి ప్రశ్నం చేయడానికి ఉంటుంది. మీ పేరేంటి ప్"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నువ్వు ఎవరు", "output": "నువ్వు ఎవరు ప్రశ్నం కూడా కొన్ని ప్రశ్నాలు కూడా కొన్ని ప్"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నమస్కారం", "output": "నమస్కారం, అనేది ప్రశ్నం చెప్పున్నాను. మీ ప్రశ్నం కూడా చ"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "హలో", "output": "నేను ప్రశ్నను సుప్రీస్ కూడా చేయడానికి ఉంటుంది. అన్ని ప"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నువ్వు ఏం చేయగలవు", "output": "నువ్వు ఏం చేయగలవు అనుకొన్ని ప్రశ్నాలను సరైన సమాధానాలను ప్"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నాకు సహాయం చెయ్యి", "output": "అన్ని సాధారణ ప్రశ్నలను సాధించాను. మరియు సంఖ్యలను ప్రశ"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "ఇది ఎలా వాడాలి", "output": "నేను ప్రశ్నను సుప్రీస్ చేయడానికి ముందుగురు ఉంటుంది. అ"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "ధన్యవాదాలు", "output": "ధన్యవాదాలు, మనే ప్రారంభం చెప్పాలు. అన్ని ప్రారంభంలో ప్"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "థాంక్స్", "output": "థాంక్స్ ను ప్రారంభించాలి. మొదట ప్రారంభంలో ముందుకొని"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "ఎలా ఉన్నావు", "output": "న్ని ఉన్నావులు పొందాలని ప్రశ్న కూడా కూడా ఉంది. మీ ప్రశ్నం"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నా డేటా సురక్షితమేనా", "output": "నా డేటా సురక్షితమేనా, నువ్వు ప్రాథమిక ప్రశ్నాలను సరైన స"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "ఈ రోజు తేదీ ఎంత", "output": "నేను తేదీ ప్రాథమిక ప్రశ్నం కూడా కొన్నిపెట్టుకోవచ్. ఈ ర"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నిన్ను ఎవరు తయారు చేశారు", "output": "నిన్ను ఎవరు తయారు చేశారు అనేది ప్రశ్న అనుసరించడానికి సమ"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "బై", "output": "నేను ప్రశ్నను సుప్రీస్ కూడా చేయడానికి ఉంటుంది. అన్ని ప"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನಿನ್ನ ಹೆಸರು ಏನು", "output": "ನಿನ್ನ ಹೆಸರು ಏನು ಕೊಡು ಹೆಸರು. ನಿನ್ನ ಹೆಸರು ಕೊಡು ಹೆಸರು."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನಿಮ್ಮ ಹೆಸರೇನು", "output": "ನಿಮ್ಮ ಹೆಸರೇನು ಹೆಸರೇನು ಹೆಸರೇನು."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನೀನು ಯಾರು", "output": "ನೀನು ಯಾರು ನೀನು ಯಾರು ನೀನು ಯಾರು ನೀನು ಯಾರು ನೀನು ಯಾರು ನೀನು ಯಾ"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನಮಸ್ಕಾರ", "output": "ನಂದಿಸಿ, ನಂದಿಸಿ."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಹಲೋ", "output": "ನಾನು ಹಲೋ ಸಂಬಂಧಿಸುತ್ತಿದೆ. ಹಲೋ ಸಂಬಂಧಿಸುತ್ತಿದೆ ಹಲೋ ಸಂಬಂಧ"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನೀನು ಏನು ಮಾಡಬಲ್ಲೆ", "output": "ನೀನು ಮಾಡಬಲ್ಲೆ ನೀನು ಮಾಡಬಲ್ಲೆ ನೀನು ಮಾಡಬಲ್ಲೆ."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನನಗೆ ಸಹಾಯ ಮಾಡು", "output": "ನನಗೆ ಸಹಾಯ ಮಾಡು ಸುತ್ತವಾಗಿ ನಾನು ನಾವಾ ಸಹಾಯ ಮಾಡುತ್ತಿದೆ. ನಾನು ನಾ"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಇದನ್ನು ಹೇಗೆ ಬಳಸೋದು", "output": "ನಾ ಇದನ್ನು ಹೇಗೆ ಬಳಸುತ್ತು. ಇದನ್ನು ಸುತ್ತಿಕೊಡಿದ್ದು."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಧನ್ಯವಾದ", "output": "ನಾನು ಧನ್ಯವಾದ ಹೊಂದಿದ್ದು. ಇಲ್ಲಿನ್ನು ಕೊಡಿಸಿದ್ದು."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಥ್ಯಾಂಕ್ಸ್", "output": "ನಾ ಹೈಸಾಬಸಾಟಿ, ಇಲ್ಲಿನ್ನು ಕೆಳಗೆ ಮುಂದು ಮುಂದು ಕೊಡುವಿಕೆಯು. ಇಲ"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಹೇಗಿದ್ದೀಯ", "output": "ನಾನು ಹೇಗಿದ್ದೀಯ ಪ್ರದೇಶದಲ್ಲಿ ಕ್ರಿಯೆಗಳನ್ನು ನುಡುಹಿಡಿಯುತ್ತು. ಹ"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನನ್ನ ಡೇಟಾ ಸುರಕ್ಷಿತವಾ", "output": "ನನ್ನ ಡೇಟಾ ಸುರಕ್ಷಿತವಾ ಸುಲಭವಾದ ಸುಲಭವಾದ ಸುಲಭವಾದ ಸುಲಭವಾದ ಸುಲಭವ"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಇವತ್ತು ದಿನಾಂಕ ಎಷ್ಟು", "output": "ನಾನು ಇವತ್ತು ದಿನಾಂಕ ಎಷ್ಟು ಕೊಡಿದ ಪ್ರದೇಶದಲ್ಲಿ ಕಾಲಿಕ ಮುಂದೆ ಮುಂ"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನಿನ್ನನ್ನು ಯಾರು ಮಾಡಿದ್ದು", "output": "ನಿನ್ನನ್ನು ಯಾರು ಮಾಡಿದ್ದು ಎಂದು ಕೊಡಿದ್ದು. ನಿನ್ನನ್ನು ಯಾರು ಮಾಡ"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಬೈ", "output": "ನಾನು ಹೈಸ್ ಸಾಥಿ ಹಾಗೂ ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರದೇಶದ ಪ್ರದೇಶದ ಪ್ರದೇಶದ ಪ್ರದೇ"}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "உன் பெயர் என்ன", "output": "உங்கள் பெயர் என்பதை அறியவும்."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "உங்க பேர் என்ன", "output": "உங்கள் பேர் என்பது பேர் என்பது பேர் என்பது பேர் என்பது பேர் என்பது பேர் எ"}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "நீ யார்", "output": "நான் இதற்கு அருகேற்கு அருகேற்கு அருகேற்கு அருகேற்கு அருகேற்கு அருகேற்கு அ"}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "வணக்கம்", "output": "வணக்கம், அவர்கள் போன்ற பொருளை வேறுபட்டு வரவர் கொள்ளும்."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "ஹலோ", "output": "நீங்கள் போன்ற பேர் காரணிகளை வெற்றி கொள்ளும்."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "நீ என்ன செய்ய முடியும்", "output": "நான் விளையாட்டு முறையில் பொறுப்பு செய்ய முடியும்."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "எனக்கு உதவி பண்ணு", "output": "நான் உதவி பண்ணு உதவிகளை உருவாக்குகிறேன்."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "இதை எப்படி பயன்படுத்துறது", "output": "உங்கள் பயன்படுத்துக்கள் இதை எப்படி பயன்படுத்துகிறோம். இது பயன்படுத்துக்கள் இ"}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "நன்றி", "output": "வணக்கம், நன்றி. அதன் போன்ற பெயர் காண வேண்டும்."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "எப்படி இருக்கீங்க", "output": "நான் பொறுப்பு மற்றும் பொறிபெற்ற பொருள் எவர் இருக்கிறது."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "என் டேட்டா பாதுகாப்பா இருக்கா", "output": "நான் என் டேட்டா பாதுகாப்பா இருக்கு பெறுகிறேன்."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "இன்னைக்கு தேதி என்ன", "output": "இன்னைக்கு தேதி என்ன என்பதை அறியவும்."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "உன்னை யார் உருவாக்கினாங்க", "output": "உன்னை உருவாக்குவதற்கு போன்ற பெயர் நோக்கி கொள்ளும்."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "பை", "output": "நான் பையாக வேறுபாடுகளை எண்ணுகிறேன்."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "tumhara naam kya hai", "output": "हाँ, मैं अपना नाम हूँ."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "aap kaun ho", "output": "आप कैसे हैं?"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "namaste", "output": "Namaste, how can I assist you today?"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "hello bhai", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "madad karo", "output": "माद लगाएं।"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "ye kaise chalta hai", "output": "यह आपकी कार्यक्रम का विस्तार देता हूँ। आप कार्य करने की जानकारी देते हैं और मैं उसकी ज"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "dhanyavad", "output": "Thank you."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "shukriya", "output": "You're welcome."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "kaise ho", "output": "आप किस तरह की जानकारी हैं?"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "mera data safe hai kya", "output": "मुझे आपकी डेटा सक्षम है।"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "aaj ki tarikh kya hai", "output": "आज का तारिख नहीं मैं जानता।"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "tumhe kisne banaya", "output": "मैं आपको किसने बनाया कहने के लिए आपको क्या कहानी दी थी।"}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "भारत की राजधानी क्या है", "output": "भारत की राजधानी यूनान है।"}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "एक चुटकुला सुनाओ", "output": "कृपया अपने चुटकुला की जानकारी दें।"}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "कल बारिश होगी क्या", "output": "कल बारिश होगी 15,000 रूपये।"}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "गाना सुनाओ", "output": "गाना सुनाओ क्या है?"}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "मुझे नौकरी चाहिए", "output": "कैसे नौकरी करें?"}
+{"task": "chat", "lang": "or", "kind": "unknown", "text": "ଭାରତର ରାଜଧାନୀ କଣ", "output": "ଭାରତର ରାଜଧାନୀ କଣ ହେଉଛି ବର୍ଷରେ ପ୍ରକାଶନରେ ପ"}
+{"task": "chat", "lang": "or", "kind": "unknown", "text": "ଗୋଟେ ଗୀତ ଗାଅ", "output": "ଗୀତ ଗାଅ କରିଛି ତାଙ୍କ ଗୋଟେ."}
+{"task": "chat", "lang": "or", "kind": "unknown", "text": "ମୋତେ ଚାକିରି ଦରକାର", "output": "ମୋତେ ଚାକିରି ଦରକାର କରିଥିଲେ ତାଙ୍କ ମୋତେ ଚାକ"}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "what is the capital of India", "output": "The capital of India is New Delhi."}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "tell me a joke", "output": "I'm sorry, but I can't assist with that."}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "will it rain tomorrow", "output": "I can assist with managing wage ledger entries, but I cannot predict weather conditions."}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "sing a song", "output": "I can help you record your work, advances, wages, and expenses, and calculate totals. I cannot sing a song."}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "I need a job", "output": "I can help you find a job."}
+{"task": "chat", "lang": "te", "kind": "unknown", "text": "భారతదేశ రాజధాని ఏది", "output": "భారతదేశ రాజధాని ఎందుకంటే భారత రాష్ట్రం అంటారు. ఇది భార"}
+{"task": "chat", "lang": "te", "kind": "unknown", "text": "ఒక జోక్ చెప్పు", "output": "నేను ఒక జోక్ చెప్పును మరియు అతను మొదట ప్రశ్న ప్రారంభించ"}
+{"task": "chat", "lang": "te", "kind": "unknown", "text": "రేపు వర్షం పడుతుందా", "output": "నేను రేపు వర్షం పడుతుందా ప్రశ్నను సుప్రీస్ చేయడానికి ఉ"}
+{"task": "chat", "lang": "kn", "kind": "unknown", "text": "ಭಾರತದ ರಾಜಧಾನಿ ಯಾವುದು", "output": "ನಾನು ಭಾರತದ ರಾಜಧಾನಿಯನ್ನು ಕೊಡಿಸಲಿದ್ದು."}
+{"task": "chat", "lang": "kn", "kind": "unknown", "text": "ಒಂದು ಜೋಕ್ ಹೇಳು", "output": "ನಾನು ಒಂದು ಜೋಕ್ ಹೇಳು ಕೊಡುವಿದ್ದು."}
+{"task": "chat", "lang": "kn", "kind": "unknown", "text": "ನಾಳೆ ಮಳೆ ಬರುತ್ತಾ", "output": "ನಾಳೆ ಮಳೆ ಬರುತ್ತಾ ಸ್ಥಳವಾಗಿ ನ್ಯಾಯಿಸಿದ್ದು. ನಾನು ನಾಳೆ ಮಳೆ ಬ"}
+{"task": "chat", "lang": "ta", "kind": "unknown", "text": "இந்தியாவின் தலைநகரம் எது", "output": "இந்தியாவின் தலைநகரம் இந்தியா மாநிலத்தில் ஒரு போர் ஆகும். இது போர்த்தொ"}
+{"task": "chat", "lang": "ta", "kind": "unknown", "text": "ஒரு ஜோக் சொல்லு", "output": "ஒரு ஜோக் சொல்லு என்பதை அறிவிக்க வேண்டும்."}
+{"task": "chat", "lang": "ta", "kind": "unknown", "text": "நாளைக்கு மழை வருமா", "output": "நாளைக் குழுவின் மழை வருமா என்பதை அறியவும்."}
+{"task": "chat", "lang": "hi-Latn", "kind": "unknown", "text": "bharat ki rajdhani kya hai", "output": "बराबर राजधानी है बैठक राजधानी।"}
+{"task": "chat", "lang": "hi-Latn", "kind": "unknown", "text": "ek chutkula sunao", "output": "सुनो चुत्कला एक हो."}
+{"task": "chat", "lang": "hi-Latn", "kind": "unknown", "text": "gaana sunao", "output": "गाना सुनो, यह अपनी गाना सुनने की कोशिश करता है।"}

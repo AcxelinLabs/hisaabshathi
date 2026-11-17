@@ -89,7 +89,7 @@ class CorpusTest {
     @Test fun scoreRecordedModelAnswers() {
         val want = corpus().filter { it["kind"]!!.jsonPrimitive.content == "entries" }.associate { it["text"]!!.jsonPrimitive.content to expected(it) }
         val report = StringBuilder()
-        for (tag in listOf("qwen05", "qwen15")) {
+        for (tag in listOf("qwen05", "qwen15", "qwen05ft")) {
             val res = javaClass.getResource("/slm_$tag.jsonl") ?: continue
             val rows = res.readText().lines().filter { it.isNotBlank() }.map { Json.parseToJsonElement(it).jsonObject }
             var n = 0; var accepted = 0; var right = 0; var wrongAccepted = 0

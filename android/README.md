@@ -24,10 +24,30 @@ Design notes: `../docs/superpowers/specs/2026-11-16-android-mvp-design.md`.
 | OCR | ML Kit text recognition (Latin + Devanagari), bundled | in APK | Google ML Kit terms |
 | Text-to-speech | The phone's own TTS engine | — | — |
 
-Entries are extracted by a rule-based grammar (`core/RuleBasedExtractor.kt`). When the
-language-model pack is installed it is consulted for sentences the rules are unsure about,
-and its answer is discarded if it contains any number the worker did not say (`core/Slm.kt`).
-All arithmetic is plain code.
+How an utterance is understood (`core/Understand.kt`), in order:
+
+1. **Ledger entry or ledger question**: rule-based grammar (`core/RuleBasedExtractor.kt`).
+2. **Greeting or simple question** ("what is your name", "is my data safe", "how do I use
+   this"): fixed replies in all six languages (`core/SmallTalk.kt`).
+3. **Anything else**: if the language-model pack is installed it may answer briefly;
+   otherwise the app says what it can do and how to phrase an entry. It never stays silent.
+
+The language model does not write entries. The app finds the numbers that were said and the
+model only labels each one (hours, pieces, rate, wage, advance, expense…). An answer that
+does not label exactly the spoken numbers is thrown away (`core/Slm.kt`). All arithmetic is
+plain code.
+
+## Test corpus
+
+`core/src/test/resources/corpus.jsonl` holds 638 prompts in Hindi, Odia, Telugu, Kannada,
+Tamil, English and Hindi in Latin letters: entries as spoken words and as digits, ledger
+questions, greetings and simple questions, and out-of-scope requests. `CorpusTest` runs every
+one through the app logic. Regenerate with `python3 tools/make_corpus.py`. The entry
+sentences are templates filled from the app's own number tables, so they test grammar and
+keywords, not real speech-recognition output.
+
+`tools/eval_slm.py` runs the app's exact prompts through a Qwen2.5 GGUF on a PC and
+`CorpusTest.scoreRecordedModelAnswers` scores the answers (`core/build/slm-report.txt`).
 
 ## Look
 

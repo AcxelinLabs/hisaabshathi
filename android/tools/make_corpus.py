@@ -130,28 +130,29 @@ def entries(kind, v):
     cat = {"exp_food": "FOOD", "exp_travel": "TRAVEL", "exp_health": "HEALTH"}[kind]
     return [e(type="EXPENSE", amount=v["E"], category=cat)]
 
-out = []
-for lang, t in T.items():
-    for kind, template in t.items():
-        if kind == "q":
-            for text, period, topic in template:
-                out.append(dict(lang=lang, kind="query", text=text, period=period, topic=topic))
-            continue
-        for _ in range(5):
-            v = dict(H=random.choice(H), P=random.choice(P), R=random.choice(R), A=random.choice(A), W=random.choice(W), E=random.choice(E), HR=random.choice(HR))
-            forms = ["digits"] if lang == "hi-Latn" else ["words", "digits"]
-            for form in forms:
-                fill = {k: (str(n) if form == "digits" else word(lang, n)) for k, n in v.items()}
-                out.append(dict(lang=lang, kind="entries", form=form, template=kind, text=template.format(**fill), entries=entries(kind, v)))
-for lang, items in CHAT.items():
-    for text, chat in items: out.append(dict(lang=lang, kind="chat", text=text, chat=chat))
-for lang, items in UNKNOWN.items():
-    for text in items: out.append(dict(lang=lang, kind="unknown", text=text))
+if __name__ == "__main__":
+    out = []
+    for lang, t in T.items():
+        for kind, template in t.items():
+            if kind == "q":
+                for text, period, topic in template:
+                    out.append(dict(lang=lang, kind="query", text=text, period=period, topic=topic))
+                continue
+            for _ in range(5):
+                v = dict(H=random.choice(H), P=random.choice(P), R=random.choice(R), A=random.choice(A), W=random.choice(W), E=random.choice(E), HR=random.choice(HR))
+                forms = ["digits"] if lang == "hi-Latn" else ["words", "digits"]
+                for form in forms:
+                    fill = {k: (str(n) if form == "digits" else word(lang, n)) for k, n in v.items()}
+                    out.append(dict(lang=lang, kind="entries", form=form, template=kind, text=template.format(**fill), entries=entries(kind, v)))
+    for lang, items in CHAT.items():
+        for text, chat in items: out.append(dict(lang=lang, kind="chat", text=text, chat=chat))
+    for lang, items in UNKNOWN.items():
+        for text in items: out.append(dict(lang=lang, kind="unknown", text=text))
 
-seen, unique = set(), []
-for o in out:
-    if o["text"] not in seen: seen.add(o["text"]); unique.append(o)
-with open("core/src/test/resources/corpus.jsonl", "w", encoding="utf-8") as f:
-    for o in unique: f.write(json.dumps(o, ensure_ascii=False) + "\n")
-from collections import Counter
-print(len(unique), "prompts", dict(Counter(o["lang"] for o in unique)), dict(Counter(o["kind"] for o in unique)))
+    seen, unique = set(), []
+    for o in out:
+        if o["text"] not in seen: seen.add(o["text"]); unique.append(o)
+    with open("core/src/test/resources/corpus.jsonl", "w", encoding="utf-8") as f:
+        for o in unique: f.write(json.dumps(o, ensure_ascii=False) + "\n")
+    from collections import Counter
+    print(len(unique), "prompts", dict(Counter(o["lang"] for o in unique)), dict(Counter(o["kind"] for o in unique)))

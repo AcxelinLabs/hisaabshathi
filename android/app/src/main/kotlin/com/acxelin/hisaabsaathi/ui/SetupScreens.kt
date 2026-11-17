@@ -175,8 +175,11 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
 
             Text(s.modelPacks, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             PackRow(vm, vm.sttPack(), s)
-            Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
-            PackRow(vm, vm.slmPack, s)
+            // Offered only once a language model has earned its place (see Slm.TRUSTED).
+            if (com.acxelin.hisaabsaathi.core.Slm.TRUSTED) {
+                Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
+                PackRow(vm, vm.slmPack, s)
+            }
             HorizontalDivider()
 
             Text(s.privacyTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)

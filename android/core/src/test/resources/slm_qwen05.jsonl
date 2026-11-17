@@ -13,3 +13,360 @@
 {"task": "extract", "lang": "hi", "text": "आज आठ घंटे काम किया दो सौ पीस आठ रुपये रेट पाँच सौ एडवांस लिया", "output": "8 hours\n200 pieces\n8 rate\n500 rate\nexpense"}
 {"task": "extract", "lang": "hi-Latn", "text": "thekedar se 100 rupaye advance liya", "output": "100=rates\npieces=work\nadvance=money\nexpense=money\nother=other"}
 {"task": "extract", "lang": "ta", "text": "இன்னைக்கு 12 மணி நேரம் வேலை மணிக்கு 80 ரூபாய்", "output": "12 pieces\n80 wage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు పని చేశాను కూలి ఏడొందలు ఇంకా ఇవ్వలేదు", "output": "700= pieces\n= wage\n= advance\n= expense\n= other"}
+{"task": "extract", "lang": "or", "text": "ବସ୍ ଭଡ଼ା ତିରିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ", "output": "30= pieces\n= wage\n= expense"}
+{"task": "extract", "lang": "te", "text": "బస్సు చార్జీ నూటయాబై రూపాయలు ఖర్చు", "output": "150= hours worked\nచార్జీ= pieces or items made\nనూటయాబై= rate\nరూపాయలు= wage\nఖర్చ"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି 9 ଘଣ୍ଟା କାମ କଲି 600 ଟଙ୍କା ମଜୁରୀ", "output": "9 pieces\n600 hours\n"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 350 ଟଙ୍କା ମଜୁରୀ", "output": "350= pieces\n1= hours\n350= wage\n1= advance\n0= expense\n0= other"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ ನೂರೈವತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "150= pieces\n= wage\n= expense"}
+{"task": "extract", "lang": "hi-Latn", "text": "bus ticket 150 rupaye kharch", "output": "150=rates\nhours=work\npieces=work\nrate=pay\nwage=money\nreceived=money\nadvance=money\nexpense=money\nother=other"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 8 గంటలు పని గంటకు 70 రూపాయలు", "output": "8 pieces\n70 hours"}
+{"task": "extract", "lang": "hi-Latn", "text": "kal 9 ghante kaam 1500 rupaye dihadi", "output": "9= pieces\n1500= rupaye"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 9 గంటలు పని గంటకు 60 రూపాయలు", "output": "9 pieces\n60 hours"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు పని చేశాను కూలి 500 ఇంకా ఇవ్వలేదు", "output": "500= pieces or items made"}
+{"task": "extract", "lang": "en", "text": "9 hours work rate 50 rupees", "output": "9=hours\n50=pieces or items made"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ 30 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "30=\nhours=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு 60 ரூபாய் செலவு", "output": "60=\nhours=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "or", "text": "ଆଜି 8 ଘଣ୍ଟା କାମ କଲି 250 ପିସ୍ 3 ଟଙ୍କା ଦର 300 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "8 hours\n250 pieces\n3 advance\n300 expense"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି ନଅ ଘଣ୍ଟା କାମ କଲି ଛଅ ଶହ ଟଙ୍କା ମଜୁରୀ", "output": "9=pieces\n600=advance"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ 20 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "20=\nhours=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 650 rupaye majdoori mili", "output": "hours=650\npieces=pieces\nrate=650\nwage=650\nreceived=650\nadvance=650\nexpense=650\nother=650"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு இருவது ரூபாய் செலவு", "output": "20=pieces\n1=rate\n20=advance\n1=expense\n0=other"}
+{"task": "extract", "lang": "te", "text": "నిన్న ఏడు గంటలు పని చేశాను ఎనిమిదొందల కూలి", "output": "7= pieces\n800= advance"}
+{"task": "extract", "lang": "en", "text": "10 hours work rate 60 rupees", "output": "10 hours\n60 rupees\nadvance\nexpense"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு பன்னிரெண்டு மணி நேரம் வேலை இருநூறு பீஸ் பீஸுக்கு நாலு ரூபாய் நூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "12 hours\n200 pieces\n4 rate\n100 wage\n4 advance\n100 expense\nother"}
+{"task": "extract", "lang": "hi", "text": "आज 8 घंटे काम किया 200 पीस 8 रुपये रेट 500 एडवांस लिया", "output": "8 hours\n200 pieces\n8 rate\n500 wage\nadvance\nexpense\nother"}
+{"task": "extract", "lang": "kn", "text": "ನಿನ್ನೆ 10 ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 350 ರೂಪಾಯಿ", "output": "10 pieces\n350 hours"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் முன்னூறு ஐம்பது ரூபாய் இன்னும் கொடுக்கல", "output": "350= pieces\n= wage\n= advance\n= expense"}
+{"task": "extract", "lang": "hi", "text": "सब्जी पर दो सौ पचास रुपये खर्च किए", "output": "250=pieces\nadvance=250\nexpense=250\nwage=250\nother=pieces"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 8 ଘଣ୍ଟା କାମ କଲି 80 ପିସ୍ 4 ଟଙ୍କା ଦର 100 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "hours = hours worked\npieces = pieces or items made\nrate = pay for one piece or one hour\nwage = money earned for the work\nreceived = wage money the worker was actually paid\nadvance = money taken early from the employer or contractor\nexpense = money the worker spent\nother"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு கூலி 1500 ரூபாய் கிடைச்சது", "output": "1500= pieces\n= wage\n= expense"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು 6 ಗಂಟೆ ಕೆಲಸ 150 ಪೀಸ್ ಪೀಸ್‌ಗೆ 10 ರೂಪಾಯಿ 1000 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "hours = hours worked\npieces = pieces or items made\nrate = pay for one piece or one hour\nwage = money earned for the work\nreceived = wage money the worker was actually paid\nadvance = money taken early from the employer or contractor\nexpense = money the worker spent\nother"}
+{"task": "extract", "lang": "hi", "text": "आज की दिहाड़ी 650 रुपये", "output": "hours=650\npieces=pieces\nrate=650\nwage=650\nreceived=650\nadvance=650\nexpense=650\nother=650"}
+{"task": "extract", "lang": "en", "text": "today I worked ten hours one hundred twenty pieces at five rupees and took two hundred rupees advance", "output": "10 hours\n120 pieces\n5 rupees\n200 rupees\nadvance"}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க இருநூறு ஐம்பது ரூபாய் செலவாச்சு", "output": "250=pieces\n=advance\n=expense\n=other"}
+{"task": "extract", "lang": "hi", "text": "आज 800 रुपये मजदूरी मिली", "output": "800= wage"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு ஒன்பது மணி நேரம் வேலை மணிக்கு ஐம்பது ரூபாய்", "output": "9=pieces\n50=advance"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ 40 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "40 pieces\n40 hours\n40 wage\n40 expense\n40 advance"}
+{"task": "extract", "lang": "hi-Latn", "text": "bus ticket 80 rupaye kharch", "output": "80= pieces\nrupaye= rate\nkharch= advance"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು 12 ಗಂಟೆ ಕೆಲಸ 150 ಪೀಸ್ ಪೀಸ್‌ಗೆ 10 ರೂಪಾಯಿ 1000 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "12 hours\n150 pieces\n10 rate\n1000 advance"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ 150 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "150=\nhours=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "en", "text": "ten hours work rate sixty rupees", "output": "10 pieces\n60 rupees"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ 20 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "20=\nhours=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க அறுவது ரூபாய் செலவாச்சு", "output": "60= pieces\n= wage\n= advance\n= expense"}
+{"task": "extract", "lang": "en", "text": "spent twenty rupees on medicine", "output": "20=expense\nhours=worked\npieces=items made\nrate=pay for one piece or one hour\nwage=money earned for the work\nreceived=money the worker was actually paid\nadvance=money taken early from the employer or contractor\nexpense=money the worker spent"}
+{"task": "extract", "lang": "en", "text": "nine hours work rate fifty rupees", "output": "9=hours\n50=pieces or items made"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ 60 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "60=\nhours=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "ta", "text": "கான்ட்ராக்டர் கிட்ட நூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "100= pieces\n100= wage\n100= advance\n100= expense\n100= other"}
+{"task": "extract", "lang": "te", "text": "మందులకు ముప్పై రూపాయలు ఖర్చు అయింది", "output": "30= pieces\nమందులకు ముప్పై రూపాయలు ఖర్చు అయింది"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 7 గంటలు పని 250 పీసులు పీసుకు 3 రూపాయలు 100 అడ్వాన్స్ తీసుకున్నాను", "output": "7 hours\n250 pieces\n3 rate\n100 advance\n100 expense"}
+{"task": "extract", "lang": "hi", "text": "दवा पर चालीस रुपये खर्च किए", "output": "40=pieces\n=rate\n=wage\n=received\n=advance\n=expense\n=other"}
+{"task": "extract", "lang": "en", "text": "yesterday worked 6 hours wage 350 rupees", "output": "6 hours\n350 rupees\nadvance\nexpense"}
+{"task": "extract", "lang": "hi", "text": "कल 10 घंटे काम किया 600 रुपये मजदूरी", "output": "10 hours\n600 pieces\n10 rupees\n600 rupees"}
+{"task": "extract", "lang": "hi", "text": "आज की दिहाड़ी एक हजार पाँच सौ रुपये", "output": "1500= pieces\n= rate\n= wage\n= advance\n= expense\n= other"}
+{"task": "extract", "lang": "hi", "text": "दवा पर 40 रुपये खर्च किए", "output": "40=hours"}
+{"task": "extract", "lang": "te", "text": "కూరగాయలకు రెండొందలు యాబై రూపాయలు ఖర్చు అయింది", "output": "250=pieces\n1=rate\n250=advance\n1=expense\n1=other"}
+{"task": "extract", "lang": "or", "text": "ଠିକାଦାର ଠାରୁ ଗୋଟିଏ ହଜାର ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "1000=hours\npieces=pieces\nrate=pay for one piece or one hour\nwage=money earned for the work\nreceived=advance\nexpense=money the worker spent\nother=anything else"}
+{"task": "extract", "lang": "hi-Latn", "text": "kal 6 ghante kaam 800 rupaye dihadi", "output": "hours=6, pieces=800, rate=6, wage=800, received=6, advance=800, expense=800, other=6"}
+{"task": "extract", "lang": "kn", "text": "ನಿನ್ನೆ ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಏಳುನೂರ ರೂಪಾಯಿ", "output": "12 pieces\n700 hours\n12 hours\n700 pieces"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 7 గంటలు పని 120 పీసులు పీసుకు 3 రూపాయలు 500 అడ్వాన్స్ తీసుకున్నాను", "output": "7 hours\n120 pieces\n3 rate\n500 advance\n500 expense"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு வேலை செஞ்சேன் சம்பளம் 350 ரூபாய் இன்னும் கொடுக்கல", "output": "350=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "hi-Latn", "text": "6 ghante kaam rate 50 rupaye", "output": "6=\n50=\n650=\n5000=\n65000=\n650000=\n65000000=\n6500000000=\n650000000000=\n"}
+{"task": "extract", "lang": "ta", "text": "பஸ்ஸுக்கு 40 ரூபாய் செலவு", "output": "40=pieces\n1=hour\n40=rate\n40=expense"}
+{"task": "extract", "lang": "en", "text": "spent 40 rupees on medicine", "output": "40=expense"}
+{"task": "extract", "lang": "te", "text": "కాంట్రాక్టర్ దగ్గర మూడొందల రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "output": "300=pieces\n=advance\n=expense\n=other"}
+{"task": "extract", "lang": "en", "text": "9 hours work rate 60 rupees", "output": "9=hours\n60=pieces or items made"}
+{"task": "extract", "lang": "te", "text": "మందులకు ఇరవై రూపాయలు ఖర్చు అయింది", "output": "20=hours\npieces=work\nrate=pay\nwage=money\nreceived=money\nadvance=money\nexpense=money\nother=other"}
+{"task": "extract", "lang": "en", "text": "spent 150 rupees on food", "output": "150 rupees\npieces\n150 rupees\nhours\n150 rupees\nadvance\n150 rupees\nexpense\n150 rupees\nother"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఆరు గంటలు పని గంటకు డెబ్బై రూపాయలు", "output": "6= pieces\n70= advance"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಆರ್ ಗಂಟೆ ಕೆಲಸ ನೂರಿಪ್ಪತ್ತು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಐದು ರೂಪಾಯಿ ಐನೂರು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "6 hours\n120 pieces\n5 hours\n500 pieces\nAdvance\nExpense\nOther"}
+{"task": "extract", "lang": "en", "text": "spent thirty rupees on bus ticket", "output": "30=expense"}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க 30 ரூபாய் செலவாச்சு", "output": "30=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 600 rupaye majdoori mili", "output": "600=rates\npieces=majdoors\n600=rates\nwage=majdoors\nreceived=600\nadvance=600\nexpense=600\nother=600"}
+{"task": "extract", "lang": "en", "text": "spent sixty rupees on food", "output": "60=expense"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು 10 ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ 60 ರೂಪಾಯಿ", "output": "10 hours\n60 pieces\n10 hours\n60 pieces"}
+{"task": "extract", "lang": "hi", "text": "आज आठ सौ रुपये मजदूरी मिली", "output": "800= pieces\n1= hours\n200= rupees"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ 60 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "60=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "hi-Latn", "text": "12 ghante kaam rate 50 rupaye", "output": "12=\n50=\n12 ghante=\n50 rupaye"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு 20 ரூபாய் செலவு", "output": "20=\nhours=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "kn", "text": "ಬಸ್ ಚಾರ್ಜ್ ಮೂವತ್ತು ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "output": "30= pieces\n= wage\n= expense"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 7 ଘଣ୍ଟା କାମ କଲି 120 ପିସ୍ 4 ଟଙ୍କା ଦର 1000 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "7 hours\n120 pieces\n4 rate\n1000 advance\n1000 expense"}
+{"task": "extract", "lang": "kn", "text": "ಬಸ್ ಚಾರ್ಜ್ 30 ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "output": "30=\nhours=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "en", "text": "today's wage is 350 rupees", "output": "350=350 rupees"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఎనమిది గంటలు పని గంటకు డెబ్బై రూపాయలు", "output": "8=pieces\n70=advance"}
+{"task": "extract", "lang": "te", "text": "మందులకు 40 రూపాయలు ఖర్చు అయింది", "output": "40=hours"}
+{"task": "extract", "lang": "te", "text": "మందులకు నలభై రూపాయలు ఖర్చు అయింది", "output": "40=hours worked"}
+{"task": "extract", "lang": "hi", "text": "6 घंटे काम रेट 50 रुपये", "output": "hours=6, pieces=50, rate=50, wage=50, received=50, advance=50, expense=50, other=50"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு பத்து மணி நேரம் வேலை மணிக்கு எண்பது ரூபாய்", "output": "10 pieces\n80 advance"}
+{"task": "extract", "lang": "kn", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ 200 ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "200=\npieces or items made=\n200=\nhours worked=\n200=\nadvance=\n200=\nexpense=\n200=\nother=\n200=\nwage=\n200=\nreceived=\n200=\nexpense=\n200=\nother=\n2"}
+{"task": "extract", "lang": "or", "text": "ଠିକାଦାର ଠାରୁ 300 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "300 pieces\nadvance\n300 hours\n300 wage\n300 expense"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ ಇಪ್ಪತ್ ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "20 hours\npieces\n20 rate\n20 wage\n20 expense\n20 other"}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க அறுபது ரூபாய் செலவாச்சு", "output": "60= pieces\n= wage\n= advance\n= expense"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ ଚାଳିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "40=pieces\n1=rate\n2=advance\n3=expense\n4=wage"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ 150 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "150 pieces\n150 hours\n150 rate\n150 wage\n150 advance\n150 expense\n150 other"}
+{"task": "extract", "lang": "hi", "text": "बस में 250 रुपये खर्च हुए", "output": "250=expense"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு நூறு ஐம்பது ரூபாய் செலவு", "output": "150= pieces\n= wage\n= advance\n= expense\n= other"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు పని చేశాను కూలి ఐదొందల ఇంకా ఇవ్వలేదు", "output": "500=pieces\n1000=advance\n200=hours\n1500=pieces\n100=expense"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj ki dihadi 700 rupaye", "output": "700=rates=pieces=wages=received=advance=expense=other"}
+{"task": "extract", "lang": "te", "text": "కూరగాయలకు ముప్పై రూపాయలు ఖర్చు అయింది", "output": "30= pieces\n= wage\n= advance\n= expense\n= other"}
+{"task": "extract", "lang": "hi", "text": "कल 6 घंटे काम किया 400 रुपये मजदूरी", "output": "6 hours\n400 pieces\n1 wage\n1 advance\n1 expense\n1 other"}
+{"task": "extract", "lang": "en", "text": "spent eighty rupees on food", "output": "80=expense"}
+{"task": "extract", "lang": "hi", "text": "ठेकेदार से एक हजार रुपये एडवांस लिया", "output": "1000=hours\n=pieces\n=rate\n=wage\n=received\n=advance\n=expense\n=other"}
+{"task": "extract", "lang": "en", "text": "spent twenty rupees on bus ticket", "output": "20=expense\nhours=worked\npieces=worked\nrate=pay\nwage=money\nreceived=money\nadvance=money\nexpense=money\nother=anything else"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 7 ghante kaam kiya 120 piece 5 rupaye rate 100 advance liya", "output": "7 hours\n120 pieces\n5 rupay\n100 advance\n100 expense"}
+{"task": "extract", "lang": "hi", "text": "आज चार सौ रुपये मजदूरी मिली", "output": "400= pieces or items made"}
+{"task": "extract", "lang": "en", "text": "today I worked ten hours two hundred fifty pieces at six rupees and took three hundred rupees advance", "output": "10 hours\n250 pieces\n6 rupees\n300 rupees\nadvance"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு பன்னிரண்டு மணி நேரம் வேலை மணிக்கு எம்பது ரூபாய்", "output": "12 pieces\n80 hours\n12=\n80=\n12 pieces\n80 hours"}
+{"task": "extract", "lang": "en", "text": "spent one hundred fifty rupees on bus ticket", "output": "150=expense"}
+{"task": "extract", "lang": "hi", "text": "बस में चालीस रुपये खर्च हुए", "output": "40=pieces\n=rate\n=wage\n=received\n=expense\n=other"}
+{"task": "extract", "lang": "hi", "text": "आज की दिहाड़ी छह सौ पचास रुपये", "output": "650= pieces\n= wage\n= advance\n= expense\n= other"}
+{"task": "extract", "lang": "hi-Latn", "text": "bus ticket 30 rupaye kharch", "output": "30= pieces\nhours= hours\nrate= pay for one hour\nwage= money earned for the work\nreceived= wage money the worker was actually paid\nadvance= money taken early from the employer or contractor\nexpense= money the worker spent\nother= anything else"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ 500 ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "500=hours worked"}
+{"task": "extract", "lang": "hi", "text": "आज की दिहाड़ी छह सौ रुपये", "output": "600= pieces\nrate= pay for one piece\nwage= money earned for the work\nreceived= wage money the worker was actually paid\nadvance= money taken early from the employer or contractor\nexpense= money the worker spent\nother= anything else"}
+{"task": "extract", "lang": "en", "text": "yesterday worked 8 hours wage 500 rupees", "output": "8 hours\n500 rupees\nwage"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು 6 ಗಂಟೆ ಕೆಲಸ 120 ಪೀಸ್ ಪೀಸ್‌ಗೆ 5 ರೂಪಾಯಿ 500 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "hours = hours worked\npieces = pieces or items made\nrate = pay for one piece or one hour\nwage = money earned for the work\nreceived = wage money the worker was actually paid\nadvance = money taken early from the employer or contractor\nexpense = money the worker spent\nother"}
+{"task": "extract", "lang": "en", "text": "today's wage is 800 rupees", "output": "800=800\nhours=hours worked\npieces=pieces or items made\nrate=pay for one piece or one hour\nwage=money earned for the work\nreceived=advance\nexpense=money the worker spent\nother=anything else"}
+{"task": "extract", "lang": "hi-Latn", "text": "thekedar se 300 rupaye advance liya", "output": "300=rates\npieces=work\nadvance=money\nexpense=money\nother=other"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ ଷାଠିଏ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "60= pieces\n4= hours\n1= rate\n2= wage\n1= expense\n0= advance\n0= other"}
+{"task": "extract", "lang": "te", "text": "కాంట్రాక్టర్ దగ్గర 100 రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "output": "100=hours\npieces=work\nrate=pay\nwage=money\nreceived=money\nadvance=money\nexpense=money\nother=other"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି ଦଶ ଘଣ୍ଟା କାମ କଲି ସାତ ଶହ ଟଙ୍କା ମଜୁରୀ", "output": "10 pieces\n700 hours\n100 advance\n700 expense"}
+{"task": "extract", "lang": "ta", "text": "நேத்து 6 மணி நேரம் வேலை செஞ்சேன் 350 ரூபாய் கூலி", "output": "6 pieces\n350 wage"}
+{"task": "extract", "lang": "en", "text": "got three hundred fifty rupees wages today", "output": "350= rupees"}
+{"task": "extract", "lang": "hi", "text": "आज 6 घंटे काम किया 250 पीस 6 रुपये रेट 100 एडवांस लिया", "output": "6 hours\n250 pieces\n6 rupees\n100 rupees\nexpense"}
+{"task": "extract", "lang": "hi", "text": "ठेकेदार से 500 रुपये एडवांस लिया", "output": "500= pieces\n"}
+{"task": "extract", "lang": "hi", "text": "9 घंटे काम रेट 50 रुपये", "output": "hours=9, pieces=50, rate=50, wage=50, received=50, advance=50, expense=50, other=50"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ ಆರುನೂರ ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "600= pieces\n1= hours\n2= rate\n3= wage\n4= advance\n5= expense\n6= other"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 6 గంటలు పని గంటకు 70 రూపాయలు", "output": "6 pieces\n70 hours"}
+{"task": "extract", "lang": "hi", "text": "आज छः सौ रुपये मजदूरी मिली", "output": "600= pieces\n1= hours\n200= advance\n300= expense\n400= wage"}
+{"task": "extract", "lang": "or", "text": "ପରିବା ପାଇଁ କୋଡ଼ି ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "20=pieces\n1=rate\n3=advance\n1=expense\n1=other"}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க முப்பத்தி ரூபாய் செலவாச்சு", "output": "30= pieces\n= wage\n= advance\n= expense\n= other"}
+{"task": "extract", "lang": "en", "text": "today I worked 6 hours 120 pieces at 3 rupees and took 200 rupees advance", "output": "6 hours\n120 pieces\n3 rupees\n200 rupees\nadvance"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ 350 ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "350= hours worked"}
+{"task": "extract", "lang": "or", "text": "ବସ୍ ଭଡ଼ା ଦୁଇ ଶହ ପଚାଶ ଟଙ୍କା ଖର୍ଚ୍ଚ", "output": "pieces=250\nrate=250\nwage=250\nadvance=250\nexpense=250\nother=250"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 8 ଘଣ୍ଟା କାମ କଲି 80 ପିସ୍ 6 ଟଙ୍କା ଦର 300 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "8 hours\n80 pieces\n6 rate\n300 advance\n300 expense"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு அறுவது ரூபாய் செலவு", "output": "60= pieces\n= wage\n= advance\n= expense\n= other"}
+{"task": "extract", "lang": "en", "text": "spent 60 rupees on food", "output": "60=expense"}
+{"task": "extract", "lang": "en", "text": "got six hundred rupees wages today", "output": "600= wage"}
+{"task": "extract", "lang": "en", "text": "took two hundred rupees advance from the contractor", "output": "200=advance\npieces=work\nrate=pay\nwage=money\nreceived=money\nadvance=money\nexpense=money\nother=work"}
+{"task": "extract", "lang": "hi", "text": "दवा पर एक सौ पचास रुपये खर्च किए", "output": "150= pieces\nadvance= money taken early from the employer or contractor\nexpense= money the worker spent\nother= anything else"}
+{"task": "extract", "lang": "kn", "text": "ಬಸ್ ಚಾರ್ಜ್ ನಲವತ್ತು ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "output": "40= pieces\n1= rate\n2= wage\n3= advance\n4= expense\n5= other"}
+{"task": "extract", "lang": "en", "text": "yesterday worked eight hours wage five hundred rupees", "output": "8 hours\n500 rupees\nwage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు కూలి 350 రూపాయలు వచ్చింది", "output": "350= pieces or items made"}
+{"task": "extract", "lang": "te", "text": "నిన్న 7 గంటలు పని చేశాను 650 కూలి", "output": "7 pieces\n650 hours"}
+{"task": "extract", "lang": "ta", "text": "கான்ட்ராக்டர் கிட்ட நூரு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "100= pieces\n100= wage\n100= advance\n100= expense\n100= other"}
+{"task": "extract", "lang": "ta", "text": "பஸ்ஸுக்கு 250 ரூபாய் செலவு", "output": "hours=250\npieces=pieces\nrate=250\nwage=250\nreceived=250\nadvance=250\nexpense=250\nother=250"}
+{"task": "extract", "lang": "te", "text": "బస్సు చార్జీ నూటయాభై రూపాయలు ఖర్చు", "output": "150= pieces\nచార్జీ= hours\nనూటయాభై= advance\nరూపాయలు= wage\nఖర్చు="}
+{"task": "extract", "lang": "hi", "text": "छः घंटे काम रेट पचास रुपये", "output": "6 pieces\n50 advance"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಐನೂರ ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "output": "500=pieces\nadvance=500\nrate=500\nwage=500\nexpense=500\nother=500"}
+{"task": "extract", "lang": "ta", "text": "கான்ட்ராக்டர் கிட்ட 100 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "100= pieces\n40= hours\n100= advance\n100= expense\n100= other"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ କୋଡ଼ିଏ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "20=pieces\n40=advance\n10=expense\n15=pieces\n10=other"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు తొమ్మిది గంటలు పని రెండొందల పీసులు పీసుకు మూడు రూపాయలు రెండొందల అడ్వాన్స్ తీసుకున్నాను", "output": "9 hours\n200 pieces\n3 advance\n200 expense"}
+{"task": "extract", "lang": "hi-Latn", "text": "dawa par 80 rupaye kharch", "output": "80=rupaye kharch"}
+{"task": "extract", "lang": "ta", "text": "கான்ட்ராக்டர் கிட்ட 300 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "300=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "ta", "text": "நேத்து 6 மணி நேரம் வேலை செஞ்சேன் 1500 ரூபாய் கூலி", "output": "6 pieces\n1500 wage"}
+{"task": "extract", "lang": "ta", "text": "நேத்து 9 மணி நேரம் வேலை செஞ்சேன் 600 ரூபாய் கூலி", "output": "9 pieces\n600 hours\n1 piece\n1 hour\n1000\n1000\n1000\n1000\n1000\n1000\n1000\n1000\n1000\n1"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ 40 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "40=\nhours=\n40=\npieces=\n40=\nrate=\n40=\nwage=\n40=\nreceived=\n40=\nadvance=\n40=\nexpense=\n40=\nother=\n40="}
+{"task": "extract", "lang": "en", "text": "today I worked 10 hours 120 pieces at 5 rupees and took 200 rupees advance", "output": "10 hours\n120 pieces\n5 rupees\n200 rupees\nadvance"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు తొమ్మిది గంటలు పని గంటకు అరవయ్ రూపాయలు", "output": "9= pieces\n60= hours"}
+{"task": "extract", "lang": "kn", "text": "ನಿನ್ನೆ ಎಂಟು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಏಳುನೂರ ರೂಪಾಯಿ", "output": "8= pieces\n700= advance"}
+{"task": "extract", "lang": "hi", "text": "आज 10 घंटे काम किया 80 पीस 8 रुपये रेट 300 एडवांस लिया", "output": "10 pieces\n80 pieces or items made\n8 hours\n300 rupees\nadvance\nexpense\nother"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ ಇಪ್ಪತ್ ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "20=pieces\n10=hours\n10=advance\n10=expense"}
+{"task": "extract", "lang": "te", "text": "మందులకు 30 రూపాయలు ఖర్చు అయింది", "output": "30= pieces or items made"}
+{"task": "extract", "lang": "en", "text": "got 600 rupees wages today", "output": "600= wage"}
+{"task": "extract", "lang": "hi-Latn", "text": "thekedar se 1000 rupaye advance liya", "output": "1000=rupaye"}
+{"task": "extract", "lang": "kn", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ 1000 ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "1000=\nhours=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಆರ್ ಗಂಟೆ ಕೆಲಸ ಒಂದೂವರೆನೂರು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಹತ್ತು ರೂಪಾಯಿ ಸಾವ್ರ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "6 hours\n150 pieces\n10 rate\n1000 advance\n1000 expense"}
+{"task": "extract", "lang": "ta", "text": "பஸ்ஸுக்கு அறுபது ரூபாய் செலவு", "output": "60= pieces\n1= rate\n2= wage\n3= received\n4= advance\n5= expense\n6= other"}
+{"task": "extract", "lang": "hi", "text": "सब्जी पर बीस रुपये खर्च किए", "output": "20=pieces\n10=rate\n10=advance\n10=expense\n10=other"}
+{"task": "extract", "lang": "en", "text": "spent two hundred fifty rupees on food", "output": "250=expense"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు కూలి వెయ్యిన్నర రూపాయలు వచ్చింది", "output": "1500=1500\nhours=hours worked\npieces=pieces or items made\nrate=pay for one piece or one hour\nwage=money earned for the work\nreceived=advance\nexpense=money the worker spent\nother=anything else"}
+{"task": "extract", "lang": "en", "text": "took five hundred rupees advance from the contractor", "output": "500=advance"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು 8 ಗಂಟೆ ಕೆಲಸ 120 ಪೀಸ್ ಪೀಸ್‌ಗೆ 10 ರೂಪಾಯಿ 1000 ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "8 hours\n120 pieces\n10 rate\n1000 advance\nother"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಯೆಂಟು ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ ಎಪ್ಪತ್ತು ರೂಪಾಯಿ", "output": "8=pieces\n70=advance"}
+{"task": "extract", "lang": "te", "text": "కూరగాయలకు 40 రూపాయలు ఖర్చు అయింది", "output": "40= pieces or items made"}
+{"task": "extract", "lang": "hi", "text": "आज 400 रुपये मजदूरी मिली", "output": "400=pieces\n"}
+{"task": "extract", "lang": "hi", "text": "सब्जी पर 20 रुपये खर्च किए", "output": "20=pieces\n10=hours\n20=rate\n10=advance\n10=expense\n10=other"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ 600 ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "hours=600\npieces=pieces\nrate=600\nwage=600\nadvance=0\nexpense=0\nother=0"}
+{"task": "extract", "lang": "hi-Latn", "text": "dawa par 60 rupaye kharch", "output": "60=rates\nhours=worked\npieces=items\nrate=pay\nwage=money\nreceived=money\nadvance=money\nexpense=money\nother=other"}
+{"task": "extract", "lang": "or", "text": "ନଅ ଘଣ୍ଟା କାମ ଦର ଅଶୀ ଟଙ୍କା", "output": "9 pieces\n80 advance"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు కూలి 650 రూపాయలు వచ్చింది", "output": "650= pieces or items made"}
+{"task": "extract", "lang": "en", "text": "today I worked nine hours eighty pieces at eight rupees and took two hundred rupees advance", "output": "9 hours worked\n80 pieces or items made\n8 rupees\n200 rupees advance\nexpense\nadvance"}
+{"task": "extract", "lang": "en", "text": "got 500 rupees wages today", "output": "500 rupees=\npieces or items made=\n500 rupees=\nwage=\n500 rupees=\nreceived=\nadvance=\n500 rupees=\nexpense=\nother="}
+{"task": "extract", "lang": "or", "text": "ଆଜି ଗୋଟିଏ ହଜାର ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "output": "1500= pieces\n1500= hours\n1500= wage\n1500= expense\n1500= other"}
+{"task": "extract", "lang": "en", "text": "yesterday worked six hours wage three hundred fifty rupees", "output": "6 hours\n350 rupees\nwage"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 400 ଟଙ୍କା ମଜୁରୀ", "output": "400= pieces\n0= hours\n400= rate\n0= wage\n0= advance\n0= expense\n0= other"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு கூலி அறுநூறு ரூபாய் கிடைச்சது", "output": "600= pieces\n= wage\n= expense"}
+{"task": "extract", "lang": "te", "text": "మందులకు 20 రూపాయలు ఖర్చు అయింది", "output": "20= pieces\nమందులకు 20 రూపాయలు ఖర్చు అయింది"}
+{"task": "extract", "lang": "or", "text": "ବସ୍ ଭଡ଼ା 250 ଟଙ୍କା ଖର୍ଚ୍ଚ", "output": "hours=250\npieces=pieces\nrate=250\nwage=250\nreceived=250\nadvance=250\nexpense=250\nother=250"}
+{"task": "extract", "lang": "en", "text": "today I worked 9 hours 80 pieces at 8 rupees and took 200 rupees advance", "output": "9 hours\n80 pieces\n8 rupees\n200 rupees\nadvance"}
+{"task": "extract", "lang": "kn", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ ನೂರು ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "100=hours\npieces=work\nrate=pay\nwage=money\nreceived=money\nadvance=money\nexpense=money\nother=other"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு கூலி அறுநூறு ஐம்பது ரூபாய் கிடைச்சது", "output": "650= pieces\n= wage\n= expense"}
+{"task": "extract", "lang": "hi", "text": "आज 700 रुपये मजदूरी मिली", "output": "700= pieces\n= wage\n= advance\n= expense\n= other"}
+{"task": "extract", "lang": "hi", "text": "बस में 60 रुपये खर्च हुए", "output": "60= pieces\n0= hours\n60= rate\n0= wage\n0= expense\n0= advance\n0= other"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಹತ್ತು ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ ಎಪ್ಪತ್ ರೂಪಾಯಿ", "output": "10 pieces\n70 hours"}
+{"task": "extract", "lang": "te", "text": "కాంట్రాక్టర్ దగ్గర 500 రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "output": "500=pieces\nadvance=500=hours\nrate=500=pieces\nwage=500=hours\nexpense=500=pieces"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି 9 ଘଣ୍ଟା କାମ କଲି 500 ଟଙ୍କା ମଜୁରୀ", "output": "9 pieces\n500 hours\n"}
+{"task": "extract", "lang": "ta", "text": "பஸ்ஸுக்கு 30 ரூபாய் செலவு", "output": "30=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "or", "text": "ସାତ ଘଣ୍ଟା କାମ ଦର ସତୁରି ଟଙ୍କା", "output": "7= pieces\n70= advance"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு கூலி ஏழுநூறு ரூபாய் கிடைச்சது", "output": "700= pieces\n= wage\n= advance\n= expense\n= other"}
+{"task": "extract", "lang": "or", "text": "ଆଜି ଗୋଟିଏ ହଜାର ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ", "output": "1500 pieces\n1500 hours\n1500 rate\n1500 wage\n1500 expense\n1500 other"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఏడు గంటలు పని నూటిరవై పీసులు పీసుకు మూడు రూపాయలు ఐదొందలు అడ్వాన్స్ తీసుకున్నాను", "output": "7= pieces\n120= hours\n3= advance\n500= wage\nother= expense"}
+{"task": "extract", "lang": "ta", "text": "நேத்து ஆறு மணி நேரம் வேலை செஞ்சேன் ஐந்நூறு ரூபாய் கூலி", "output": "6 pieces\n500 wage\n400 expense"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 800 rupaye majdoori mili", "output": "800=rates\npieces=majdoors\n800=rates\nwage=majdoors\nreceived=800\nadvance=800\nexpense=800\nother=800"}
+{"task": "extract", "lang": "en", "text": "got eight hundred rupees wages today", "output": "800= wage"}
+{"task": "extract", "lang": "hi-Latn", "text": "dawa par 20 rupaye kharch", "output": "20=rupaye kharch"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି ଆଠ ଘଣ୍ଟା କାମ କଲି ଚାରି ଶହ ଟଙ୍କା ମଜୁରୀ", "output": "8=8\n400=400"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఆరు గంటలు పని రెండొందలు యాబై పీసులు పీసుకు ఐదు రూపాయలు రెండొందలు అడ్వాన్స్ తీసుకున్నాను", "output": "6= pieces\n250= wage\n5= advance\n200= expense\nOther= other"}
+{"task": "extract", "lang": "or", "text": "ଆଜି ଏକ ହଜାର ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "output": "1500= pieces\n1500= hours\n1500= wage\n1500= expense\n1500= other"}
+{"task": "extract", "lang": "hi", "text": "कल आठ घंटे काम किया आठ सौ रुपये मजदूरी", "output": "8 hours\n800 pieces\nरुपये\nकल\n8=\n800=\nकल आठ घंटे काम किया आठ सौ रुपये मजदूरी"}
+{"task": "extract", "lang": "ta", "text": "நேத்து ஆறு மணி நேரம் வேலை செஞ்சேன் ஓராயிரம் ஐந்நூறு ரூபாய் கூலி", "output": "6=pieces\n1500=advance"}
+{"task": "extract", "lang": "ta", "text": "நேத்து ஏழு மணி நேரம் வேலை செஞ்சேன் எண்ணூறு ரூபாய் கூலி", "output": "7= pieces\n800= wage\n1= advance\n1= expense"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు కూలి ఐదొందల రూపాయలు వచ్చింది", "output": "500=pieces\n1000=advance\n200=hours\n150=pieces\n100=expense"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ ಇನ್ನೂರೈವತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "250= pieces or items made\nrate= pay for one piece or one hour\nwage= money earned for the work\nreceived= wage money the worker was actually paid\nadvance= money taken early from the employer or contractor\nexpense= money the worker spent\nother= anything else"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି 8 ଘଣ୍ଟା କାମ କଲି 400 ଟଙ୍କା ମଜୁରୀ", "output": "8 pieces\n400 wage\n"}
+{"task": "extract", "lang": "hi", "text": "बस में 40 रुपये खर्च हुए", "output": "40=expense"}
+{"task": "extract", "lang": "hi", "text": "आज 600 रुपये मजदूरी मिली", "output": "hours=600\npieces=pieces\nrate=600\nwage=600\nreceived=600\nadvance=600\nexpense=600\nother=600"}
+{"task": "extract", "lang": "or", "text": "ଆଜି ତିନି ଶହ ପଚାଶ ଟଙ୍କା ମଜୁରୀ", "output": "350 pieces\n350 hours\n350 rate\n350 wage\n350 advance\n350 expense\n350 other"}
+{"task": "extract", "lang": "or", "text": "ଆଜି ଆଠ ଘଣ୍ଟା କାମ କଲି ଅଶୀ ପିସ୍ ଚାରି ଟଙ୍କା ଦର ଗୋଟିଏ ଶହ ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "8= pieces\n80= hours\n4= advance\n100= wage\nOther= expense"}
+{"task": "extract", "lang": "en", "text": "spent sixty rupees on bus ticket", "output": "60=expense"}
+{"task": "extract", "lang": "en", "text": "spent forty rupees on medicine", "output": "40=expense"}
+{"task": "extract", "lang": "te", "text": "కూరగాయలకు 150 రూపాయలు ఖర్చు అయింది", "output": "150= pieces\nరూపాయలకు= advance\nఖర్చు అయింది= received"}
+{"task": "extract", "lang": "en", "text": "today I worked 10 hours 80 pieces at 10 rupees and took 500 rupees advance", "output": "10 hours\n80 pieces\n10 rupees\n500 rupees\nadvance"}
+{"task": "extract", "lang": "hi", "text": "कल दस घंटे काम किया तीन सौ पचास रुपये मजदूरी", "output": "10 pieces\n350 rupees"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 9 గంటలు పని 200 పీసులు పీసుకు 3 రూపాయలు 200 అడ్వాన్స్ తీసుకున్నాను", "output": "9 hours\n200 pieces\n3 rate\n200 advance\nexpense"}
+{"task": "extract", "lang": "hi", "text": "दवा पर 150 रुपये खर्च किए", "output": "150= pieces\nadvance= money taken early from the employer or contractor\nexpense= money the worker spent\nother= anything else"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 1500 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "output": "1500=\npieces=\nrate=\nwage=\nreceived=\nadvance=\nexpense=\nother="}
+{"task": "extract", "lang": "ta", "text": "நேத்து 7 மணி நேரம் வேலை செஞ்சேன் 800 ரூபாய் கூலி", "output": "7 pieces\n800 wage"}
+{"task": "extract", "lang": "en", "text": "spent 20 rupees on bus ticket", "output": "20=expense\nhours=worked\npieces=worked\nrate=pay\nwage=money\nreceived=money\nadvance=money\nexpense=money\nother=anything else"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "आपका नाम क्या है", "output": "I am Qwen, a wage-ledger app helper."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "तुम्हारा नाम क्या है", "output": "I am Qwen, a wage-ledger phone app helper."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "तुम कौन हो", "output": "I am a wage-ledger app helper."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "नमस्ते", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "हेलो", "output": "हेलो"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "राम राम भाई", "output": "हाँ, राम। राम भाई राम भाई।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "तुम क्या कर सकते हो", "output": "You can do anything."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "इसे कैसे इस्तेमाल करूं", "output": "You note work, advances, wages, and expenses."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "मदद करो", "output": "You note work, advances, wages, and expenses."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "धन्यवाद", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "शुक्रिया भाई", "output": "I'm a wage-ledger app helper. I can record work, advance, wages, and expenses. I don't do anything else."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "कैसे हो", "output": "I'm a wage-ledger app, not a general knowledge assistant."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "क्या हाल है", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "मेरा डेटा सुरक्षित है क्या", "output": "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "क्या ठेकेदार मेरा हिसाब देख सकता है", "output": "हम आपको एक भी छोड़े रहे हैं। आपको आपकी भी छोड़े हैं।"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "आज क्या तारीख है", "output": "Today's wage is being advanced."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "तुम्हें किसने बनाया", "output": "I am a wage-ledger app helper."}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "बाय", "output": "बाय"}
+{"task": "chat", "lang": "hi", "kind": "chat", "text": "अच्छा फिर मिलेंगे", "output": "हाँ, मिलेंगे।"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ତୁମ ନାମ କଣ", "output": "I'm not sure what you mean by \"ତୁମ ନାମ କଣ\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ଆପଣଙ୍କ ନାଁ କଣ", "output": "I'm not sure what you mean by \"ଆପଣଙ୍କ ନାଁ କଣ\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ତୁମେ କିଏ", "output": "I'm not sure what you mean by \"ସାହାଶା\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ନମସ୍କାର", "output": "I'm a wage-ledger app, not a wage calculator."}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ହେଲୋ", "output": "I'm a wage-ledger app, not a general knowledge assistant."}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ତୁମେ କଣ କରିପାରିବ", "output": "I'm not sure what you're asking. Could you please provide more information or ask a specific question?"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ମୋତେ ସାହାଯ୍ୟ କର", "output": "I'm a wage-ledger app, not a wage calculator."}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ଏହାକୁ କିପରି ବ୍ୟବହାର କରିବି", "output": "I'm not sure what you're asking. Could you please provide more details or ask a specific question?"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ଧନ୍ୟବାଦ", "output": "I'm a wage-ledger app, not a wage calculator."}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "କେମିତି ଅଛ", "output": "I'm a wage-ledger app, not a wage calculator."}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ମୋ ଡାଟା ସୁରକ୍ଷିତ କି", "output": "I'm not a wage-ledger phone app, but I can assist with work, advances, wages, and expenses."}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ଆଜି କି ତାରିଖ", "output": "I'm not sure what you mean by \"ଆଜି କି ତାରିଖ\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ତୁମକୁ କିଏ ତିଆରି କଲା", "output": "I'm not sure what you mean by \"ତୁମକୁ କିଏ ତିଆରି କଲା\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "or", "kind": "chat", "text": "ବାଏ", "output": "I'm here to help with your daily wage transactions."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "what is your name", "output": "I am Qwen, a wage-ledger assistant created by Alibaba Cloud."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "who are you", "output": "I am Qwen, a wage-ledger app for daily-wage workers in India. I can help you track your work, advances, wages, and expenses."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "tell me your name", "output": "I am Qwen, a wage-ledger app helper."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "hello", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "hi", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "good morning", "output": "Good morning!"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "what can you do", "output": "I can help you with work, advance, wages, and expenses."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "how do I use this", "output": "I'm here to assist you with your daily wage ledger. Please tell me what you need help with, such as calculating totals, tracking expenses, or accessing information about your work."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "help me", "output": "I'm here to assist you with your daily wage tasks."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "thank you", "output": "You're welcome."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "thanks a lot", "output": "You're welcome!"}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "how are you", "output": "I'm just a virtual assistant here, not a real person. I don't have feelings or emotions. I'm here to help with tasks and provide information."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "is my data safe", "output": "I am here to assist you with your daily wage data. Please provide the necessary information so I can process it accurately."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "who can see my records", "output": "You can view your records, but you cannot modify them."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "what is the date today", "output": "Today is the date you asked for."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "who made you", "output": "I am a helper created by Alibaba Cloud, not made by myself."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "bye", "output": "Goodbye."}
+{"task": "chat", "lang": "en", "kind": "chat", "text": "goodbye", "output": "Goodbye."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నీ పేరు ఏమిటి", "output": "I'm not sure what you mean by \"నీ పేరు ఏమిటి\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "మీ పేరేంటి", "output": "I'm not sure what you mean by \"మీ పేరేంటి\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నువ్వు ఎవరు", "output": "అందుకు నుయ్యాంటు."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నమస్కారం", "output": "I'm here to assist you with your daily wage."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "హలో", "output": "I'm here to assist you with your daily wage."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నువ్వు ఏం చేయగలవు", "output": "I'm not sure what you mean by \"నువ్వు ఏం చేయగలవు\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నాకు సహాయం చెయ్యి", "output": "I am here to note your work, advance, wages, and expenses. I will provide totals."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "ఇది ఎలా వాడాలి", "output": "I am Qwen, a wage-ledger phone app helper. I can record work, advance, wages, and expenses. I don't do anything else."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "ధన్యవాదాలు", "output": "I am Qwen, a wage-ledger app helper. I can record work, advance, wages, and expenses. I don't do anything else."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "థాంక్స్", "output": "I'm a wage-ledger app, not a general knowledge assistant."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "ఎలా ఉన్నావు", "output": "I'm here to help with your daily wage transactions."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నా డేటా సురక్షితమేనా", "output": "I am Qwen, a wage-ledger phone app helper. I can record work, advance, wages, and expenses. I don't do anything else."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "ఈ రోజు తేదీ ఎంత", "output": "I am a wage-ledger phone app helper."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "నిన్ను ఎవరు తయారు చేశారు", "output": "You have completed your daily wage."}
+{"task": "chat", "lang": "te", "kind": "chat", "text": "బై", "output": "I'm not sure what you mean by \"బై\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನಿನ್ನ ಹೆಸರು ಏನು", "output": "I'm here to help with your daily wage transactions."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನಿಮ್ಮ ಹೆಸರೇನು", "output": "I'm here to assist you with your daily wage."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನೀನು ಯಾರು", "output": "Hello! I'm your wage-ledger assistant. I can help you track your work, advances, wages, and expenses. Just let me know what you need."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನಮಸ್ಕಾರ", "output": "I'm a wage-ledger app, not a general knowledge assistant."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಹಲೋ", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನೀನು ಏನು ಮಾಡಬಲ್ಲೆ", "output": "You note work, advances, wages, and expenses."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನನಗೆ ಸಹಾಯ ಮಾಡು", "output": "You note work, advances, wages, and expenses."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಇದನ್ನು ಹೇಗೆ ಬಳಸೋದು", "output": "You have completed your work."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಧನ್ಯವಾದ", "output": "I'm a wage-ledger app, not a general knowledge assistant."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಥ್ಯಾಂಕ್ಸ್", "output": "I'm not a wage-ledger phone app, but I can assist with work, wages, and expenses."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಹೇಗಿದ್ದೀಯ", "output": "I'm a wage-ledger app, not a general knowledge assistant."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನನ್ನ ಡೇಟಾ ಸುರಕ್ಷಿತವಾ", "output": "I'm not sure what you're asking. Could you please provide more context or ask a specific question?"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಇವತ್ತು ದಿನಾಂಕ ಎಷ್ಟು", "output": "I'm not sure what you're asking. Could you please provide more context or ask a specific question?"}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ನಿನ್ನನ್ನು ಯಾರು ಮಾಡಿದ್ದು", "output": "You note work, advances, wages, and expenses."}
+{"task": "chat", "lang": "kn", "kind": "chat", "text": "ಬೈ", "output": "I'm not sure what you mean by \"ಬೈ\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "உன் பெயர் என்ன", "output": "I am a wage-ledger app helper."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "உங்க பேர் என்ன", "output": "I am Qwen, a wage-ledger app helper. I can record work, advance, wages, and expenses. I don't do anything else."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "நீ யார்", "output": "I'm a wage-ledger app helper."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "வணக்கம்", "output": "I'm here to assist you with your daily wage work."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "ஹலோ", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "நீ என்ன செய்ய முடியும்", "output": "You have completed your daily wage."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "எனக்கு உதவி பண்ணு", "output": "I am a wage-ledger app helper."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "இதை எப்படி பயன்படுத்துறது", "output": "I am a wage-ledger app helper."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "நன்றி", "output": "I'm a wage-ledger app helper."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "எப்படி இருக்கீங்க", "output": "I am Qwen, a wage-ledger app helper. I can record work, advance, wages, and expenses. I don't do anything else."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "என் டேட்டா பாதுகாப்பா இருக்கா", "output": "I am Qwen, a wage-ledger phone app helper. I can record work, advance, wages, and expenses. I don't do anything else."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "இன்னைக்கு தேதி என்ன", "output": "I am a wage-ledger app helper."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "உன்னை யார் உருவாக்கினாங்க", "output": "You have completed your daily wage."}
+{"task": "chat", "lang": "ta", "kind": "chat", "text": "பை", "output": "I'm a wage-ledger app, not a general knowledge assistant."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "tumhara naam kya hai", "output": "I am Qwen, a wage-ledger app helper. I can help you with work, advances, wages, and expenses."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "aap kaun ho", "output": "I am a wage-ledger phone app helper."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "namaste", "output": "Namaste!"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "hello bhai", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "madad karo", "output": "I'm here to help you with your daily wage."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "ye kaise chalta hai", "output": "I'm here to help you with your daily wage."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "dhanyavad", "output": "You have completed your work."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "shukriya", "output": "I'm Qwen, a wage-ledger app helper. I can help you with work, wages, expenses, and totals."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "kaise ho", "output": "Hello! How can I assist you today?"}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "mera data safe hai kya", "output": "Data is safe."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "aaj ki tarikh kya hai", "output": "I am a wage-ledger phone app helper."}
+{"task": "chat", "lang": "hi-Latn", "kind": "chat", "text": "tumhe kisne banaya", "output": "I'm here to help with your daily wage transactions."}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "भारत की राजधानी क्या है", "output": "हालांकि, भारत की राजधानी है।"}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "एक चुटकुला सुनाओ", "output": "हाँ, मैं आपको चुटकुला सुनिए।"}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "कल बारिश होगी क्या", "output": "हाँ, कल बारिश होगा।"}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "गाना सुनाओ", "output": "हाँ, गाना सुनाए।"}
+{"task": "chat", "lang": "hi", "kind": "unknown", "text": "मुझे नौकरी चाहिए", "output": "मुझे नौकरी चाहिए."}
+{"task": "chat", "lang": "or", "kind": "unknown", "text": "ଭାରତର ରାଜଧାନୀ କଣ", "output": "I'm not sure what you're asking. Could you please provide more information or ask a specific question?"}
+{"task": "chat", "lang": "or", "kind": "unknown", "text": "ଗୋଟେ ଗୀତ ଗାଅ", "output": "I'm not sure what you mean by \"ଗୋଟେ ଗୀତ ଗାଅ\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "or", "kind": "unknown", "text": "ମୋତେ ଚାକିରି ଦରକାର", "output": "I'm not sure what you mean by \"ମୋତେ ଚାକିରି ଦରକାର\". Could you please provide more context or clarify your question?"}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "what is the capital of India", "output": "The capital of India is Delhi."}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "tell me a joke", "output": "Why did the tomato turn red? Because it saw the salad dressing!"}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "will it rain tomorrow", "output": "I'm not capable of predicting weather conditions."}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "sing a song", "output": "I'm not capable of singing. I'm a language model designed to assist with tasks such as note taking, financial management, and answering questions."}
+{"task": "chat", "lang": "en", "kind": "unknown", "text": "I need a job", "output": "I'm here to assist you with your daily wage."}
+{"task": "chat", "lang": "te", "kind": "unknown", "text": "భారతదేశ రాజధాని ఏది", "output": "I'm not sure what you're asking. Could you please provide more context or ask a specific question?"}
+{"task": "chat", "lang": "te", "kind": "unknown", "text": "ఒక జోక్ చెప్పు", "output": "I'm not sure what you mean by \"కోంట్ట్ట్ట్ట్ట్ట్ట్ట్ట్ట్ట్ట్ట్ట్ట్ట"}
+{"task": "chat", "lang": "te", "kind": "unknown", "text": "రేపు వర్షం పడుతుందా", "output": "You have completed the wage ledger for the day."}
+{"task": "chat", "lang": "kn", "kind": "unknown", "text": "ಭಾರತದ ರಾಜಧಾನಿ ಯಾವುದು", "output": "I'm not a wage-ledger phone app, but I can assist with work, wages, and expenses."}
+{"task": "chat", "lang": "kn", "kind": "unknown", "text": "ಒಂದು ಜೋಕ್ ಹೇಳು", "output": "I'm not ready to work or advance yet. I'm just a helper with the latest wage data."}
+{"task": "chat", "lang": "kn", "kind": "unknown", "text": "ನಾಳೆ ಮಳೆ ಬರುತ್ತಾ", "output": "I'm sorry, but I can't assist with that."}
+{"task": "chat", "lang": "ta", "kind": "unknown", "text": "இந்தியாவின் தலைநகரம் எது", "output": "இந்தியாவின் தலைநகரம் இருந்து இந்தியாவின் தலைநகரம் இருந்து இந்தியாவின"}
+{"task": "chat", "lang": "ta", "kind": "unknown", "text": "ஒரு ஜோக் சொல்லு", "output": "I'm a wage-ledger app for daily-wage workers in India. I can track work, advances, wages, and expenses."}
+{"task": "chat", "lang": "ta", "kind": "unknown", "text": "நாளைக்கு மழை வருமா", "output": "I'm working on my app, and I need to know about your work, wages, expenses, and totals."}
+{"task": "chat", "lang": "hi-Latn", "kind": "unknown", "text": "bharat ki rajdhani kya hai", "output": "Bharat is the name of the state in India."}
+{"task": "chat", "lang": "hi-Latn", "kind": "unknown", "text": "ek chutkula sunao", "output": "I am Qwen, a wage-ledger phone app helper. I can record work, advance, wages, and expenses. I don't do anything else."}
+{"task": "chat", "lang": "hi-Latn", "kind": "unknown", "text": "gaana sunao", "output": "I'm here to help with your daily wage transactions."}
