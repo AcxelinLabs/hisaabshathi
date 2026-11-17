@@ -49,6 +49,21 @@ keywords, not real speech-recognition output.
 `tools/eval_slm.py` runs the app's exact prompts through a Qwen2.5 GGUF on a PC and
 `CorpusTest.scoreRecordedModelAnswers` scores the answers (`core/build/slm-report.txt`).
 
+### Language model results (16–17 Nov 2026, on a PC with llama.cpp / PyTorch, not on a phone)
+
+| Model | Entry sentences labelled exactly right | Simple-question replies |
+|---|---|---|
+| Rules only (what the app uses) | 638 / 638 corpus prompts | fixed replies, all six languages |
+| Qwen2.5-0.5B, stock | 16 / 240 (7%) | wrong script or nonsense in Odia, Telugu, Kannada, Tamil |
+| Qwen2.5-1.5B, stock | 33 / 120 (28%) | right script, often wrong ("India's capital is Greece") |
+| Qwen2.5-0.5B, LoRA fine-tuned (`tools/finetune_slm.py`) | 133 / 140 (95%) | not fine-tuned for chat |
+
+The fine-tuned model was trained on sentences built from the same templates as the corpus
+(with no overlapping sentences), so 95% shows it can learn the task, not how it does on real
+speech. It is still below the rules on this corpus, so the app keeps the model switched off
+(`Slm.TRUSTED = false`). To ship it, the LoRA adapter must be merged and converted to a
+MediaPipe `.task` file (ai-edge-torch); that conversion has not been done.
+
 ## Look
 
 Ink blue and marigold, styled after a hand-written wage slip; type is Anek (SIL OFL), one

@@ -1,2 +1,140 @@
-{"task": "extract", "lang": "or", "text": "ପରିବା ପାଇଁ 20 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "20=earnings"}
-{"task": "extract", "lang": "hi-Latn", "text": "aaj 8 ghante kaam kiya 120 piece 10 rupaye rate 200 advance liya", "output": "8=hour\n120=piece\n10=rate\n200=advance"}
+{"task": "extract", "lang": "or", "text": "ପରିବା ପାଇଁ 20 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "20=expense"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 8 ghante kaam kiya 120 piece 10 rupaye rate 200 advance liya", "output": "8=hours\n120=pieces\n10=rate\n200=advance"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு கூலி ஓராயிரம் ஐந்நூறு ரூபாய் கிடைச்சது", "output": "1500=received"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 7 గంటలు పని గంటకు 60 రూపాయలు", "output": "7=hours\n60=rate"}
+{"task": "extract", "lang": "kn", "text": "ನಿನ್ನೆ ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಏಳುನೂರ ರೂಪಾಯಿ", "output": "12=hours\n700=wage"}
+{"task": "extract", "lang": "en", "text": "got six hundred rupees wages today", "output": "600=received"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ ಮೂವತ್ ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "30=expense"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு கூலி ஏழுநூறு ரூபாய் கிடைச்சது", "output": "700=received"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 9 గంటలు పని 200 పీసులు పీసుకు 3 రూపాయలు 200 అడ్వాన్స్ తీసుకున్నాను", "output": "9=hours\n200=pieces\n3=rate\n200=advance"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 8 గంటలు పని గంటకు 70 రూపాయలు", "output": "8=hours\n70=wage"}
+{"task": "extract", "lang": "hi", "text": "आज सात सौ रुपये मजदूरी मिली", "output": "700=received"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 12 ଘଣ୍ଟା କାମ କଲି 120 ପିସ୍ 3 ଟଙ୍କା ଦର 200 ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "12=hours\n120=pieces\n3=rate\n200=advance"}
+{"task": "extract", "lang": "hi", "text": "बस में 250 रुपये खर्च हुए", "output": "250=expense"}
+{"task": "extract", "lang": "en", "text": "spent sixty rupees on bus ticket", "output": "60=expense"}
+{"task": "extract", "lang": "or", "text": "ଆଜି ଆଠ ଘଣ୍ଟା କାମ କଲି ଦୁଇ ଶହ ପଚାଶ ପିସ୍ ତିନି ଟଙ୍କା ଦର ତିନି ଶହ ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "8=hours\n250=pieces\n3=rate\n300=advance"}
+{"task": "extract", "lang": "kn", "text": "ನಿನ್ನೆ 10 ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 350 ರೂಪಾಯಿ", "output": "10=hours\n350=wage"}
+{"task": "extract", "lang": "en", "text": "yesterday worked 8 hours wage 500 rupees", "output": "8=hours\n500=wage"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ ଚାଳିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "40=expense"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 7 గంటలు పని 250 పీసులు పీసుకు 3 రూపాయలు 100 అడ్వాన్స్ తీసుకున్నాను", "output": "7=hours\n250=pieces\n3=rate\n100=advance"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு பன்னிரெண்டு மணி நேரம் வேலை இருநூறு பீஸ் பீஸுக்கு நாலு ரூபாய் நூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "12=hours\n200=pieces\n4=rate\n100=advance"}
+{"task": "extract", "lang": "hi", "text": "सब्जी पर 80 रुपये खर्च किए", "output": "80=expense"}
+{"task": "extract", "lang": "hi", "text": "सब्जी पर 20 रुपये खर्च किए", "output": "20=expense"}
+{"task": "extract", "lang": "kn", "text": "ತರಕಾರಿಗೆ 20 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "20=expense"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು 6 ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ 60 ರೂಪಾಯಿ", "output": "6=hours\n60=rate"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj ki dihadi 350 rupaye", "output": "350=received"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ 150 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "150=expense"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ 500 ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "output": "500=received"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ ଦୁଇ ଶହ ପଚାଶ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "250=expense"}
+{"task": "extract", "lang": "or", "text": "6 ଘଣ୍ଟା କାମ ଦର 80 ଟଙ୍କା", "output": "6=hours\n80=rate"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఏడు గంటలు పని గంటకు అరవయ్ రూపాయలు", "output": "7=hours\n60=rate"}
+{"task": "extract", "lang": "en", "text": "10 hours work rate 60 rupees", "output": "10=hours\n60=rate"}
+{"task": "extract", "lang": "te", "text": "కూరగాయలకు 40 రూపాయలు ఖర్చు అయింది", "output": "40=expense"}
+{"task": "extract", "lang": "hi", "text": "बस में दो सौ पचास रुपये खर्च हुए", "output": "250=expense"}
+{"task": "extract", "lang": "or", "text": "ବସ୍ ଭଡ଼ା 250 ଟଙ୍କା ଖର୍ଚ୍ଚ", "output": "250=expense"}
+{"task": "extract", "lang": "en", "text": "took two hundred rupees advance from the contractor", "output": "200=advance"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ 400 ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "400=received"}
+{"task": "extract", "lang": "kn", "text": "ನಿನ್ನೆ ಎಂಟು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಏಳುನೂರ ರೂಪಾಯಿ", "output": "8=hours\n700=wage"}
+{"task": "extract", "lang": "te", "text": "నిన్న 8 గంటలు పని చేశాను 800 కూలి", "output": "8=hours\n800=wage"}
+{"task": "extract", "lang": "en", "text": "spent 60 rupees on food", "output": "60=expense"}
+{"task": "extract", "lang": "or", "text": "ନଅ ଘଣ୍ଟା କାମ ଦର ଅଶୀ ଟଙ୍କା", "output": "9=hours\n80=rate"}
+{"task": "extract", "lang": "en", "text": "took 500 rupees advance from the contractor", "output": "500=advance"}
+{"task": "extract", "lang": "en", "text": "yesterday worked 9 hours wage 400 rupees", "output": "9=hours\n400=wage"}
+{"task": "extract", "lang": "hi-Latn", "text": "thekedar se 100 rupaye advance liya", "output": "100=advance"}
+{"task": "extract", "lang": "te", "text": "కూరగాయలకు రెండొందలు యాబై రూపాయలు ఖర్చు అయింది", "output": "250=expense"}
+{"task": "extract", "lang": "te", "text": "మందులకు ఇరవై రూపాయలు ఖర్చు అయింది", "output": "20=expense"}
+{"task": "extract", "lang": "hi-Latn", "text": "thekedar se 1000 rupaye advance liya", "output": "1000=advance"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு பத்து மணி நேரம் வேலை மணிக்கு எண்பது ரூபாய்", "output": "10=hours\n80=rate"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ 40 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "40=expense"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு ஒன்பது மணி நேரம் வேலை மணிக்கு ஐம்பது ரூபாய்", "output": "9=hours\n50=wage"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି ଆଠ ଘଣ୍ଟା କାମ କଲି ଚାରି ଶହ ଟଙ୍କା ମଜୁରୀ", "output": "8=hours\n400=wage"}
+{"task": "extract", "lang": "kn", "text": "ನಿನ್ನೆ ಹತ್ತು ಗಂಟೆ ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಮುನ್ನೂರೈವತ್ತು ರೂಪಾಯಿ", "output": "10=hours\n350=wage"}
+{"task": "extract", "lang": "en", "text": "6 hours work rate 70 rupees", "output": "6=hours\n70=rate"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 500 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "output": "500=received"}
+{"task": "extract", "lang": "te", "text": "కాంట్రాక్టర్ దగ్గర 100 రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "output": "100=advance"}
+{"task": "extract", "lang": "or", "text": "ଆଜି 400 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "output": "400=received"}
+{"task": "extract", "lang": "hi", "text": "कल 8 घंटे काम किया 800 रुपये मजदूरी", "output": "8=hours\n800=wage"}
+{"task": "extract", "lang": "en", "text": "spent thirty rupees on food", "output": "30=expense"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఆరు గంటలు పని గంటకు డెబ్బై రూపాయలు", "output": "6=hours\n70=rate"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఎనమిది గంటలు పని గంటకు డెబ్బై రూపాయలు", "output": "8=hours\n70=rate"}
+{"task": "extract", "lang": "kn", "text": "ಬಸ್ ಚಾರ್ಜ್ 250 ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "output": "250=expense"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு 7 மணி நேரம் வேலை மணிக்கு 50 ரூபாய்", "output": "7=hours\n50=rate"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj ki dihadi 700 rupaye", "output": "700=received"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಆರ್ ಗಂಟೆ ಕೆಲಸ ನೂರಿಪ್ಪತ್ತು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಐದು ರೂಪಾಯಿ ಐನೂರು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "6=hours\n120=pieces\n5=rate\n500=advance"}
+{"task": "extract", "lang": "te", "text": "బస్సు చార్జీ 40 రూపాయలు ఖర్చు", "output": "40=expense"}
+{"task": "extract", "lang": "ta", "text": "நேத்து 6 மணி நேரம் வேலை செஞ்சேன் 350 ரூபாய் கூலி", "output": "6=hours\n350=wage"}
+{"task": "extract", "lang": "or", "text": "ବସ୍ ଭଡ଼ା 30 ଟଙ୍କା ଖର୍ଚ୍ଚ", "output": "30=expense"}
+{"task": "extract", "lang": "ta", "text": "நேத்து ஆறு மணி நேரம் வேலை செஞ்சேன் முந்நூறு அம்பது ரூபாய் கூலி", "output": "6=hours\n350=wage"}
+{"task": "extract", "lang": "hi", "text": "कल 10 घंटे काम किया 600 रुपये मजदूरी", "output": "10=hours\n600=wage"}
+{"task": "extract", "lang": "hi", "text": "छः घंटे काम रेट पचास रुपये", "output": "6=hours\n50=rate"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿದೆ ಕೂಲಿ ಐನೂರ ರೂಪಾಯಿ ಇನ್ನೂ ಕೊಟ್ಟಿಲ್ಲ", "output": "500=wage"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ ನಾನೂರು ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "400=received"}
+{"task": "extract", "lang": "ta", "text": "பஸ்ஸுக்கு இருநூறு அம்பது ரூபாய் செலவு", "output": "250=expense"}
+{"task": "extract", "lang": "en", "text": "spent two hundred fifty rupees on bus ticket", "output": "250=expense"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఏడు గంటలు పని నూటిరవై పీసులు పీసుకు మూడు రూపాయలు ఐదొందలు అడ్వాన్స్ తీసుకున్నాను", "output": "7=hours\n120=pieces\n3=rate\n500=advance"}
+{"task": "extract", "lang": "hi", "text": "बस में साठ रुपये खर्च हुए", "output": "60=expense"}
+{"task": "extract", "lang": "kn", "text": "ಮೇಸ್ತ್ರಿ ಹತ್ರ 1000 ರೂಪಾಯಿ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "1000=advance"}
+{"task": "extract", "lang": "hi-Latn", "text": "aaj 6 ghante kaam kiya 250 piece 3 rupaye rate 1000 advance liya", "output": "6=hours\n250=pieces\n3=rate\n1000=advance"}
+{"task": "extract", "lang": "or", "text": "ବସ୍ ଭଡ଼ା ଦୁଇ ଶହ ପଚାଶ ଟଙ୍କା ଖର୍ଚ୍ଚ", "output": "250=expense"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు కూలి 350 రూపాయలు వచ్చింది", "output": "350=received"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಕೂಲಿ ಮುನ್ನೂರೈವತ್ತು ರೂಪಾಯಿ ಸಿಕ್ತು", "output": "350=received"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு நாப்பது ரூபாய் செலவு", "output": "40=expense"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு 10 மணி நேரம் வேலை 250 பீஸ் பீஸுக்கு 6 ரூபாய் 200 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "10=hours\n250=pieces\n6=rate\n200=advance"}
+{"task": "extract", "lang": "te", "text": "మందులకు నలభై రూపాయలు ఖర్చు అయింది", "output": "40=expense"}
+{"task": "extract", "lang": "hi", "text": "आज 8 घंटे काम किया 120 पीस 6 रुपये रेट 100 एडवांस लिया", "output": "8=hours\n120=pieces\n6=rate\n100=advance"}
+{"task": "extract", "lang": "en", "text": "took three hundred rupees advance from the contractor", "output": "300=advance"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு 60 ரூபாய் செலவு", "output": "60=expense"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு ஏழு மணி நேரம் வேலை எம்பது பீஸ் பீஸுக்கு மூணு ரூபாய் ஓராயிரம் ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "7=hours\n80=pieces\n3=rate\n1000=advance"}
+{"task": "extract", "lang": "or", "text": "ଆଜି ସାତ ଶହ ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "output": "700=received"}
+{"task": "extract", "lang": "hi", "text": "आज की दिहाड़ी एक हजार पांच सौ रुपये", "output": "1500=wage"}
+{"task": "extract", "lang": "en", "text": "spent 30 rupees on medicine", "output": "30=expense"}
+{"task": "extract", "lang": "te", "text": "కాంట్రాక్టర్ దగ్గర 500 రూపాయలు అడ్వాన్స్ తీసుకున్నాను", "output": "500=advance"}
+{"task": "extract", "lang": "te", "text": "నిన్న ఎనమిది గంటలు పని చేశాను ఎనిమిదొందలు కూలి", "output": "8=hours\n800=wage"}
+{"task": "extract", "lang": "ta", "text": "கான்ட்ராக்டர் கிட்ட நூறு ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "100=advance"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 9 గంటలు పని గంటకు 60 రూపాయలు", "output": "9=hours\n60=rate"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ 60 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "60=expense"}
+{"task": "extract", "lang": "en", "text": "got three hundred fifty rupees wages today", "output": "350=received"}
+{"task": "extract", "lang": "hi", "text": "आज 700 रुपये मजदूरी मिली", "output": "700=received"}
+{"task": "extract", "lang": "hi", "text": "8 घंटे काम रेट 60 रुपये", "output": "8=hours\n60=rate"}
+{"task": "extract", "lang": "hi", "text": "आज आठ सौ रुपये मजदूरी मिली", "output": "800=received"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಆರ್ ಗಂಟೆ ಕೆಲಸ ಒಂದೂವರೆನೂರು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಹತ್ತು ರೂಪಾಯಿ ಸಾವ್ರ ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "6=hours\n150=pieces\n10=rate\n1000=advance"}
+{"task": "extract", "lang": "hi", "text": "आज आठ घंटे काम किया दो सौ पीस आठ रुपये रेट पाँच सौ एडवांस लिया", "output": "8=hours\n200=pieces\n8=rate\n500=advance"}
+{"task": "extract", "lang": "te", "text": "మందులకు 40 రూపాయలు ఖర్చు అయింది", "output": "40=expense"}
+{"task": "extract", "lang": "ta", "text": "காய்கறி வாங்க முப்பத்தி ரூபாய் செலவாச்சு", "output": "30=expense"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಯೆಂಟು ಗಂಟೆ ಕೆಲಸ ಗಂಟೆಗೆ ಎಪ್ಪತ್ತು ರೂಪಾಯಿ", "output": "8=hours\n70=rate"}
+{"task": "extract", "lang": "te", "text": "నిన్న పండ్రెండు గంటలు పని చేశాను ఏడొందల కూలి", "output": "12=hours\n700=wage"}
+{"task": "extract", "lang": "kn", "text": "ಬಸ್ ಚಾರ್ಜ್ ಮೂವತ್ತು ರೂಪಾಯಿ ಕೊಟ್ಟೆ", "output": "30=expense"}
+{"task": "extract", "lang": "en", "text": "today I worked nine hours eighty pieces at eight rupees and took two hundred rupees advance", "output": "9=hours\n80=pieces\n8=rate\n200=advance"}
+{"task": "extract", "lang": "en", "text": "spent 60 rupees on bus ticket", "output": "60=expense"}
+{"task": "extract", "lang": "kn", "text": "ಇವತ್ತು ಹನ್ನೆರಡು ಗಂಟೆ ಕೆಲಸ ಒಂದೂವರೆನೂರು ಪೀಸ್ ಪೀಸ್‌ಗೆ ಮೂರ್ ರೂಪಾಯಿ ಮುನ್ನೂರು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "output": "12=hours\n150=pieces\n3=rate\n300=advance"}
+{"task": "extract", "lang": "te", "text": "కూరగాయలకు 150 రూపాయలు ఖర్చు అయింది", "output": "150=expense"}
+{"task": "extract", "lang": "en", "text": "today I worked ten hours one hundred twenty pieces at five rupees and took two hundred rupees advance", "output": "10=hours\n120=pieces\n5=rate\n200=advance"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு ஒன்பது மணி நேரம் வேலை மணிக்கு எண்பது ரூபாய்", "output": "9=hours\n80=rate"}
+{"task": "extract", "lang": "or", "text": "9 ଘଣ୍ଟା କାମ ଦର 80 ଟଙ୍କା", "output": "9=hours\n80=rate"}
+{"task": "extract", "lang": "en", "text": "spent 250 rupees on food", "output": "250=expense"}
+{"task": "extract", "lang": "hi-Latn", "text": "sabzi par 20 rupaye kharch", "output": "20=expense"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு 8 மணி நேரம் வேலை 150 பீஸ் பீஸுக்கு 10 ரூபாய் 1000 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "8=hours\n150=pieces\n10=rate\n1000=advance"}
+{"task": "extract", "lang": "en", "text": "spent one hundred fifty rupees on bus ticket", "output": "150=expense"}
+{"task": "extract", "lang": "hi", "text": "ठेकेदार से 500 रुपये एडवांस लिया", "output": "500=advance"}
+{"task": "extract", "lang": "hi", "text": "कल 6 घंटे काम किया 400 रुपये मजदूरी", "output": "6=hours\n400=wage"}
+{"task": "extract", "lang": "hi", "text": "दवा पर 250 रुपये खर्च किए", "output": "250=expense"}
+{"task": "extract", "lang": "en", "text": "got 800 rupees wages today", "output": "800=received"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు ఆరు గంటలు పని రెండొందలు యాబై పీసులు పీసుకు ఐదు రూపాయలు రెండొందలు అడ్వాన్స్ తీసుకున్నాను", "output": "6=hours\n250=pieces\n5=rate\n200=advance"}
+{"task": "extract", "lang": "or", "text": "ଆଜି ଏକ ହଜାର ପାଞ୍ଚ ଶହ ଟଙ୍କା ମଜୁରୀ ମିଳିଲା", "output": "1500=received"}
+{"task": "extract", "lang": "te", "text": "నిన్న ఆరు గంటలు పని చేశాను ఆరొందల కూలి", "output": "6=hours\n600=wage"}
+{"task": "extract", "lang": "en", "text": "spent 20 rupees on bus ticket", "output": "20=expense"}
+{"task": "extract", "lang": "or", "text": "ଠିକାଦାର ଠାରୁ ଗୋଟିଏ ହଜାର ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "1000=advance"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు 6 గంటలు పని గంటకు 70 రూపాయలు", "output": "6=hours\n70=wage"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ 20 ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "20=expense"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు తొమ్మిది గంటలు పని రెండొందల పీసులు పీసుకు మూడు రూపాయలు రెండొందల అడ్వాన్స్ తీసుకున్నాను", "output": "9=hours\n200=pieces\n3=rate\n200=advance"}
+{"task": "extract", "lang": "or", "text": "ଆଜି ସାତ ଘଣ୍ଟା କାମ କଲି ଏକ ଶହ କୋଡ଼ିଏ ପିସ୍ ଚାରି ଟଙ୍କା ଦର ଏକ ହଜାର ଟଙ୍କା ଆଡଭାନ୍ସ ନେଲି", "output": "7=hours\n120=pieces\n4=rate\n1000=advance"}
+{"task": "extract", "lang": "en", "text": "yesterday worked 6 hours wage 650 rupees", "output": "6=hours\n650=wage"}
+{"task": "extract", "lang": "ta", "text": "மருந்துக்கு 20 ரூபாய் செலவு", "output": "20=expense"}
+{"task": "extract", "lang": "kn", "text": "ಔಷಧಿಗೆ ಅರ್ವತ್ತು ರೂಪಾಯಿ ಖರ್ಚಾಯ್ತು", "output": "60=expense"}
+{"task": "extract", "lang": "ta", "text": "இன்னைக்கு 7 மணி நேரம் வேலை 80 பீஸ் பீஸுக்கு 3 ரூபாய் 1000 ரூபாய் அட்வான்ஸ் வாங்கினேன்", "output": "7=hours\n80=pieces\n3=rate\n1000=advance"}
+{"task": "extract", "lang": "or", "text": "ପରିବା ପାଇଁ ଚାଳିଶ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "40=expense"}
+{"task": "extract", "lang": "en", "text": "took 300 rupees advance from the contractor", "output": "300=advance"}
+{"task": "extract", "lang": "or", "text": "ଔଷଧ ପାଇଁ 250 ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି", "output": "250=expense"}
+{"task": "extract", "lang": "or", "text": "ଗତକାଲି ଦଶ ଘଣ୍ଟା କାମ କଲି ସାତ ଶହ ଟଙ୍କା ମଜୁରୀ", "output": "10=hours\n700=wage"}
+{"task": "extract", "lang": "te", "text": "ఈరోజు కూలి నాలుగొందల రూపాయలు వచ్చింది", "output": "400=wage"}
+{"task": "extract", "lang": "en", "text": "six hours work rate seventy rupees", "output": "6=hours\n70=rate"}
