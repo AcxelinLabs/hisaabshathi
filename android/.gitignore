@@ -8,5 +8,3 @@ captures/
 *.jks
 *.keystore
 
-# The fine-tuned model (~514 MB) is not kept in git; see tools/make_task.py.
-app/src/full/assets/*.task

@@ -73,11 +73,10 @@ speech.
 - The app asks it only when the rules are unsure or found nothing, and keeps its answer only
   if it labels exactly the numbers that were said, so it cannot override a confident rule
   result or add an amount.
-- Two builds: **full** (`./gradlew :app:assembleFullDebug`, ~600 MB) carries the model and
-  unpacks it on first launch; **lite** (`assembleLiteDebug`, ~90 MB) offers "Add model file
-  from phone" in Settings, and a download button once `HISAAB_MODEL_URL` in
-  `app/build.gradle.kts` points at a hosted copy. The model file is not kept in git; put it
-  in `app/src/full/assets/` before building full.
+- Hosted at https://huggingface.co/QubitMan/hisaabsaathi-model (Apache-2.0). The app
+  offers it during first-time setup and under Settings → Offline packs; downloads resume
+  if interrupted, and a file of the wrong size is never loaded. "Add model file from phone"
+  in Settings works without internet. The link is `HISAAB_MODEL_URL` in `app/build.gradle.kts`.
 - Not yet checked on a phone: MediaPipe loading this bundle, speed and memory on 3–4 GB
   devices.
 
@@ -93,11 +92,11 @@ family covering all six scripts (`app/src/main/res/font`).
 ```
 
 ```bash
-./gradlew :app:testLiteDebugUnitTest     # drives the real screens end to end; screenshots in app/build/screens
+./gradlew :app:testDebugUnitTest     # drives the real screens end to end; screenshots in app/build/screens
 ```
 
 ```bash
-./gradlew :app:assembleLiteDebug     # APKs in app/build/outputs/apk/lite/debug (use arm64-v8a for most phones)
+./gradlew :app:assembleDebug         # APKs in app/build/outputs/apk/debug (use arm64-v8a for most phones)
 ```
 
 Needs JDK 17+ and the Android SDK (platform 35). Set `sdk.dir` in `local.properties`.

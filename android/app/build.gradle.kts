@@ -13,29 +13,15 @@ android {
         applicationId = "com.acxelin.hisaabsaathi"
         minSdk = 29 // Android 10
         targetSdk = 35
-        versionCode = 4
-        versionName = "0.4.0"
-        // Where phones download the fine-tuned model from. Upload
-        // hisaabsaathi-qwen05-ft-q8.task (tools/make_task.py) somewhere public and set the URL
-        // here; while it is empty the app offers only "Add from phone".
-        buildConfigField("String", "HISAAB_MODEL_URL", "\"\"")
+        versionCode = 5
+        versionName = "0.5.0"
+        // Where phones download the fine-tuned model from (public, Apache-2.0).
+        buildConfigField(
+            "String", "HISAAB_MODEL_URL",
+            "\"https://huggingface.co/QubitMan/hisaabsaathi-model/resolve/main/hisaabsaathi-qwen05-ft-q8.task\"",
+        )
     }
 
-    // "lite": the model is downloaded or added from the phone later (smaller APK).
-    // "full": the fine-tuned model ships inside the APK and is unpacked on first launch.
-    // Put hisaabsaathi-qwen05-ft-q8.task in app/src/full/assets/ before building "full".
-    flavorDimensions += "model"
-    productFlavors {
-        create("lite") {
-            dimension = "model"
-            buildConfigField("Boolean", "BUNDLED_MODEL", "false")
-        }
-        create("full") {
-            dimension = "model"
-            versionNameSuffix = "-full"
-            buildConfigField("Boolean", "BUNDLED_MODEL", "true")
-        }
-    }
     androidResources { noCompress += "task" }
 
     buildTypes {

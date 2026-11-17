@@ -160,36 +160,6 @@ class PackManager(context: Context, private val scope: CoroutineScope) {
         }
     }
 
-    /** Unpacks a model that ships inside the APK ("full" build) into app storage. */
-    fun installBundled(context: Context, pack: Pack, assetName: String) {
-        if (isReady(pack) || jobs[pack.id]?.isActive == true) return
-        val f = pack.files.single()
-        set(pack, PackState.Downloading(0f))
-        jobs[pack.id] = scope.launch(Dispatchers.IO) {
-            val target = file(f); val part = File(target.path + ".part")
-            try {
-                target.parentFile?.mkdirs()
-                var copied = 0L
-                context.assets.open(assetName).use { input ->
-                    part.outputStream().use { out ->
-                        val buf = ByteArray(1 shl 16)
-                        while (true) {
-                            val n = input.read(buf)
-                            if (n < 0) break
-                            out.write(buf, 0, n); copied += n
-                            if (copied % (8L shl 20) < n) set(pack, PackState.Downloading(copied.toFloat() / f.bytes))
-                        }
-                    }
-                }
-                if (copied != f.bytes || !part.renameTo(target)) error("could not unpack model")
-                set(pack, PackState.Ready)
-            } catch (e: Exception) {
-                part.delete()
-                set(pack, PackState.Failed(e.message ?: e.javaClass.simpleName))
-            }
-        }
-    }
-
     fun delete(pack: Pack) {
         jobs.remove(pack.id)?.cancel()
         // Shared files (VAD, tokens) stay if another installed pack still needs them.

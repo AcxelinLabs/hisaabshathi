@@ -9,7 +9,6 @@ import com.acxelin.hisaabsaathi.data.LedgerDb
 import com.acxelin.hisaabsaathi.data.LedgerRepository
 import com.acxelin.hisaabsaathi.data.SettingsStore
 import com.acxelin.hisaabsaathi.export.Exporter
-import com.acxelin.hisaabsaathi.models.Catalog
 import com.acxelin.hisaabsaathi.models.PackManager
 import com.acxelin.hisaabsaathi.speech.OnDeviceStt
 import com.acxelin.hisaabsaathi.speech.Speaker
@@ -34,11 +33,6 @@ open class HisaabApp : Application() {
     val slm by lazy { SlmEngine(this, packs) }
     val scanner by lazy { Scanner(this) }
     val exporter by lazy { Exporter(this) }
-    override fun onCreate() {
-        super.onCreate()
-        if (BuildConfig.BUNDLED_MODEL) packs.installBundled(this, Catalog.slmHisaab, "hisaabsaathi-qwen05-ft-q8.task")
-    }
-
     val wagePack: WagePack by lazy {
         runCatching { Wages.parse(assets.open("wage_pack_in.json").bufferedReader().use { it.readText() }) }
             .getOrDefault(WagePack(0, ""))

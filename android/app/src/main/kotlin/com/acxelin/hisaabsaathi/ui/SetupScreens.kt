@@ -133,6 +133,9 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                     Text(s.voicePackTitle, fontSize = 22.sp)
                     Text(s.voicePackBody, fontSize = 17.sp)
                     PackRow(vm, vm.sttPack(), s, allowDelete = false)
+                    // Optional: the app works without it, using its built-in rules.
+                    Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
+                    PackRow(vm, vm.slmPack, s, allowDelete = false, canDownload = Catalog.canDownloadSlm)
                     HorizontalDivider()
                     Text(s.privacyTitle, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                     Text(s.privacyBody, fontSize = 15.sp)
