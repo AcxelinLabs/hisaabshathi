@@ -91,6 +91,18 @@ class Strings(val lang: Lang) {
     val micFailed get() = t("माइक चालू नहीं हुआ। माइक इस्तेमाल करने वाले दूसरे ऐप बंद करके फिर कोशिश करें।", "ମାଇକ୍ ଚାଲୁ ହେଲା ନାହିଁ। ମାଇକ୍ ବ୍ୟବହାର କରୁଥିବା ଅନ୍ୟ ଆପ୍ ବନ୍ଦ କରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।", "The microphone did not start. Close other apps using it and try again.")
     val voiceFailed get() = t("आवाज़ समझने में दिक्कत आई। फिर से कोशिश करें या लिखकर डालें।", "ସ୍ୱର ବୁଝିବାରେ ଅସୁବିଧା ହେଲା। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ କିମ୍ବା ଲେଖି ଦିଅନ୍ତୁ।", "Something went wrong understanding your voice. Try again, or type instead.")
     val lastProblemLabel get() = t("पिछली दिक्कत (जाँच के लिए)", "ପୂର୍ବ ଅସୁବିଧା (ଯାଞ୍ଚ ପାଇଁ)", "Last problem (for testing)")
+
+    // ---- correction log (settings)
+    val improveTitle get() = t("ऐप को बेहतर बनाने में मदद", "ଆପ୍‌କୁ ଉନ୍ନତ କରିବାରେ ସାହାଯ୍ୟ", "Help improve the app")
+    val improveBody get() = t(
+        "जब आप ऐप की समझी बात ठीक करते हैं, फोन सुनी हुई बात और आपका सुधार रख लेता है। ये इसी फोन में रहते हैं। आप चाहें तो ही इन्हें भेजें, ताकि ऐप आपके बोलने का तरीका सीखे।",
+        "ଆପଣ ଆପ୍ ବୁଝିଥିବା କଥା ଠିକ୍ କଲେ, ଫୋନ୍ ଶୁଣିଥିବା କଥା ଓ ଆପଣଙ୍କ ସଂଶୋଧନ ରଖେ। ଏଗୁଡ଼ିକ ଏହି ଫୋନ୍‌ରେ ରହେ। ଆପଣ ଚାହିଁଲେ ହିଁ ପଠାନ୍ତୁ, ଯାହାଦ୍ୱାରା ଆପ୍ ଆପଣଙ୍କ କହିବା ଶୈଳୀ ଶିଖିବ।",
+        "When you fix what the app understood, the phone keeps what it heard and your fix. They stay on this phone. Share them only if you want to, so the app learns how you speak.",
+    )
+    val keepCorrections get() = t("मेरे सुधार रखें", "ମୋ ସଂଶୋଧନ ରଖନ୍ତୁ", "Keep my corrections")
+    fun correctionsCount(n: Int) = tp("$n सुधार रखे हैं", "$n ଟି ସଂଶୋଧନ ରଖାଯାଇଛି", "$n corrections kept", "{0} corrections kept", n)
+    val shareCorrections get() = t("सुधार भेजें", "ସଂଶୋଧନ ପଠାନ୍ତୁ", "Share corrections")
+    val deleteCorrections get() = t("सुधार मिटाएं", "ସଂଶୋଧନ ଲିଭାନ୍ତୁ", "Delete corrections")
     fun voicePackDownloading(pct: Int): String = tp("आवाज़ पैक अभी डाउनलोड हो रहा है ($pct%)। थोड़ा रुकिए, या लिखकर डालें।", "ଭଏସ୍ ପ୍ୟାକ୍ ଏବେ ଡାଉନଲୋଡ୍ ହେଉଛି ($pct%)। ଟିକେ ଅପେକ୍ଷା କରନ୍ତୁ, କିମ୍ବା ଲେଖି ଦିଅନ୍ତୁ।", "The voice pack is still downloading ($pct%). Please wait, or type instead.", "The voice pack is still downloading ({0}%). Please wait, or type instead.", pct)
 
     // ---- confirm

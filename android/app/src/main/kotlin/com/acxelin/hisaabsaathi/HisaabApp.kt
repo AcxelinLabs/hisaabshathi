@@ -5,6 +5,7 @@ import com.acxelin.hisaabsaathi.ai.Scanner
 import com.acxelin.hisaabsaathi.ai.SlmEngine
 import com.acxelin.hisaabsaathi.core.WagePack
 import com.acxelin.hisaabsaathi.core.Wages
+import com.acxelin.hisaabsaathi.data.CorrectionLog
 import com.acxelin.hisaabsaathi.data.LedgerDb
 import com.acxelin.hisaabsaathi.data.LedgerRepository
 import com.acxelin.hisaabsaathi.data.SettingsStore
@@ -22,7 +23,9 @@ open class HisaabApp : Application() {
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     val settings by lazy { SettingsStore(this) }
-    val ledger by lazy { LedgerRepository(openDb().entries()) }
+    private val db by lazy { openDb() }
+    val ledger by lazy { LedgerRepository(db.entries()) }
+    val corrections by lazy { CorrectionLog(db.corrections()) }
 
     /** Encrypted on a phone; tests replace it with an in-memory database. */
     protected open fun openDb(): LedgerDb = LedgerDb.open(this)

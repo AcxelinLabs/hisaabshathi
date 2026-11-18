@@ -98,10 +98,14 @@ class Exporter(private val context: Context) {
         return File(dir, "hisaab-evidence-${System.currentTimeMillis()}.json").apply { writeText(root.toString(2)) }
     }
 
-    fun share(files: List<File>, chooserTitle: String) {
+    /** The worker's corrections, one JSON object per line (core/Corrections.kt). */
+    fun correctionsFile(jsonLines: String): File =
+        File(dir, "hisaab-corrections-${System.currentTimeMillis()}.jsonl").apply { writeText(jsonLines) }
+
+    fun share(files: List<File>, chooserTitle: String, mime: String = "application/pdf") {
         val uris = ArrayList(files.map { FileProvider.getUriForFile(context, "${context.packageName}.files", it) })
         val intent = if (uris.size == 1) {
-            Intent(Intent.ACTION_SEND).setType("application/pdf").putExtra(Intent.EXTRA_STREAM, uris[0])
+            Intent(Intent.ACTION_SEND).setType(mime).putExtra(Intent.EXTRA_STREAM, uris[0])
         } else {
             Intent(Intent.ACTION_SEND_MULTIPLE).setType("*/*").putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
         }

@@ -13,6 +13,8 @@ import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.Transaction
+import com.acxelin.hisaabsaathi.core.Correction
+import com.acxelin.hisaabsaathi.core.Corrections
 import com.acxelin.hisaabsaathi.core.Entry
 import com.acxelin.hisaabsaathi.core.EntryType
 import com.acxelin.hisaabsaathi.core.ExpenseCategory
@@ -103,16 +105,71 @@ abstract class EntryDao {
     }
 }
 
-@Database(entities = [EntryRow::class], version = 1, exportSchema = false)
+/** One fix the worker made to what the app understood (core/Corrections.kt). */
+@Entity(tableName = "corrections")
+data class CorrectionRow(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val createdAtMs: Long,
+    val lang: String,
+    val source: String,
+    val heard: String,
+    val understood: String,
+    val kept: String?,
+) {
+    fun toCorrection() = Correction(createdAtMs, lang, source, heard, understood, kept)
+
+    companion object {
+        fun from(c: Correction) = CorrectionRow(0, c.createdAtMs, c.lang, c.source, c.heard, c.understood, c.kept)
+    }
+}
+
+@Dao
+abstract class CorrectionDao {
+    @Query("SELECT COUNT(*) FROM corrections")
+    abstract fun count(): Flow<Int>
+
+    @Query("SELECT * FROM corrections ORDER BY id ASC")
+    abstract suspend fun all(): List<CorrectionRow>
+
+    @Insert
+    abstract suspend fun insert(row: CorrectionRow)
+
+    @Query("DELETE FROM corrections WHERE id NOT IN (SELECT id FROM corrections ORDER BY id DESC LIMIT :keep)")
+    abstract suspend fun trim(keep: Int)
+
+    @Query("DELETE FROM corrections")
+    abstract suspend fun clear()
+
+    @Transaction
+    open suspend fun add(c: Correction) {
+        insert(CorrectionRow.from(c))
+        trim(Corrections.LIMIT)
+    }
+}
+
+@Database(entities = [EntryRow::class, CorrectionRow::class], version = 2, exportSchema = false)
 abstract class LedgerDb : RoomDatabase() {
     abstract fun entries(): EntryDao
+    abstract fun corrections(): CorrectionDao
 
     companion object {
         fun open(context: Context): LedgerDb {
             System.loadLibrary("sqlcipher")
             return Room.databaseBuilder(context, LedgerDb::class.java, "ledger.db")
                 .openHelperFactory(SupportOpenHelperFactory(DbKey.get(context)))
+                .addMigrations(ADD_CORRECTIONS)
                 .build()
+        }
+
+        /** 0.6.2 adds the correction log; existing records are untouched. */
+        val ADD_CORRECTIONS = object : androidx.room.migration.Migration(1, 2) {
+            override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `corrections` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                        "`createdAtMs` INTEGER NOT NULL, `lang` TEXT NOT NULL, `source` TEXT NOT NULL, `heard` TEXT NOT NULL, " +
+                        "`understood` TEXT NOT NULL, `kept` TEXT)",
+                )
+            }
         }
     }
 }
@@ -166,4 +223,12 @@ class LedgerRepository(private val dao: EntryDao) {
     suspend fun delete(id: Long) = dao.deleteAndReseal(id)
     suspend fun eraseAll() = dao.clear()
     suspend fun oldestFirst(): List<Entry> = dao.allOldestFirst().map { it.toEntry() }
+}
+
+class CorrectionLog(private val dao: CorrectionDao) {
+    val count: Flow<Int> = dao.count()
+
+    suspend fun add(c: Correction) = dao.add(c)
+    suspend fun all(): List<Correction> = dao.all().map { it.toCorrection() }
+    suspend fun clear() = dao.clear()
 }

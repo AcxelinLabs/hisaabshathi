@@ -13,12 +13,12 @@ android {
         applicationId = "com.acxelin.hisaabsaathi"
         minSdk = 29 // Android 10
         targetSdk = 35
-        versionCode = 8
-        versionName = "0.6.1"
+        versionCode = 9
+        versionName = "0.6.2"
         // Where phones download the fine-tuned model from (public, Apache-2.0).
         buildConfigField(
             "String", "HISAAB_MODEL_URL",
-            "\"https://huggingface.co/QubitMan/hisaabsaathi-model/resolve/main/hisaabsaathi-qwen05-ft-q8.litertlm\"",
+            "\"https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/hisaabsaathi-qwen05-ft-q8.litertlm\"",
         )
     }
 

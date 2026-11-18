@@ -203,6 +203,22 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
                 HorizontalDivider()
             }
 
+            Text(s.improveTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(s.improveBody, fontSize = 15.sp)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(s.keepCorrections, Modifier.weight(1f), fontSize = 16.sp)
+                Switch(checked = settings.keepCorrections, onCheckedChange = { vm.setKeepCorrections(it) })
+            }
+            val kept by vm.correctionCount.collectAsStateWithLifecycle()
+            Text(s.correctionsCount(kept), fontSize = 15.sp, color = InkSoft)
+            if (kept > 0) {
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    OutlinedButton(onClick = { vm.shareCorrections() }, modifier = Modifier.height(52.dp)) { Text(s.shareCorrections) }
+                    OutlinedButton(onClick = { vm.deleteCorrections() }, modifier = Modifier.height(52.dp)) { Text(s.deleteCorrections, color = Red) }
+                }
+            }
+            HorizontalDivider()
+
             Text(s.privacyTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(s.privacyBody, fontSize = 15.sp)
             HorizontalDivider()

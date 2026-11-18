@@ -16,6 +16,8 @@ data class Settings(
     val onboarded: Boolean = false,
     val reminders: Boolean = true,
     val monthlyGoalPaise: Long = 0,
+    /** Keep a local log of the worker's fixes (core/Corrections.kt); shared only if they choose. */
+    val keepCorrections: Boolean = true,
 )
 
 private val Context.dataStore by preferencesDataStore("settings")
@@ -27,6 +29,7 @@ class SettingsStore(private val context: Context) {
     private val onboarded = booleanPreferencesKey("onboarded")
     private val reminders = booleanPreferencesKey("reminders")
     private val goal = longPreferencesKey("monthly_goal_paise")
+    private val keepCorrections = booleanPreferencesKey("keep_corrections")
 
     val flow: Flow<Settings> = context.dataStore.data.map {
         Settings(
@@ -35,6 +38,7 @@ class SettingsStore(private val context: Context) {
             onboarded = it[onboarded] ?: false,
             reminders = it[reminders] ?: true,
             monthlyGoalPaise = it[goal] ?: 0,
+            keepCorrections = it[keepCorrections] ?: true,
         )
     }
 
@@ -43,4 +47,5 @@ class SettingsStore(private val context: Context) {
     suspend fun setOnboarded() = context.dataStore.edit { it[onboarded] = true }
     suspend fun setReminders(v: Boolean) = context.dataStore.edit { it[reminders] = v }
     suspend fun setGoal(paise: Long) = context.dataStore.edit { it[goal] = paise }
+    suspend fun setKeepCorrections(v: Boolean) = context.dataStore.edit { it[keepCorrections] = v }
 }

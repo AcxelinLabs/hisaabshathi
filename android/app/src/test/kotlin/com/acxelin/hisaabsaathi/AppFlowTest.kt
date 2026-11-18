@@ -12,6 +12,9 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
+import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.printToString
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -125,6 +128,8 @@ class AppFlowTest {
         click("आगे")
         waitFor("क्या यह सही है?")
         rule.onNode(hasSetTextAction() and hasText("80")).assertExists()
+        // The worker fixes the amount: kept in the correction log (shown in Settings below).
+        rule.onNode(hasSetTextAction() and hasText("80")).performTextReplacement("90")
         click("सही है, सेव करें")
         waitFor("सेव हो गया")
         rule.onNodeWithContentDescription("हो गया").performClick()
@@ -165,7 +170,11 @@ class AppFlowTest {
         // --- settings, then the same home screen in Odia and English
         rule.onNodeWithContentDescription("सेटिंग").performClick()
         waitFor("ऑफ़लाइन पैक")
+        waitFor("1 सुधार रखे हैं")
         shot("11-settings")
+        rule.onNodeWithText("सुधार भेजें").performScrollTo()
+        shot("11b-settings-corrections")
+        rule.onRoot().performTouchInput { swipeDown() } // back to the top for the language buttons
         // --- a question and its answer in every language (home screen, typed; spoken on a phone)
         val questions = listOf(
             Lang.OR to "ଏହି ସପ୍ତାହରେ କେତେ ରୋଜଗାର ହେଲା",

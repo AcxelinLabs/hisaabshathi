@@ -36,7 +36,7 @@ sealed interface PackState {
 object Catalog {
     private const val HF = "https://huggingface.co"
     private const val STT = "$HF/parismitaglobalsolutions/indicconformer-sherpa-onnx/resolve/main"
-    private const val OWN = "$HF/QubitMan/hisaabsaathi-model/resolve/main"
+    private const val OWN = "$HF/AcxelinLabs/hisaabsaathi-model/resolve/main"
 
     // Shared by every speech pack; listed in each so any one pack is complete on its own.
     private val vad = PackFile("$HF/csukuangfj/vad/resolve/main/silero_vad_v5.onnx", "speech/silero_vad_v5.onnx", 2_313_101)

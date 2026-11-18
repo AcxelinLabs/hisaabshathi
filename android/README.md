@@ -129,7 +129,7 @@ speech.
 - The app asks it only when the rules are unsure or found nothing, and keeps its answer only
   if it labels exactly the numbers that were said, so it cannot override a confident rule
   result or add an amount.
-- Hosted at https://huggingface.co/QubitMan/hisaabsaathi-model (Apache-2.0). The app
+- Hosted at https://huggingface.co/AcxelinLabs/hisaabsaathi-model (Apache-2.0). The app
   offers it during first-time setup and under Settings → Offline packs; downloads resume
   if interrupted, and a file of the wrong size is never loaded. "Add model file from phone"
   in Settings works without internet. The link is `HISAAB_MODEL_URL` in `app/build.gradle.kts`.

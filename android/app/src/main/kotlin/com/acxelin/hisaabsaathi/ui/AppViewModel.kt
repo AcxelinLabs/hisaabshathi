@@ -6,6 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.acxelin.hisaabsaathi.HisaabApp
 import com.acxelin.hisaabsaathi.core.Confirm
+import com.acxelin.hisaabsaathi.core.Correction
+import com.acxelin.hisaabsaathi.core.Corrections
 import com.acxelin.hisaabsaathi.core.DraftEntry
 import com.acxelin.hisaabsaathi.core.Entry
 import com.acxelin.hisaabsaathi.core.HashChain
@@ -46,6 +48,8 @@ sealed interface Capture {
         val lowConfidence: Boolean,
         val source: String,
         val attachment: String? = null,
+        /** What the app first understood, before any fix by the worker (for the correction log). */
+        val understood: List<DraftEntry> = drafts,
     ) : Capture
 
     /** A spoken answer or a problem, also shown as text on the home screen. */
@@ -62,6 +66,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val packStates = app.packs.states
     val capture = MutableStateFlow<Capture>(Capture.Idle)
     val level = MutableStateFlow(0f)
+    val correctionCount: StateFlow<Int> = app.corrections.count.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
     val wagePack get() = app.wagePack
 
     private val lang: Lang get() = settings.value?.lang ?: Lang.HI
@@ -242,8 +247,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val now = System.currentTimeMillis()
         app.ledger.add(r.drafts.filter { it.amountPaise > 0 || it.hours != null || it.pieces != null }
             .map { Ledger.fromDraft(it, today, now, r.transcript, r.source, r.attachment) })
+        log(Corrections.corrected(now, lang, r.source, r.transcript, r.understood, r.drafts))
         say(strings.saved)
     }
+
+    /** Keeps the worker's fix on the phone (encrypted), unless they switched that off. */
+    private fun log(c: Correction?) {
+        if (c == null || settings.value?.keepCorrections == false) return
+        app.scope.launch { runCatching { app.corrections.add(c) }.onFailure { note("correction log: ${it.message}") } }
+    }
+
+    private fun rejected(r: Capture.Review) = log(Corrections.rejected(System.currentTimeMillis(), lang, r.source, r.transcript, r.understood))
 
     /** "Say yes or no": yes saves, no starts a new recording. */
     fun confirmByVoice() = viewModelScope.launch(guard) {
@@ -251,12 +265,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val heard = listenOnce() ?: return@launch
         when (Confirm.parse(heard)) {
             true -> { capture.value = r; confirmSave() }
-            false -> listenForEntry()
+            false -> { rejected(r); listenForEntry() }
             null -> review(r)
         }
     }
 
     fun retry() {
+        (capture.value as? Capture.Review)?.let(::rejected)
         val wasVoice = (capture.value as? Capture.Review)?.source == "voice"
         dismiss()
         if (wasVoice) listenForEntry()
@@ -280,7 +295,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     // ---- ledger, settings, export
 
     fun delete(id: Long) = viewModelScope.launch(guard) { app.ledger.delete(id) }
-    fun eraseAll() = viewModelScope.launch(guard) { app.ledger.eraseAll() }
+    fun eraseAll() = viewModelScope.launch(guard) { app.ledger.eraseAll(); app.corrections.clear() }
+
+    // ---- correction log
+
+    fun setKeepCorrections(on: Boolean) = viewModelScope.launch(guard) { app.settings.setKeepCorrections(on) }
+    fun deleteCorrections() = viewModelScope.launch(guard) { app.corrections.clear() }
+
+    fun shareCorrections() = viewModelScope.launch(guard) {
+        val list = app.corrections.all()
+        if (list.isEmpty()) return@launch
+        app.exporter.share(listOf(app.exporter.correctionsFile(Corrections.toJsonLines(list))), strings.share, mime = "application/json")
+    }
 
     fun setLang(l: Lang) = viewModelScope.launch(guard) { app.settings.setLang(l) }
     fun setRegion(r: String) = viewModelScope.launch(guard) { app.settings.setRegion(r) }
