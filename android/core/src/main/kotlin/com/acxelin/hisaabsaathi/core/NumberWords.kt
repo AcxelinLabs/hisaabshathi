@@ -82,20 +82,67 @@ object NumberWords {
 
     private val extraLangs = listOf(Te.numbers to Te.multipliers, Kn.numbers to Kn.multipliers, Ta.numbers to Ta.multipliers)
 
+    /**
+     * English numbers as each Indian-language speech model writes them ("ఫైవ్ హండ్రెడ్").
+     * Workers often say amounts in English. Spellings are those the app's models produced
+     * for Indian-accented English speech, plus close variants.
+     */
+    private val englishSaid = table(
+        // Hindi
+        "0=जीरो|ज़ीरो; 1=वन; 3=थ्री; 4=फोर|फ़ोर; 5=फाइव|फ़ाइव|फाईव; 6=सिक्स; 7=सेवन|सेवेन; 9=नाइन|नाईन; 10=टेन",
+        "11=इलेवन|इलेवेन; 12=ट्वेल्व; 13=थर्टीन; 14=फोर्टीन; 15=फिफ्टीन|फ़िफ़्टीन; 16=सिक्सटीन; 17=सेवनटीन|सेवेनटीन; 18=एटीन|ऐटीन; 19=नाइनटीन",
+        "20=ट्वेंटी|ट्वेन्टी; 30=थर्टी; 40=फोर्टी|फ़ोर्टी|फॉर्टी; 50=फिफ्टी|फ़िफ़्टी; 60=सिक्सटी; 70=सेवेंटी|सेवंटी|सेवनटी|सेवेन्टी; 80=एटी|ऐटी; 90=नाइंटी|नाइनटी",
+        // Odia
+        "0=ଜିରୋ; 1=ୱାନ|ୱନ; 3=ଥ୍ରୀ; 4=ଫୋର; 5=ଫାଇଭ; 6=ସିକ୍ସ; 7=ସେଭେନ|ସେଭନ; 9=ନାଇନ; 10=ଟେନ",
+        "11=ଇଲେଭେନ; 12=ଟ୍ୱେଲଭ; 13=ଥର୍ଟିନ; 14=ଫୋର୍ଟିନ; 15=ଫିଫ୍ଟିନ; 16=ସିକ୍ସଟିନ; 17=ସେଭେନଟିନ; 18=ଏଟିନ|ଏଇଟିନ; 19=ନାଇନଟିନ",
+        "20=ଟ୍ୱେଣ୍ଟି|ଟୁଏଣ୍ଟି; 30=ଥର୍ଟି; 40=ଫୋର୍ଟି|ଫର୍ଟି; 50=ଫିଫ୍ଟି; 60=ସିକ୍ସଟି; 70=ସେଭେଣ୍ଟି|ସେଭେନ୍ଟି; 80=ଏଇଟି|ଏଟି; 90=ନାଇଣ୍ଟି|ନାଇନଟି",
+        // Telugu
+        "0=జీరో; 1=వన్; 3=త్రీ|థ్రీ; 4=ఫోర్; 5=ఫైవ్; 6=సిక్స్; 7=సెవెన్|సెవన్; 9=నైన్; 10=టెన్",
+        "11=ఎలెవెన్|ఇలెవెన్; 12=ట్వెల్వ్; 13=థర్టీన్; 14=ఫోర్టీన్; 15=ఫిఫ్టీన్; 16=సిక్స్టీన్; 17=సెవెంటీన్|సెవెన్టీన్; 18=ఎయిటీన్|ఏటీన్; 19=నైంటీన్|నైన్టీన్",
+        "20=ట్వెంటీ|ట్వంటీ; 30=థర్టీ; 40=ఫోర్టీ|ఫార్టీ; 50=ఫిఫ్టీ; 60=సిక్స్టీ; 70=సెవెంటీ|సెవెన్టీ; 80=ఎయిటీ|ఏటీ; 90=నైంటీ|నైన్టీ",
+        // Kannada
+        "0=ಜೀರೋ|ಝೀರೋ; 1=ಒನ್|ವನ್|ವಾನ್; 3=ಥ್ರೀ|ತ್ರೀ; 4=ಫೋರ್; 5=ಫೈವ್|ಫೈಬ್; 6=ಸಿಕ್ಸ್; 7=ಸೆವೆನ್|ಸೆವನ್; 9=ನೈನ್; 10=ಟೆನ್",
+        "11=ಇಲೆವೆನ್|ಎಲೆವೆನ್; 12=ಟ್ವೆಲ್ವ್; 13=ಥರ್ಟೀನ್; 14=ಫೋರ್ಟೀನ್; 15=ಫಿಫ್ಟೀನ್; 16=ಸಿಕ್ಸ್ಟೀನ್; 17=ಸೆವೆಂಟೀನ್; 18=ಏಟೀನ್|ಎಯ್ಟೀನ್; 19=ನೈಂಟೀನ್",
+        "20=ಟ್ವೆಂಟಿ; 30=ಥರ್ಟಿ; 40=ಫೋರ್ಟಿ|ಫಾರ್ಟಿ; 50=ಫಿಫ್ಟಿ; 60=ಸಿಕ್ಸ್ಟಿ; 70=ಸೆವೆಂಟಿ; 80=ಏಟಿ|ಎಯ್ಟಿ; 90=ನೈಂಟಿ",
+        // Tamil
+        "0=ஜீரோ; 1=ஒன்|வன்; 3=த்ரீ|திரீ; 4=ஃபோர்; 5=ஃபைவ்|பைவ்; 6=சிக்ஸ்; 7=செவன்|செவென்; 9=நைன்; 10=டென்",
+        "11=இலெவன்|லெவன்; 12=ட்வெல்வ்; 13=தர்டீன்; 14=ஃபோர்டீன்; 15=ஃபிஃப்டீன்|ஃபிப்டீன்|பிஃப்டீன்; 16=சிக்ஸ்டீன்; 17=செவன்டீன்; 18=எயிட்டீன்|எய்டீன்; 19=நைன்டீன்",
+        "20=ட்வென்டி|ட்வெண்டி|டுவெண்டி; 30=தர்டி|தேர்டி|தீர்டி; 40=ஃபோர்டி|ஃபார்டி; 50=ஃபிஃப்டி|ஃபிப்டி|பிஃப்டி|பிப்டி; 60=சிக்ஸ்டி; 70=செவன்டி|செவண்டி; 80=எயிட்டி|எய்டி; 90=நைன்டி|நைண்டி",
+    )
+
+    /**
+     * "two" and "eight" in Indian scripts are also how the models write English "to" and
+     * "at" ("डाउन टू", "ऐट नाइन"), so they count only right before a hundred, a thousand or
+     * a rupee word.
+     */
+    private val englishSaidAmbiguous = table(
+        "2=टू|ଟୁ|టూ|ಟೂ|டூ",
+        "8=एट|ऐट|एइट|ଏଇଟ|ଏଟ|ఎయిట్|ఏట్|ಏಟ್|ಎಯ್ಟ್|எயிட்|எய்ட்",
+    )
+    private val currency: Set<String> = setOf(
+        "रुपये", "रुपए", "रुपया", "रूपये", "रुपय", "ଟଙ୍କା", "రూపాయలు", "రూపాయల", "రూపాయి", "రుపాయలు",
+        "ರೂಪಾಯಿ", "ರೂಪಾಯ", "ரூபாய்", "ரூபா", "rupees", "rupaye", "rs",
+    ).map { Text.normalize(it) }.toSet()
+
     private val units: Map<String, Double> = HashMap<String, Double>().apply {
-        putAll(english); putAll(roman)
+        putAll(english); putAll(roman); putAll(englishSaid)
         for ((numbers, _) in extraLangs) putAll(table(*numbers.toTypedArray()))
         putAll(odia); putAll(hindi)
     }
 
-    private val englishTens = english.filterValues { it >= 20 }.keys
+    /** Tens a following unit adds to: "twenty five", "ట్వెంటీ ఫైవ్". */
+    private val englishTens = english.filterValues { it >= 20 }.keys + englishSaid.filterValues { it >= 20 && it % 10 == 0.0 }.keys
 
     private val multipliers: Map<String, Double> = table(
-        "100=सौ|सो|ଶହ|ଶହେ|ଶ|sau|hundred",
-        "1000=हजार|ହଜାର|hazaar|hazar|hajar|thousand",
+        "100=सौ|सो|ଶହ|ଶହେ|ଶ|sau|hundred|हंड्रेड|हन्ड्रेड|ହଣ୍ଡ୍ରେଡ|హండ్రెడ్|హండ్రడ్|ಹಂಡ್ರೆಡ್|ಹಂಡ್ರಡ್|ஹண்ட்ரட்|ஹன்ட்ரட்|ஹண்ட்ரெட்|ஹன்ட்ரெட்",
+        "1000=हजार|ହଜାର|hazaar|hazar|hajar|thousand|थाउजेंड|थाउसेंड|थाउजंड|ଥାଉଜେଣ୍ଡ|ଥାଉଜାଣ୍ଡ|థౌజండ్|థౌజెండ్|తౌజండ్|ಥೌಸಂಡ್|ಥೌಸೆಂಡ್|ಥೌಜಂಡ್|தவுசண்ட்|தௌசண்ட்|தவுசன்ட்",
         "100000=लाख|ଲକ୍ଷ|lakh|lac",
         *extraLangs.map { it.second }.toTypedArray(),
     )
+
+    /** "and" inside an English number: "three hundred and seventy five". */
+    private val connectors: Set<String> = setOf("and", "एंड", "ऐंड", "ଆଣ୍ଡ", "ଏଣ୍ଡ", "అండ్", "ಆ್ಯಂಡ್", "ಆಂಡ್", "ಅಂಡ್", "அண்ட்", "அண்டு")
+        .map { Text.normalize(it) }.toSet()
 
     /** Words that add or subtract a fraction of the following count: "साढ़े तीन सौ" = 350. */
     private val fractionPrefix: Map<String, Double> = table(
@@ -117,9 +164,12 @@ object NumberWords {
         for (t in tokens) {
             if (t !in units && t !in multipliers) {
                 val cps = t.codePoints().toArray()
+                // A known word joined to the number after it, "ଆଜିବାର" (today + twelve), splits too.
+                val afterWord = t !in Keywords.known && t.any { it.code >= 128 }
                 val split = (cps.size - 2 downTo 2).firstOrNull { k ->
                     val head = String(cps, 0, k); val tail = String(cps, k, cps.size - k)
-                    head in units && (tail in multipliers || tail in units || glue(tail))
+                    (head in units && (tail in multipliers || tail in units || glue(tail))) ||
+                        (afterWord && head in Keywords.known && tail in units)
                 }
                 if (split != null) {
                     out += String(cps, 0, split); out += String(cps, split, cps.size - split)
@@ -146,6 +196,10 @@ object NumberWords {
         if (t == "do") {
             val next = tokens.getOrNull(i + 1) ?: return null
             if (next in multipliers || next in romanDoFollowers) return 2.0
+        }
+        englishSaidAmbiguous[t]?.let { v ->
+            val next = tokens.getOrNull(i + 1) ?: return null
+            if (next in multipliers || next in currency) return v
         }
         return null
     }
@@ -184,6 +238,10 @@ object NumberWords {
         var j = start
         while (j < tokens.size) {
             val t = tokens[j]
+            if (t in connectors && acc > 0 && cur == null && frac == null && j + 1 < tokens.size && unitValue(tokens, j + 1) != null) {
+                j++
+                continue
+            }
             val f = fractionPrefix[t]
             val m = multipliers[t]
             val digit = if (digits.matches(t)) t.toDouble() else null

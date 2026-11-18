@@ -16,12 +16,26 @@ object Text {
                 c == 'ଁ' -> sb.append('ଂ')
                 c == '₹' -> sb.append(" rs ")
                 c == '‌' || c == '‍' -> {}
+                // Speech models sometimes write two vowel signs in a row ("అయిదుొందల"):
+                // keep the second. A vowel sign right after a vowel letter ("ଆାଠ") is dropped.
+                isVowelSign(c) && sb.isNotEmpty() && isVowelSign(sb.last()) -> sb.setCharAt(sb.length - 1, shortVowel[c] ?: c)
+                isVowelSign(c) && sb.isNotEmpty() && isVowelLetter(sb.last()) -> {}
+                c in viramas && sb.isNotEmpty() && sb.last() == c -> {} // doubled virama ("செவன்்டி")
                 // Long and short vowel signs are often confused by speech recognition.
                 else -> sb.append(shortVowel[c] ?: c.lowercaseChar())
             }
         }
         return sb.toString().replace(finalVirama, "")
     }
+
+    /** Dependent vowel signs (matras) of the five Indian scripts the app reads. */
+    private fun isVowelSign(c: Char): Boolean =
+        c in 'ा'..'ौ' || c in 'ା'..'ୌ' || c in 'ా'..'ౌ' || c in 'ಾ'..'ೌ' || c in 'ா'..'ௌ'
+
+    private const val viramas = "्୍్್்"
+
+    private fun isVowelLetter(c: Char): Boolean =
+        c in 'अ'..'औ' || c in 'ଅ'..'ଔ' || c in 'అ'..'ఔ' || c in 'ಅ'..'ಔ' || c in 'அ'..'ஔ'
 
     private val shortVowel: Map<Char, Char> = mapOf(
         'ी' to 'ि', 'ू' to 'ु', 'ई' to 'इ', 'ऊ' to 'उ', // Devanagari
