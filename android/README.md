@@ -22,7 +22,7 @@ Design notes: `../docs/superpowers/specs/2026-11-16-android-mvp-design.md`.
 | Speech-to-text | AI4Bharat IndicConformer (Hindi, Odia, Telugu, Kannada, Tamil), int8, via sherpa-onnx | ~197 MB each | MIT |
 | Understanding (optional) | Qwen2.5-0.5B / 1.5B Instruct, 8-bit, via MediaPipe LLM Inference | 547 MB / 1.6 GB | Apache-2.0 |
 | OCR | ML Kit text recognition (Latin + Devanagari), bundled | in APK | Google ML Kit terms |
-| Text-to-speech | The phone's own TTS engine | — | — |
+| Text-to-speech | Indic Tiny TTS (Hindi, Odia, Telugu, Kannada, Tamil; Matcha + Vocos), run on ONNX Runtime 1.29 in its own `:voice` process; falls back to the phone's TTS for English or if the voice fails | ~91 MB each | CC-BY-4.0 (voices), MIT (Vocos) |
 
 How an utterance is understood (`core/Understand.kt`), in order:
 
@@ -36,6 +36,30 @@ The language model does not write entries. The app finds the numbers that were s
 model only labels each one (hours, pieces, rate, wage, advance, expense…). An answer that
 does not label exactly the spoken numbers is thrown away (`core/Slm.kt`). All arithmetic is
 plain code.
+
+## Speech model benchmarks (18 Nov 2026, on a PC, not a phone)
+
+Speech-to-text on 40 real FLEURS recordings per language (word / character error rate):
+
+| Language | IndicConformer 120M (in the app) | IndicConformer 600M |
+|---|---|---|
+| Hindi | 12.9% / 6.3% | 14.7% / 7.2% |
+| Odia | 20.7% / 6.5% | 29.4% / 13.8% |
+| Telugu | 26.3% / 11.1% | 27.9% / 11.6% |
+| Kannada | 22.5% / 8.8% | 22.5% / 9.2% |
+| Tamil | 24.1% / 9.3% | 27.5% / 10.0% |
+| English (NeMo) | 12.1% / 6.8% | — |
+
+The larger model was not better, so the app keeps the smaller one. Fine-tuning speech
+recognition for workers' own speech needs real, consented recordings and a GPU; training on
+synthetic voices risks making real speech worse.
+
+Voices: every sentence was spoken and then transcribed back by the recogniser (character
+error rate, female / male voice; speed is seconds of compute per second of audio, 4 threads):
+Hindi 4.2% / 5.6%, Odia 5.2% / 8.4%, Telugu 2.8% / 2.2%, Kannada 1.2% / 0%, Tamil 2.0% / 2.0%;
+speed 0.07–0.10. The Kotlin player matches the Python reference to 1.9e-7 RMS
+(`core/TinyTts.kt`, `tools/tts/`). Numbers are spelled out in each language first
+(`core/NumberSpeller.kt`).
 
 ## Test corpus
 
@@ -105,7 +129,8 @@ Needs JDK 17+ and the Android SDK (platform 35). Set `sdk.dir` in `local.propert
 
 This was built without an emulator. Unit and screen tests pass and the speech models were
 checked on Linux, but microphone capture, model speed and memory on 3–4 GB phones, the
-language model, camera/OCR, notifications and text-to-speech voices need testing on devices.
+language model, camera/OCR, notifications and the downloadable voices (their separate
+process and runtime) need testing on devices.
 
 ## Known gaps
 
@@ -115,6 +140,9 @@ language model, camera/OCR, notifications and text-to-speech voices need testing
   summaries of the notifications. Karnataka, Tamil Nadu, Andhra Pradesh, Kerala, Maharashtra,
   Gujarat and West Bengal have no confirmed figure yet and fall back to the central rate.
   Check every figure against the gazette notification before the pilot.
-- No open-licence Odia text-to-speech voice was found; Odia readback depends on the phone
-  having an Odia voice. No Odia-script OCR.
+- No Odia-script OCR.
+- The APK carries two ONNX Runtime builds (the speech engine's 1.28.2 and 1.29 for the voices,
+  renamed `libortvoice.so`), about 32 MB extra. The speech engine's build lacks the `Mish`
+  operation the voices need.
+- ML Kit's Google data transport may send anonymous usage metrics; not yet switched off.
 - Release build is signed with the debug key. No Play Store listing yet.
