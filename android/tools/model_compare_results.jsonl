@@ -1,0 +1,1 @@
+{"tag": "qwen3_06", "model": "Qwen/Qwen3-0.6B", "train_min": 62, "corpus_right": 140, "corpus_n": 140, "question_model_alone_right": 81, "question_n": 167, "median_s": 1.01}

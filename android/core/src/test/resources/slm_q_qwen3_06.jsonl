@@ -1,0 +1,167 @@
+{"text": "आज का कमाई बताना", "output": "none"}
+{"text": "इस हफ्ते का कमाई बताना", "output": "period=week\ntopic=all"}
+{"text": "इस महीने का कमाई बताना", "output": "period=month\ntopic=earned"}
+{"text": "इस साल का कमाई बताना", "output": "period=year\ntopic=all"}
+{"text": "आज काम से हाथ में कितना पैसा आया", "output": "period=today\ntopic=earned"}
+{"text": "इस हफ्ते काम से हाथ में कितना पैसा आया", "output": "period=week\ntopic=earned"}
+{"text": "इस महीने काम से हाथ में कितना पैसा आया", "output": "period=month\ntopic=earned"}
+{"text": "इस साल काम से हाथ में कितना पैसा आया", "output": "period=year\ntopic=earned"}
+{"text": "आज मालिक से उधार कितना उठाया", "output": "period=today\ntopic=advance"}
+{"text": "इस हफ्ते मालिक से उधार कितना उठाया", "output": "period=week\ntopic=advance"}
+{"text": "इस महीने मालिक से उधार कितना उठाया", "output": "period=month\ntopic=advance"}
+{"text": "इस साल मालिक से उधार कितना उठाया", "output": "period=year\ntopic=advance"}
+{"text": "आज पैसे कहाँ कहाँ लगे", "output": "none"}
+{"text": "इस हफ्ते पैसे कहाँ कहाँ लगे", "output": "period=week\ntopic=advance"}
+{"text": "इस महीने पैसे कहाँ कहाँ लगे", "output": "period=month\ntopic=advance"}
+{"text": "इस साल पैसे कहाँ कहाँ लगे", "output": "period=year\ntopic=advance"}
+{"text": "ठेकेदार से अभी कितना लेना है", "output": "none"}
+{"text": "क्या आज का पूरी मजदूरी मिल गई", "output": "period=today\ntopic=all"}
+{"text": "क्या इस हफ्ते का पूरी मजदूरी मिल गई", "output": "period=week\ntopic=all"}
+{"text": "क्या इस महीने का पूरी मजदूरी मिल गई", "output": "period=month\ntopic=all"}
+{"text": "क्या इस साल का पूरी मजदूरी मिल गई", "output": "period=year\ntopic=all"}
+{"text": "आज का सारा लेखा जोखा", "output": "period=today\ntopic=all"}
+{"text": "इस हफ्ते का सारा लेखा जोखा", "output": "period=week\ntopic=all"}
+{"text": "इस महीने का सारा लेखा जोखा", "output": "period=month\ntopic=all"}
+{"text": "इस साल का सारा लेखा जोखा", "output": "period=year\ntopic=all"}
+{"text": "बस कितने बजे आएगी", "output": "none"}
+{"text": "मेरे बेटे का स्कूल कब खुलेगा", "output": "none"}
+{"text": "पानी कितना गरम है", "output": "none"}
+{"text": "aaj ka kamai batao na", "output": "none"}
+{"text": "is hafte ka kamai batao na", "output": "period=week\ntopic=earned"}
+{"text": "is mahine ka kamai batao na", "output": "none"}
+{"text": "is saal ka kamai batao na", "output": "none"}
+{"text": "aaj udhaar kitna uthaya", "output": "none"}
+{"text": "is hafte udhaar kitna uthaya", "output": "period=week\ntopic=due"}
+{"text": "is mahine udhaar kitna uthaya", "output": "none"}
+{"text": "is saal udhaar kitna uthaya", "output": "none"}
+{"text": "aaj paise kahan gaye", "output": "none"}
+{"text": "is hafte paise kahan gaye", "output": "period=week\ntopic=expense"}
+{"text": "is mahine paise kahan gaye", "output": "none"}
+{"text": "is saal paise kahan gaye", "output": "none"}
+{"text": "seth se abhi kitna lena hai", "output": "none"}
+{"text": "aaj ka pura lekha jokha", "output": "none"}
+{"text": "is hafte ka pura lekha jokha", "output": "period=week\ntopic=all"}
+{"text": "is mahine ka pura lekha jokha", "output": "period=month\ntopic=all"}
+{"text": "is saal ka pura lekha jokha", "output": "period=month\ntopic=all"}
+{"text": "bus kitne baje aayegi", "output": "none"}
+{"text": "school kab khulega", "output": "none"}
+{"text": "today what was my income", "output": "period=today\ntopic=earned"}
+{"text": "this week what was my income", "output": "period=week\ntopic=earned"}
+{"text": "this month what was my income", "output": "period=month\ntopic=earned"}
+{"text": "this year what was my income", "output": "period=year\ntopic=earned"}
+{"text": "money taken in advance today", "output": "period=today\ntopic=advance"}
+{"text": "money taken in advance this week", "output": "period=week\ntopic=advance"}
+{"text": "money taken in advance this month", "output": "period=month\ntopic=advance"}
+{"text": "money taken in advance this year", "output": "period=year\ntopic=advance"}
+{"text": "where did my money go today", "output": "period=today\ntopic=expense"}
+{"text": "where did my money go this week", "output": "period=week\ntopic=expense"}
+{"text": "where did my money go this month", "output": "period=month\ntopic=expense"}
+{"text": "where did my money go this year", "output": "period=year\ntopic=expense"}
+{"text": "does the boss still owe me anything", "output": "none"}
+{"text": "did I get all my wages today", "output": "period=today\ntopic=earned"}
+{"text": "did I get all my wages this week", "output": "period=week\ntopic=all"}
+{"text": "did I get all my wages this month", "output": "period=month\ntopic=all"}
+{"text": "did I get all my wages this year", "output": "period=year\ntopic=all"}
+{"text": "full picture for today please", "output": "period=today\ntopic=all"}
+{"text": "full picture for this week please", "output": "period=week\ntopic=all"}
+{"text": "full picture for this month please", "output": "period=month\ntopic=all"}
+{"text": "full picture for this year please", "output": "period=year\ntopic=all"}
+{"text": "when does the bus come", "output": "none"}
+{"text": "how hot is the water", "output": "none"}
+{"text": "what time is it", "output": "none"}
+{"text": "ଆଜି କାମରୁ କେତେ ପଇସା ଆସିଲା", "output": "period=today\ntopic=earned"}
+{"text": "ଏହି ସପ୍ତାହରେ କାମରୁ କେତେ ପଇସା ଆସିଲା", "output": "period=week\ntopic=earned"}
+{"text": "ଏହି ମାସରେ କାମରୁ କେତେ ପଇସା ଆସିଲା", "output": "period=month\ntopic=earned"}
+{"text": "ଏହି ବର୍ଷରେ କାମରୁ କେତେ ପଇସା ଆସିଲା", "output": "period=year\ntopic=earned"}
+{"text": "ଆଜି ଧାର କେତେ ଉଠାଇଲି", "output": "none"}
+{"text": "ଏହି ସପ୍ତାହରେ ଧାର କେତେ ଉଠାଇଲି", "output": "period=week\ntopic=earned"}
+{"text": "ଏହି ମାସରେ ଧାର କେତେ ଉଠାଇଲି", "output": "period=month\ntopic=due"}
+{"text": "ଏହି ବର୍ଷରେ ଧାର କେତେ ଉଠାଇଲି", "output": "period=year\ntopic=earned"}
+{"text": "ଆଜି ପଇସା କେଉଁଠି ଗଲା", "output": "none"}
+{"text": "ଏହି ସପ୍ତାହରେ ପଇସା କେଉଁଠି ଗଲା", "output": "none"}
+{"text": "ଏହି ମାସରେ ପଇସା କେଉଁଠି ଗଲା", "output": "period=month\ntopic=due"}
+{"text": "ଏହି ବର୍ଷରେ ପଇସା କେଉଁଠି ଗଲା", "output": "none"}
+{"text": "ଠିକାଦାରଙ୍କଠୁ ଆଉ କେତେ ପାଇବାକୁ ଅଛି", "output": "none"}
+{"text": "ଆଜି ମୋ ପୁରା ମଜୁରି ମିଳିଗଲା କି", "output": "period=today\ntopic=earned"}
+{"text": "ଏହି ସପ୍ତାହରେ ମୋ ପୁରା ମଜୁରି ମିଳିଗଲା କି", "output": "period=week\ntopic=earned"}
+{"text": "ଏହି ମାସରେ ମୋ ପୁରା ମଜୁରି ମିଳିଗଲା କି", "output": "period=month\ntopic=earned"}
+{"text": "ଏହି ବର୍ଷରେ ମୋ ପୁରା ମଜୁରି ମିଳିଗଲା କି", "output": "period=year\ntopic=earned"}
+{"text": "ଆଜିର ପୁରା ଲେଖାଜୋଖା", "output": "none"}
+{"text": "ଏହି ସପ୍ତାହର ପୁରା ଲେଖାଜୋଖା", "output": "none"}
+{"text": "ଏହି ମାସର ପୁରା ଲେଖାଜୋଖା", "output": "period=month\ntopic=expense"}
+{"text": "ଏହି ବର୍ଷର ପୁରା ଲେଖାଜୋଖା", "output": "period=year\ntopic=all"}
+{"text": "ବସ୍ କେତେବେଳେ ଆସିବ", "output": "none"}
+{"text": "ସ୍କୁଲ୍ କେବେ ଖୋଲିବ", "output": "none"}
+{"text": "ପାଣି କେତେ ଗରମ", "output": "none"}
+{"text": "ఈరోజు పని చేసి ఎంత డబ్బు వచ్చింది", "output": "period=today\ntopic=advance"}
+{"text": "ఈ వారం పని చేసి ఎంత డబ్బు వచ్చింది", "output": "period=week\ntopic=advance"}
+{"text": "ఈ నెల పని చేసి ఎంత డబ్బు వచ్చింది", "output": "period=month\ntopic=advance"}
+{"text": "ఈ సంవత్సరం పని చేసి ఎంత డబ్బు వచ్చింది", "output": "period=year\ntopic=advance"}
+{"text": "ఈరోజు అప్పు ఎంత తీసుకున్నాను", "output": "period=today\ntopic=advance"}
+{"text": "ఈ వారం అప్పు ఎంత తీసుకున్నాను", "output": "period=week\ntopic=advance"}
+{"text": "ఈ నెల అప్పు ఎంత తీసుకున్నాను", "output": "none"}
+{"text": "ఈ సంవత్సరం అప్పు ఎంత తీసుకున్నాను", "output": "period=year\ntopic=advance"}
+{"text": "ఈరోజు డబ్బులు ఎక్కడ పోయాయి", "output": "period=today\ntopic=due"}
+{"text": "ఈ వారం డబ్బులు ఎక్కడ పోయాయి", "output": "period=week\ntopic=due"}
+{"text": "ఈ నెల డబ్బులు ఎక్కడ పోయాయి", "output": "none"}
+{"text": "ఈ సంవత్సరం డబ్బులు ఎక్కడ పోయాయి", "output": "period=year\ntopic=expense"}
+{"text": "మేస్త్రి నుండి ఇంకా ఎంత రావాలి", "output": "none"}
+{"text": "ఈరోజు నా పూర్తి కూలి వచ్చిందా", "output": "period=today\ntopic=all"}
+{"text": "ఈ వారం నా పూర్తి కూలి వచ్చిందా", "output": "period=week\ntopic=all"}
+{"text": "ఈ నెల నా పూర్తి కూలి వచ్చిందా", "output": "period=month\ntopic=all"}
+{"text": "ఈ సంవత్సరం నా పూర్తి కూలి వచ్చిందా", "output": "period=year\ntopic=all"}
+{"text": "ఈరోజు పూర్తి వివరాలు", "output": "period=today\ntopic=all"}
+{"text": "ఈ వారం పూర్తి వివరాలు", "output": "period=week\ntopic=all"}
+{"text": "ఈ నెల పూర్తి వివరాలు", "output": "period=month\ntopic=all"}
+{"text": "ఈ సంవత్సరం పూర్తి వివరాలు", "output": "period=year\ntopic=all"}
+{"text": "బస్సు ఎప్పుడు వస్తుంది", "output": "none"}
+{"text": "స్కూల్ ఎప్పుడు తెరుస్తారు", "output": "none"}
+{"text": "నీళ్ళు ఎంత వేడిగా ఉన్నాయి", "output": "none"}
+{"text": "ಇವತ್ತು ಕೆಲಸದಿಂದ ಎಷ್ಟು ದುಡ್ಡು ಬಂತು", "output": "none"}
+{"text": "ಈ ವಾರ ಕೆಲಸದಿಂದ ಎಷ್ಟು ದುಡ್ಡು ಬಂತು", "output": "period=week\ntopic=earned"}
+{"text": "ಈ ತಿಂಗಳು ಕೆಲಸದಿಂದ ಎಷ್ಟು ದುಡ್ಡು ಬಂತು", "output": "none"}
+{"text": "ಈ ವರ್ಷ ಕೆಲಸದಿಂದ ಎಷ್ಟು ದುಡ್ಡು ಬಂತು", "output": "period=year\ntopic=earned"}
+{"text": "ಇವತ್ತು ಸಾಲ ಎಷ್ಟು ತಗೊಂಡೆ", "output": "period=month\ntopic=advance"}
+{"text": "ಈ ವಾರ ಸಾಲ ಎಷ್ಟು ತಗೊಂಡೆ", "output": "period=week\ntopic=advance"}
+{"text": "ಈ ತಿಂಗಳು ಸಾಲ ಎಷ್ಟು ತಗೊಂಡೆ", "output": "period=month\ntopic=advance"}
+{"text": "ಈ ವರ್ಷ ಸಾಲ ಎಷ್ಟು ತಗೊಂಡೆ", "output": "period=year\ntopic=advance"}
+{"text": "ಇವತ್ತು ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "output": "none"}
+{"text": "ಈ ವಾರ ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "output": "none"}
+{"text": "ಈ ತಿಂಗಳು ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "output": "none"}
+{"text": "ಈ ವರ್ಷ ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "output": "period=year\ntopic=all"}
+{"text": "ಮೇಸ್ತ್ರಿಯಿಂದ ಇನ್ನೂ ಎಷ್ಟು ಬರಬೇಕು", "output": "none"}
+{"text": "ಇವತ್ತು ನನ್ನ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "output": "none"}
+{"text": "ಈ ವಾರ ನನ್ನ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "output": "period=week\ntopic=all"}
+{"text": "ಈ ತಿಂಗಳು ನನ್ನ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "output": "none"}
+{"text": "ಈ ವರ್ಷ ನನ್ನ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "output": "period=year\ntopic=all"}
+{"text": "ಇವತ್ತಿನ ಎಲ್ಲಾ ವಿವರ", "output": "period=month\ntopic=all"}
+{"text": "ಈ ವಾರದ ಎಲ್ಲಾ ವಿವರ", "output": "period=week\ntopic=all"}
+{"text": "ಈ ತಿಂಗಳ ಎಲ್ಲಾ ವಿವರ", "output": "period=month\ntopic=all"}
+{"text": "ಈ ವರ್ಷದ ಎಲ್ಲಾ ವಿವರ", "output": "period=year\ntopic=all"}
+{"text": "ಬಸ್ ಯಾವಾಗ ಬರುತ್ತೆ", "output": "none"}
+{"text": "ಶಾಲೆ ಯಾವಾಗ ಶುರು", "output": "none"}
+{"text": "ನೀರು ಎಷ್ಟು ಬಿಸಿ ಇದೆ", "output": "none"}
+{"text": "இன்னைக்கு வேலை செஞ்சு எவ்வளவு காசு வந்தது", "output": "none"}
+{"text": "இந்த வாரம் வேலை செஞ்சு எவ்வளவு காசு வந்தது", "output": "period=week\ntopic=due"}
+{"text": "இந்த மாசம் வேலை செஞ்சு எவ்வளவு காசு வந்தது", "output": "period=month\ntopic=due"}
+{"text": "இந்த வருஷம் வேலை செஞ்சு எவ்வளவு காசு வந்தது", "output": "period=year\ntopic=due"}
+{"text": "இன்னைக்கு கடன் எவ்வளவு வாங்கினேன்", "output": "period=month\ntopic=advance"}
+{"text": "இந்த வாரம் கடன் எவ்வளவு வாங்கினேன்", "output": "period=week\ntopic=advance"}
+{"text": "இந்த மாசம் கடன் எவ்வளவு வாங்கினேன்", "output": "period=month\ntopic=advance"}
+{"text": "இந்த வருஷம் கடன் எவ்வளவு வாங்கினேன்", "output": "period=year\ntopic=advance"}
+{"text": "இன்னைக்கு காசு எங்க போச்சு", "output": "none"}
+{"text": "இந்த வாரம் காசு எங்க போச்சு", "output": "none"}
+{"text": "இந்த மாசம் காசு எங்க போச்சு", "output": "period=month\ntopic=expense"}
+{"text": "இந்த வருஷம் காசு எங்க போச்சு", "output": "none"}
+{"text": "மேஸ்திரிகிட்ட இருந்து இன்னும் எவ்வளவு வரணும்", "output": "none"}
+{"text": "இன்னைக்கு என் முழு கூலி கிடைச்சுதா", "output": "period=month\ntopic=all"}
+{"text": "இந்த வாரம் என் முழு கூலி கிடைச்சுதா", "output": "period=week\ntopic=all"}
+{"text": "இந்த மாசம் என் முழு கூலி கிடைச்சுதா", "output": "period=month\ntopic=all"}
+{"text": "இந்த வருஷம் என் முழு கூலி கிடைச்சுதா", "output": "period=year\ntopic=all"}
+{"text": "இன்னைக்கு எல்லா விவரமும்", "output": "period=month\ntopic=all"}
+{"text": "இந்த வார எல்லா விவரமும்", "output": "period=week\ntopic=all"}
+{"text": "இந்த மாச எல்லா விவரமும்", "output": "period=month\ntopic=all"}
+{"text": "இந்த வருஷ எல்லா விவரமும்", "output": "period=year\ntopic=all"}
+{"text": "பஸ் எப்போ வரும்", "output": "none"}
+{"text": "ஸ்கூல் எப்போ திறக்கும்", "output": "none"}
+{"text": "தண்ணி எவ்வளவு சூடா இருக்கு", "output": "none"}
