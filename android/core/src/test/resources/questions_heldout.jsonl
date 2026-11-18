@@ -1,0 +1,167 @@
+{"lang": "hi", "text": "आज का कमाई बताना", "expect": "DAY EARNED"}
+{"lang": "hi", "text": "इस हफ्ते का कमाई बताना", "expect": "WEEK EARNED"}
+{"lang": "hi", "text": "इस महीने का कमाई बताना", "expect": "MONTH EARNED"}
+{"lang": "hi", "text": "इस साल का कमाई बताना", "expect": "YEAR EARNED"}
+{"lang": "hi", "text": "आज काम से हाथ में कितना पैसा आया", "expect": "DAY EARNED"}
+{"lang": "hi", "text": "इस हफ्ते काम से हाथ में कितना पैसा आया", "expect": "WEEK EARNED"}
+{"lang": "hi", "text": "इस महीने काम से हाथ में कितना पैसा आया", "expect": "MONTH EARNED"}
+{"lang": "hi", "text": "इस साल काम से हाथ में कितना पैसा आया", "expect": "YEAR EARNED"}
+{"lang": "hi", "text": "आज मालिक से उधार कितना उठाया", "expect": "DAY ADVANCE"}
+{"lang": "hi", "text": "इस हफ्ते मालिक से उधार कितना उठाया", "expect": "WEEK ADVANCE"}
+{"lang": "hi", "text": "इस महीने मालिक से उधार कितना उठाया", "expect": "MONTH ADVANCE"}
+{"lang": "hi", "text": "इस साल मालिक से उधार कितना उठाया", "expect": "YEAR ADVANCE"}
+{"lang": "hi", "text": "आज पैसे कहाँ कहाँ लगे", "expect": "DAY EXPENSE"}
+{"lang": "hi", "text": "इस हफ्ते पैसे कहाँ कहाँ लगे", "expect": "WEEK EXPENSE"}
+{"lang": "hi", "text": "इस महीने पैसे कहाँ कहाँ लगे", "expect": "MONTH EXPENSE"}
+{"lang": "hi", "text": "इस साल पैसे कहाँ कहाँ लगे", "expect": "YEAR EXPENSE"}
+{"lang": "hi", "text": "ठेकेदार से अभी कितना लेना है", "expect": "WEEK DUE"}
+{"lang": "hi", "text": "क्या आज का पूरी मजदूरी मिल गई", "expect": "DAY DUE"}
+{"lang": "hi", "text": "क्या इस हफ्ते का पूरी मजदूरी मिल गई", "expect": "WEEK DUE"}
+{"lang": "hi", "text": "क्या इस महीने का पूरी मजदूरी मिल गई", "expect": "MONTH DUE"}
+{"lang": "hi", "text": "क्या इस साल का पूरी मजदूरी मिल गई", "expect": "YEAR DUE"}
+{"lang": "hi", "text": "आज का सारा लेखा जोखा", "expect": "DAY ALL"}
+{"lang": "hi", "text": "इस हफ्ते का सारा लेखा जोखा", "expect": "WEEK ALL"}
+{"lang": "hi", "text": "इस महीने का सारा लेखा जोखा", "expect": "MONTH ALL"}
+{"lang": "hi", "text": "इस साल का सारा लेखा जोखा", "expect": "YEAR ALL"}
+{"lang": "hi", "text": "बस कितने बजे आएगी", "expect": "NONE"}
+{"lang": "hi", "text": "मेरे बेटे का स्कूल कब खुलेगा", "expect": "NONE"}
+{"lang": "hi", "text": "पानी कितना गरम है", "expect": "NONE"}
+{"lang": "hi-Latn", "text": "aaj ka kamai batao na", "expect": "DAY EARNED"}
+{"lang": "hi-Latn", "text": "is hafte ka kamai batao na", "expect": "WEEK EARNED"}
+{"lang": "hi-Latn", "text": "is mahine ka kamai batao na", "expect": "MONTH EARNED"}
+{"lang": "hi-Latn", "text": "is saal ka kamai batao na", "expect": "YEAR EARNED"}
+{"lang": "hi-Latn", "text": "aaj udhaar kitna uthaya", "expect": "DAY ADVANCE"}
+{"lang": "hi-Latn", "text": "is hafte udhaar kitna uthaya", "expect": "WEEK ADVANCE"}
+{"lang": "hi-Latn", "text": "is mahine udhaar kitna uthaya", "expect": "MONTH ADVANCE"}
+{"lang": "hi-Latn", "text": "is saal udhaar kitna uthaya", "expect": "YEAR ADVANCE"}
+{"lang": "hi-Latn", "text": "aaj paise kahan gaye", "expect": "DAY EXPENSE"}
+{"lang": "hi-Latn", "text": "is hafte paise kahan gaye", "expect": "WEEK EXPENSE"}
+{"lang": "hi-Latn", "text": "is mahine paise kahan gaye", "expect": "MONTH EXPENSE"}
+{"lang": "hi-Latn", "text": "is saal paise kahan gaye", "expect": "YEAR EXPENSE"}
+{"lang": "hi-Latn", "text": "seth se abhi kitna lena hai", "expect": "WEEK DUE"}
+{"lang": "hi-Latn", "text": "aaj ka pura lekha jokha", "expect": "DAY ALL"}
+{"lang": "hi-Latn", "text": "is hafte ka pura lekha jokha", "expect": "WEEK ALL"}
+{"lang": "hi-Latn", "text": "is mahine ka pura lekha jokha", "expect": "MONTH ALL"}
+{"lang": "hi-Latn", "text": "is saal ka pura lekha jokha", "expect": "YEAR ALL"}
+{"lang": "hi-Latn", "text": "bus kitne baje aayegi", "expect": "NONE"}
+{"lang": "hi-Latn", "text": "school kab khulega", "expect": "NONE"}
+{"lang": "en", "text": "today what was my income", "expect": "DAY EARNED"}
+{"lang": "en", "text": "this week what was my income", "expect": "WEEK EARNED"}
+{"lang": "en", "text": "this month what was my income", "expect": "MONTH EARNED"}
+{"lang": "en", "text": "this year what was my income", "expect": "YEAR EARNED"}
+{"lang": "en", "text": "money taken in advance today", "expect": "DAY ADVANCE"}
+{"lang": "en", "text": "money taken in advance this week", "expect": "WEEK ADVANCE"}
+{"lang": "en", "text": "money taken in advance this month", "expect": "MONTH ADVANCE"}
+{"lang": "en", "text": "money taken in advance this year", "expect": "YEAR ADVANCE"}
+{"lang": "en", "text": "where did my money go today", "expect": "DAY EXPENSE"}
+{"lang": "en", "text": "where did my money go this week", "expect": "WEEK EXPENSE"}
+{"lang": "en", "text": "where did my money go this month", "expect": "MONTH EXPENSE"}
+{"lang": "en", "text": "where did my money go this year", "expect": "YEAR EXPENSE"}
+{"lang": "en", "text": "does the boss still owe me anything", "expect": "WEEK DUE"}
+{"lang": "en", "text": "did I get all my wages today", "expect": "DAY DUE"}
+{"lang": "en", "text": "did I get all my wages this week", "expect": "WEEK DUE"}
+{"lang": "en", "text": "did I get all my wages this month", "expect": "MONTH DUE"}
+{"lang": "en", "text": "did I get all my wages this year", "expect": "YEAR DUE"}
+{"lang": "en", "text": "full picture for today please", "expect": "DAY ALL"}
+{"lang": "en", "text": "full picture for this week please", "expect": "WEEK ALL"}
+{"lang": "en", "text": "full picture for this month please", "expect": "MONTH ALL"}
+{"lang": "en", "text": "full picture for this year please", "expect": "YEAR ALL"}
+{"lang": "en", "text": "when does the bus come", "expect": "NONE"}
+{"lang": "en", "text": "how hot is the water", "expect": "NONE"}
+{"lang": "en", "text": "what time is it", "expect": "NONE"}
+{"lang": "or", "text": "ଆଜି କାମରୁ କେତେ ପଇସା ଆସିଲା", "expect": "DAY EARNED"}
+{"lang": "or", "text": "ଏହି ସପ୍ତାହରେ କାମରୁ କେତେ ପଇସା ଆସିଲା", "expect": "WEEK EARNED"}
+{"lang": "or", "text": "ଏହି ମାସରେ କାମରୁ କେତେ ପଇସା ଆସିଲା", "expect": "MONTH EARNED"}
+{"lang": "or", "text": "ଏହି ବର୍ଷରେ କାମରୁ କେତେ ପଇସା ଆସିଲା", "expect": "YEAR EARNED"}
+{"lang": "or", "text": "ଆଜି ଧାର କେତେ ଉଠାଇଲି", "expect": "DAY ADVANCE"}
+{"lang": "or", "text": "ଏହି ସପ୍ତାହରେ ଧାର କେତେ ଉଠାଇଲି", "expect": "WEEK ADVANCE"}
+{"lang": "or", "text": "ଏହି ମାସରେ ଧାର କେତେ ଉଠାଇଲି", "expect": "MONTH ADVANCE"}
+{"lang": "or", "text": "ଏହି ବର୍ଷରେ ଧାର କେତେ ଉଠାଇଲି", "expect": "YEAR ADVANCE"}
+{"lang": "or", "text": "ଆଜି ପଇସା କେଉଁଠି ଗଲା", "expect": "DAY EXPENSE"}
+{"lang": "or", "text": "ଏହି ସପ୍ତାହରେ ପଇସା କେଉଁଠି ଗଲା", "expect": "WEEK EXPENSE"}
+{"lang": "or", "text": "ଏହି ମାସରେ ପଇସା କେଉଁଠି ଗଲା", "expect": "MONTH EXPENSE"}
+{"lang": "or", "text": "ଏହି ବର୍ଷରେ ପଇସା କେଉଁଠି ଗଲା", "expect": "YEAR EXPENSE"}
+{"lang": "or", "text": "ଠିକାଦାରଙ୍କଠୁ ଆଉ କେତେ ପାଇବାକୁ ଅଛି", "expect": "WEEK DUE"}
+{"lang": "or", "text": "ଆଜି ମୋ ପୁରା ମଜୁରି ମିଳିଗଲା କି", "expect": "DAY DUE"}
+{"lang": "or", "text": "ଏହି ସପ୍ତାହରେ ମୋ ପୁରା ମଜୁରି ମିଳିଗଲା କି", "expect": "WEEK DUE"}
+{"lang": "or", "text": "ଏହି ମାସରେ ମୋ ପୁରା ମଜୁରି ମିଳିଗଲା କି", "expect": "MONTH DUE"}
+{"lang": "or", "text": "ଏହି ବର୍ଷରେ ମୋ ପୁରା ମଜୁରି ମିଳିଗଲା କି", "expect": "YEAR DUE"}
+{"lang": "or", "text": "ଆଜିର ପୁରା ଲେଖାଜୋଖା", "expect": "DAY ALL"}
+{"lang": "or", "text": "ଏହି ସପ୍ତାହର ପୁରା ଲେଖାଜୋଖା", "expect": "WEEK ALL"}
+{"lang": "or", "text": "ଏହି ମାସର ପୁରା ଲେଖାଜୋଖା", "expect": "MONTH ALL"}
+{"lang": "or", "text": "ଏହି ବର୍ଷର ପୁରା ଲେଖାଜୋଖା", "expect": "YEAR ALL"}
+{"lang": "or", "text": "ବସ୍ କେତେବେଳେ ଆସିବ", "expect": "NONE"}
+{"lang": "or", "text": "ସ୍କୁଲ୍ କେବେ ଖୋଲିବ", "expect": "NONE"}
+{"lang": "or", "text": "ପାଣି କେତେ ଗରମ", "expect": "NONE"}
+{"lang": "te", "text": "ఈరోజు పని చేసి ఎంత డబ్బు వచ్చింది", "expect": "DAY EARNED"}
+{"lang": "te", "text": "ఈ వారం పని చేసి ఎంత డబ్బు వచ్చింది", "expect": "WEEK EARNED"}
+{"lang": "te", "text": "ఈ నెల పని చేసి ఎంత డబ్బు వచ్చింది", "expect": "MONTH EARNED"}
+{"lang": "te", "text": "ఈ సంవత్సరం పని చేసి ఎంత డబ్బు వచ్చింది", "expect": "YEAR EARNED"}
+{"lang": "te", "text": "ఈరోజు అప్పు ఎంత తీసుకున్నాను", "expect": "DAY ADVANCE"}
+{"lang": "te", "text": "ఈ వారం అప్పు ఎంత తీసుకున్నాను", "expect": "WEEK ADVANCE"}
+{"lang": "te", "text": "ఈ నెల అప్పు ఎంత తీసుకున్నాను", "expect": "MONTH ADVANCE"}
+{"lang": "te", "text": "ఈ సంవత్సరం అప్పు ఎంత తీసుకున్నాను", "expect": "YEAR ADVANCE"}
+{"lang": "te", "text": "ఈరోజు డబ్బులు ఎక్కడ పోయాయి", "expect": "DAY EXPENSE"}
+{"lang": "te", "text": "ఈ వారం డబ్బులు ఎక్కడ పోయాయి", "expect": "WEEK EXPENSE"}
+{"lang": "te", "text": "ఈ నెల డబ్బులు ఎక్కడ పోయాయి", "expect": "MONTH EXPENSE"}
+{"lang": "te", "text": "ఈ సంవత్సరం డబ్బులు ఎక్కడ పోయాయి", "expect": "YEAR EXPENSE"}
+{"lang": "te", "text": "మేస్త్రి నుండి ఇంకా ఎంత రావాలి", "expect": "WEEK DUE"}
+{"lang": "te", "text": "ఈరోజు నా పూర్తి కూలి వచ్చిందా", "expect": "DAY DUE"}
+{"lang": "te", "text": "ఈ వారం నా పూర్తి కూలి వచ్చిందా", "expect": "WEEK DUE"}
+{"lang": "te", "text": "ఈ నెల నా పూర్తి కూలి వచ్చిందా", "expect": "MONTH DUE"}
+{"lang": "te", "text": "ఈ సంవత్సరం నా పూర్తి కూలి వచ్చిందా", "expect": "YEAR DUE"}
+{"lang": "te", "text": "ఈరోజు పూర్తి వివరాలు", "expect": "DAY ALL"}
+{"lang": "te", "text": "ఈ వారం పూర్తి వివరాలు", "expect": "WEEK ALL"}
+{"lang": "te", "text": "ఈ నెల పూర్తి వివరాలు", "expect": "MONTH ALL"}
+{"lang": "te", "text": "ఈ సంవత్సరం పూర్తి వివరాలు", "expect": "YEAR ALL"}
+{"lang": "te", "text": "బస్సు ఎప్పుడు వస్తుంది", "expect": "NONE"}
+{"lang": "te", "text": "స్కూల్ ఎప్పుడు తెరుస్తారు", "expect": "NONE"}
+{"lang": "te", "text": "నీళ్ళు ఎంత వేడిగా ఉన్నాయి", "expect": "NONE"}
+{"lang": "kn", "text": "ಇವತ್ತು ಕೆಲಸದಿಂದ ಎಷ್ಟು ದುಡ್ಡು ಬಂತು", "expect": "DAY EARNED"}
+{"lang": "kn", "text": "ಈ ವಾರ ಕೆಲಸದಿಂದ ಎಷ್ಟು ದುಡ್ಡು ಬಂತು", "expect": "WEEK EARNED"}
+{"lang": "kn", "text": "ಈ ತಿಂಗಳು ಕೆಲಸದಿಂದ ಎಷ್ಟು ದುಡ್ಡು ಬಂತು", "expect": "MONTH EARNED"}
+{"lang": "kn", "text": "ಈ ವರ್ಷ ಕೆಲಸದಿಂದ ಎಷ್ಟು ದುಡ್ಡು ಬಂತು", "expect": "YEAR EARNED"}
+{"lang": "kn", "text": "ಇವತ್ತು ಸಾಲ ಎಷ್ಟು ತಗೊಂಡೆ", "expect": "DAY ADVANCE"}
+{"lang": "kn", "text": "ಈ ವಾರ ಸಾಲ ಎಷ್ಟು ತಗೊಂಡೆ", "expect": "WEEK ADVANCE"}
+{"lang": "kn", "text": "ಈ ತಿಂಗಳು ಸಾಲ ಎಷ್ಟು ತಗೊಂಡೆ", "expect": "MONTH ADVANCE"}
+{"lang": "kn", "text": "ಈ ವರ್ಷ ಸಾಲ ಎಷ್ಟು ತಗೊಂಡೆ", "expect": "YEAR ADVANCE"}
+{"lang": "kn", "text": "ಇವತ್ತು ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "expect": "DAY EXPENSE"}
+{"lang": "kn", "text": "ಈ ವಾರ ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "expect": "WEEK EXPENSE"}
+{"lang": "kn", "text": "ಈ ತಿಂಗಳು ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "expect": "MONTH EXPENSE"}
+{"lang": "kn", "text": "ಈ ವರ್ಷ ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "expect": "YEAR EXPENSE"}
+{"lang": "kn", "text": "ಮೇಸ್ತ್ರಿಯಿಂದ ಇನ್ನೂ ಎಷ್ಟು ಬರಬೇಕು", "expect": "WEEK DUE"}
+{"lang": "kn", "text": "ಇವತ್ತು ನನ್ನ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "expect": "DAY DUE"}
+{"lang": "kn", "text": "ಈ ವಾರ ನನ್ನ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "expect": "WEEK DUE"}
+{"lang": "kn", "text": "ಈ ತಿಂಗಳು ನನ್ನ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "expect": "MONTH DUE"}
+{"lang": "kn", "text": "ಈ ವರ್ಷ ನನ್ನ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "expect": "YEAR DUE"}
+{"lang": "kn", "text": "ಇವತ್ತಿನ ಎಲ್ಲಾ ವಿವರ", "expect": "DAY ALL"}
+{"lang": "kn", "text": "ಈ ವಾರದ ಎಲ್ಲಾ ವಿವರ", "expect": "WEEK ALL"}
+{"lang": "kn", "text": "ಈ ತಿಂಗಳ ಎಲ್ಲಾ ವಿವರ", "expect": "MONTH ALL"}
+{"lang": "kn", "text": "ಈ ವರ್ಷದ ಎಲ್ಲಾ ವಿವರ", "expect": "YEAR ALL"}
+{"lang": "kn", "text": "ಬಸ್ ಯಾವಾಗ ಬರುತ್ತೆ", "expect": "NONE"}
+{"lang": "kn", "text": "ಶಾಲೆ ಯಾವಾಗ ಶುರು", "expect": "NONE"}
+{"lang": "kn", "text": "ನೀರು ಎಷ್ಟು ಬಿಸಿ ಇದೆ", "expect": "NONE"}
+{"lang": "ta", "text": "இன்னைக்கு வேலை செஞ்சு எவ்வளவு காசு வந்தது", "expect": "DAY EARNED"}
+{"lang": "ta", "text": "இந்த வாரம் வேலை செஞ்சு எவ்வளவு காசு வந்தது", "expect": "WEEK EARNED"}
+{"lang": "ta", "text": "இந்த மாசம் வேலை செஞ்சு எவ்வளவு காசு வந்தது", "expect": "MONTH EARNED"}
+{"lang": "ta", "text": "இந்த வருஷம் வேலை செஞ்சு எவ்வளவு காசு வந்தது", "expect": "YEAR EARNED"}
+{"lang": "ta", "text": "இன்னைக்கு கடன் எவ்வளவு வாங்கினேன்", "expect": "DAY ADVANCE"}
+{"lang": "ta", "text": "இந்த வாரம் கடன் எவ்வளவு வாங்கினேன்", "expect": "WEEK ADVANCE"}
+{"lang": "ta", "text": "இந்த மாசம் கடன் எவ்வளவு வாங்கினேன்", "expect": "MONTH ADVANCE"}
+{"lang": "ta", "text": "இந்த வருஷம் கடன் எவ்வளவு வாங்கினேன்", "expect": "YEAR ADVANCE"}
+{"lang": "ta", "text": "இன்னைக்கு காசு எங்க போச்சு", "expect": "DAY EXPENSE"}
+{"lang": "ta", "text": "இந்த வாரம் காசு எங்க போச்சு", "expect": "WEEK EXPENSE"}
+{"lang": "ta", "text": "இந்த மாசம் காசு எங்க போச்சு", "expect": "MONTH EXPENSE"}
+{"lang": "ta", "text": "இந்த வருஷம் காசு எங்க போச்சு", "expect": "YEAR EXPENSE"}
+{"lang": "ta", "text": "மேஸ்திரிகிட்ட இருந்து இன்னும் எவ்வளவு வரணும்", "expect": "WEEK DUE"}
+{"lang": "ta", "text": "இன்னைக்கு என் முழு கூலி கிடைச்சுதா", "expect": "DAY DUE"}
+{"lang": "ta", "text": "இந்த வாரம் என் முழு கூலி கிடைச்சுதா", "expect": "WEEK DUE"}
+{"lang": "ta", "text": "இந்த மாசம் என் முழு கூலி கிடைச்சுதா", "expect": "MONTH DUE"}
+{"lang": "ta", "text": "இந்த வருஷம் என் முழு கூலி கிடைச்சுதா", "expect": "YEAR DUE"}
+{"lang": "ta", "text": "இன்னைக்கு எல்லா விவரமும்", "expect": "DAY ALL"}
+{"lang": "ta", "text": "இந்த வார எல்லா விவரமும்", "expect": "WEEK ALL"}
+{"lang": "ta", "text": "இந்த மாச எல்லா விவரமும்", "expect": "MONTH ALL"}
+{"lang": "ta", "text": "இந்த வருஷ எல்லா விவரமும்", "expect": "YEAR ALL"}
+{"lang": "ta", "text": "பஸ் எப்போ வரும்", "expect": "NONE"}
+{"lang": "ta", "text": "ஸ்கூல் எப்போ திறக்கும்", "expect": "NONE"}
+{"lang": "ta", "text": "தண்ணி எவ்வளவு சூடா இருக்கு", "expect": "NONE"}

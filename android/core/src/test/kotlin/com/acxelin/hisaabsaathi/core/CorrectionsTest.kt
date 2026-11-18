@@ -61,3 +61,20 @@ class TypedAmountTest {
         for (bad in listOf("abc", "NaN", "Infinity", "1e9", "-5", "1.234", "12..5", "99999999999")) assertNull(bad, Money.parseTyped(bad))
     }
 }
+
+class QuestionAnswerCheckTest {
+    @Test fun onlyTheExactFormatIsAccepted() {
+        assertEquals(Query(QueryPeriod.MONTH, QueryTopic.DUE), Slm.parseQuestion("period=month\ntopic=due"))
+        assertEquals(Query(QueryPeriod.DAY, QueryTopic.EARNED), Slm.parseQuestion(" period = today \n topic = earned "))
+        assertNull(Slm.parseQuestion("none"))
+        assertNull(Slm.parseQuestion("period=fortnight\ntopic=due"))
+        assertNull(Slm.parseQuestion("topic=due"))
+        assertNull(Slm.parseQuestion("You earned 500 rupees this week"))
+        assertNull(Slm.parseQuestion(null))
+    }
+
+    @Test fun promptQuotesTheSentenceSafely() {
+        val p = Slm.questionPrompt("he said \"how much\"")
+        assertTrue(p, "\"he said  how much \"" in p)
+    }
+}

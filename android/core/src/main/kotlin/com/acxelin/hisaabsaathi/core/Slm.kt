@@ -37,6 +37,40 @@ ${numbers.joinToString("\n") { fmt(it) + "=" }}
 """.trimStart()
     }
 
+    /**
+     * For a sentence the rules did not understand: is it a question about the worker's own
+     * records, and which period and topic? The answer can only pick from fixed words, and
+     * the totals are always worked out by the app, never by the model.
+     */
+    fun questionPrompt(transcript: String): String = """
+A daily-wage worker in India said this to their wage-ledger app (Hindi, Odia, Telugu, Kannada, Tamil or English):
+"${transcript.replace('"', ' ')}"
+Is it a question about their own work and money records? If yes, answer two lines:
+period=today, week, month or year (week if no time is said)
+topic=earned, advance, expense, due or all
+earned = money earned for work
+advance = money taken early from the employer or contractor
+expense = money the worker spent
+due = wages still owed to the worker
+all = everything
+If it is not such a question, answer: none
+""".trimStart()
+
+    private val periodWord = mapOf("today" to QueryPeriod.DAY, "week" to QueryPeriod.WEEK, "month" to QueryPeriod.MONTH, "year" to QueryPeriod.YEAR)
+    private val topicWord = mapOf(
+        "earned" to QueryTopic.EARNED, "advance" to QueryTopic.ADVANCE, "expense" to QueryTopic.EXPENSE,
+        "due" to QueryTopic.DUE, "all" to QueryTopic.ALL,
+    )
+
+    /** The question the model found, or null for "none" or anything that is not exactly the asked format. */
+    fun parseQuestion(modelOutput: String?): Query? {
+        val lines = modelOutput?.lowercase()?.lines()?.map { it.trim() }?.filter { it.isNotEmpty() } ?: return null
+        if (lines.firstOrNull() == "none") return null
+        val period = lines.firstOrNull { it.startsWith("period") }?.substringAfter('=')?.trim()?.let(periodWord::get) ?: return null
+        val topic = lines.firstOrNull { it.startsWith("topic") }?.substringAfter('=')?.trim()?.let(topicWord::get) ?: return null
+        return Query(period, topic)
+    }
+
     /** For things that are neither a ledger entry nor one of the fixed simple questions. */
     fun chatPrompt(question: String, languageName: String): String = """
 You are HisaabSaathi, a helper inside a wage-ledger phone app for daily-wage workers in India.

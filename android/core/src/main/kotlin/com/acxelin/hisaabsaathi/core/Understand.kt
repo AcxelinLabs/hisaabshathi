@@ -11,7 +11,10 @@ sealed interface Understood {
     /** A greeting or simple question with a fixed answer. */
     data class Talk(val chat: Chat) : Understood
 
-    /** None of the above: the language model may try, otherwise the app explains what it can do. */
+    /**
+     * None of the above: the language model may find an entry or a ledger question in it
+     * (Slm.prompt, Slm.questionPrompt); otherwise the app explains what it can do.
+     */
     data class Unknown(val transcript: String) : Understood
 }
 

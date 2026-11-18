@@ -223,6 +223,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     app.stt.unload()
                     val found = Slm.choose(Extraction(text), Slm.prompt(text)?.let { app.slm.generate(it) })
                     if (found.entries.isNotEmpty()) return review(Capture.Review(text, found.entries, true, source))
+                    // A ledger question in words the rules do not know ("did I get all my wages this
+                    // month?"). The model only names the period and topic; the totals are the app's.
+                    Slm.parseQuestion(app.slm.generate(Slm.questionPrompt(text)))?.let { return answer(it, text) }
                 }
                 // Never stay silent: say what the app can do and how to phrase it.
                 say(strings.chatFallback, asked = text)
