@@ -31,6 +31,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 class SlmEngine(private val context: Context, private val packs: PackManager) {
     private val lock = Mutex()
     private val prefs = context.getSharedPreferences("slm", Context.MODE_PRIVATE)
+        .also { com.acxelin.hisaabsaathi.speech.resetAfterUpdate(it) }
     private var service: Messenger? = null
     private var connection: ServiceConnection? = null
 

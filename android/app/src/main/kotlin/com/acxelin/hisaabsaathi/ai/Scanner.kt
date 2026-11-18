@@ -14,10 +14,11 @@ import kotlin.coroutines.resume
  */
 class Scanner(private val context: Context) {
     suspend fun text(photo: Uri): String = suspendCancellableCoroutine { cont ->
-        val recognizer = TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
         runCatching { InputImage.fromFilePath(context, photo) }
             .onFailure { cont.resume("") }
             .onSuccess { image ->
+                // Made only once there is an image, so a photo that cannot be read leaks nothing.
+                val recognizer = TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
                 recognizer.process(image)
                     .addOnSuccessListener { if (cont.isActive) cont.resume(it.text) }
                     .addOnFailureListener { if (cont.isActive) cont.resume("") }

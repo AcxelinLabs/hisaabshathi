@@ -67,6 +67,9 @@ class Strings(val lang: Lang) {
 
     // ---- home
     val today get() = t("आज", "ଆଜି", "Today")
+    val yesterday get() = t("कल", "ଗତକାଲି", "Yesterday")
+    val dayBefore get() = t("परसों", "ପଅରଦିନ", "Day before")
+    val amountInvalid get() = t("सिर्फ़ रकम लिखें, जैसे 450", "କେବଳ ଟଙ୍କା ଲେଖନ୍ତୁ, ଯେପରି 450", "Type only the amount, like 450")
     val earned get() = t("कमाई", "ରୋଜଗାର", "Earned")
     val advance get() = t("एडवांस", "ଆଡଭାନ୍ସ", "Advance")
     val received get() = t("मिला", "ମିଳିଲା", "Received")

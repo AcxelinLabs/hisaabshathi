@@ -41,3 +41,23 @@ class CorrectionsTest {
         assertTrue(lines[1], "\"kept\":null" in lines[1] && "இரண்டு" in lines[1])
     }
 }
+
+class TypedAmountTest {
+    @Test fun plainAmounts() {
+        assertEquals(45_000L, Money.parseTyped("450"))
+        assertEquals(1_250L, Money.parseTyped("12.50"))
+        assertEquals(1_250L, Money.parseTyped("12,50"))
+        assertEquals(120_000L, Money.parseTyped("1,200"))
+        assertEquals(500L, Money.parseTyped("5."))
+        assertEquals(45_000L, Money.parseTyped("४५०"))
+    }
+
+    @Test fun emptyBoxIsZero() {
+        assertEquals(0L, Money.parseTyped(""))
+        assertEquals(0L, Money.parseTyped("  "))
+    }
+
+    @Test fun slipsAreRejected() {
+        for (bad in listOf("abc", "NaN", "Infinity", "1e9", "-5", "1.234", "12..5", "99999999999")) assertNull(bad, Money.parseTyped(bad))
+    }
+}

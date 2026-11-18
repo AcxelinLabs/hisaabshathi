@@ -50,7 +50,12 @@ sealed interface Capture {
         val attachment: String? = null,
         /** What the app first understood, before any fix by the worker (for the correction log). */
         val understood: List<DraftEntry> = drafts,
-    ) : Capture
+        /** Lines whose amount box holds something that is not an amount; saving waits until fixed. */
+        val invalid: Set<Int> = emptySet(),
+    ) : Capture {
+        /** Something worth saving, and no amount box left with a typing slip. */
+        val canSave: Boolean get() = invalid.isEmpty() && drafts.any { it.amountPaise > 0 || it.hours != null || it.pieces != null }
+    }
 
     /** A spoken answer or a problem, also shown as text on the home screen. */
     /** [asked] is what the worker said, shown above the answer so they can see what was understood. */
@@ -77,13 +82,33 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     // ---- voice
 
+    /**
+     * The one piece of voice work running (listening, understanding, or the yes/no answer).
+     * A second tap never starts a second recording on top of it.
+     */
+    private var busy: kotlinx.coroutines.Job? = null
+    private val isBusy get() = busy?.isActive == true
+
     fun micTapped() {
-        if (capture.value == Capture.Listening) app.stt.stop() else listenForEntry()
+        when (capture.value) {
+            Capture.Listening -> { app.stt.stop(); app.systemStt.stop() }
+            Capture.Thinking -> cancelThinking()
+            else -> if (!isBusy) listenForEntry()
+        }
     }
 
-    private fun listenForEntry() = viewModelScope.launch(guard) {
-        val text = listenOnce() ?: return@launch
-        understand(text, "voice")
+    /** "Understanding…" can take a while with the language model: the worker may stop it. */
+    fun cancelThinking() {
+        busy?.cancel(); busy = null
+        app.speaker.stop()
+        capture.value = Capture.Idle
+    }
+
+    private fun listenForEntry() {
+        busy = viewModelScope.launch(guard) {
+            val text = listenOnce() ?: return@launch
+            understand(text, "voice")
+        }
     }
 
     /** Technical note about the last problem, shown in Settings for testers. */
@@ -170,7 +195,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun submitText(text: String) = viewModelScope.launch(guard) { understand(text, "typed") }
+    fun submitText(text: String) {
+        if (isBusy) return
+        busy = viewModelScope.launch(guard) { understand(text, "typed") }
+    }
 
     private suspend fun understand(text: String, source: String) {
         if (text.isBlank()) return say(strings.notUnderstood)
@@ -238,17 +266,52 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updateDraft(index: Int, draft: DraftEntry) {
         val r = capture.value as? Capture.Review ?: return
+        if (index !in r.drafts.indices) return
         capture.value = r.copy(drafts = r.drafts.toMutableList().also { it[index] = draft })
     }
 
-    fun confirmSave() = viewModelScope.launch(guard) {
-        val r = capture.value as? Capture.Review ?: return@launch
-        val today = LocalDate.now()
-        val now = System.currentTimeMillis()
-        app.ledger.add(r.drafts.filter { it.amountPaise > 0 || it.hours != null || it.pieces != null }
-            .map { Ledger.fromDraft(it, today, now, r.transcript, r.source, r.attachment) })
-        log(Corrections.corrected(now, lang, r.source, r.transcript, r.understood, r.drafts))
-        say(strings.saved)
+    /** The worker typed in an amount box: an empty box is 0, a slip ("abc", "1e9") blocks saving. */
+    fun updateAmount(index: Int, typed: String) {
+        val r = capture.value as? Capture.Review ?: return
+        if (index !in r.drafts.indices) return
+        val paise = com.acxelin.hisaabsaathi.core.Money.parseTyped(typed)
+        capture.value = if (paise == null) r.copy(invalid = r.invalid + index)
+        else r.copy(drafts = r.drafts.toMutableList().also { it[index] = it[index].copy(amountPaise = paise) }, invalid = r.invalid - index)
+    }
+
+    /** Removes one wrongly heard line from what is about to be saved. */
+    fun removeDraft(index: Int) {
+        val r = capture.value as? Capture.Review ?: return
+        if (r.drafts.size <= 1 || index !in r.drafts.indices) return
+        capture.value = r.copy(
+            drafts = r.drafts.filterIndexed { i, _ -> i != index },
+            invalid = r.invalid.filter { it != index }.map { if (it > index) it - 1 else it }.toSet(),
+        )
+    }
+
+    /**
+     * Saves once. The screen leaves the review state before anything slow happens, so a
+     * double tap cannot save the same lines twice.
+     */
+    fun confirmSave() {
+        val r = capture.value as? Capture.Review ?: return
+        if (!r.canSave) return
+        capture.value = Capture.Thinking
+        viewModelScope.launch(guard) {
+            val today = LocalDate.now()
+            val now = System.currentTimeMillis()
+            try {
+                app.ledger.add(r.drafts.filter { it.amountPaise > 0 || it.hours != null || it.pieces != null }
+                    .map { Ledger.fromDraft(it, today, now, r.transcript, r.source, r.attachment) })
+            } catch (e: Exception) {
+                note("save: ${e.javaClass.simpleName}: ${e.message}")
+                capture.value = r // keep what the worker confirmed on screen; nothing is lost
+                app.speaker.speak(strings.voiceFailed, lang)
+                return@launch
+            }
+            log(Corrections.corrected(now, lang, r.source, r.transcript, r.understood, r.drafts))
+            say(strings.saved)
+        }
     }
 
     /** Keeps the worker's fix on the phone (encrypted), unless they switched that off. */
@@ -259,14 +322,21 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun rejected(r: Capture.Review) = log(Corrections.rejected(System.currentTimeMillis(), lang, r.source, r.transcript, r.understood))
 
-    /** "Say yes or no": yes saves, no starts a new recording. */
-    fun confirmByVoice() = viewModelScope.launch(guard) {
-        val r = capture.value as? Capture.Review ?: return@launch
-        val heard = listenOnce() ?: return@launch
-        when (Confirm.parse(heard)) {
-            true -> { capture.value = r; confirmSave() }
-            false -> { rejected(r); listenForEntry() }
-            null -> review(r)
+    /**
+     * "Say yes or no": yes saves, no starts a new recording. If nothing usable is heard the
+     * worker's lines come back on screen (the problem is still spoken), never lost.
+     */
+    fun confirmByVoice() {
+        val r = capture.value as? Capture.Review ?: return
+        if (isBusy) return
+        busy = viewModelScope.launch(guard) {
+            val heard = try { listenOnce() } catch (e: Exception) { note("yes/no: ${e.javaClass.simpleName}"); null }
+            if (heard == null) { capture.value = r; return@launch }
+            when (Confirm.parse(heard)) {
+                true -> { capture.value = r; confirmSave() }
+                false -> { rejected(r); capture.value = Capture.Idle; busy = null; listenForEntry() }
+                null -> review(r)
+            }
         }
     }
 
@@ -274,7 +344,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         (capture.value as? Capture.Review)?.let(::rejected)
         val wasVoice = (capture.value as? Capture.Review)?.source == "voice"
         dismiss()
-        if (wasVoice) listenForEntry()
+        if (wasVoice && !isBusy) listenForEntry()
     }
 
     fun dismiss() {

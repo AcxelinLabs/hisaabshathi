@@ -157,7 +157,7 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
             Box(Modifier.size(if (compact) 92.dp else 146.dp).scale(pulse).clip(CircleShape).background(if (listening) Sindoor.copy(alpha = 0.22f) else Marigold.copy(alpha = 0.28f)))
             Box(
                 Modifier.size(if (compact) 78.dp else 126.dp).clip(CircleShape).background(if (listening) Sindoor else Marigold)
-                    .clickable(enabled = !thinking, onClick = onMic),
+                    .clickable(onClick = if (thinking) vm::cancelThinking else onMic),
                 contentAlignment = Alignment.Center,
             ) {
                 if (thinking) CircularProgressIndicator(color = Ink)
@@ -173,6 +173,7 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
             fontSize = if (compact) 17.sp else 19.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold,
             maxLines = 2, lineHeight = if (compact) 22.sp else 25.sp,
         )
+        if (thinking) TextButton(onClick = vm::cancelThinking) { Text(s.cancel, fontSize = 17.sp) }
         if (!listening && !thinking && !compact) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
 
         // While an answer is showing, the answer takes this space; the buttons return when it is closed.
@@ -243,7 +244,9 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
             }
             r.drafts.forEachIndexed { i, d ->
                 Section {
-                    Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    // All four kinds stay visible (they wrap), so "expense" is never hidden off screen.
+                    Row(verticalAlignment = Alignment.Top) {
+                    FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         EntryType.entries.forEach { type ->
                             FilterChip(
                                 selected = d.type == type,
@@ -259,18 +262,40 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                             )
                         }
                     }
+                    // A line the app heard wrongly can be taken out, as long as one line is left.
+                    if (r.drafts.size > 1) IconButton(onClick = { vm.removeDraft(i) }) { Icon(Icons.Default.Delete, s.delete, tint = InkSoft) }
+                    }
                     val detail = if (d.type == EntryType.WORK) s.workDetail(d.hours, d.pieces, d.ratePaise) else ""
                     if (detail.isNotEmpty()) Text(detail, fontSize = 18.sp)
-                    if (d.type == EntryType.EXPENSE) Text(s.categoryName(d.category ?: ExpenseCategory.OTHER), fontSize = 16.sp, color = InkSoft)
+                    if (d.type == EntryType.EXPENSE) {
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            ExpenseCategory.entries.forEach { c ->
+                                FilterChip(
+                                    selected = (d.category ?: ExpenseCategory.OTHER) == c, onClick = { vm.updateDraft(i, d.copy(category = c)) },
+                                    label = { Text(s.categoryName(c), fontSize = 15.sp) }, modifier = Modifier.height(44.dp),
+                                )
+                            }
+                        }
+                    }
+                    // Which day: said "yesterday", or forgot to; one tap fixes it.
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        listOf(0 to s.today, -1 to s.yesterday, -2 to s.dayBefore).forEach { (offset, label) ->
+                            FilterChip(
+                                selected = d.dayOffset == offset, onClick = { vm.updateDraft(i, d.copy(dayOffset = offset)) },
+                                label = { Text(label, fontSize = 15.sp) }, modifier = Modifier.height(44.dp),
+                            )
+                        }
+                    }
                     Spacer(Modifier.height(6.dp))
-                    var amount by remember(i, d.amountPaise) { mutableStateOf(if (d.amountPaise == 0L) "" else Money.format(d.amountPaise)) }
+                    // Kept as typed; the view model reads it (empty box = 0, a slip blocks saving).
+                    var amount by remember(i, r.drafts.size) { mutableStateOf(if (d.amountPaise == 0L) "" else Money.format(d.amountPaise)) }
+                    val bad = i in r.invalid
                     OutlinedTextField(
                         value = amount,
-                        onValueChange = { v ->
-                            amount = v
-                            v.toDoubleOrNull()?.let { vm.updateDraft(i, d.copy(amountPaise = Money.rupeesToPaise(it))) }
-                        },
+                        onValueChange = { v -> amount = v; vm.updateAmount(i, v) },
                         label = { Text(s.amountLabel) },
+                        isError = bad,
+                        supportingText = if (bad) ({ Text(s.amountInvalid) }) else null,
                         textStyle = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         singleLine = true, modifier = Modifier.fillMaxWidth(),
@@ -281,7 +306,7 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                 OutlinedButton(onClick = vm::replay) {
                     Icon(Icons.Default.PlayArrow, null); Spacer(Modifier.width(4.dp)); Text(s.playAgain)
                 }
-                OutlinedButton(onClick = { vm.confirmByVoice() }) {
+                OutlinedButton(onClick = onSpeakAnswer) {
                     Icon(painterResource(R.drawable.ic_mic), null, tint = Ink, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(4.dp)); Text("${s.yes} / ${s.no}")
                 }
@@ -298,7 +323,7 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                 }
             }
             Button(
-                onClick = { vm.confirmSave() }, modifier = Modifier.weight(1f).height(68.dp), shape = RoundedCornerShape(12.dp),
+                onClick = { vm.confirmSave() }, enabled = r.canSave, modifier = Modifier.weight(1f).height(68.dp), shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Green),
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {

@@ -51,6 +51,29 @@ data class Extraction(
 object Money {
     fun rupeesToPaise(rupees: Double): Long = Math.round(rupees * 100)
 
+    /** The largest amount one entry may hold: ₹1 crore. Anything bigger is a typing slip. */
+    const val MAX_PAISE = 1_000_000_000L
+
+    private val decimalComma = Regex("""^\d+,\d{1,2}$""")
+    private val plain = Regex("""^\d+(\.\d{0,2})?$""")
+
+    /**
+     * An amount the worker typed, in paise: 0 for an empty box, null if it is not a plain
+     * amount ("abc", "1e9", "NaN", three decimals, or above [MAX_PAISE]). Accepts "12,50"
+     * (decimal comma), "1,200" (grouping), and Devanagari or Odia digits.
+     */
+    fun parseTyped(input: String): Long? {
+        var t = Text.normalize(input).trim().replace(" ", "")
+        if (t.isEmpty()) return 0
+        t = if (decimalComma.matches(t)) t.replace(',', '.') else t.replace(",", "")
+        if (!plain.matches(t)) return null
+        val whole = t.substringBefore('.')
+        if (whole.length > 8) return null
+        val frac = t.substringAfter('.', "").padEnd(2, '0')
+        val paise = whole.toLong() * 100 + frac.toLong()
+        return paise.takeIf { it <= MAX_PAISE }
+    }
+
     /** "600" or "12.50" — no currency sign, no grouping, ASCII digits. */
     fun format(paise: Long): String {
         val neg = paise < 0

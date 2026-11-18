@@ -91,6 +91,14 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
         if (granted) vm.micTapped() else micPermission.launch(Manifest.permission.RECORD_AUDIO)
     }
+    // The spoken yes/no on the confirm screen needs the microphone too (the entry may have been typed).
+    val answerPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) vm.confirmByVoice()
+    }
+    val onAnswer = {
+        val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        if (granted) vm.confirmByVoice() else answerPermission.launch(Manifest.permission.RECORD_AUDIO)
+    }
 
     // Camera: the photo goes straight into app-private storage.
     var pendingPhoto by remember { mutableStateOf<Pair<Uri, String>?>(null) }
@@ -110,7 +118,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
     val review = capture as? Capture.Review
     if (review != null) {
         BackHandler { vm.dismiss() }
-        ReviewScreen(vm, review, s, onSpeakAnswer = onMic)
+        ReviewScreen(vm, review, s, onSpeakAnswer = onAnswer)
         return
     }
     if (typing) {

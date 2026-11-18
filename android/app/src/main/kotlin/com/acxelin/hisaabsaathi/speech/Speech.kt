@@ -142,14 +142,22 @@ class OnDeviceStt(private val packs: PackManager) {
         // Stop after ~1.3 s of silence once speech was heard, or 6 s if nobody spoke.
         val endSilence = (1.3f * SAMPLE_RATE / WINDOW).toInt()
         val noSpeechLimit = 6 * SAMPLE_RATE
-        recorder.startRecording()
         try {
+            // Inside the try: if starting fails the microphone is still released for next time.
+            recorder.startRecording()
+            if (recorder.recordingState != AudioRecord.RECORDSTATE_RECORDING) error("microphone is busy (another app may be using it)")
+            var emptyReads = 0
             while (!stopRequested && count + WINDOW <= all.size) {
                 var got = 0
                 while (got < WINDOW) {
                     val n = recorder.read(pcm, got, WINDOW - got)
                     if (n < 0) error("microphone read failed ($n)")
-                    if (n == 0) continue
+                    if (n == 0) {
+                        // A microphone that delivers nothing must not hang the app.
+                        if (++emptyReads > 400) error("microphone gave no sound")
+                        Thread.sleep(5)
+                        continue
+                    }
                     got += n
                 }
                 var energy = 0.0
@@ -181,7 +189,12 @@ class OnDeviceStt(private val packs: PackManager) {
     }
 
     private fun recognizerFor(lang: Lang): OfflineRecognizer {
-        recognizer?.let { if (loadedFor == lang) return it else it.release() }
+        recognizer?.let {
+            if (loadedFor == lang) return it
+            // Forget the old model before loading the next: if loading fails, nothing may use the freed one.
+            recognizer = null; loadedFor = null
+            it.release()
+        }
         val pack = Catalog.stt(lang)
         val model = packs.file(pack.files.first { it.path.endsWith("model.int8.onnx") })
         val tokens = packs.file(pack.files.first { it.path.endsWith("tokens.txt") })
@@ -209,15 +222,31 @@ class OnDeviceStt(private val packs: PackManager) {
  * its on-device mode (Android 12+), so audio still never leaves the phone.
  */
 class SystemOnDeviceStt(private val context: Context) {
-    fun available(): Boolean =
+    private val main = android.os.Handler(android.os.Looper.getMainLooper())
+    private var current: SpeechRecognizer? = null
+
+    fun available(): Boolean = runCatching {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && SpeechRecognizer.isOnDeviceRecognitionAvailable(context)
+    }.getOrDefault(false)
+
+    /** The worker tapped the mic again: finish now with what was heard so far. */
+    fun stop() { main.post { runCatching { current?.stopListening() } } }
 
     suspend fun listen(lang: Lang, onRecorded: () -> Unit = {}): Heard = withContext(Dispatchers.Main) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return@withContext Heard.Failed(Heard.Kind.NO_LANGUAGE, "Android < 12")
+        // Some phones' recognisers never answer; do not leave the worker on "Listening" for ever.
+        kotlinx.coroutines.withTimeoutOrNull(30_000) { recognise(lang, onRecorded) }
+            ?: Heard.Failed(Heard.Kind.NO_LANGUAGE, "system recogniser did not answer")
+    }
+
+    private suspend fun recognise(lang: Lang, onRecorded: () -> Unit): Heard =
         suspendCancellableCoroutine<Heard> { cont ->
             val sr = SpeechRecognizer.createOnDeviceSpeechRecognizer(context)
+            current = sr
+            var destroyed = false
+            fun destroy() { if (!destroyed) { destroyed = true; if (current === sr) current = null; runCatching { sr.destroy() } } }
             fun finish(result: Heard) {
-                sr.destroy()
+                destroy()
                 if (cont.isActive) cont.resume(result)
             }
             sr.setRecognitionListener(object : RecognitionListener {
@@ -241,14 +270,16 @@ class SystemOnDeviceStt(private val context: Context) {
                 override fun onPartialResults(partialResults: Bundle?) {}
                 override fun onEvent(eventType: Int, params: Bundle?) {}
             })
-            sr.startListening(
-                Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                    .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                    .putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale(lang).toLanguageTag()),
-            )
-            cont.invokeOnCancellation { sr.destroy() }
+            runCatching {
+                sr.startListening(
+                    Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                        .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                        .putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale(lang).toLanguageTag()),
+                )
+            }.onFailure { finish(Heard.Failed(Heard.Kind.NO_LANGUAGE, "system recogniser: ${it.javaClass.simpleName}")) }
+            // The recogniser must be destroyed on the main thread, whichever thread cancels.
+            cont.invokeOnCancellation { main.post { destroy() } }
         }
-    }
 }
 
 fun locale(lang: Lang): Locale = Locale(lang.code, "IN")
@@ -329,7 +360,9 @@ class VoiceEngine(private val context: Context) {
     private var connection: android.content.ServiceConnection? = null
     private var count = 0
 
-    /** False after the voice failed twice on this phone; the phone's own voice is used from then on. */
+    init { resetAfterUpdate(prefs) }
+
+    /** False after the voice failed twice on this phone (until the next app update); the phone's own voice is used meanwhile. */
     val usable: Boolean get() = prefs.getInt("failures", 0) < 2
     val problem: String get() = prefs.getString("problem", "").orEmpty()
 
@@ -377,4 +410,13 @@ class VoiceEngine(private val context: Context) {
         connection?.let { runCatching { context.unbindService(it) } }
         connection = null; service = null
     }
+}
+
+/**
+ * The app's own voice and the language model switch themselves off after two failures on a
+ * phone. A new app version gets a fresh start, so one slow first load is not "off for ever".
+ */
+internal fun resetAfterUpdate(prefs: android.content.SharedPreferences) {
+    val version = com.acxelin.hisaabsaathi.BuildConfig.VERSION_CODE
+    if (prefs.getInt("version", -1) != version) prefs.edit().putInt("version", version).putInt("failures", 0).apply()
 }
