@@ -18,7 +18,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 
 /**
- * The on-device fine-tuned language model (Qwen2.5-0.5B via MediaPipe/LiteRT), run in a
+ * The on-device fine-tuned language model (Qwen2.5-0.5B via LiteRT-LM), run in a
  * separate process by [LlmService] so a crash there cannot close the app.
  *
  * It is asked only to say what each number in a sentence is; [com.acxelin.hisaabsaathi.core.Slm.parse]
@@ -38,7 +38,7 @@ class SlmEngine(private val context: Context, private val packs: PackManager) {
     var problem: String = prefs.getString("problem", "").orEmpty()
         private set
 
-    private fun installed() = Catalog.slmHisaab.takeIf { packs.isReady(it) }
+    private fun installed() = Catalog.slmHisaab.takeIf { Catalog.slmSupported && packs.isReady(it) }
 
     private val failures get() = prefs.getInt("failures", 0)
 

@@ -66,15 +66,15 @@ object Catalog {
 
     /**
      * Qwen2.5-0.5B-Instruct fine-tuned to label the numbers in a worker's sentence
-     * (tools/finetune_slm.py), converted to 8-bit LiteRT and packed for MediaPipe
-     * (tools/make_task.py). 133/140 held-out corpus prompts labelled right before
-     * conversion, 37/40 after.
+     * (tools/finetune_slm.py), converted to 8-bit LiteRT-LM with litert-torch.
+     * 133/140 held-out corpus prompts labelled right before conversion; 78/80 after, in the
+     * LiteRT-LM runtime the app uses (tools/check_litertlm.py), about 0.8 s a sentence on a PC.
      */
     val slmHisaab = Pack(
         id = "slm-hisaab",
         title = "HisaabSaathi Qwen2.5-0.5B, fine-tuned (8-bit)",
         licence = "Apache-2.0 (Qwen2.5); fine-tune by Acxelin Labs",
-        files = listOf(PackFile(BuildConfig.HISAAB_MODEL_URL, "slm/hisaabsaathi-qwen05-ft-q8.task", 513_718_731)),
+        files = listOf(PackFile(BuildConfig.HISAAB_MODEL_URL, "slm/hisaabsaathi-qwen05-ft-q8.litertlm", 512_983_040)),
     )
 
     /**
@@ -110,6 +110,9 @@ object Catalog {
 
     val canDownloadSlm: Boolean get() = BuildConfig.HISAAB_MODEL_URL.isNotBlank()
 
+    /** LiteRT-LM ships 64-bit libraries only; 32-bit phones use the rules alone. */
+    val slmSupported: Boolean get() = android.os.Process.is64Bit()
+
     fun stt(lang: Lang): Pack = when (lang) {
         Lang.HI -> sttHindi
         Lang.OR -> sttOdia
@@ -125,6 +128,11 @@ object Catalog {
 class PackManager(context: Context, private val scope: CoroutineScope) {
     private val root = File(context.filesDir, "models")
     private val jobs = HashMap<String, Job>()
+
+    init {
+        // The model used to ship in MediaPipe's .task format (0.5.x); free that 500 MB.
+        File(root, "slm/hisaabsaathi-qwen05-ft-q8.task").delete()
+    }
 
     private val _states = MutableStateFlow(Catalog.all.associate { it.id to initial(it) })
     val states: StateFlow<Map<String, PackState>> = _states

@@ -13,16 +13,14 @@ android {
         applicationId = "com.acxelin.hisaabsaathi"
         minSdk = 29 // Android 10
         targetSdk = 35
-        versionCode = 6
-        versionName = "0.5.1"
+        versionCode = 7
+        versionName = "0.6.0"
         // Where phones download the fine-tuned model from (public, Apache-2.0).
         buildConfigField(
             "String", "HISAAB_MODEL_URL",
-            "\"https://huggingface.co/QubitMan/hisaabsaathi-model/resolve/main/hisaabsaathi-qwen05-ft-q8.task\"",
+            "\"https://huggingface.co/QubitMan/hisaabsaathi-model/resolve/main/hisaabsaathi-qwen05-ft-q8.litertlm\"",
         )
     }
-
-    androidResources { noCompress += "task" }
 
     buildTypes {
         release {
@@ -35,7 +33,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = "17" }
     buildFeatures { compose = true; buildConfig = true }
 
     // One APK per processor type keeps each download small (most phones need arm64-v8a).
@@ -84,7 +81,7 @@ dependencies {
     // ONNX Runtime 1.29 for the voices. Its native library is shipped renamed (libortvoice.so,
     // src/main/jniLibs) so it cannot clash with the 1.28.2 copy inside sherpa-onnx.
     implementation(files("libs/onnxruntime-android-1.29.0-classes.jar"))
-    implementation(libs.mediapipe.genai)   // on-device small language model
+    implementation(libs.litertlm)          // on-device small language model (LiteRT-LM)
     implementation(libs.mlkit.text.devanagari) // on-device OCR (Devanagari + Latin)
 
     testImplementation(libs.junit)
@@ -96,3 +93,5 @@ dependencies {
     testImplementation(libs.coroutines.test)
     debugImplementation(libs.compose.ui.test.manifest)
 }
+
+kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }

@@ -20,7 +20,7 @@ Design notes: `../docs/superpowers/specs/2026-11-16-android-mvp-design.md`.
 |---|---|---|---|
 | Voice activity | Silero VAD v5 | 2 MB | MIT |
 | Speech-to-text | AI4Bharat IndicConformer (Hindi, Odia, Telugu, Kannada, Tamil), int8, via sherpa-onnx | ~197 MB each | MIT |
-| Understanding (optional) | Qwen2.5-0.5B / 1.5B Instruct, 8-bit, via MediaPipe LLM Inference | 547 MB / 1.6 GB | Apache-2.0 |
+| Understanding (optional) | Qwen2.5-0.5B Instruct fine-tuned by Acxelin Labs, 8-bit, via LiteRT-LM | 513 MB | Apache-2.0 |
 | OCR | ML Kit text recognition (Latin + Devanagari), bundled | in APK | Google ML Kit terms |
 | Text-to-speech | Indic Tiny TTS (Hindi, Odia, Telugu, Kannada, Tamil; Matcha + Vocos), run on ONNX Runtime 1.29 in its own `:voice` process; falls back to the phone's TTS for English or if the voice fails | ~91 MB each | CC-BY-4.0 (voices), MIT (Vocos) |
 
@@ -88,12 +88,15 @@ speech.
 
 ### The fine-tuned model in the app
 
-- Merged and converted to 8-bit LiteRT with litert-torch (Qwen2.5 0.5B recipe), then packed
-  as a MediaPipe `.task` (`tools/make_task.py`, tokenizer and chat template reused from
-  Google's published Qwen2.5-0.5B bundle). File: `hisaabsaathi-qwen05-ft-q8.task`, 514 MB,
-  sha256 `43fd871b0aec440f288d23685cf4e26f0f1e66804241ff4273db67f638b509a1`.
-- After conversion it labels 37/40 held-out prompts right (`tools/check_tflite.py`), the
-  same as before conversion.
+- Merged and converted to 8-bit LiteRT-LM with litert-torch (`--transpose_kv_cache=true`,
+  generic model type with Qwen's chat template including its default system turn). File:
+  `hisaabsaathi-qwen05-ft-q8.litertlm`, 513 MB, sha256
+  `35547b01dffa191303e1d8ca1e4e2c75abbc5c8f330cc957e905d0e9dc3c7a7f`.
+- In the LiteRT-LM runtime (the same C++ engine as the Android library, 0.19) it labels
+  78/80 held-out prompts right, median 0.8 s a sentence on 4 PC cores
+  (`tools/check_litertlm.py`). Before conversion: 133/140.
+- Runs in its own `:llm` process; repacked weights are cached in the app's cache folder
+  (about 500 MB, which Android may clear when storage is low).
 - The app asks it only when the rules are unsure or found nothing, and keeps its answer only
   if it labels exactly the numbers that were said, so it cannot override a confident rule
   result or add an amount.
@@ -101,8 +104,8 @@ speech.
   offers it during first-time setup and under Settings → Offline packs; downloads resume
   if interrupted, and a file of the wrong size is never loaded. "Add model file from phone"
   in Settings works without internet. The link is `HISAAB_MODEL_URL` in `app/build.gradle.kts`.
-- Not yet checked on a phone: MediaPipe loading this bundle, speed and memory on 3–4 GB
-  devices.
+- Not yet checked on a phone: LiteRT-LM loading the model, speed and memory on 3–4 GB
+  devices. LiteRT-LM ships only arm64 and x86_64 libraries, so 32-bit phones run on rules alone.
 
 ## Look
 
