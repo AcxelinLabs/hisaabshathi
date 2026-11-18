@@ -74,16 +74,18 @@ object Catalog {
     )
 
     /**
-     * Qwen2.5-0.5B-Instruct fine-tuned to label the numbers in a worker's sentence
-     * (tools/finetune_slm.py), converted to 8-bit LiteRT-LM with litert-torch.
-     * 133/140 held-out corpus prompts labelled right before conversion; 78/80 after, in the
-     * LiteRT-LM runtime the app uses (tools/check_litertlm.py), about 0.8 s a sentence on a PC.
+     * Qwen3-0.6B fine-tuned for the app's two model jobs (tools/finetune_compare.py): say what
+     * each number in a worker's sentence is, and say whether a sentence the rules did not
+     * understand is a ledger question and for which period. Chosen over Gemma 3 1B and
+     * Qwen2.5-0.5B trained on the same data (README, "Choosing the language model").
+     * Converted to 8-bit LiteRT-LM with litert-torch; in the LiteRT-LM runtime 138/140 held-out
+     * corpus prompts right, about 1.1 s an answer on a PC (tools/litertlm_answers.py).
      */
     val slmHisaab = Pack(
         id = "slm-hisaab",
-        title = "HisaabSaathi Qwen2.5-0.5B, fine-tuned (8-bit)",
-        licence = "Apache-2.0 (Qwen2.5); fine-tune by Acxelin Labs",
-        files = listOf(PackFile(BuildConfig.HISAAB_MODEL_URL, "slm/hisaabsaathi-qwen05-ft-q8.litertlm", 512_983_040)),
+        title = "HisaabSaathi Qwen3-0.6B, fine-tuned (8-bit)",
+        licence = "Apache-2.0 (Qwen3); fine-tune by Acxelin Labs",
+        files = listOf(PackFile(BuildConfig.HISAAB_MODEL_URL, "slm/hisaabsaathi-qwen3-ft-q8.litertlm", 616_873_984)),
     )
 
     /**
@@ -142,6 +144,8 @@ class PackManager(context: Context, private val scope: CoroutineScope) {
     init {
         // The model used to ship in MediaPipe's .task format (0.5.x); free that 500 MB.
         File(root, "slm/hisaabsaathi-qwen05-ft-q8.task").delete()
+        // Qwen2.5-0.5B was replaced by Qwen3-0.6B in 0.7.0; free its 513 MB.
+        File(root, "slm/hisaabsaathi-qwen05-ft-q8.litertlm").delete()
         // English moved to Parakeet in 0.6.1; free the old model's 175 MB.
         File(root, "speech/en/model.int8.onnx").delete()
         File(root, "speech/en/tokens.txt").delete()

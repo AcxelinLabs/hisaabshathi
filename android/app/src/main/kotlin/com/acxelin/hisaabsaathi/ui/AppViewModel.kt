@@ -224,8 +224,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     val found = Slm.choose(Extraction(text), Slm.prompt(text)?.let { app.slm.generate(it) })
                     if (found.entries.isNotEmpty()) return review(Capture.Review(text, found.entries, true, source))
                     // A ledger question in words the rules do not know ("did I get all my wages this
-                    // month?"). The model only names the period and topic; the totals are the app's.
-                    Slm.parseQuestion(app.slm.generate(Slm.questionPrompt(text)))?.let { return answer(it, text) }
+                    // month?"). The totals are the app's. Only the model's period is trusted: in tests it
+                    // named the period right 60 times in 64 but the topic often wrong, so the worker
+                    // hears the whole summary for that period rather than one possibly wrong total.
+                    Slm.parseQuestion(app.slm.generate(Slm.questionPrompt(text)))
+                        ?.let { return answer(Query(it.period, QueryTopic.ALL), text) }
                 }
                 // Never stay silent: say what the app can do and how to phrase it.
                 say(strings.chatFallback, asked = text)

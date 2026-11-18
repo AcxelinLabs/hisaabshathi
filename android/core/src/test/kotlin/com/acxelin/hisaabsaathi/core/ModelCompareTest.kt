@@ -117,6 +117,16 @@ class ModelCompareTest {
             }
             report.appendLine("  $name: $right/${questions.size} right; missed questions $missed; non-questions taken as questions $falseAsk  " +
                 by.map { (k, v) -> "$k ${v[0]}/${v[1]}" }.joinToString(", "))
+            if (outputs == null) return
+            // The safer use: trust only the model's period and show everything for it.
+            var periodRight = 0; var periodWrong = 0
+            for (q in questions) {
+                val text = str(q, "text")!!; val want = str(q, "expect")!!
+                if (want == "NONE" || Understand.of(text) !is Understood.Unknown) continue
+                val got = Slm.parseQuestion(outputs[text]) ?: continue
+                if (want.startsWith("${got.period} ")) periodRight++ else periodWrong++
+            }
+            report.appendLine("    questions only the model caught, period right $periodRight, period wrong $periodWrong")
         }
         questionLine("rules alone", null)
         for (tag in tags) {

@@ -1,6 +1,7 @@
 package com.acxelin.hisaabsaathi
 
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.activity.compose.setContent
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -27,14 +28,19 @@ import org.robolectric.annotation.GraphicsMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = TestApp::class, qualifiers = "w360dp-h780dp-xxhdpi")
 class EditFormScreenshotTest {
-    @get:Rule val rule = createComposeRule()
+    // Hosted in the app's own activity: the bare test activity exists only in debug builds.
+    @get:Rule val rule = createAndroidComposeRule<com.acxelin.hisaabsaathi.ui.MainActivity>()
 
     @Test fun editForm() {
         val e = Entry(id = 3, epochDay = java.time.LocalDate.now().toEpochDay(), createdAtMs = 1, type = EntryType.EXPENSE, amountPaise = 8_000, category = ExpenseCategory.FOOD)
         var saved: List<Any>? = null
-        rule.setContent {
-            HisaabTheme(Lang.HI) { EditEntryForm(e, Strings(Lang.HI), onCancel = {}) { t, a, d, c -> saved = listOf(t, a, d, c) } }
+        rule.runOnUiThread {
+            // Replaces the app's own screen (the test rule's setContent refuses a second one).
+            rule.activity.setContent {
+                HisaabTheme(Lang.HI) { EditEntryForm(e, Strings(Lang.HI), onCancel = {}) { t, a, d, c -> saved = listOf(t, a, d, c) } }
+            }
         }
+        rule.waitForIdle()
         rule.onNodeWithText("आना-जाना", substring = true).performClick()
         rule.onNode(hasSetTextAction()).performTextReplacement("90")
         rule.onRoot().captureRoboImage("build/screens/08b-edit-entry.png")

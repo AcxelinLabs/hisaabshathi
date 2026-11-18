@@ -251,5 +251,5 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
 /** Attribution the open models and fonts ask for (CC-BY-4.0 requires credit). */
 private const val CREDITS = """Speech recognition: AI4Bharat IndicConformer (MIT); English: NVIDIA Parakeet TDT-CTC 110M (CC-BY-4.0, ONNX export by k2-fsa); voice detection: Silero VAD (MIT); runtime: sherpa-onnx (Apache-2.0).
 Voices: Indic Tiny TTS by Sulabh Katiyar (CC-BY-4.0, huggingface.co/sulabhkatiyar), trained on AI4Bharat Rasa (CC-BY-4.0); vocoder: Vocos by charactr (MIT); runtime: ONNX Runtime (MIT).
-Understanding: Qwen2.5-0.5B-Instruct by Alibaba Cloud (Apache-2.0), fine-tuned by Acxelin Labs; runtime: Google LiteRT-LM (Apache-2.0).
+Understanding: Qwen3-0.6B by Alibaba Cloud (Apache-2.0), fine-tuned by Acxelin Labs; runtime: Google LiteRT-LM (Apache-2.0).
 Fonts: Anek by EkType (SIL Open Font Licence)."""

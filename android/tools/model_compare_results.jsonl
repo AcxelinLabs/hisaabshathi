@@ -1,1 +1,3 @@
 {"tag": "qwen3_06", "model": "Qwen/Qwen3-0.6B", "train_min": 62, "corpus_right": 140, "corpus_n": 140, "question_model_alone_right": 81, "question_n": 167, "median_s": 1.01}
+{"tag": "gemma3_1b", "model": "unsloth/gemma-3-1b-it", "train_min": 68, "corpus_right": 127, "corpus_n": 140, "question_model_alone_right": 62, "question_n": 167, "median_s": 1.29}
+{"tag": "qwen25_05", "model": "Qwen/Qwen2.5-0.5B-Instruct", "train_min": 52, "corpus_right": 127, "corpus_n": 140, "question_model_alone_right": 20, "question_n": 167, "median_s": 0.77}

@@ -21,7 +21,7 @@ import com.google.ai.edge.litertlm.SessionConfig
  * dies: the app keeps running and carries on with its rules.
  *
  * Each sentence gets a fresh session with greedy decoding. The session applies the chat
- * template stored in the model file (Qwen's, with its default system turn), the same format
+ * template stored in the model file (Qwen3's, with thinking turned off), the same format
  * the model was fine-tuned on; tools/check_litertlm.py measures exactly this set-up.
  */
 class LlmService : Service() {

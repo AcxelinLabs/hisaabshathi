@@ -18,7 +18,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 
 /**
- * The on-device fine-tuned language model (Qwen2.5-0.5B via LiteRT-LM), run in a
+ * The on-device fine-tuned language model (Qwen3-0.6B via LiteRT-LM), run in a
  * separate process by [LlmService] so a crash there cannot close the app.
  *
  * It is asked only to say what each number in a sentence is; [com.acxelin.hisaabsaathi.core.Slm.parse]

@@ -21,7 +21,7 @@ Design notes: `../docs/superpowers/specs/2026-11-16-android-mvp-design.md`.
 | Voice activity | Silero VAD v5 | 2 MB | MIT |
 | Speech-to-text | AI4Bharat IndicConformer (Hindi, Odia, Telugu, Kannada, Tamil), int8, via sherpa-onnx | ~197 MB each | MIT |
 | Speech-to-text, English | NVIDIA Parakeet TDT-CTC 110M (CTC branch), 8-bit weights by Acxelin Labs, via sherpa-onnx | 174 MB | CC-BY-4.0 |
-| Understanding (optional) | Qwen2.5-0.5B Instruct fine-tuned by Acxelin Labs, 8-bit, via LiteRT-LM | 513 MB | Apache-2.0 |
+| Understanding (optional) | Qwen3-0.6B fine-tuned by Acxelin Labs, 8-bit, via LiteRT-LM | 617 MB | Apache-2.0 |
 | OCR | ML Kit text recognition (Latin + Devanagari), bundled | in APK | Google ML Kit terms |
 | Text-to-speech | Indic Tiny TTS (Hindi, Odia, Telugu, Kannada, Tamil; Matcha + Vocos), run on ONNX Runtime 1.29 in its own `:voice` process; falls back to the phone's TTS for English or if the voice fails | ~91 MB each | CC-BY-4.0 (voices), MIT (Vocos) |
 
@@ -180,17 +180,43 @@ The fine-tuned model was trained on sentences built from the same templates as t
 (with no overlapping sentences), so 95% shows it can learn the task, not how it does on real
 speech.
 
+### Choosing the language model (18 Nov 2026)
+
+Three small models were fine-tuned the same way on identical data (`tools/finetune_compare.py`:
+LoRA, 800 entry sentences and 400 questions in the training phrasings of
+`tools/make_questions.py`) and scored through the app's own code (`ModelCompareTest`, report
+in `core/build/model-compare-report.txt`). Tests: 140 held-out corpus prompts; the 168 spoken
+entries of the speech test exactly as the speech models wrote them; 167 sentences in
+question phrasings never used in training (147 ledger questions, 20 other sentences).
+
+| | Corpus prompts | Real speech, entry right | Questions right / missed | Time per answer (PC) |
+|---|---|---|---|---|
+| Rules alone | — | 95 / 168 | 46 / 93 missed | — |
+| + Qwen3-0.6B | 140 / 140 | 100 | 78 / 29 missed | 1.0 s |
+| + Gemma 3 1B | 127 / 140 | 98 | 67 / 47 missed | 1.3 s |
+| + Qwen2.5-0.5B | 127 / 140 | 101 | 46 / 93 (answers "none" to everything) | 0.8 s |
+
+No model took an ordinary sentence for a question. Qwen3-0.6B was chosen. It names the
+question's period well (60 right, 4 wrong among the questions only it caught) but often picks
+the wrong topic (e.g. "did I get all my wages?" taken as "earned" instead of "still owed"), so
+the app trusts only the period and reads out the whole summary for it.
+
 ### The fine-tuned model in the app
 
-- Merged and converted to 8-bit LiteRT-LM with litert-torch (`--transpose_kv_cache=true`,
-  generic model type with Qwen's chat template including its default system turn). File:
-  `hisaabsaathi-qwen05-ft-q8.litertlm`, 513 MB, sha256
-  `35547b01dffa191303e1d8ca1e4e2c75abbc5c8f330cc957e905d0e9dc3c7a7f`.
-- In the LiteRT-LM runtime (the same C++ engine as the Android library, 0.19) it labels
-  78/80 held-out prompts right, median 0.8 s a sentence on 4 PC cores
-  (`tools/check_litertlm.py`). Before conversion: 133/140.
+- Qwen3-0.6B, LoRA merged, converted to 8-bit LiteRT-LM with litert-torch
+  (`convert_v3_to_tflite`, `--transpose_kv_cache=true`; the tied output weight is added to the
+  checkpoint as `lm_head.weight` for the converter), generic model type with the training
+  chat template (Qwen3's, thinking turned off, no system turn). File:
+  `hisaabsaathi-qwen3-ft-q8.litertlm`, 617 MB (616,873,984 bytes), sha256
+  `917030d2567e5ddee1ba53c20d95a575f9ca825aebf2a87e71363f099e2290b2`.
+- In the LiteRT-LM runtime (the same C++ engine as the Android library) with the template
+  stored in the file, as the app calls it (`tools/litertlm_answers.py`): 138/140 corpus
+  prompts; real speech 100/168 with the rules, the same as before conversion; questions 75/167
+  (59 caught by the model with the right period, 4 wrong). Median 1.1 s an answer on 4 PC cores.
+- Earlier model (0.6.x): Qwen2.5-0.5B fine-tuned for entries only, 513 MB; the app deletes it
+  after the update.
 - Runs in its own `:llm` process; repacked weights are cached in the app's cache folder
-  (about 500 MB, which Android may clear when storage is low).
+  (about 600 MB, which Android may clear when storage is low).
 - The app asks it only when the rules are unsure or found nothing, and keeps its answer only
   if it labels exactly the numbers that were said, so it cannot override a confident rule
   result or add an amount.
