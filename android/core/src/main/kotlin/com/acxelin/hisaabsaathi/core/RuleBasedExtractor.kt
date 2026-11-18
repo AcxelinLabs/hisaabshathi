@@ -101,8 +101,16 @@ object RuleBasedExtractor {
         else -> null
     }
 
+    /** The transcript's words, with numbers split off the money, hours and pieces words they are written onto. */
+    fun tokensOf(transcript: String): List<String> =
+        NumberWords.expand(Text.tokens(transcript)) { it in money || it in hours || it in pieces }
+
+    /** Every number spoken in [transcript], read exactly as [extract] reads it. */
+    fun numbersIn(transcript: String): List<Double> =
+        NumberWords.parse(tokensOf(transcript)).filterIsInstance<NumberWords.Num>().map { it.value }
+
     fun extract(transcript: String): Extraction {
-        val tokens = NumberWords.expand(Text.tokens(transcript)) { it in money || it in hours || it in pieces }
+        val tokens = tokensOf(transcript)
         val toks = NumberWords.parse(tokens)
         val wordSet = tokens.toSet()
 

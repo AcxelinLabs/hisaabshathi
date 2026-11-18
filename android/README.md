@@ -84,16 +84,16 @@ Test sets:
   unseen speakers per language are used (2–9 minutes each), plus a 0.5 h sample of seen
   rural speakers for contrast.
 
-Word error rate / character error rate; spoken numbers the recogniser kept (number words
-as the app's `NumberWords` reads them; values other than 1, since "one" is mostly the
-article "a"):
+Word error rate / character error rate, and the share of spoken number values (other than
+1, which here is mostly the article "a") that the app reads the same from the recogniser's
+text as from the reference; count in brackets:
 
 | Language | Vaani, unseen | IndicVoices, unseen | IndicVoices, seen speakers |
 |---|---|---|---|
-| Odia | 48.3% / 14.0%; numbers 86%, values≠1 64% (90) | 35.5% / 14.4% (75 clips) | 32.7% / 10.4%; 91%, 90% |
-| Telugu | 34.2% / 9.2%; 93%, 92% (155) | 28.2% / 8.4% (72) | 29.5% / 8.1%; 82%, 82% |
-| Kannada | 53.1% / 18.2%; 79%, 87% (154) | 40.6% / 13.9% (21) | 37.8% / 10.9%; 86%, 86% |
-| Tamil | 54.2% / 16.7%; 76%, 94% (133) | 33.1% / 10.1% (111) | 33.4% / 9.6%; 84%, 92% |
+| Odia | 48.3% / 14.0%; 86% (149) | 35.5% / 14.4% (75 clips) | 32.7% / 10.4%; 92% (109) |
+| Telugu | 34.2% / 9.2%; 92% (155) | 28.2% / 8.4% (72) | 29.5% / 8.1%; 82% (60) |
+| Kannada | 53.1% / 18.2%; 88% (152) | 40.6% / 13.9% (21) | 37.8% / 10.9%; 90% (63) |
+| Tamil | 54.2% / 16.7%; 94% (133) | 33.1% / 10.1% (111) | 33.4% / 9.6%; 89% (85) |
 
 Odia Vaani rural districts 51.9% WER vs Khordha 44.6%. Vaani transcripts keep dialect
 spellings (ଗୋଟେ, ஒன்னு) that the recogniser writes in standard form, so part of its higher
@@ -101,30 +101,35 @@ error rate is spelling, not mishearing.
 
 Full app path: each reference transcript and each recogniser output goes through
 `Understand` (`PipelineEvalTest`). Where the reference reads as a ledger entry, how often
-the recogniser's text gives the same amounts (and the same entry exactly):
+the recogniser's text gives the same amounts; and how many clips gave an entry from the
+recogniser's text when the reference gave none (the confirmation card catches these):
 
-| Language | Vaani | IndicVoices, seen |
-|---|---|---|
-| Odia | 57% (25/44), exact 57% | 95% (36/38) |
-| Telugu | 78% (152/195), exact 72% | 73% (22/30) |
-| Kannada | 69% (107/154), exact 68% | 70% (26/37) |
-| Tamil | 71% (57/80), exact 66% | 76% (38/50) |
+| Language | Vaani: same amount | Vaani: false entries | IndicVoices seen: same amount |
+|---|---|---|---|
+| Odia | 75% (60/80) | 11 of 1,477 | 93% (43/46) |
+| Telugu | 78% (152/195) | 33 of 1,534 | 73% (22/30) |
+| Kannada | 70% (105/151) | 31 of 1,093 | 76% (26/34) |
+| Tamil | 71% (57/80) | 7 of 765 | 71% (27/38) |
 
-The other way round, the recogniser's text produced an entry where the reference had none in
-41 Odia, 33 Telugu, 32 Kannada and 7 Tamil Vaani clips (the confirmation card catches these).
 These sentences describe pictures or everyday life, not ledger entries, so this measures
 how numbers survive, not real use. Example of a wrong amount: Tamil அறுநூறு (600) heard as
 இரநூறு (200).
 
-Problems in the app's number reader found on the way (not speech recognition):
+Number-reader fixes from this test (`RealSpeechNumbersTest`), all included above:
 
-- Colloquial "one" is missing: Odia ଗୋଟେ / ଗୁଟେ (506 times in 1,477 Vaani Odia
-  transcripts), Tamil ஒன்னு.
-- Numbers with a counting suffix written as one word are not read: Odia ଦୁଇଜଣ,
-  କୋଡ଼ିଏଟା.
-- Words read as numbers by mistake: Tamil நாங்கள் ("we") as 4 (made a false entry),
-  Odia ଏଇଟି ("this one") as 80, Kannada ಹೊತ್ತು ("time") likely as 10, the ବାର in
-  କରିବାର as 12.
+- Colloquial Odia "one" (ଗୋଟେ, ଗୁଟେ, ଗୋଟାଏ: 506 times in 1,477 Vaani Odia transcripts) and
+  ଷୋଳ (16) were not read.
+- Odia numbers with a counting word attached (ଦୁଇଜଣ "two people", ଚାରିଟା, କୋଡ଼ିଏଟା) were
+  not read.
+- Everyday words read as numbers: Tamil நாங்கள் / நாங்க ("we") as 4, which made false
+  entries; Kannada ಹೊತ್ତು ("time") as 10; Odia ଏଇଟି / ଏଟି ("this one", also how English
+  "eighty" is written) as 80, now only before hundred/thousand/rupee words or an English
+  unit; ବାର inside କରିବାର ("of doing") as 12, as a word is now split from a number only
+  before a money, hours or pieces word.
+
+Before the fixes, Odia Vaani read 64% of number values the same and gave 41 false
+entries; same amount on entries was 57% (25/44).
+
 
 ## Speech model benchmarks (earlier, sherpa-onnx 1.12.40, on a PC)
 

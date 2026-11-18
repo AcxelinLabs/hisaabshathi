@@ -20,14 +20,14 @@ class PipelineEvalTest {
     private val corpus = CorpusTest()
 
     private fun numberWords(text: String): List<String> {
-        val toks = NumberWords.expand(Text.tokens(text))
+        val toks = RuleBasedExtractor.tokensOf(text)
         return NumberWords.parse(toks).filterIsInstance<NumberWords.Num>().flatMap { toks.subList(it.start, it.end) }
     }
 
     private fun side(text: String) = JsonObject(
         mapOf(
             "num_words" to JsonArray(numberWords(text).map { JsonPrimitive(it) }),
-            "values" to JsonArray(NumberWords.numbersIn(text).map { JsonPrimitive(it) }),
+            "values" to JsonArray(RuleBasedExtractor.numbersIn(text).map { JsonPrimitive(it) }),
             "understood" to JsonPrimitive(corpus.actualFor(text)),
         ),
     )

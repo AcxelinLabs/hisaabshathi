@@ -53,8 +53,8 @@ object NumberWords {
     )
 
     private val odia = table(
-        "0=ଶୂନ|ଶୂନ୍ୟ; 1=ଏକ|ଗୋଟିଏ; 2=ଦୁଇ; 3=ତିନି; 4=ଚାରି; 5=ପାଞ୍ଚ; 6=ଛଅ; 7=ସାତ; 8=ଆଠ; 9=ନଅ; 10=ଦଶ",
-        "11=ଏଗାର; 12=ବାର; 13=ତେର; 14=ଚଉଦ; 15=ପନ୍ଦର; 16=ଷୋହଳ; 17=ସତର; 18=ଅଠର; 19=ଉଣେଇଶ; 20=କୋଡ଼ିଏ|କୋଡ଼ି",
+        "0=ଶୂନ|ଶୂନ୍ୟ; 1=ଏକ|ଗୋଟିଏ|ଗୋଟେ|ଗୁଟେ|ଗୋଟାଏ|ଗୁଟିଏ; 2=ଦୁଇ; 3=ତିନି; 4=ଚାରି; 5=ପାଞ୍ଚ; 6=ଛଅ; 7=ସାତ; 8=ଆଠ; 9=ନଅ; 10=ଦଶ",
+        "11=ଏଗାର; 12=ବାର; 13=ତେର; 14=ଚଉଦ; 15=ପନ୍ଦର; 16=ଷୋହଳ|ଷୋଳ; 17=ସତର; 18=ଅଠର; 19=ଉଣେଇଶ; 20=କୋଡ଼ିଏ|କୋଡ଼ି",
         "21=ଏକୋଇଶ; 22=ବାଇଶ; 23=ତେଇଶ; 24=ଚବିଶ; 25=ପଚିଶ; 26=ଛବିଶ; 27=ସତାଇଶ; 28=ଅଠାଇଶ; 29=ଅଣତିରିଶ; 30=ତିରିଶ",
         "31=ଏକତିରିଶ; 32=ବତିଶ; 33=ତେତିଶ; 34=ଚଉତିରିଶ; 35=ପଞ୍ଚତିରିଶ; 36=ଛତିଶ; 37=ସଇଁତିରିଶ; 38=ଅଠତିରିଶ; 39=ଅଣଚାଳିଶ; 40=ଚାଳିଶ",
         "41=ଏକଚାଳିଶ; 42=ବୟାଳିଶ; 43=ତେୟାଳିଶ; 44=ଚଉରାଳିଶ; 45=ପଞ୍ଚଚାଳିଶ; 46=ଛୟାଳିଶ; 47=ସତଚାଳିଶ; 48=ଅଠଚାଳିଶ; 49=ଅଣଚାଶ; 50=ପଚାଶ",
@@ -95,7 +95,7 @@ object NumberWords {
         // Odia
         "0=ଜିରୋ; 1=ୱାନ|ୱନ; 3=ଥ୍ରୀ; 4=ଫୋର; 5=ଫାଇଭ; 6=ସିକ୍ସ; 7=ସେଭେନ|ସେଭନ; 9=ନାଇନ; 10=ଟେନ",
         "11=ଇଲେଭେନ; 12=ଟ୍ୱେଲଭ; 13=ଥର୍ଟିନ; 14=ଫୋର୍ଟିନ; 15=ଫିଫ୍ଟିନ; 16=ସିକ୍ସଟିନ; 17=ସେଭେନଟିନ; 18=ଏଟିନ|ଏଇଟିନ; 19=ନାଇନଟିନ",
-        "20=ଟ୍ୱେଣ୍ଟି|ଟୁଏଣ୍ଟି; 30=ଥର୍ଟି; 40=ଫୋର୍ଟି|ଫର୍ଟି; 50=ଫିଫ୍ଟି; 60=ସିକ୍ସଟି; 70=ସେଭେଣ୍ଟି|ସେଭେନ୍ଟି; 80=ଏଇଟି|ଏଟି; 90=ନାଇଣ୍ଟି|ନାଇନଟି",
+        "20=ଟ୍ୱେଣ୍ଟି|ଟୁଏଣ୍ଟି; 30=ଥର୍ଟି; 40=ଫୋର୍ଟି|ଫର୍ଟି; 50=ଫିଫ୍ଟି; 60=ସିକ୍ସଟି; 70=ସେଭେଣ୍ଟି|ସେଭେନ୍ଟି; 90=ନାଇଣ୍ଟି|ନାଇନଟି",
         // Telugu
         "0=జీరో; 1=వన్; 3=త్రీ|థ్రీ; 4=ఫోర్; 5=ఫైవ్; 6=సిక్స్; 7=సెవెన్|సెవన్; 9=నైన్; 10=టెన్",
         "11=ఎలెవెన్|ఇలెవెన్; 12=ట్వెల్వ్; 13=థర్టీన్; 14=ఫోర్టీన్; 15=ఫిఫ్టీన్; 16=సిక్స్టీన్; 17=సెవెంటీన్|సెవెన్టీన్; 18=ఎయిటీన్|ఏటీన్; 19=నైంటీన్|నైన్టీన్",
@@ -113,12 +113,25 @@ object NumberWords {
     /**
      * "two" and "eight" in Indian scripts are also how the models write English "to" and
      * "at" ("डाउन टू", "ऐट नाइन"), so they count only right before a hundred, a thousand or
-     * a rupee word.
+     * a rupee word. Odia "eighty" (ଏଇଟି, ଏଟି) is spelled like "this one", so it counts in the
+     * same places or before an English unit ("ଏଇଟି ଫାଇଭ" = 85).
      */
     private val englishSaidAmbiguous = table(
         "2=टू|ଟୁ|టూ|ಟೂ|டூ",
         "8=एट|ऐट|एइट|ଏଇଟ|ଏଟ|ఎయిట్|ఏట్|ಏಟ್|ಎಯ್ಟ್|எயிட்|எய்ட்",
+        "80=ଏଇଟି|ଏଟି",
     )
+
+    /**
+     * Everyday words one letter away from a number word, never read as numbers:
+     * Tamil நாங்கள் (we) vs நாங்கு (four), Kannada ಹೊತ್ತು (time) vs ಹತ್ತು (ten),
+     * Odia ଏଇଟେ / ଏଇଟା (this) vs ଏଇଟି.
+     */
+    private val notNumbers: Set<String> = setOf("நாங்கள்", "நாங்க", "ಹೊತ್ತು", "ಹೊತ್ತಿಗೆ", "ଏଇଟେ", "ଏଇଟା", "ଏଟେ", "ଏଟା")
+        .map { Text.normalize(it) }.toSet()
+
+    /** Odia counting words written onto a number: ଦୁଇଜଣ (two people), ଚାରିଟା (four of). */
+    private val odiaCounters = listOf("ଟିଏ", "ଜଣ", "ଟା", "ଟି", "ଟେ").map { Text.normalize(it) }
     private val currency: Set<String> = setOf(
         "रुपये", "रुपए", "रुपया", "रूपये", "रुपय", "ଟଙ୍କା", "రూపాయలు", "రూపాయల", "రూపాయి", "రుపాయలు",
         "ರೂಪಾಯಿ", "ರೂಪಾಯ", "ரூபாய்", "ரூபா", "rupees", "rupaye", "rs",
@@ -131,7 +144,8 @@ object NumberWords {
     }
 
     /** Tens a following unit adds to: "twenty five", "ట్వెంటీ ఫైవ్". */
-    private val englishTens = english.filterValues { it >= 20 }.keys + englishSaid.filterValues { it >= 20 && it % 10 == 0.0 }.keys
+    private val englishTens = english.filterValues { it >= 20 }.keys + englishSaid.filterValues { it >= 20 && it % 10 == 0.0 }.keys +
+        englishSaidAmbiguous.filterValues { it >= 20 }.keys
 
     private val multipliers: Map<String, Double> = table(
         "100=सौ|सो|ଶହ|ଶହେ|ଶ|sau|hundred|हंड्रेड|हन्ड्रेड|ହଣ୍ଡ୍ରେଡ|హండ్రెడ్|హండ్రడ్|ಹಂಡ್ರೆಡ್|ಹಂಡ್ರಡ್|ஹண்ட்ரட்|ஹன்ட்ரட்|ஹண்ட்ரெட்|ஹன்ட்ரெட்",
@@ -161,11 +175,19 @@ object NumberWords {
      */
     fun expand(tokens: List<String>, glue: (String) -> Boolean = { false }): List<String> {
         val out = ArrayList<String>(tokens.size)
-        for (t in tokens) {
+        for ((i, t) in tokens.withIndex()) {
             if (t !in units && t !in multipliers) {
+                val counter = odiaCounters.firstOrNull { t.length > it.length && t.endsWith(it) }
+                if (counter != null && t.dropLast(counter.length) in units) {
+                    out += t.dropLast(counter.length); out += counter
+                    continue
+                }
                 val cps = t.codePoints().toArray()
-                // A known word joined to the number after it, "ଆଜିବାର" (today + twelve), splits too.
-                val afterWord = t !in Keywords.known && t.any { it.code >= 128 }
+                // A known word joined to the number after it, "ଆଜିବାର" (today + twelve), splits too,
+                // but only before an amount, hours or pieces word: "କରିବାର" (of doing) is not "କରି 12".
+                val next = tokens.getOrNull(i + 1)
+                val counted = next != null && (next in multipliers || next in currency || glue(next))
+                val afterWord = counted && t !in Keywords.known && t.any { it.code >= 128 }
                 val split = (cps.size - 2 downTo 2).firstOrNull { k ->
                     val head = String(cps, 0, k); val tail = String(cps, k, cps.size - k)
                     (head in units && (tail in multipliers || tail in units || glue(tail))) ||
@@ -192,7 +214,7 @@ object NumberWords {
         val t = tokens[i]
         units[t]?.let { return it }
         // A misheard number word ("ಅರುವತ್ತು" for "ಅರವತ್ತು"): accept only an unambiguous match.
-        if (t !in multipliers && t !in fractionPrefix) Fuzzy.unique(t, units)?.let { return it }
+        if (t !in multipliers && t !in fractionPrefix && t !in notNumbers && t !in englishSaidAmbiguous) Fuzzy.unique(t, units)?.let { return it }
         if (t == "do") {
             val next = tokens.getOrNull(i + 1) ?: return null
             if (next in multipliers || next in romanDoFollowers) return 2.0
@@ -200,6 +222,7 @@ object NumberWords {
         englishSaidAmbiguous[t]?.let { v ->
             val next = tokens.getOrNull(i + 1) ?: return null
             if (next in multipliers || next in currency) return v
+            if (v >= 20 && englishSaid[next]?.let { it >= 1 && it < 10 } == true) return v
         }
         return null
     }

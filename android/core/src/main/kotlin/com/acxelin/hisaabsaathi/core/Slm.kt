@@ -17,7 +17,7 @@ object Slm {
 
     /** Null when nothing was said that could be labelled. */
     fun prompt(transcript: String): String? {
-        val numbers = NumberWords.numbersIn(transcript)
+        val numbers = RuleBasedExtractor.numbersIn(transcript)
         if (numbers.isEmpty()) return null
         return """
 A daily-wage worker in India said this (Hindi, Odia, Telugu, Kannada, Tamil or English):
@@ -62,7 +62,7 @@ Reply:""".trimStart()
      * label exactly the numbers that were spoken, in order.
      */
     fun parse(modelOutput: String, transcript: String, dayOffset: Int = 0): List<DraftEntry>? {
-        val spoken = NumberWords.numbersIn(transcript)
+        val spoken = RuleBasedExtractor.numbersIn(transcript)
         val found = line.findAll(modelOutput.lowercase()).map { it.groupValues[1].toDouble() to it.groupValues[2] }.toList()
         if (spoken.isEmpty() || found.size != spoken.size) return null
         for (i in spoken.indices) if (abs(found[i].first - spoken[i]) > 0.005 || found[i].second !in labels) return null
