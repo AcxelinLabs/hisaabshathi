@@ -41,8 +41,8 @@ def below100(n, lang, combining=False):
     head = (TENS_COMB.get(lang) or TENS[lang]).split()[t - 2]
     return f"{head} {U[lang][u]}"
 
-def spell(n, lang):
-    n = int(n)
+def spell(n, lang, more=False):
+    n = int(n); more = more and lang == "te"  # only Telugu marks a number before a noun
     if n < 100: return below100(n, lang)
     parts = []
     lakh, rest = divmod(n, 100000)
@@ -53,14 +53,14 @@ def spell(n, lang):
         if lang in WORDS: parts.append(f"{spell(th, lang)} {WORDS[lang][1]}")
         else:
             one, many, comb = THOUSAND[lang]
-            if th == 1: parts.append(one if rest == 0 else ({"te": "వెయ్యి", "kn": "ಸಾವಿರದ", "ta": "ஆயிரத்து"}[lang]))
-            else: parts.append(f"{spell(th, lang)} {many if rest == 0 else comb}")
+            if th == 1: parts.append(one if rest == 0 and not more else ({"te": "వెయ్యి", "kn": "ಸಾವಿರದ", "ta": "ஆயிரத்து"}[lang]))
+            else: parts.append(f"{spell(th, lang)} {many if rest == 0 and not more else comb}")
     h, rest = divmod(rest, 100)
     if h:
         if lang in WORDS: parts.append(f"{below100(h, lang)} {WORDS[lang][0]}")
         else:
             exact, comb = HUNDREDS[lang]
-            parts.append((exact if rest == 0 else comb).split()[h - 1].replace("_", " "))
+            parts.append((exact if rest == 0 and not more else comb).split()[h - 1].replace("_", " "))
     if rest: parts.append(below100(rest, lang))
     return " ".join(parts)
 
@@ -70,5 +70,6 @@ def spell_numbers(text, lang):
         if "." in s:
             a, b = s.split(".", 1)
             return spell(a, lang) + (" " + {"hi": "दशमलव", "or": "ଦଶମିକ", "te": "పాయింట్", "kn": "ಪಾಯಿಂಟ್", "ta": "புள்ளி", "en": "point"}[lang] + " " + " ".join(spell(d, lang) for d in b) if b.strip("0") else "")
-        return spell(s, lang)
+        more = text[m.end():].lstrip()[:1].isalpha()
+        return spell(s, lang, more)
     return re.sub(r"\d[\d,]*(?:\.\d+)?", rep, text)
