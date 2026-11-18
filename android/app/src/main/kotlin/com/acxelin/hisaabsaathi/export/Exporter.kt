@@ -98,6 +98,30 @@ class Exporter(private val context: Context) {
         return File(dir, "hisaab-evidence-${System.currentTimeMillis()}.json").apply { writeText(root.toString(2)) }
     }
 
+    companion object {
+        /**
+         * Reads a saved copy (the evidence file). Null if it is not one. The hashes are not
+         * trusted: the lines are re-sealed when they join this phone's record.
+         */
+        fun readBackup(text: String): List<Entry>? = runCatching {
+            val root = JSONObject(text)
+            if (root.optString("app") != "HisaabSaathi") return null
+            val arr = root.getJSONArray("entries")
+            (0 until arr.length()).map { i ->
+                val o = arr.getJSONObject(i)
+                fun optLong(k: String) = if (o.isNull(k)) null else o.getLong(k)
+                Entry(
+                    epochDay = o.getLong("epochDay"), createdAtMs = o.getLong("createdAtMs"),
+                    type = EntryType.valueOf(o.getString("type")), amountPaise = o.getLong("amountPaise").coerceIn(0, com.acxelin.hisaabsaathi.core.Money.MAX_PAISE),
+                    hours = if (o.isNull("hours")) null else o.getDouble("hours"),
+                    pieces = optLong("pieces")?.toInt(), ratePaise = optLong("ratePaise"),
+                    category = if (o.isNull("category")) null else ExpenseCategory.valueOf(o.getString("category")),
+                    note = o.optString("note"), source = o.optString("source", "backup"),
+                )
+            }
+        }.getOrNull()
+    }
+
     /** The worker's corrections, one JSON object per line (core/Corrections.kt). */
     fun correctionsFile(jsonLines: String): File =
         File(dir, "hisaab-corrections-${System.currentTimeMillis()}.jsonl").apply { writeText(jsonLines) }

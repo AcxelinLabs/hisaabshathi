@@ -31,6 +31,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
@@ -357,11 +359,13 @@ private fun typeColor(type: EntryType): Color = when (type) {
 @Composable
 fun LedgerScreen(vm: AppViewModel, s: Strings) {
     val entries by vm.entries.collectAsStateWithLifecycle()
+    val deleted by vm.lastDeleted.collectAsStateWithLifecycle()
     var toDelete by remember { mutableStateOf<Entry?>(null) }
+    var editing by remember { mutableStateOf<Entry?>(null) }
+    Box(Modifier.fillMaxSize()) {
     if (entries.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(s.noEntries, fontSize = 18.sp, color = InkSoft) }
-        return
-    }
+    } else {
     val byDay = remember(entries) { entries.groupBy { it.epochDay } }
     LazyColumn(Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         byDay.forEach { (day, list) ->
@@ -372,7 +376,8 @@ fun LedgerScreen(vm: AppViewModel, s: Strings) {
                 )
             }
             items(list, key = { it.id }) { e ->
-                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Paper)) {
+                // Tap a line to change it.
+                Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Paper).clickable(onClickLabel = s.editEntry) { editing = e }) {
                     Row(Modifier.padding(start = 12.dp, top = 10.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                         Box(Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)).background(typeColor(e.type)), contentAlignment = Alignment.Center) {
                             Icon(painterResource(typeIcon(e.type)), null, tint = if (e.type == EntryType.ADVANCE) Ink else Color.White, modifier = Modifier.size(22.dp))
@@ -396,8 +401,22 @@ fun LedgerScreen(vm: AppViewModel, s: Strings) {
                 }
             }
         }
-        item { Spacer(Modifier.height(16.dp)) }
+        item { Spacer(Modifier.height(if (deleted != null) 88.dp else 16.dp)) }
     }
+    }
+    // Undo a delete for a few seconds: a wrong tap must not cost the worker a day's record.
+    deleted?.let { d ->
+        androidx.compose.runtime.LaunchedEffect(d) { kotlinx.coroutines.delay(8_000); vm.forgetDeleted() }
+        Row(
+            Modifier.align(Alignment.BottomCenter).padding(12.dp).fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Ink).padding(horizontal = 16.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text("${s.entryRemoved}: ${s.typeName(d.type)} ${s.rupees(d.amountPaise)}", color = Color.White, fontSize = 16.sp, modifier = Modifier.weight(1f))
+            TextButton(onClick = vm::undoDelete) { Text(s.undo, color = Marigold, fontSize = 18.sp, fontWeight = FontWeight.Bold) }
+        }
+    }
+    }
+    editing?.let { e -> EditEntryDialog(vm, e, s) { editing = null } }
     toDelete?.let { e ->
         AlertDialog(
             onDismissRequest = { toDelete = null },
@@ -558,6 +577,57 @@ fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
             }
             Spacer(Modifier.height(8.dp))
             BigButton(s.exportEvidence, Ink, Modifier.fillMaxWidth()) { vm.exportEvidence() }
+        }
+    }
+}
+
+/** Change a saved line: kind, amount, day and (for an expense) what it was for. */
+@Composable
+private fun EditEntryDialog(vm: AppViewModel, e: Entry, s: Strings, onDone: () -> Unit) {
+    // A plain dialog (not AlertDialog): its measuring does not get along with chips that wrap.
+    androidx.compose.ui.window.Dialog(onDismissRequest = onDone) {
+        EditEntryForm(e, s, onCancel = onDone) { type, amount, day, category -> if (vm.editEntry(e, type, amount, day, category)) onDone() }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+internal fun EditEntryForm(e: Entry, s: Strings, onCancel: () -> Unit, onSave: (EntryType, String, Long, ExpenseCategory) -> Unit) {
+    var type by remember(e.id) { mutableStateOf(e.type) }
+    var category by remember(e.id) { mutableStateOf(e.category ?: ExpenseCategory.OTHER) }
+    var day by remember(e.id) { mutableStateOf(e.epochDay) }
+    var amount by remember(e.id) { mutableStateOf(Money.format(e.amountPaise)) }
+    val bad = Money.parseTyped(amount) == null
+    val today = LocalDate.now().toEpochDay()
+    Column(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Paper).padding(20.dp).verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(s.editEntry, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            EntryType.entries.forEach { t ->
+                FilterChip(selected = type == t, onClick = { type = t }, label = { Text(s.typeName(t), fontSize = 15.sp) }, modifier = Modifier.height(44.dp))
+            }
+        }
+        if (type == EntryType.EXPENSE) FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            ExpenseCategory.entries.forEach { c ->
+                FilterChip(selected = category == c, onClick = { category = c }, label = { Text(s.categoryName(c), fontSize = 14.sp) }, modifier = Modifier.height(40.dp))
+            }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = { day -= 1 }) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, s.earlierDay, tint = Ink) }
+            Text(LocalDate.ofEpochDay(day).format(dayFormat), fontSize = 18.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+            IconButton(onClick = { if (day < today) day += 1 }, enabled = day < today) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, s.laterDay, tint = if (day < today) Ink else InkSoft) }
+        }
+        OutlinedTextField(
+            value = amount, onValueChange = { amount = it }, label = { Text(s.amountLabel) },
+            isError = bad, supportingText = if (bad) ({ Text(s.amountInvalid) }) else null,
+            textStyle = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true, modifier = Modifier.fillMaxWidth(),
+        )
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            TextButton(onClick = onCancel) { Text(s.cancel, fontSize = 17.sp) }
+            TextButton(onClick = { onSave(type, amount, day, category) }, enabled = !bad) { Text(s.done, fontSize = 17.sp, fontWeight = FontWeight.Bold) }
         }
     }
 }

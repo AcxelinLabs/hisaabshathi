@@ -108,7 +108,7 @@ Reply:""".trimStart()
         val fromModel = parse(modelOutput, rules.transcript, dayOffset)
         if (fromModel.isNullOrEmpty()) return rules
         val unsure = fromModel.any { it.type == EntryType.WORK && it.amountPaise == 0L }
-        return Extraction(rules.transcript, entries = fromModel, lowConfidence = unsure)
+        return Extraction(rules.transcript, entries = fromModel, lowConfidence = unsure).sane()
     }
 
     /** Whether it is worth spending seconds of model time on this utterance. */

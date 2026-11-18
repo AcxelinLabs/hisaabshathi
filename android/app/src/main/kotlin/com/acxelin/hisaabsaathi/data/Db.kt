@@ -92,16 +92,34 @@ abstract class EntryDao {
 
     /** Removes one entry and re-links the rest so the chain stays verifiable. */
     @Transaction
-    open suspend fun deleteAndReseal(id: Long) {
-        val keep = allOldestFirst().filter { it.id != id }
+    open suspend fun deleteAndReseal(id: Long) = reseal(allOldestFirst().filter { it.id != id }.map { it.toEntry() })
+
+    /** Replaces one entry (same id, same place in the chain) and re-links the rest. */
+    @Transaction
+    open suspend fun replaceAndReseal(entry: Entry) = reseal(allOldestFirst().map { if (it.id == entry.id) entry else it.toEntry() })
+
+    /** Puts a deleted entry back where it was (undo). */
+    @Transaction
+    open suspend fun restoreAndReseal(entry: Entry) =
+        reseal((allOldestFirst().map { it.toEntry() }.filter { it.id != entry.id } + entry).sortedBy { it.id })
+
+    /** Adds entries from a backup file, skipping any already here, and orders the whole record by when each line was made. */
+    @Transaction
+    open suspend fun mergeAndReseal(incoming: List<Entry>): Int {
+        val have = allOldestFirst().map { it.toEntry() }
+        val key = { e: Entry -> Triple(e.createdAtMs, e.type, e.amountPaise) to e.epochDay }
+        val known = have.map(key).toHashSet()
+        val fresh = incoming.filter { known.add(key(it)) }
+        if (fresh.isEmpty()) return 0
+        val all = (have + fresh.map { it.copy(id = 0) }).sortedWith(compareBy({ it.createdAtMs }, { it.id }))
+        reseal(all.mapIndexed { i, e -> e.copy(id = i + 1L) })
+        return fresh.size
+    }
+
+    private suspend fun reseal(entriesInOrder: List<Entry>) {
         clear()
         var prev = HashChain.GENESIS
-        val resealed = keep.map {
-            val sealed = HashChain.seal(prev, it.toEntry())
-            prev = sealed.hash
-            EntryRow.from(sealed)
-        }
-        insertAll(resealed)
+        insertAll(entriesInOrder.map { e -> HashChain.seal(prev, e).also { prev = it.hash }.let(EntryRow::from) })
     }
 }
 
@@ -156,7 +174,7 @@ abstract class LedgerDb : RoomDatabase() {
         fun open(context: Context): LedgerDb {
             System.loadLibrary("sqlcipher")
             return Room.databaseBuilder(context, LedgerDb::class.java, "ledger.db")
-                .openHelperFactory(SupportOpenHelperFactory(DbKey.get(context)))
+                .openHelperFactory(SupportOpenHelperFactory(runCatching { DbKey.get(context) }.getOrElse { DbKey.startOver(context, it) }))
                 .addMigrations(ADD_CORRECTIONS)
                 .build()
         }
@@ -201,6 +219,24 @@ object DbKey {
         return passphrase
     }
 
+    /**
+     * The phone lost the key that unlocks the ledger (rare: a reset security chip, a broken
+     * update). Without this the app would close on every start. The unreadable file is kept
+     * aside, not deleted, and a new empty ledger starts; a backup file can be restored into it.
+     */
+    fun startOver(context: Context, why: Throwable): ByteArray {
+        val stamp = System.currentTimeMillis()
+        for (suffix in listOf("", "-wal", "-shm", "-journal")) {
+            val f = context.getDatabasePath("ledger.db$suffix")
+            if (f.exists()) f.renameTo(java.io.File(f.parentFile, "ledger-unreadable-$stamp.db$suffix"))
+        }
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().clear().commit()
+        runCatching { KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry(ALIAS) }
+        context.getSharedPreferences("diagnostics", Context.MODE_PRIVATE).edit()
+            .putString("last", "ledger key lost (${why.javaClass.simpleName}); old file kept as ledger-unreadable-$stamp.db").apply()
+        return get(context)
+    }
+
     private fun keystoreKey(): SecretKey {
         val ks = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
         (ks.getKey(ALIAS, null) as? SecretKey)?.let { return it }
@@ -221,6 +257,9 @@ class LedgerRepository(private val dao: EntryDao) {
 
     suspend fun add(entries: List<Entry>) = dao.append(entries)
     suspend fun delete(id: Long) = dao.deleteAndReseal(id)
+    suspend fun replace(entry: Entry) = dao.replaceAndReseal(entry)
+    suspend fun restore(entry: Entry) = dao.restoreAndReseal(entry)
+    suspend fun merge(entries: List<Entry>): Int = dao.mergeAndReseal(entries)
     suspend fun eraseAll() = dao.clear()
     suspend fun oldestFirst(): List<Entry> = dao.allOldestFirst().map { it.toEntry() }
 }

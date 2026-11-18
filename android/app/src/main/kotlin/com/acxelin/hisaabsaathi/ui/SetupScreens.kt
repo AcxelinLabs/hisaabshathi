@@ -65,7 +65,7 @@ private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boole
             PackState.Missing -> if (canDownload) Button(onClick = { vm.download(pack) }) { Text(s.download) }
             is PackState.Downloading -> {
                 LinearProgressIndicator(progress = { state.fraction }, modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp), color = Green)
-                Text("${s.downloading} ${(state.fraction * 100).toInt()}%")
+                Text(if (state.waiting) "${s.waitingForInternet} ${(state.fraction * 100).toInt()}%" else "${s.downloading} ${(state.fraction * 100).toInt()}%")
             }
             PackState.Ready -> Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.Check, null, tint = Leaf)
@@ -73,7 +73,7 @@ private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boole
                 if (allowDelete) TextButton(onClick = { vm.deletePack(pack) }) { Text(s.delete, color = Red) }
             }
             is PackState.Failed -> {
-                Text(s.downloadFailed, color = Red)
+                Text(state.message.removePrefix("space:").toLongOrNull()?.takeIf { state.message.startsWith("space:") }?.let(s::notEnoughSpace) ?: s.downloadFailed, color = Red)
                 if (canDownload) Button(onClick = { vm.download(pack) }) { Text(s.download) }
             }
         }
@@ -202,6 +202,15 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
                 Text(problem, fontSize = 13.sp, color = InkSoft)
                 HorizontalDivider()
             }
+
+            Text(s.backupTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(s.backupBody, fontSize = 15.sp)
+            val restore = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::restoreBackup) }
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                OutlinedButton(onClick = { vm.saveBackup() }, modifier = Modifier.height(52.dp)) { Text(s.saveBackup) }
+                OutlinedButton(onClick = { restore.launch(arrayOf("application/json", "application/octet-stream", "text/plain", "*/*")) }, modifier = Modifier.height(52.dp)) { Text(s.restoreBackup) }
+            }
+            HorizontalDivider()
 
             Text(s.improveTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(s.improveBody, fontSize = 15.sp)

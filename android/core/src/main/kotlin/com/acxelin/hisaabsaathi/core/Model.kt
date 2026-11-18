@@ -46,6 +46,24 @@ data class Extraction(
     val lowConfidence: Boolean = false,
 ) {
     val isEmpty: Boolean get() = entries.isEmpty() && query == null
+
+    /**
+     * No line may claim more than ₹1 crore (a misheard phone number, a long run of digits):
+     * such an amount is left blank and marked for checking, so the worker types it. Absurd
+     * hours or pieces are dropped the same way.
+     */
+    fun sane(): Extraction {
+        var flagged = false
+        val fixed = entries.map { d ->
+            var e = d
+            if (e.amountPaise !in 0..Money.MAX_PAISE) { e = e.copy(amountPaise = 0); flagged = true }
+            if (e.ratePaise != null && e.ratePaise !in 0..Money.MAX_PAISE) { e = e.copy(ratePaise = null); flagged = true }
+            if (e.hours != null && e.hours !in 0.0..24.0 * 31) { e = e.copy(hours = null); flagged = true }
+            if (e.pieces != null && e.pieces !in 0..10_000_000) { e = e.copy(pieces = null); flagged = true }
+            e
+        }
+        return if (!flagged) this else copy(entries = fixed, lowConfidence = true)
+    }
 }
 
 object Money {

@@ -203,7 +203,7 @@ object RuleBasedExtractor {
         }
         for (p in paid) entries += DraftEntry(EntryType.PAYMENT, Money.rupeesToPaise(p), dayOffset = dayOffset)
 
-        return Extraction(transcript, entries = entries, lowConfidence = lowConfidence)
+        return Extraction(transcript, entries = entries, lowConfidence = lowConfidence).sane()
     }
 
     private fun isPerWord(w: String?): Boolean = w != null && (w == "के" || w == "ke" || w == "per" || w == "ପ୍ରତି")

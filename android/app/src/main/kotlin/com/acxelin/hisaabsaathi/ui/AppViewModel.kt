@@ -10,6 +10,9 @@ import com.acxelin.hisaabsaathi.core.Correction
 import com.acxelin.hisaabsaathi.core.Corrections
 import com.acxelin.hisaabsaathi.core.DraftEntry
 import com.acxelin.hisaabsaathi.core.Entry
+import com.acxelin.hisaabsaathi.core.EntryType
+import com.acxelin.hisaabsaathi.core.ExpenseCategory
+import com.acxelin.hisaabsaathi.core.Money
 import com.acxelin.hisaabsaathi.core.HashChain
 import com.acxelin.hisaabsaathi.core.Lang
 import com.acxelin.hisaabsaathi.core.Ledger
@@ -357,14 +360,52 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun scanned(photo: Uri, path: String) = viewModelScope.launch(guard) {
         capture.value = Capture.Thinking
         val text = app.scanner.text(photo)
-        val draft = ReceiptReader.read(text)
+        // Same limits as speech: a long run of digits on a bill must not become a ₹ crore line.
+        val draft = ReceiptReader.read(text)?.let { Extraction(text, listOf(it)).sane().entries.single() }
         if (draft == null) say(strings.notUnderstood)
         else review(Capture.Review(text.lines().take(6).joinToString(" / "), listOf(draft), true, "scan", path))
     }
 
     // ---- ledger, settings, export
 
-    fun delete(id: Long) = viewModelScope.launch(guard) { app.ledger.delete(id) }
+    /** The line deleted last, kept for a few seconds so the worker can undo a wrong tap. */
+    val lastDeleted = MutableStateFlow<Entry?>(null)
+
+    fun delete(id: Long) = viewModelScope.launch(guard) {
+        val e = entries.value.firstOrNull { it.id == id } ?: return@launch
+        app.ledger.delete(id)
+        lastDeleted.value = e
+    }
+
+    fun undoDelete() = viewModelScope.launch(guard) {
+        val e = lastDeleted.value ?: return@launch
+        lastDeleted.value = null
+        app.ledger.restore(e)
+    }
+
+    fun forgetDeleted() { lastDeleted.value = null }
+
+    /**
+     * Changes a saved line. Returns false (nothing changed) if the amount is a typing slip.
+     * The line keeps its place in the record, and its note says what it was before, so an
+     * exported record shows the edit.
+     */
+    fun editEntry(original: Entry, type: EntryType, amountText: String, epochDay: Long, category: ExpenseCategory?): Boolean {
+        val paise = Money.parseTyped(amountText) ?: return false
+        val day = minOf(epochDay, LocalDate.now().toEpochDay())
+        val changed = original.copy(
+            type = type, amountPaise = paise, epochDay = day,
+            category = if (type == EntryType.EXPENSE) category ?: ExpenseCategory.OTHER else null,
+            hours = original.hours.takeIf { type == EntryType.WORK },
+            pieces = original.pieces.takeIf { type == EntryType.WORK },
+            ratePaise = original.ratePaise.takeIf { type == EntryType.WORK },
+        )
+        if (changed == original) return true
+        val was = "${original.type.name} ${Money.format(original.amountPaise)} ${LocalDate.ofEpochDay(original.epochDay)}"
+        val note = "${original.note} · edited ${LocalDate.now()}, was $was".trim()
+        viewModelScope.launch(guard) { app.ledger.replace(changed.copy(note = note)) }
+        return true
+    }
     fun eraseAll() = viewModelScope.launch(guard) { app.ledger.eraseAll(); app.corrections.clear() }
 
     // ---- correction log
@@ -405,12 +446,43 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun chainIntact(): Boolean = HashChain.firstBroken(entries.value.sortedBy { it.id }) < 0
 
+    // ---- backup
+
+    /** A copy of every line (the evidence file, with its hashes) to keep somewhere safe. */
+    fun saveBackup() = viewModelScope.launch(guard) {
+        val file = app.exporter.evidenceJson(app.ledger.oldestFirst())
+        app.exporter.share(listOf(file), strings.share, mime = "application/json")
+    }
+
+    /** Adds the lines from a saved copy; lines already on this phone are not added twice. */
+    fun restoreBackup(uri: Uri) = viewModelScope.launch(guard) {
+        val text = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            runCatching {
+                app.contentResolver.openInputStream(uri)?.use { input ->
+                    // Read at most a little over the limit (works on every Android version).
+                    val out = java.io.ByteArrayOutputStream()
+                    val buf = ByteArray(64 * 1024)
+                    while (out.size() <= MAX_BACKUP_BYTES) { val n = input.read(buf); if (n < 0) break; out.write(buf, 0, n) }
+                    if (out.size() > MAX_BACKUP_BYTES) null else out.toByteArray().decodeToString()
+                }
+            }.getOrNull()
+        }
+        val lines = text?.let { com.acxelin.hisaabsaathi.export.Exporter.readBackup(it) }
+        val message = if (lines == null) strings.restoreFailed else strings.restored(app.ledger.merge(lines))
+        android.widget.Toast.makeText(app, message, android.widget.Toast.LENGTH_LONG).show()
+        app.speaker.speak(message, lang)
+    }
+
     fun exportEvidence() = viewModelScope.launch(guard) {
         val s = strings
         val all = app.ledger.oldestFirst()
         val note = if (HashChain.firstBroken(all) < 0) s.recordIntact else s.recordBroken
         val pdf = app.exporter.pdf(s.evidenceTitle, all.reversed(), s, chainNote = note)
         app.exporter.share(listOf(pdf, app.exporter.evidenceJson(all)), s.share)
+    }
+
+    private companion object {
+        const val MAX_BACKUP_BYTES = 20 * 1024 * 1024
     }
 
     override fun onCleared() {

@@ -95,6 +95,28 @@ class Strings(val lang: Lang) {
     val voiceFailed get() = t("आवाज़ समझने में दिक्कत आई। फिर से कोशिश करें या लिखकर डालें।", "ସ୍ୱର ବୁଝିବାରେ ଅସୁବିଧା ହେଲା। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ କିମ୍ବା ଲେଖି ଦିଅନ୍ତୁ।", "Something went wrong understanding your voice. Try again, or type instead.")
     val lastProblemLabel get() = t("पिछली दिक्कत (जाँच के लिए)", "ପୂର୍ବ ଅସୁବିଧା (ଯାଞ୍ଚ ପାଇଁ)", "Last problem (for testing)")
 
+    // ---- edit, undo, backup, downloads
+    val editEntry get() = t("बदलें", "ବଦଳାନ୍ତୁ", "Change entry")
+    val entryRemoved get() = t("हटा दिया", "ହଟାଗଲା", "Entry removed")
+    val undo get() = t("वापस लाएं", "ଫେରାନ୍ତୁ", "Undo")
+    val earlierDay get() = t("पिछला दिन", "ପୂର୍ବ ଦିନ", "Earlier day")
+    val laterDay get() = t("अगला दिन", "ପର ଦିନ", "Later day")
+    val backupTitle get() = t("बैकअप (हिसाब की कॉपी)", "ବ୍ୟାକଅପ୍ (ହିସାବର କପି)", "Backup")
+    val backupBody get() = t(
+        "फोन खो जाए या बदलें तो हिसाब भी चला जाता है। एक कॉपी सेव करें (जैसे WhatsApp पर खुद को भेजें) और नए फोन पर वापस लाएं।",
+        "ଫୋନ୍ ହଜିଗଲେ କିମ୍ବା ବଦଳାଇଲେ ହିସାବ ମଧ୍ୟ ଚାଲିଯାଏ। ଗୋଟିଏ କପି ସେଭ୍ କରନ୍ତୁ (ଯେପରି WhatsApp ରେ ନିଜକୁ ପଠାନ୍ତୁ) ଏବଂ ନୂଆ ଫୋନ୍‌ରେ ଫେରାନ୍ତୁ।",
+        "If this phone is lost or changed, your records go with it. Save a copy (for example, send it to yourself on WhatsApp) and restore it on the new phone.",
+    )
+    val saveBackup get() = t("कॉपी सेव करें", "କପି ସେଭ୍ କରନ୍ତୁ", "Save a copy")
+    val restoreBackup get() = t("कॉपी से वापस लाएं", "କପିରୁ ଫେରାନ୍ତୁ", "Restore from a copy")
+    fun restored(n: Int) = tp("$n हिसाब जोड़े गए", "$n ଟି ହିସାବ ଯୋଡ଼ାଗଲା", "$n records added", "{0} records added", n)
+    val restoreFailed get() = t("यह हिसाब साथी की कॉपी नहीं है।", "ଏହା ହିସାବ ସାଥୀର କପି ନୁହେଁ।", "This file is not a HisaabSaathi copy.")
+    fun notEnoughSpace(mb: Long) = tp(
+        "फोन में जगह कम है। $mb MB खाली करके फिर कोशिश करें।", "ଫୋନ୍‌ରେ ଜାଗା କମ୍। $mb MB ଖାଲି କରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।",
+        "Not enough space on the phone. Free $mb MB and try again.", "Not enough space on the phone. Free {0} MB and try again.", mb,
+    )
+    val waitingForInternet get() = t("इंटरनेट का इंतज़ार…", "ଇଣ୍ଟରନେଟ୍ ଅପେକ୍ଷା…", "Waiting for internet…")
+
     // ---- correction log (settings)
     val improveTitle get() = t("ऐप को बेहतर बनाने में मदद", "ଆପ୍‌କୁ ଉନ୍ନତ କରିବାରେ ସାହାଯ୍ୟ", "Help improve the app")
     val improveBody get() = t(

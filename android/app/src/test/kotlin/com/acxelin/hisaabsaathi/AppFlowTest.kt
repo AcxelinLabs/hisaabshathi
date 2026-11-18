@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -159,6 +160,13 @@ class AppFlowTest {
         click("खाता")
         waitFor("खाना")
         shot("08-ledger")
+        // Delete a line, then undo (the edit dialog is drawn in EditFormScreenshotTest).
+        rule.onAllNodesWithContentDescription("हटाएं").onFirst().performClick(); pump()
+        click("हटाएं")
+        waitFor("हटा दिया")
+        shot("08c-undo")
+        click("वापस लाएं")
+        waitFor("खाना")
         click("हिसाब")
         waitFor("बचत का लक्ष्य")
         shot("09-summary")
