@@ -16,6 +16,7 @@ import com.acxelin.hisaabsaathi.speech.SystemOnDeviceStt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 open class HisaabApp : Application() {
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -33,6 +34,13 @@ open class HisaabApp : Application() {
     val slm by lazy { SlmEngine(this, packs) }
     val scanner by lazy { Scanner(this) }
     val exporter by lazy { Exporter(this) }
+    /** Android is short of memory: drop the speech model (it reloads on the next listen). */
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        @Suppress("DEPRECATION")
+        if (level >= TRIM_MEMORY_RUNNING_LOW) scope.launch { runCatching { stt.release() } }
+    }
+
     val wagePack: WagePack by lazy {
         runCatching { Wages.parse(assets.open("wage_pack_in.json").bufferedReader().use { it.readText() }) }
             .getOrDefault(WagePack(0, ""))

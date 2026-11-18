@@ -61,6 +61,11 @@ class OnDeviceStt(private val packs: PackManager) {
     /** Ends the current recording early (the worker tapped the mic again). */
     fun stop() { stopRequested = true }
 
+    /** Frees the speech model (~200 MB); it reloads on the next listen. Called when memory runs low. */
+    suspend fun release() = lock.withLock {
+        recognizer?.release(); recognizer = null; loadedFor = null
+    }
+
     /**
      * Records until the speaker pauses (or [maxSeconds]), then transcribes.
      * [onLevel] receives 0..1 loudness for the mic animation; [onRecorded] fires when

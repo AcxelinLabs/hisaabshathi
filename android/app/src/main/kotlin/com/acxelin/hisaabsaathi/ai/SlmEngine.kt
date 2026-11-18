@@ -44,6 +44,17 @@ class SlmEngine(private val context: Context, private val packs: PackManager) {
 
     fun available(): Boolean = installed() != null && failures < 2
 
+    /**
+     * Loading the model needs about 1 GB at first (weights are repacked, then cached). On a
+     * busy 3–4 GB phone that can make Android close the app, so below this much free memory
+     * the rules answer alone. Not counted as a failure: it may work next time.
+     */
+    private fun enoughMemory(): Boolean = runCatching {
+        val am = context.getSystemService(android.app.ActivityManager::class.java)
+        val mi = android.app.ActivityManager.MemoryInfo().also { am.getMemoryInfo(it) }
+        !mi.lowMemory && mi.availMem > MIN_FREE_BYTES
+    }.getOrDefault(true)
+
     private fun fail(why: String) {
         problem = why
         prefs.edit().putInt("failures", failures + 1).putString("problem", why).apply()
@@ -74,6 +85,7 @@ class SlmEngine(private val context: Context, private val packs: PackManager) {
     suspend fun generate(prompt: String): String? = lock.withLock {
         val pack = installed() ?: return@withLock null
         if (failures >= 2) return@withLock null
+        if (service == null && !enoughMemory()) return@withLock null   // not loaded yet and memory is tight
         val remote = connect() ?: return@withLock null.also { fail("model service did not start") }
         val answer = CompletableDeferred<Bundle>()
         val replies = Messenger(Handler(Looper.getMainLooper()) { m -> answer.complete(m.data); true })
@@ -100,4 +112,8 @@ class SlmEngine(private val context: Context, private val packs: PackManager) {
 
     /** Frees the model's memory (its whole process) before speech recognition loads. */
     suspend fun unload() = lock.withLock { disconnect() }
+
+    private companion object {
+        const val MIN_FREE_BYTES = 1_500_000_000L
+    }
 }
