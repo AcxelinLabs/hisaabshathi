@@ -1,0 +1,81 @@
+{
+ "Odia": {
+  "clips": 1477,
+  "hours": 2.5,
+  "speakers": 559,
+  "rural_share": 0.508,
+  "districts": {
+   "Malkangiri": 578,
+   "Sambalpur": 146,
+   "Nuapada": 26,
+   "Khordha": 727
+  },
+  "row_groups": 279,
+  "sr": {
+   "16000": 1477
+  }
+ },
+ "Telugu": {
+  "clips": 1534,
+  "hours": 2.5,
+  "speakers": 607,
+  "rural_share": 1.0,
+  "districts": {
+   "Annamaya": 108,
+   "Mahabubabad": 652,
+   "KomaramBheem": 126,
+   "Karimnagar": 40,
+   "Guntur": 117,
+   "Srikakulam": 173,
+   "Nalgonda": 40,
+   "Chittoor": 126,
+   "Krishna": 117,
+   "Anantpur": 29,
+   "Bellary": 6
+  },
+  "row_groups": 347,
+  "sr": {
+   "16000": 1534
+  }
+ },
+ "Kannada": {
+  "clips": 1093,
+  "hours": 2.51,
+  "speakers": 379,
+  "rural_share": 1.0,
+  "districts": {
+   "Mysore": 358,
+   "Shimoga": 146,
+   "Bidar": 123,
+   "Bellary": 109,
+   "Gulbarga": 43,
+   "Bijapur": 116,
+   "DakshinaKannada": 41,
+   "Belgaum": 71,
+   "Dharwad": 53,
+   "Chamarajanagar": 31,
+   "Raichur": 2
+  },
+  "row_groups": 250,
+  "sr": {
+   "16000": 1093
+  }
+ },
+ "Tamil": {
+  "clips": 765,
+  "hours": 0.88,
+  "speakers": 438,
+  "rural_share": 0.906,
+  "districts": {
+   "Nilgiris": 319,
+   "Kanyakumari": 284,
+   "Namakkal": 90,
+   "Bangalore": 60,
+   "Chennai": 12
+  },
+  "row_groups": 183,
+  "sr": {
+   "16000": 765
+  }
+ }
+}

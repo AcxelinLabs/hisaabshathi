@@ -1,0 +1,38 @@
+{
+ "odia": {
+  "valid_speakers": 523,
+  "valid_speakers_in_train": 519,
+  "clips": 75,
+  "hours": 0.06,
+  "speakers": 4,
+  "rural_share": 0.587,
+  "districts": 3
+ },
+ "telugu": {
+  "valid_speakers": 327,
+  "valid_speakers_in_train": 320,
+  "clips": 72,
+  "hours": 0.09,
+  "speakers": 7,
+  "rural_share": 0.694,
+  "districts": 6
+ },
+ "kannada": {
+  "valid_speakers": 220,
+  "valid_speakers_in_train": 218,
+  "clips": 21,
+  "hours": 0.03,
+  "speakers": 2,
+  "rural_share": 0.524,
+  "districts": 2
+ },
+ "tamil": {
+  "valid_speakers": 553,
+  "valid_speakers_in_train": 546,
+  "clips": 111,
+  "hours": 0.15,
+  "speakers": 7,
+  "rural_share": 0.459,
+  "districts": 5
+ }
+}

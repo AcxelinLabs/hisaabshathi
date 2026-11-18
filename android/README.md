@@ -66,6 +66,66 @@ English on Indian-accented speech (Svarah 300, Karya conversation 27, FLEURS 40)
 | NeMo FastConformer (before 0.6.1) | 16.1% | 67.9% | 11.3% | 0.018 |
 | Parakeet TDT-CTC 110M, 8-bit (0.6.1) | 13.6% | 53.3% | 10.7% | 0.012 |
 
+## Odia, Telugu, Kannada, Tamil on unseen speakers (18 Nov 2026, sherpa-onnx 1.13.8)
+
+The app's IndicConformer models, run exactly as `speech/Speech.kt` runs them (NeMo CTC,
+greedy, whole clip of at most 20 s). Tools and data: `tools/asr/indic/`. No training yet.
+
+Test sets:
+
+- **Vaani** (ARTPARK-IISc, CC-BY-4.0), main set: transcribed clips from speakers with a
+  known ID, rural districts first. Odia 2.5 h / 559 speakers (half from Khordha, as the rural
+  districts ran out), Telugu 2.5 h / 607, Kannada 2.5 h / 379 (all rural districts),
+  Tamil 0.9 h / 438. Speaker IDs are in `tools/asr/indic/sets/test_speakers.json`; keep
+  them, and preferably their districts, out of any fine-tuning.
+- **IndicVoices** (AI4Bharat, CC-BY-4.0): its public `valid` split is not held out by
+  speaker. 99% of its speakers are also in `train` (Odia 519/523, Telugu 320/327,
+  Kannada 218/220, Tamil 546/553), which the app's models were trained on. Only the 2–7
+  unseen speakers per language are used (2–9 minutes each), plus a 0.5 h sample of seen
+  rural speakers for contrast.
+
+Word error rate / character error rate; spoken numbers the recogniser kept (number words
+as the app's `NumberWords` reads them; values other than 1, since "one" is mostly the
+article "a"):
+
+| Language | Vaani, unseen | IndicVoices, unseen | IndicVoices, seen speakers |
+|---|---|---|---|
+| Odia | 48.3% / 14.0%; numbers 86%, values≠1 64% (90) | 35.5% / 14.4% (75 clips) | 32.7% / 10.4%; 91%, 90% |
+| Telugu | 34.2% / 9.2%; 93%, 92% (155) | 28.2% / 8.4% (72) | 29.5% / 8.1%; 82%, 82% |
+| Kannada | 53.1% / 18.2%; 79%, 87% (154) | 40.6% / 13.9% (21) | 37.8% / 10.9%; 86%, 86% |
+| Tamil | 54.2% / 16.7%; 76%, 94% (133) | 33.1% / 10.1% (111) | 33.4% / 9.6%; 84%, 92% |
+
+Odia Vaani rural districts 51.9% WER vs Khordha 44.6%. Vaani transcripts keep dialect
+spellings (ଗୋଟେ, ஒன்னு) that the recogniser writes in standard form, so part of its higher
+error rate is spelling, not mishearing.
+
+Full app path: each reference transcript and each recogniser output goes through
+`Understand` (`PipelineEvalTest`). Where the reference reads as a ledger entry, how often
+the recogniser's text gives the same amounts (and the same entry exactly):
+
+| Language | Vaani | IndicVoices, seen |
+|---|---|---|
+| Odia | 57% (25/44), exact 57% | 95% (36/38) |
+| Telugu | 78% (152/195), exact 72% | 73% (22/30) |
+| Kannada | 69% (107/154), exact 68% | 70% (26/37) |
+| Tamil | 71% (57/80), exact 66% | 76% (38/50) |
+
+The other way round, the recogniser's text produced an entry where the reference had none in
+41 Odia, 33 Telugu, 32 Kannada and 7 Tamil Vaani clips (the confirmation card catches these).
+These sentences describe pictures or everyday life, not ledger entries, so this measures
+how numbers survive, not real use. Example of a wrong amount: Tamil அறுநூறு (600) heard as
+இரநூறு (200).
+
+Problems in the app's number reader found on the way (not speech recognition):
+
+- Colloquial "one" is missing: Odia ଗୋଟେ / ଗୁଟେ (506 times in 1,477 Vaani Odia
+  transcripts), Tamil ஒன்னு.
+- Numbers with a counting suffix written as one word are not read: Odia ଦୁଇଜଣ,
+  କୋଡ଼ିଏଟା.
+- Words read as numbers by mistake: Tamil நாங்கள் ("we") as 4 (made a false entry),
+  Odia ଏଇଟି ("this one") as 80, Kannada ಹೊತ್ತು ("time") likely as 10, the ବାର in
+  କରିବାର as 12.
+
 ## Speech model benchmarks (earlier, sherpa-onnx 1.12.40, on a PC)
 
 Speech-to-text on 40 real FLEURS recordings per language (word / character error rate):

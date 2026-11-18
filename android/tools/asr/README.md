@@ -25,3 +25,19 @@ Tools from the Nov 2026 rural-Hindi fine-tune and the speech re-test (results in
 Data used: AI4Bharat Rural_Women_ASR_v2 (CC-BY-4.0), Rural_Women_Bhojpuri / SRUTI
 (CC-BY-SA-4.0), 1rsh/tts-rj-hi-karya (MIT), Google FLEURS, Svarah. Test speakers for Rural
 Women are not in training; sentences shared between Karya train and test were dropped.
+
+## Odia, Telugu, Kannada, Tamil test (`indic/`, 18 Nov 2026)
+
+`indic/run.sh` rebuilds the test sets and scores the app's IndicConformer models in
+sherpa-onnx 1.13.8 (results in `android/README.md`). Steps: `download.py` (IndicVoices
+`valid`), `ivspk.py` (IndicVoices train speaker IDs, column-only reads), `vmeta.py` (Vaani
+metadata, no audio), `build_iv.py` / `build_ivseen.py` / `build_vaani.py` (16 kHz WAVs and
+manifests; Vaani audio is fetched only for the row groups that hold chosen clips),
+`decode.py` (the app's recogniser settings), then `PipelineEvalTest` (the app's own
+`NumberWords` and `Understand` on reference and recogniser text) and `score.py`.
+
+`indic/sets/` holds every test clip's reference, recogniser output and app result;
+`indic/sets/test_speakers.json` lists the test speakers, to keep out of fine-tuning.
+Audio is not stored; `run.sh` fetches it again. The Vaani subset with official splits
+(`ARTPARK-IISc/Vaani-transcription-part`) needs separate access approval, so the main
+`ARTPARK-IISc/Vaani` dataset's transcribed clips are used.
