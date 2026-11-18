@@ -20,6 +20,7 @@ Design notes: `../docs/superpowers/specs/2026-11-16-android-mvp-design.md`.
 |---|---|---|---|
 | Voice activity | Silero VAD v5 | 2 MB | MIT |
 | Speech-to-text | AI4Bharat IndicConformer (Hindi, Odia, Telugu, Kannada, Tamil), int8, via sherpa-onnx | ~197 MB each | MIT |
+| Speech-to-text, English | NVIDIA Parakeet TDT-CTC 110M (CTC branch), 8-bit weights by Acxelin Labs, via sherpa-onnx | 174 MB | CC-BY-4.0 |
 | Understanding (optional) | Qwen2.5-0.5B Instruct fine-tuned by Acxelin Labs, 8-bit, via LiteRT-LM | 513 MB | Apache-2.0 |
 | OCR | ML Kit text recognition (Latin + Devanagari), bundled | in APK | Google ML Kit terms |
 | Text-to-speech | Indic Tiny TTS (Hindi, Odia, Telugu, Kannada, Tamil; Matcha + Vocos), run on ONNX Runtime 1.29 in its own `:voice` process; falls back to the phone's TTS for English or if the voice fails | ~91 MB each | CC-BY-4.0 (voices), MIT (Vocos) |
@@ -37,7 +38,35 @@ model only labels each one (hours, pieces, rate, wage, advance, expense…). An 
 does not label exactly the spoken numbers is thrown away (`core/Slm.kt`). All arithmetic is
 plain code.
 
-## Speech model benchmarks (18 Nov 2026, on a PC, not a phone)
+## Speech re-test in the app's own engine (18 Nov 2026)
+
+The table further down was measured with Python sherpa-onnx 1.12.40, whose audio frontend
+differs from the 1.13.8 engine the app ships; those numbers understate the app. These were
+measured with sherpa-onnx 1.13.8 (word error rate; share of spoken numbers recognised).
+
+Hindi, current app model vs the same model fine-tuned on rural speech (upper 9 of 17 layers,
+4 passes over 9.5 h: AI4Bharat Rural Women ASR v2, Karya Rajasthani, SRUTI Bhojpuri train
+set; test sets have no shared sentences, and Rural Women test speakers are unseen):
+
+| Test set | App model | Fine-tuned |
+|---|---|---|
+| Rural women, unseen speakers (400) | 13.6%; 90.3% | 12.5%; 90.8% |
+| SRUTI Bhojpuri (444) | 37.1%; 84.3% | 32.3%; 83.9% |
+| Karya Rajasthani (300) | 10.4%; 87.8% | 11.4%; 92.7% |
+| FLEURS read Hindi (150) | 9.2%; 97.8% | 10.1%; 100% |
+| Karya Hindi samples (10) | 18.3% | 20.0% |
+
+Mixed: better on rural speakers, worse on read Hindi and Rajasthani. The app keeps the
+current Hindi model until real workers' recordings decide it.
+
+English on Indian-accented speech (Svarah 300, Karya conversation 27, FLEURS 40):
+
+| Model | Svarah | Karya | FLEURS | Speed |
+|---|---|---|---|---|
+| NeMo FastConformer (before 0.6.1) | 16.1% | 67.9% | 11.3% | 0.018 |
+| Parakeet TDT-CTC 110M, 8-bit (0.6.1) | 13.6% | 53.3% | 10.7% | 0.012 |
+
+## Speech model benchmarks (earlier, sherpa-onnx 1.12.40, on a PC)
 
 Speech-to-text on 40 real FLEURS recordings per language (word / character error rate):
 

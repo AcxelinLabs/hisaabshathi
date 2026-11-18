@@ -36,6 +36,7 @@ sealed interface PackState {
 object Catalog {
     private const val HF = "https://huggingface.co"
     private const val STT = "$HF/parismitaglobalsolutions/indicconformer-sherpa-onnx/resolve/main"
+    private const val OWN = "$HF/QubitMan/hisaabsaathi-model/resolve/main"
 
     // Shared by every speech pack; listed in each so any one pack is complete on its own.
     private val vad = PackFile("$HF/csukuangfj/vad/resolve/main/silero_vad_v5.onnx", "speech/silero_vad_v5.onnx", 2_313_101)
@@ -53,14 +54,20 @@ object Catalog {
     val sttTelugu = indic("te", "Telugu", 197_595_693)
     val sttKannada = indic("kn", "Kannada", 197_595_728)
     val sttTamil = indic("ta", "Tamil", 197_595_513)
+    /**
+     * NVIDIA Parakeet TDT-CTC 110M (CTC branch), ONNX export by k2-fsa, 8-bit weights by
+     * Acxelin Labs. In the app's engine it beat the previous English model on Indian-accented
+     * English: Svarah 13.6% vs 16.1% word errors, Karya conversation 53% vs 68%, FLEURS
+     * 10.7% vs 11.3%, and runs faster.
+     */
     val sttEnglish = Pack(
         id = "stt-en",
-        title = "English speech (NVIDIA NeMo fast-conformer)",
+        title = "English speech (NVIDIA Parakeet 110M)",
         licence = "CC-BY-4.0 (NVIDIA)",
         files = listOf(
             vad,
-            PackFile("$STT/en/tokens.txt", "speech/en/tokens.txt", 11_433),
-            PackFile("$STT/en/model.int8.onnx", "speech/en/model.int8.onnx", 174_610_057),
+            PackFile("$OWN/speech/en-parakeet/tokens.txt", "speech/en-parakeet/tokens.txt", 9_953),
+            PackFile("$OWN/speech/en-parakeet/model.int8.onnx", "speech/en-parakeet/model.int8.onnx", 173_887_662),
         ),
     )
 
@@ -132,6 +139,9 @@ class PackManager(context: Context, private val scope: CoroutineScope) {
     init {
         // The model used to ship in MediaPipe's .task format (0.5.x); free that 500 MB.
         File(root, "slm/hisaabsaathi-qwen05-ft-q8.task").delete()
+        // English moved to Parakeet in 0.6.1; free the old model's 175 MB.
+        File(root, "speech/en/model.int8.onnx").delete()
+        File(root, "speech/en/tokens.txt").delete()
     }
 
     private val _states = MutableStateFlow(Catalog.all.associate { it.id to initial(it) })
