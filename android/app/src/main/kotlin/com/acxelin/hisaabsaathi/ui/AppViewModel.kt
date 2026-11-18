@@ -299,6 +299,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun download(pack: Pack) = app.packs.download(pack)
     fun deletePack(pack: Pack) = app.packs.delete(pack)
     fun sttPack(): Pack = Catalog.stt(lang)
+    fun voicePack(): Pack? = Catalog.voice(lang)
 
     fun exportPdf(period: QueryPeriod) = viewModelScope.launch(guard) {
         val s = strings

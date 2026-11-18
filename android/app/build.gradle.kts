@@ -56,7 +56,7 @@ android {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
         jniLibs.useLegacyPackaging = false
         // Parts of sherpa-onnx the app does not call.
-        jniLibs.excludes += listOf("**/libsherpa-onnx-c-api.so", "**/libsherpa-onnx-cxx-api.so", "**/libonnxruntime4j_jni.so")
+        jniLibs.excludes += listOf("**/libsherpa-onnx-c-api.so", "**/libsherpa-onnx-cxx-api.so")
     }
 }
 
@@ -81,6 +81,9 @@ dependencies {
     implementation(libs.sqlite)
 
     implementation(libs.sherpa.onnx)       // on-device speech-to-text + voice activity detection
+    // ONNX Runtime 1.29 for the voices. Its native library is shipped renamed (libortvoice.so,
+    // src/main/jniLibs) so it cannot clash with the 1.28.2 copy inside sherpa-onnx.
+    implementation(files("libs/onnxruntime-android-1.29.0-classes.jar"))
     implementation(libs.mediapipe.genai)   // on-device small language model
     implementation(libs.mlkit.text.devanagari) // on-device OCR (Devanagari + Latin)
 

@@ -4,6 +4,7 @@ package com.acxelin.hisaabsaathi.core.i18n
 internal object Ta {
     /** UI and spoken text, keyed by the exact English string used in Strings.kt. */
     val strings: Map<String, String> = mapOf(
+        "For a clear voice when reading aloud" to "தெளிவான குரலில் கேட்க",
         "I didn't hear anything. Tap the mic and speak close to the phone." to "எதுவும் கேட்கல. மைக்கை அழுத்தி போன் பக்கத்துல பேசுங்க.",
         "The microphone did not start. Close other apps using it and try again." to "மைக் ஆன் ஆகல. மைக் பயன்படுத்துற மற்ற ஆப்பை மூடிட்டு மறுபடி முயற்சி பண்ணுங்க.",
         "Something went wrong understanding your voice. Try again, or type instead." to "உங்க குரலை புரிஞ்சுக்க பிரச்சனை வந்தது. மறுபடி முயற்சி பண்ணுங்க, இல்ல டைப் பண்ணுங்க.",

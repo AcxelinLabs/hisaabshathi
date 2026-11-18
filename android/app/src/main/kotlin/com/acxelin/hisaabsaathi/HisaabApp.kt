@@ -29,7 +29,7 @@ open class HisaabApp : Application() {
     val packs by lazy { PackManager(this, scope) }
     val stt by lazy { OnDeviceStt(packs) }
     val systemStt by lazy { SystemOnDeviceStt(this) }
-    val speaker by lazy { Speaker(this) }
+    val speaker by lazy { Speaker(this, packs) }
     val slm by lazy { SlmEngine(this, packs) }
     val scanner by lazy { Scanner(this) }
     val exporter by lazy { Exporter(this) }

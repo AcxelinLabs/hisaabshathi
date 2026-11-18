@@ -57,6 +57,7 @@ class Strings(val lang: Lang) {
         "ଥରେ ଡାଉନଲୋଡ୍ କଲା ପରେ ଆପ୍ ବିନା ଇଣ୍ଟରନେଟ୍‌ରେ ଆପଣଙ୍କ କଥା ବୁଝିବ। ଆପଣଙ୍କ ସ୍ୱର ଓ ହିସାବ ଫୋନ୍ ବାହାରକୁ ଯାଏ ନାହିଁ।",
         "After one download the app understands your voice with no internet. Your voice and your records never leave this phone.",
     )
+    val voicePackReadAloud get() = t("साफ़ आवाज़ में सुनने के लिए", "ସଫା ସ୍ୱରରେ ଶୁଣିବା ପାଇଁ", "For a clear voice when reading aloud")
     val download get() = t("डाउनलोड करें", "ଡାଉନଲୋଡ୍ କରନ୍ତୁ", "Download")
     val downloading get() = t("डाउनलोड हो रहा है", "ଡାଉନଲୋଡ୍ ହେଉଛି", "Downloading")
     val installed get() = t("तैयार", "ପ୍ରସ୍ତୁତ", "Ready")

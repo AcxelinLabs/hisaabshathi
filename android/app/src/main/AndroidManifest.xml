@@ -41,6 +41,12 @@
             </intent-filter>
         </activity>
 
+        <!-- The voices run in their own process so a native crash cannot close the app. -->
+        <service
+            android:name=".speech.VoiceService"
+            android:exported="false"
+            android:process=":voice" />
+
         <!-- The language model runs in its own process so a native crash cannot close the app. -->
         <service
             android:name=".ai.LlmService"

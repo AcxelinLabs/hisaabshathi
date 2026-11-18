@@ -77,6 +77,37 @@ object Catalog {
         files = listOf(PackFile(BuildConfig.HISAAB_MODEL_URL, "slm/hisaabsaathi-qwen05-ft-q8.task", 513_718_731)),
     )
 
+    /**
+     * Indic Tiny TTS voices (female and male) by Sulabh Katiyar, CC-BY-4.0, trained on
+     * AI4Bharat Rasa (CC-BY-4.0); vocoder Vocos (MIT). Pinned to the tested revision.
+     * English uses the phone's own voice.
+     */
+    private fun voicePack(code: String, name: String, rev: String, config: Long, encoder: Long) = Pack(
+        id = "voice-$code",
+        title = "${name} voice (Indic Tiny TTS)",
+        licence = "CC-BY-4.0 (Sulabh Katiyar; AI4Bharat Rasa); vocoder MIT",
+        files = listOf(
+            PackFile("$HF/sulabhkatiyar/indic-tiny-tts-${name.lowercase()}/resolve/$rev/config.json", "voice/$code/config.json", config),
+            PackFile("$HF/sulabhkatiyar/indic-tiny-tts-${name.lowercase()}/resolve/$rev/onnx/text_encoder.onnx", "voice/$code/onnx/text_encoder.onnx", encoder),
+            PackFile("$HF/sulabhkatiyar/indic-tiny-tts-${name.lowercase()}/resolve/$rev/onnx/flow_decoder.onnx", "voice/$code/onnx/flow_decoder.onnx", 19_169_253),
+            PackFile("$HF/sulabhkatiyar/indic-tiny-tts-${name.lowercase()}/resolve/$rev/onnx/vocoder.onnx", "voice/$code/onnx/vocoder.onnx", 54_150_036),
+        ),
+    )
+    val voiceHindi = voicePack("hi", "Hindi", "1fb1b108ee6ffb73ee74bd68b283ec13eb39e957", 3443, 17_695_838)
+    val voiceOdia = voicePack("or", "Odia", "cc5e90366f144ddbf50a3ea99dd832f6ac839b19", 3269, 17_693_790)
+    val voiceTelugu = voicePack("te", "Telugu", "fb552545f06d76d7b5d6365827b69c0bda465767", 3216, 17_692_254)
+    val voiceKannada = voicePack("kn", "Kannada", "73714eb01cdebc79367f7d1ddf2f4c73adff2be6", 3358, 17_696_862)
+    val voiceTamil = voicePack("ta", "Tamil", "c3a32ece466031c8a18e72047ab37f5c143cd2b0", 3087, 17_687_134)
+
+    fun voice(lang: Lang): Pack? = when (lang) {
+        Lang.HI -> voiceHindi
+        Lang.OR -> voiceOdia
+        Lang.TE -> voiceTelugu
+        Lang.KN -> voiceKannada
+        Lang.TA -> voiceTamil
+        Lang.EN -> null
+    }
+
     val canDownloadSlm: Boolean get() = BuildConfig.HISAAB_MODEL_URL.isNotBlank()
 
     fun stt(lang: Lang): Pack = when (lang) {
@@ -88,7 +119,7 @@ object Catalog {
         Lang.EN -> sttEnglish
     }
 
-    val all = listOf(sttHindi, sttOdia, sttTelugu, sttKannada, sttTamil, sttEnglish, slmHisaab)
+    val all = listOf(sttHindi, sttOdia, sttTelugu, sttKannada, sttTamil, sttEnglish, slmHisaab, voiceHindi, voiceOdia, voiceTelugu, voiceKannada, voiceTamil)
 }
 
 class PackManager(context: Context, private val scope: CoroutineScope) {

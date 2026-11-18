@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import kotlin.coroutines.resume
@@ -248,24 +249,127 @@ class SystemOnDeviceStt(private val context: Context) {
 fun locale(lang: Lang): Locale = Locale(lang.code, "IN")
 
 /**
- * Reads text aloud with the phone's own text-to-speech engine. If the phone has no voice
- * for the chosen language (common for Odia), [speak] returns false and the app shows the
- * text instead.
+ * Reads text aloud. Uses the app's own Indian-language voice when its pack is installed
+ * (clearer, works with no internet, and covers Odia, which many phones lack), otherwise the
+ * phone's text-to-speech engine. If neither can speak the language, [speak] returns false and
+ * the app shows the text instead.
  */
-class Speaker(context: Context) {
+class Speaker(context: Context, private val packs: com.acxelin.hisaabsaathi.models.PackManager) {
+    private val app = context.applicationContext
     private var ready = false
-    private val tts = TextToSpeech(context.applicationContext) { status -> ready = status == TextToSpeech.SUCCESS }
+    private val tts = TextToSpeech(app) { status -> ready = status == TextToSpeech.SUCCESS }
+    private val voice = VoiceEngine(app)
+    private val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + Dispatchers.Main)
+    private var job: kotlinx.coroutines.Job? = null
+    private var player: android.media.MediaPlayer? = null
 
-    fun canSpeak(lang: Lang): Boolean =
-        ready && tts.isLanguageAvailable(locale(lang)) >= TextToSpeech.LANG_AVAILABLE
+    /** "female" or "male", for the app's own voices. */
+    var voiceName: String = "female"
+
+    private fun systemCanSpeak(lang: Lang) = ready && tts.isLanguageAvailable(locale(lang)) >= TextToSpeech.LANG_AVAILABLE
+
+    private fun voiceDir(lang: Lang): java.io.File? {
+        val pack = com.acxelin.hisaabsaathi.models.Catalog.voice(lang) ?: return null
+        return if (packs.isReady(pack) && voice.usable) packs.file(pack.files.first()).parentFile else null
+    }
+
+    fun canSpeak(lang: Lang): Boolean = voiceDir(lang) != null || systemCanSpeak(lang)
 
     fun speak(text: String, lang: Lang): Boolean {
-        if (!canSpeak(lang)) return false
+        stop()
+        val dir = voiceDir(lang)
+        if (dir != null) {
+            job = scope.launch {
+                val wav = voice.synthesize(dir, text, lang, voiceName)
+                if (wav != null) play(wav) else speakWithPhone(text, lang)
+            }
+            return true
+        }
+        return speakWithPhone(text, lang)
+    }
+
+    private fun speakWithPhone(text: String, lang: Lang): Boolean {
+        if (!systemCanSpeak(lang)) return false
         tts.language = locale(lang)
         tts.setSpeechRate(0.9f)
         return tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "hisaab") == TextToSpeech.SUCCESS
     }
 
-    fun stop() { if (ready) tts.stop() }
-    fun shutdown() = tts.shutdown()
+    private fun play(file: java.io.File) {
+        runCatching {
+            player = android.media.MediaPlayer().apply {
+                setAudioAttributes(
+                    android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT)
+                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build(),
+                )
+                setDataSource(file.path); setOnCompletionListener { it.release(); if (player === it) player = null }
+                prepare(); start()
+            }
+        }
+    }
+
+    fun stop() {
+        job?.cancel(); job = null
+        player?.let { runCatching { it.stop(); it.release() } }; player = null
+        if (ready) tts.stop()
+    }
+
+    fun shutdown() { stop(); tts.shutdown(); voice.close() }
+}
+
+/** Talks to [VoiceService] in its own process. Gives up (returns null) on any failure or delay. */
+class VoiceEngine(private val context: Context) {
+    private val prefs = context.getSharedPreferences("voice", Context.MODE_PRIVATE)
+    private var service: android.os.Messenger? = null
+    private var connection: android.content.ServiceConnection? = null
+    private var count = 0
+
+    /** False after the voice failed twice on this phone; the phone's own voice is used from then on. */
+    val usable: Boolean get() = prefs.getInt("failures", 0) < 2
+    val problem: String get() = prefs.getString("problem", "").orEmpty()
+
+    private fun fail(why: String) {
+        prefs.edit().putInt("failures", prefs.getInt("failures", 0) + 1).putString("problem", why).apply()
+        close()
+    }
+
+    private suspend fun connect(): android.os.Messenger? {
+        service?.let { return it }
+        val ready = kotlinx.coroutines.CompletableDeferred<android.os.Messenger?>()
+        val conn = object : android.content.ServiceConnection {
+            override fun onServiceConnected(name: android.content.ComponentName?, binder: android.os.IBinder?) {
+                val m = binder?.let { android.os.Messenger(it) }; service = m; ready.complete(m)
+            }
+            override fun onServiceDisconnected(name: android.content.ComponentName?) { service = null }
+            override fun onBindingDied(name: android.content.ComponentName?) { service = null }
+        }
+        if (!context.bindService(Intent(context, VoiceService::class.java), conn, Context.BIND_AUTO_CREATE)) return null
+        connection = conn
+        return kotlinx.coroutines.withTimeoutOrNull(8_000) { ready.await() }
+    }
+
+    suspend fun synthesize(dir: java.io.File, text: String, lang: Lang, voice: String): java.io.File? {
+        val remote = connect() ?: return null.also { fail("voice service did not start") }
+        val out = java.io.File(context.cacheDir, "voice/say_${count++ % 2}.wav")
+        val done = kotlinx.coroutines.CompletableDeferred<Bundle>()
+        val reply = android.os.Messenger(android.os.Handler(android.os.Looper.getMainLooper()) { m -> done.complete(m.data); true })
+        val msg = android.os.Message.obtain(null, VoiceService.MSG_SPEAK).apply {
+            data = Bundle().apply {
+                putString(VoiceService.KEY_DIR, dir.path); putString(VoiceService.KEY_TEXT, text)
+                putString(VoiceService.KEY_LANG, lang.code); putString(VoiceService.KEY_VOICE, voice)
+                putString(VoiceService.KEY_OUT, out.path)
+            }
+            replyTo = reply
+        }
+        try { remote.send(msg) } catch (e: Exception) { return null.also { fail("voice process stopped") } }
+        val data = kotlinx.coroutines.withTimeoutOrNull(30_000) { done.await() }
+            ?: return null.also { fail(if (service == null) "voice process crashed" else "voice took too long") }
+        data.getString(VoiceService.KEY_ERROR)?.let { return null.also { _ -> fail("voice error: $it") } }
+        return out.takeIf { it.exists() && it.length() > 44 }
+    }
+
+    fun close() {
+        connection?.let { runCatching { context.unbindService(it) } }
+        connection = null; service = null
+    }
 }

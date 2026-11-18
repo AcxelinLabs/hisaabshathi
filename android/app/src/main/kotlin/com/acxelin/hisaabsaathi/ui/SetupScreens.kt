@@ -133,6 +133,7 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                     Text(s.voicePackTitle, fontSize = 22.sp)
                     Text(s.voicePackBody, fontSize = 17.sp)
                     PackRow(vm, vm.sttPack(), s, allowDelete = false)
+                    vm.voicePack()?.let { Text(s.voicePackReadAloud, fontSize = 15.sp, color = InkSoft); PackRow(vm, it, s, allowDelete = false) }
                     // Optional: the app works without it, using its built-in rules.
                     Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
                     PackRow(vm, vm.slmPack, s, allowDelete = false, canDownload = Catalog.canDownloadSlm)
@@ -181,6 +182,7 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
 
             Text(s.modelPacks, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             PackRow(vm, vm.sttPack(), s)
+            vm.voicePack()?.let { Text(s.voicePackReadAloud, fontSize = 15.sp, color = InkSoft); PackRow(vm, it, s) }
             Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
             PackRow(vm, vm.slmPack, s, canDownload = Catalog.canDownloadSlm)
             val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::importModel) }
@@ -199,6 +201,9 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
 
             Text(s.privacyTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(s.privacyBody, fontSize = 15.sp)
+            HorizontalDivider()
+            Text("Credits", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(CREDITS, fontSize = 12.sp, color = InkSoft, lineHeight = 17.sp)
             OutlinedButton(onClick = { confirmErase = true }) { Text(s.eraseAll, color = Red) }
             Spacer(Modifier.height(24.dp))
         }
@@ -213,3 +218,9 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
         )
     }
 }
+
+/** Attribution the open models and fonts ask for (CC-BY-4.0 requires credit). */
+private const val CREDITS = """Speech recognition: AI4Bharat IndicConformer (MIT); English: NVIDIA NeMo FastConformer (CC-BY-4.0); voice detection: Silero VAD (MIT); runtime: sherpa-onnx (Apache-2.0).
+Voices: Indic Tiny TTS by Sulabh Katiyar (CC-BY-4.0, huggingface.co/sulabhkatiyar), trained on AI4Bharat Rasa (CC-BY-4.0); vocoder: Vocos by charactr (MIT); runtime: ONNX Runtime (MIT).
+Understanding: Qwen2.5-0.5B-Instruct by Alibaba Cloud (Apache-2.0), fine-tuned by Acxelin Labs.
+Fonts: Anek by EkType (SIL Open Font Licence)."""
