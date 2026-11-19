@@ -41,7 +41,11 @@ class EditFormScreenshotTest {
             }
         }
         rule.waitForIdle()
-        rule.onNodeWithText("आना-जाना", substring = true).performClick()
+        // Each choice is one button showing what is chosen; tapping it lists the others.
+        rule.onNodeWithText("खाना").performClick()
+        rule.waitForIdle()
+        rule.onNodeWithText("आना-जाना").performClick()
+        rule.waitForIdle()
         rule.onNode(hasSetTextAction()).performTextReplacement("90")
         rule.onRoot().captureRoboImage("build/screens/08b-edit-entry.png")
         rule.onNodeWithText("हो गया").performClick()

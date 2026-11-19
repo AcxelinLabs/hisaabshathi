@@ -54,6 +54,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -75,6 +80,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.acxelin.hisaabsaathi.R
 import com.acxelin.hisaabsaathi.core.DraftEntry
+import com.acxelin.hisaabsaathi.core.Ledger
 import com.acxelin.hisaabsaathi.core.Entry
 import com.acxelin.hisaabsaathi.core.EntryType
 import com.acxelin.hisaabsaathi.core.ExpenseCategory
@@ -334,47 +340,54 @@ private fun DraftSummary(d: DraftEntry, s: Strings) {
     }
 }
 
+/**
+ * One choice shown as a single button with what is chosen now; tapping it lists the others.
+ * Keeps the screen to a few big buttons instead of a wall of options.
+ */
+@Composable
+private fun <T> Choice(current: T, options: List<T>, name: (T) -> String, onPick: (T) -> Unit, modifier: Modifier = Modifier, icon: ((T) -> Int)? = null) {
+    var open by remember { mutableStateOf(false) }
+    Box(modifier) {
+        OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(12.dp)) {
+            icon?.let { Icon(painterResource(it(current)), null, tint = Ink, modifier = Modifier.size(22.dp)); Spacer(Modifier.width(10.dp)) }
+            Text(name(current), fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Ink, modifier = Modifier.weight(1f), maxLines = 1)
+            Icon(Icons.Default.ArrowDropDown, null, tint = Ink)
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            options.forEach { o ->
+                DropdownMenuItem(
+                    text = { Text(name(o), fontSize = 18.sp, fontWeight = if (o == current) FontWeight.Bold else FontWeight.Normal) },
+                    leadingIcon = icon?.let { f -> { Icon(painterResource(f(o)), null, tint = Ink, modifier = Modifier.size(22.dp)) } },
+                    trailingIcon = if (o == current) ({ Icon(Icons.Default.Check, null, tint = Leaf) }) else null,
+                    onClick = { open = false; onPick(o) },
+                    modifier = Modifier.height(56.dp),
+                )
+            }
+        }
+    }
+}
+
 /** Every choice for one line: kind, category, day and the amount box. */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun DraftEditor(vm: AppViewModel, r: Capture.Review, i: Int, d: DraftEntry, s: Strings) {
-    // All four kinds stay visible (they wrap), so "expense" is never hidden off screen.
-    Row(verticalAlignment = Alignment.Top) {
-        FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            EntryType.entries.forEach { type ->
-                FilterChip(
-                    selected = d.type == type,
-                    onClick = {
-                        vm.updateDraft(i, d.copy(type = type, category = if (type == EntryType.EXPENSE) d.category ?: ExpenseCategory.OTHER else null))
-                    },
-                    label = { Text(s.typeName(type), fontSize = 16.sp) },
-                    leadingIcon = { Icon(painterResource(typeIcon(type)), null, tint = Ink, modifier = Modifier.size(18.dp)) },
-                    modifier = Modifier.height(48.dp),
-                )
-            }
-        }
-        // A line the app heard wrongly can be taken out, as long as one line is left.
-        if (r.drafts.size > 1) IconButton(onClick = { vm.removeDraft(i) }) { Icon(Icons.Default.Delete, s.delete, tint = InkSoft) }
-    }
-    val detail = if (d.type == EntryType.WORK) s.workDetail(d.hours, d.pieces, d.ratePaise) else ""
-    if (detail.isNotEmpty()) Text(detail, fontSize = 18.sp)
-    if (d.type == EntryType.EXPENSE) {
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            ExpenseCategory.entries.forEach { c ->
-                FilterChip(
-                    selected = (d.category ?: ExpenseCategory.OTHER) == c, onClick = { vm.updateDraft(i, d.copy(category = c)) },
-                    label = { Text(s.categoryName(c), fontSize = 15.sp) }, modifier = Modifier.height(44.dp),
-                )
-            }
-        }
-    }
-    // Which day: said "yesterday", or forgot to; one tap fixes it.
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        listOf(0 to s.today, -1 to s.yesterday, -2 to s.dayBefore).forEach { (offset, label) ->
-            FilterChip(
-                selected = d.dayOffset == offset, onClick = { vm.updateDraft(i, d.copy(dayOffset = offset)) },
-                label = { Text(label, fontSize = 15.sp) }, modifier = Modifier.height(44.dp),
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Choice(
+                d.type, EntryType.entries, s::typeName, icon = ::typeIcon, modifier = Modifier.weight(1f),
+                onPick = { type -> vm.updateDraft(i, d.copy(type = type, category = if (type == EntryType.EXPENSE) d.category ?: ExpenseCategory.OTHER else null)) },
             )
+            // A line the app heard wrongly can be taken out, as long as one line is left.
+            if (r.drafts.size > 1) IconButton(onClick = { vm.removeDraft(i) }) { Icon(Icons.Default.Delete, s.delete, tint = InkSoft) }
+        }
+        val detail = if (d.type == EntryType.WORK) s.workDetail(d.hours, d.pieces, d.ratePaise) else ""
+        if (detail.isNotEmpty()) Text(detail, fontSize = 18.sp)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (d.type == EntryType.EXPENSE) {
+                Choice(d.category ?: ExpenseCategory.OTHER, ExpenseCategory.entries, s::categoryName, onPick = { vm.updateDraft(i, d.copy(category = it)) }, modifier = Modifier.weight(1f))
+            }
+            // Which day: said "yesterday", or forgot to; one tap fixes it.
+            val days = listOf(0 to s.today, -1 to s.yesterday, -2 to s.dayBefore)
+            Choice(d.dayOffset.coerceIn(-2, 0), days.map { it.first }, { o -> days.first { it.first == o }.second }, onPick = { vm.updateDraft(i, d.copy(dayOffset = it)) }, modifier = Modifier.weight(1f))
         }
     }
     Spacer(Modifier.height(6.dp))
@@ -412,6 +425,37 @@ private fun typeColor(type: EntryType): Color = when (type) {
     EntryType.EXPENSE -> InkSoft
 }
 
+/** A day's heading: "Today", "Yesterday" or the weekday and date, with what was earned, taken and spent. */
+@Composable
+private fun DayCard(day: Long, today: Long, list: List<Entry>, open: Boolean, s: Strings, onClick: () -> Unit) {
+    val t = Ledger.totals(list)
+    val date = LocalDate.ofEpochDay(day)
+    val loc = com.acxelin.hisaabsaathi.speech.locale(s.lang)
+    val name = when (day) {
+        today -> s.today
+        today - 1 -> s.yesterday
+        else -> date.format(DateTimeFormatter.ofPattern("EEEE", loc))
+    }
+    Column(
+        Modifier.fillMaxWidth().padding(top = 8.dp).clip(RoundedCornerShape(10.dp)).background(InkWash)
+            .clickable(onClick = onClick).padding(horizontal = 14.dp, vertical = 10.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(name, fontSize = 19.sp, fontWeight = FontWeight.ExtraBold)
+            Spacer(Modifier.width(8.dp))
+            Text(date.format(DateTimeFormatter.ofPattern("d MMM", loc)), fontSize = 15.sp, color = InkSoft, modifier = Modifier.weight(1f))
+            Icon(if (open) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown, null, tint = Ink)
+        }
+        val parts = listOfNotNull(
+            t.earnedPaise.takeIf { it > 0 }?.let { "${s.earned} ${s.rupees(it)}" },
+            t.advancePaise.takeIf { it > 0 }?.let { "${s.typeName(EntryType.ADVANCE)} ${s.rupees(it)}" },
+            t.paidPaise.takeIf { it > 0 }?.let { "${s.typeName(EntryType.PAYMENT)} ${s.rupees(it)}" },
+            t.expensePaise.takeIf { it > 0 }?.let { "${s.spent} ${s.rupees(it)}" },
+        )
+        if (parts.isNotEmpty()) Text(parts.joinToString("  ·  "), fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = Ink)
+    }
+}
+
 @Composable
 fun LedgerScreen(vm: AppViewModel, s: Strings) {
     val entries by vm.entries.collectAsStateWithLifecycle()
@@ -423,15 +467,14 @@ fun LedgerScreen(vm: AppViewModel, s: Strings) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(s.noEntries, fontSize = 18.sp, color = InkSoft) }
     } else {
     val byDay = remember(entries) { entries.groupBy { it.epochDay } }
+    val open = remember { androidx.compose.runtime.mutableStateMapOf<Long, Boolean>() }
     LazyColumn(Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        val today = LocalDate.now().toEpochDay()
         byDay.forEach { (day, list) ->
-            item(key = "d$day") {
-                Text(
-                    LocalDate.ofEpochDay(day).format(dayFormat), fontWeight = FontWeight.SemiBold, color = InkSoft,
-                    modifier = Modifier.padding(top = 12.dp),
-                )
-            }
-            items(list, key = { it.id }) { e ->
+            // One card per day: its name and totals. Tap to see that day's lines (today starts open).
+            val isOpen = open[day] ?: (day == today)
+            item(key = "d$day") { DayCard(day, today, list, isOpen, s) { open[day] = !isOpen } }
+            if (isOpen) items(list, key = { it.id }) { e ->
                 // Tap a line to change it.
                 Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Paper).clickable(onClickLabel = s.editEntry) { editing = e }) {
                     Row(Modifier.padding(start = 12.dp, top = 10.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -660,16 +703,8 @@ internal fun EditEntryForm(e: Entry, s: Strings, onCancel: () -> Unit, onSave: (
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(s.editEntry, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            EntryType.entries.forEach { t ->
-                FilterChip(selected = type == t, onClick = { type = t }, label = { Text(s.typeName(t), fontSize = 15.sp) }, modifier = Modifier.height(44.dp))
-            }
-        }
-        if (type == EntryType.EXPENSE) FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            ExpenseCategory.entries.forEach { c ->
-                FilterChip(selected = category == c, onClick = { category = c }, label = { Text(s.categoryName(c), fontSize = 14.sp) }, modifier = Modifier.height(40.dp))
-            }
-        }
+        Choice(type, EntryType.entries, s::typeName, onPick = { type = it }, icon = ::typeIcon)
+        if (type == EntryType.EXPENSE) Choice(category, ExpenseCategory.entries, s::categoryName, onPick = { category = it })
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { day -= 1 }) { Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, s.earlierDay, tint = Ink) }
             Text(LocalDate.ofEpochDay(day).format(dayFormat), fontSize = 18.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
