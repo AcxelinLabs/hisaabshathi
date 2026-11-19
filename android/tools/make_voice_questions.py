@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""200 spoken-style questions per app language (Hindi, Odia, Telugu, Kannada, Tamil, English)
+"""300 spoken-style questions per app language (Hindi, Odia, Telugu, Kannada, Tamil, English)
 for recording in real voices, to find where the app misses.
 
 Each question is built from a hand-written phrasing (how people actually ask, with local and
@@ -338,7 +338,7 @@ IMPERATIVE = {"hi": ["बताओ", "सुनाओ", "दिखाओ", "द�
 # How many of each kind per language (200 in all). Unsupported periods are about one in eight
 # ledger questions; fixed questions (minimum wage, chat, not-ledger) are all used once.
 LEDGER_SHARE = {"EARNED": 0.24, "ADVANCE": 0.19, "EXPENSE": 0.21, "DUE": 0.17, "ALL": 0.19}
-PER_LANG = 200
+PER_LANG = 200  # the first 200; tools/voice_questions_extra.py adds 100 more
 
 
 def clean(t):
@@ -399,19 +399,71 @@ def describe(expect, lang_name):
                 "HOW_ARE_YOU": "A friendly reply", "MAKER": "Who made it"}[rest[0]]
     period, topic = rest
     t = {"EARNED": "money earned", "ADVANCE": "advance taken", "EXPENSE": "money spent", "DUE": "money still owed to the worker",
-         "ALL": "full summary", "MIN_WAGE": "government minimum wage"}[topic]
+         "ALL": "full summary", "MIN_WAGE": "government minimum wage", "COMPARE": "a comparison (not answered yet)",
+         "HOURS": "hours worked (not answered yet)", "DAYS": "days worked (not answered yet)", "PIECES": "pieces made (not answered yet)",
+         "SAVED": "money left after spending (not answered yet)", "AVERAGE": "average per day (not answered yet)",
+         "PAYMENTS": "number of payments (not answered yet)", "RATE": "rate per hour (not answered yet)"}[topic]
     p = {"DAY": "today", "WEEK": "this week", "MONTH": "this month", "YEAR": "this year", "ANY": "",
-         "YESTERDAY": "yesterday", "LAST_WEEK": "last week", "LAST_MONTH": "last month"}[period]
+         "YESTERDAY": "yesterday", "LAST_WEEK": "last week", "LAST_MONTH": "last month", "LAST_YEAR": "last year (not answered yet)",
+         "WEEKDAY": "a weekday (not answered yet)", "DATE": "a date range (not answered yet)", "TOMORROW": "tomorrow (not answered yet)"}[period]
     return (t[0].upper() + t[1:] + (f", {p}" if p else "")).strip()
 
 
+def build_extra(code, rng, base):
+    """Questions 201-300: the hard questions, then new everyday phrasings to make 100."""
+    import voice_questions_extra as X
+    d = L[code]
+    seen = {r["text"] for r in base}
+    rows = []
+    for key, text in X.HARD[code].items():
+        english, expect, supported = X.CONCEPTS[key]
+        rows.append(dict(text=text, english=text if code == "en" else english.replace("{state}", X.STATE[code]),
+                         expect=expect, supported=supported, hard=True))
+        seen.add(text)
+    frames = [(t, g, topic) for topic, fs in X.FRAMES[code].items() for t, g in fs]
+    tries = 0
+    while len(rows) < 100 and tries < 50000:
+        tries += 1
+        text, gloss, topic = frames[len(rows) % len(frames)] if tries <= len(frames) else rng.choice(frames)
+        if "{p}" in text or "{s}" in text:
+            key = rng.choice(["yesterday", "last_week", "last_month"]) if rng.random() < 0.15 else rng.choice(["today", "week", "month", "year"])
+            adv, mod, eng = rng.choice(d["periods"][key])
+            period = PERIOD[key][0]
+        else:
+            adv = mod = eng = ""; period = "ANY"
+        sentence = clean(text.replace("{p}", adv).replace("{s}", mod))
+        if sentence in seen:
+            continue
+        seen.add(sentence)
+        rows.append(dict(text=sentence, english=sentence if code == "en" else clean(gloss.replace("{e}", eng)),
+                         expect=f"ASK {period} {topic}", supported=True, hard=False))
+    assert len(rows) == 100, (code, len(rows))
+    rng.shuffle(rows)
+    for i, r in enumerate(rows, 201):
+        r["id"] = f"{code}_{i:03d}"
+        r["lang"] = code
+    return rows
+
+
 def main():
+    sys.path.insert(0, "tools")
     rng = random.Random(2026)
-    rows = [r for code in ["hi", "or", "te", "kn", "ta", "en"] for r in build(code, rng)]
+    base = {code: build(code, rng) for code in ["hi", "or", "te", "kn", "ta", "en"]}
+    rng2 = random.Random(3030)
+    rows = []
+    for code in ["hi", "or", "te", "kn", "ta", "en"]:
+        for r in base[code]:
+            r["hard"] = False
+        rows += base[code] + build_extra(code, rng2, base[code])
     with open("core/src/test/resources/voice_questions.jsonl", "w", encoding="utf-8") as f:
         for r in rows:
-            f.write(json.dumps({k: r[k] for k in ["id", "lang", "text", "english", "expect", "supported"]}, ensure_ascii=False) + "\n")
+            f.write(json.dumps({k: r[k] for k in ["id", "lang", "text", "english", "expect", "supported", "hard"]}, ensure_ascii=False) + "\n")
     print(len(rows), "questions")
+    # HisaabSaathi Recorder (recorder/) shows these prompts.
+    with open("recorder/src/main/assets/voice_prompts.jsonl", "w", encoding="utf-8") as f:
+        for r in rows:
+            f.write(json.dumps({"id": r["id"], "lang": r["lang"], "text": r["text"], "english": r["english"],
+                                "expect": r["expect"], "answer": describe(r["expect"], "")}, ensure_ascii=False) + "\n")
     if len(sys.argv) > 1:
         write_xlsx(rows, sys.argv[1])
 
@@ -430,17 +482,18 @@ def write_xlsx(rows, path):
     ws = wb.active
     ws.title = "How to record"
     guide = [
-        ("HisaabSaathi voice question test", True),
-        ("200 questions in each language, asked the way workers really speak. Record each one, then send the recordings back to be run through the app.", False),
+        ("HisaabSaathi voice questions", True),
+        ("300 questions in each language, asked the way workers really speak. 1-200: everyday ways of asking. 201-300: new and hard ones, including things the app cannot answer yet ('Supported now: no').", False),
         ("", False),
-        ("1. Use the speaker's own phone voice recorder. Hold the phone as you would to talk to the app (about 20 cm away).", False),
-        ("2. Read the sentence in column B naturally, the way you would say it at work. Small changes in wording are fine: write what you actually said in column G.", False),
-        ("3. Save each recording with the name in column F (for example hi_001.m4a). Any format the phone records (m4a, mp3, wav, ogg) is fine.", False),
-        ("4. Record some in a quiet room and some outdoors or with background noise. Mark which in column H (quiet / noisy).", False),
-        ("5. More speakers are better: men and women, young and old, different districts. Put the speaker's initials in column I.", False),
-        ("6. Put all recordings of one language in one folder (hi, or, te, kn, ta, en), zip them and send them back.", False),
+        ("Best way: record in the app. HisaabSaathi > Settings > Voice samples > Record voice samples.", True),
+        ("1. Choose the speaker's language, age group, gender, state, and quiet or noisy place. No names are saved: each speaker gets a code.", False),
+        ("2. Read the consent text to the speaker (or tap Read aloud) and record their 'yes'. Without it the app does not record.", False),
+        ("3. 'Read the sentence': the speaker reads the question shown. 'Say it your own way': for people who do not read; tell them what to ask (the meaning is shown) and let them ask in their own words.", False),
+        ("4. Tap the big button, the speaker talks, tap again. Play it back, then Next. The app names and saves every file and these details for you.", False),
+        ("5. About 25 to 50 questions per speaker is plenty (5-10 minutes). Each new speaker starts where the last one stopped, so together they cover all 300.", False),
+        ("6. At the end tap Export: one zip with all recordings and a list of what was said. Send it to your computer (WhatsApp, Drive, email) and upload it to the one shared place: the private Hugging Face dataset AcxelinLabs/hisaabsaathi-voices, folder sessions/.", False),
         ("", False),
-        ("Only fill in columns G, H and I (shaded yellow). Columns A–F are already filled.", True),
+        ("Without the app (phone voice recorder): record each sentence and save it with the name in column F; fill columns G, H, I (yellow). Zip one folder per language.", True),
         ("Column D says what the app should answer.", False),
         ("", False),
         ("Example row (from the Hindi sheet):", True),

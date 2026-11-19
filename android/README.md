@@ -180,6 +180,15 @@ The fine-tuned model was trained on sentences built from the same templates as t
 (with no overlapping sentences), so 95% shows it can learn the task, not how it does on real
 speech.
 
+### Voice recordings from real speakers
+
+`recorder/` is a separate app, **HisaabSaathi Recorder**, for field agents. It records workers
+asking the 300 questions per language of `tools/make_voice_questions.py`, offline, with each
+speaker's details and spoken consent, and exports one zip per speaker in the layout of the
+private dataset `AcxelinLabs/hisaabsaathi-voices`. `tools/voices.py` checks, lists and
+transcribes the recordings with the app's own speech models; `VoiceQuestionsTest` scores what
+the app understood. See `recorder/README.md`.
+
 ### Understanding questions without the model (19 Nov 2026)
 
 The rules (`core/.../QuestionWords.kt`, `RuleBasedExtractor.query`) read ledger questions in
