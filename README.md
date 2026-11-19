@@ -76,29 +76,6 @@ be installed side by side.
 On questions written after the rules and never tuned on, the rules alone answer **92%**
 correctly (previously 39%). Details and every benchmark: [`android/README.md`](android/README.md).
 
-## Repository
-
-```
-android/
-  app/        HisaabSaathi: the Android app (Kotlin, Jetpack Compose)
-  core/       language rules, number reading, ledger maths, voice-sample formats; plain Kotlin, unit-tested
-  recorder/   HisaabSaathi Recorder: the field-agent app for recording voice samples
-  tools/      Python: test sets, model fine-tuning and checks, speech benchmarks, voice dataset tools
-  README.md   engineering notes, models and results
-docs/         design notes and screenshots
-```
-
-## Build and test
-
-You need JDK 17 and the Android SDK (API 35).
-
-```bash
-cd android
-./gradlew :app:assembleDebug        # HisaabSaathi APKs per processor type in app/build/outputs/apk/debug/
-./gradlew :recorder:assembleRelease # HisaabSaathi Recorder
-./gradlew test                      # every unit and screen test (core, app, recorder)
-```
-
 The speech, voice and language models are not in the repository. The app downloads them on
 first use, and they are listed in [`android/README.md`](android/README.md). Screen tests save a
 screenshot of every step to `app/build/screens` and `recorder/build/screens`.
