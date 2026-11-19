@@ -156,6 +156,9 @@ class Strings(val lang: Lang) {
         QueryPeriod.WEEK -> t("हफ्ता", "ସପ୍ତାହ", "Week")
         QueryPeriod.MONTH -> t("महीना", "ମାସ", "Month")
         QueryPeriod.YEAR -> t("साल", "ବର୍ଷ", "Year")
+        QueryPeriod.YESTERDAY -> yesterday
+        QueryPeriod.LAST_WEEK -> t("पिछला हफ्ता", "ଗତ ସପ୍ତାହ", "Last week")
+        QueryPeriod.LAST_MONTH -> t("पिछला महीना", "ଗତ ମାସ", "Last month")
     }
 
     // ---- wage & help
@@ -308,6 +311,9 @@ class Strings(val lang: Lang) {
         QueryPeriod.WEEK -> t("इस हफ्ते", "ଏହି ସପ୍ତାହରେ", "This week")
         QueryPeriod.MONTH -> t("इस महीने", "ଏହି ମାସରେ", "This month")
         QueryPeriod.YEAR -> t("इस साल", "ଏହି ବର୍ଷ", "This year")
+        QueryPeriod.YESTERDAY -> yesterday
+        QueryPeriod.LAST_WEEK -> t("पिछले हफ्ते", "ଗତ ସପ୍ତାହରେ", "Last week")
+        QueryPeriod.LAST_MONTH -> t("पिछले महीने", "ଗତ ମାସରେ", "Last month")
     }
 
     /** The spoken report for a period. */

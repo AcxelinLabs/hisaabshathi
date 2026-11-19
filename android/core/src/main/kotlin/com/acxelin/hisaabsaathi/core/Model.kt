@@ -29,7 +29,14 @@ data class DraftEntry(
     val dayOffset: Int = 0,
 )
 
-enum class QueryPeriod { DAY, WEEK, MONTH, YEAR }
+enum class QueryPeriod {
+    DAY, WEEK, MONTH, YEAR, YESTERDAY, LAST_WEEK, LAST_MONTH;
+
+    companion object {
+        /** The periods the summary screen offers as tabs; the others are only asked about. */
+        val tabs = listOf(DAY, WEEK, MONTH, YEAR)
+    }
+}
 
 enum class QueryTopic { ALL, EARNED, ADVANCE, EXPENSE, DUE, MIN_WAGE }
 

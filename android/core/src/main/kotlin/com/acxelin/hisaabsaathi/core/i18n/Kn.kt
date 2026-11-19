@@ -11,6 +11,8 @@ internal object Kn {
         "Last problem (for testing)" to "ಹಿಂದಿನ ತೊಂದರೆ (ಪರೀಕ್ಷೆಗಾಗಿ)",
         "Change entry" to "ಬದಲಿಸಿ",
         "Change" to "ಬದಲಿಸಿ",
+        "Last week" to "ಹೋದ ವಾರ",
+        "Last month" to "ಹೋದ ತಿಂಗಳು",
         "Entry removed" to "ತೆಗೆದುಹಾಕಲಾಯಿತು",
         "Undo" to "ವಾಪಸ್ ತನ್ನಿ",
         "Earlier day" to "ಹಿಂದಿನ ದಿನ",

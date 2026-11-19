@@ -11,6 +11,8 @@ internal object Ta {
         "Last problem (for testing)" to "கடைசி பிரச்சனை (சோதனைக்கு)",
         "Change entry" to "மாத்துங்க",
         "Change" to "மாத்துங்க",
+        "Last week" to "போன வாரம்",
+        "Last month" to "போன மாசம்",
         "Entry removed" to "நீக்கப்பட்டது",
         "Undo" to "திரும்பக் கொண்டு வா",
         "Earlier day" to "முந்தைய நாள்",

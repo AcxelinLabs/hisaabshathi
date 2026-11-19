@@ -539,7 +539,7 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
 
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp).widthIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            QueryPeriod.entries.forEach { p ->
+            QueryPeriod.tabs.forEach { p ->
                 FilterChip(selected = period == p, onClick = { period = p }, label = { Text(s.periodName(p), fontSize = 16.sp) }, modifier = Modifier.height(48.dp))
             }
         }

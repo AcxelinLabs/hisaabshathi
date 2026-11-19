@@ -91,7 +91,10 @@ object Fuzzy {
  * words the app does not know exactly: "खर्च" (spent) must never match "खर्ची" (advance)
  * just because they are one letter apart.
  */
-class Keywords(val exact: Set<String>) : Set<String> by exact {
+class Keywords(val exact: Set<String>, val stems: List<String> = emptyList()) : Set<String> by exact {
+    /** Whether [word] is one of the word roots with an ending added ("कमाई", "कमाया" for "कमा"). */
+    fun hasStem(word: String): Boolean = stems.any { word.length > it.length && word.startsWith(it) }
+
     private val cache = ConcurrentHashMap<String, Boolean>()
 
     init { known.addAll(exact) }
@@ -104,5 +107,6 @@ class Keywords(val exact: Set<String>) : Set<String> by exact {
         val known: MutableSet<String> = ConcurrentHashMap.newKeySet()
     }
 
-    operator fun plus(other: Set<String>): Keywords = Keywords(exact + (if (other is Keywords) other.exact else other))
+    operator fun plus(other: Set<String>): Keywords =
+        Keywords(exact + (if (other is Keywords) other.exact else other), stems + ((other as? Keywords)?.stems ?: emptyList()))
 }

@@ -70,6 +70,9 @@ object Ledger {
             QueryPeriod.WEEK -> today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).let { it to it.plusDays(6) }
             QueryPeriod.MONTH -> today.withDayOfMonth(1) to today.with(TemporalAdjusters.lastDayOfMonth())
             QueryPeriod.YEAR -> today.withDayOfYear(1) to today.with(TemporalAdjusters.lastDayOfYear())
+            QueryPeriod.YESTERDAY -> today.minusDays(1) to today.minusDays(1)
+            QueryPeriod.LAST_WEEK -> today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).minusWeeks(1).let { it to it.plusDays(6) }
+            QueryPeriod.LAST_MONTH -> today.minusMonths(1).let { it.withDayOfMonth(1) to it.with(TemporalAdjusters.lastDayOfMonth()) }
         }
         return from.toEpochDay()..to.toEpochDay()
     }

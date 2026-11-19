@@ -11,6 +11,8 @@ internal object Te {
         "Last problem (for testing)" to "గత సమస్య (పరీక్ష కోసం)",
         "Change entry" to "మార్చండి",
         "Change" to "మార్చండి",
+        "Last week" to "పోయిన వారం",
+        "Last month" to "పోయిన నెల",
         "Entry removed" to "తీసేశాం",
         "Undo" to "వెనక్కి తెండి",
         "Earlier day" to "ముందు రోజు",

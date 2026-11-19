@@ -8,8 +8,7 @@ mein"...). It records what the app should answer:
 
 - ledger questions: period (DAY, WEEK, MONTH, YEAR; ANY when no time is said) and topic
   (EARNED, ADVANCE, EXPENSE, DUE, ALL, MIN_WAGE);
-- periods the app does not answer yet (YESTERDAY, LAST_WEEK, LAST_MONTH), marked
-  supported = no, to measure how often workers would ask them;
+- yesterday, last week and last month (YESTERDAY, LAST_WEEK, LAST_MONTH), answered since 0.7.3;
 - simple questions the app answers itself (TALK: DATE, HELP, NAME, PRIVACY, HOW_ARE_YOU, MAKER);
 - everyday questions that are not about the ledger (NONE).
 
@@ -23,7 +22,7 @@ import json, random, sys
 
 # period key -> (expected period, supported)
 PERIOD = {"today": ("DAY", True), "week": ("WEEK", True), "month": ("MONTH", True), "year": ("YEAR", True),
-          "yesterday": ("YESTERDAY", False), "last_week": ("LAST_WEEK", False), "last_month": ("LAST_MONTH", False)}
+          "yesterday": ("YESTERDAY", True), "last_week": ("LAST_WEEK", True), "last_month": ("LAST_MONTH", True)}
 
 # Per language:
 #   periods: key -> list of (adverb form {p}, modifier form {s}, English)
@@ -442,7 +441,7 @@ def write_xlsx(rows, path):
         ("6. Put all recordings of one language in one folder (hi, or, te, kn, ta, en), zip them and send them back.", False),
         ("", False),
         ("Only fill in columns G, H and I (shaded yellow). Columns A–F are already filled.", True),
-        ("Column D says what the app should answer. 'Supported now: no' marks questions about yesterday, last week or last month, which the app cannot answer yet: they show how often workers ask them.", False),
+        ("Column D says what the app should answer.", False),
         ("", False),
         ("Example row (from the Hindi sheet):", True),
     ]

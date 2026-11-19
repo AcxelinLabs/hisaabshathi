@@ -12,10 +12,10 @@
 {"id": "hi_012", "lang": "hi", "text": "आज कितना कमा लिया", "english": "how much have I earned today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "hi_013", "lang": "hi", "text": "इस साल का पूरा ब्यौरा दो", "english": "give the full details this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "hi_014", "lang": "hi", "text": "इस वीक का पूरा पैसा मिला क्या", "english": "did I get all the money this week", "expect": "ASK WEEK DUE", "supported": true}
-{"id": "hi_015", "lang": "hi", "text": "कल का बकाया कितना है", "english": "how much are the dues yesterday", "expect": "ASK YESTERDAY DUE", "supported": false}
-{"id": "hi_016", "lang": "hi", "text": "सुनो पिछले हफ्ते का टोटल खर्चा कितना है बता दो ना", "english": "listen, what is the total spending last week, please tell me", "expect": "ASK LAST_WEEK EXPENSE", "supported": false}
+{"id": "hi_015", "lang": "hi", "text": "कल का बकाया कितना है", "english": "how much are the dues yesterday", "expect": "ASK YESTERDAY DUE", "supported": true}
+{"id": "hi_016", "lang": "hi", "text": "सुनो पिछले हफ्ते का टोटल खर्चा कितना है बता दो ना", "english": "listen, what is the total spending last week, please tell me", "expect": "ASK LAST_WEEK EXPENSE", "supported": true}
 {"id": "hi_017", "lang": "hi", "text": "अरे इस महीने कितना खर्चा हुआ", "english": "hey, how much was spent this month", "expect": "ASK MONTH EXPENSE", "supported": true}
-{"id": "hi_018", "lang": "hi", "text": "पिछले हफ्ते कितना पैसा लग गया", "english": "how much money got used up last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": false}
+{"id": "hi_018", "lang": "hi", "text": "पिछले हफ्ते कितना पैसा लग गया", "english": "how much money got used up last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": true}
 {"id": "hi_019", "lang": "hi", "text": "सरकारी मजदूरी कितनी है", "english": "what is the government wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "hi_020", "lang": "hi", "text": "आज की रिपोर्ट दिखाओ", "english": "show the report today", "expect": "ASK DAY ALL", "supported": true}
 {"id": "hi_021", "lang": "hi", "text": "सुनो इस वीक की कमाई कितनी है", "english": "listen, what are the earnings this week", "expect": "ASK WEEK EARNED", "supported": true}
@@ -24,12 +24,12 @@
 {"id": "hi_024", "lang": "hi", "text": "सुनो इस साल का हिसाब किताब सुनाओ", "english": "listen, read out the accounts this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "hi_025", "lang": "hi", "text": "इस साल कितना पैसा बाकी है", "english": "how much money is pending this year", "expect": "ASK YEAR DUE", "supported": true}
 {"id": "hi_026", "lang": "hi", "text": "महीने भर का पूरा हिसाब बताओ", "english": "tell me the full account over the month", "expect": "ASK MONTH ALL", "supported": true}
-{"id": "hi_027", "lang": "hi", "text": "कल कितना लेना बाकी है", "english": "how much is left to collect yesterday", "expect": "ASK YESTERDAY DUE", "supported": false}
+{"id": "hi_027", "lang": "hi", "text": "कल कितना लेना बाकी है", "english": "how much is left to collect yesterday", "expect": "ASK YESTERDAY DUE", "supported": true}
 {"id": "hi_028", "lang": "hi", "text": "मेरा कितना पैसा फंसा हुआ है", "english": "how much of my money is stuck", "expect": "ASK ANY DUE", "supported": true}
 {"id": "hi_029", "lang": "hi", "text": "हफ्ते भर की समरी बताओ", "english": "tell me the summary over the week", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "hi_030", "lang": "hi", "text": "सुनो इस महीने कितनी मजूरी बनी", "english": "listen, how much wage was made this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "hi_031", "lang": "hi", "text": "हफ्ते भर में कितने का काम किया", "english": "how much work (in money) did I do over the week", "expect": "ASK WEEK EARNED", "supported": true}
-{"id": "hi_032", "lang": "hi", "text": "पिछले हफ्ते मेरी दिहाड़ी कितनी बनी", "english": "how much daily wage did I make last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "hi_032", "lang": "hi", "text": "पिछले हफ्ते मेरी दिहाड़ी कितनी बनी", "english": "how much daily wage did I make last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "hi_033", "lang": "hi", "text": "सुनो महीने भर में सेठ से कितना उठाया", "english": "listen, how much did I draw from the seth over the month", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "hi_034", "lang": "hi", "text": "भाई साल भर का टोटल खर्चा कितना है", "english": "brother, what is the total spending over the year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "hi_035", "lang": "hi", "text": "मिनिमम वेज कितना है", "english": "how much is the minimum wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
@@ -50,12 +50,12 @@
 {"id": "hi_050", "lang": "hi", "text": "इस साल की रिपोर्ट दिखाओ", "english": "show the report this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "hi_051", "lang": "hi", "text": "ठेकेदार को अभी मुझे कितना देना है", "english": "how much does the contractor still have to give me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "hi_052", "lang": "hi", "text": "इस वीक का पूरा ब्यौरा दो", "english": "give the full details this week", "expect": "ASK WEEK ALL", "supported": true}
-{"id": "hi_053", "lang": "hi", "text": "कल काम करके कितना मिला", "english": "how much did I get for my work yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "hi_053", "lang": "hi", "text": "कल काम करके कितना मिला", "english": "how much did I get for my work yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "hi_054", "lang": "hi", "text": "अरे मेरा कितना पैसा फंसा हुआ है", "english": "hey, how much of my money is stuck", "expect": "ASK ANY DUE", "supported": true}
 {"id": "hi_055", "lang": "hi", "text": "इस महीने मुंशी से कितना एडवांस लिया", "english": "how much advance did I take from the munshi this month", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "hi_056", "lang": "hi", "text": "आज कितने पैसे उड़ गए", "english": "how much money flew away today", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "hi_057", "lang": "hi", "text": "इस हफ्ते कितनी कमाई हुई", "english": "how much was earned this week", "expect": "ASK WEEK EARNED", "supported": true}
-{"id": "hi_058", "lang": "hi", "text": "पिछले हफ्ते का बकाया कितना है बता दो ना", "english": "how much are the dues last week, please tell me", "expect": "ASK LAST_WEEK DUE", "supported": false}
+{"id": "hi_058", "lang": "hi", "text": "पिछले हफ्ते का बकाया कितना है बता दो ना", "english": "how much are the dues last week, please tell me", "expect": "ASK LAST_WEEK DUE", "supported": true}
 {"id": "hi_059", "lang": "hi", "text": "इस बरस का टोटल खर्चा कितना है", "english": "what is the total spending this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "hi_060", "lang": "hi", "text": "अरे इस साल का टोटल खर्चा कितना है", "english": "hey, what is the total spending this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "hi_061", "lang": "hi", "text": "सुनो इस वीक कितना पैसा लग गया", "english": "listen, how much money got used up this week", "expect": "ASK WEEK EXPENSE", "supported": true}
@@ -77,7 +77,7 @@
 {"id": "hi_077", "lang": "hi", "text": "इस साल का हिसाब किताब सुनाओ", "english": "read out the accounts this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "hi_078", "lang": "hi", "text": "इस साल घर कितना भेजा", "english": "how much did I send home this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "hi_079", "lang": "hi", "text": "इस मंथ कितनी कमाई हुई बताओ", "english": "how much was earned this month, tell me", "expect": "ASK MONTH EARNED", "supported": true}
-{"id": "hi_080", "lang": "hi", "text": "भाई पिछले महीने कितना पेमेंट रुका है", "english": "brother, how much payment is held up last month", "expect": "ASK LAST_MONTH DUE", "supported": false}
+{"id": "hi_080", "lang": "hi", "text": "भाई पिछले महीने कितना पेमेंट रुका है", "english": "brother, how much payment is held up last month", "expect": "ASK LAST_MONTH DUE", "supported": true}
 {"id": "hi_081", "lang": "hi", "text": "आज दिन भर में खाने पीने में कितना गया", "english": "how much went on food all day today", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "hi_082", "lang": "hi", "text": "तुम्हारा नाम क्या है", "english": "what is your name", "expect": "TALK NAME", "supported": true}
 {"id": "hi_083", "lang": "hi", "text": "इस हफ्ते पेशगी कितनी ली", "english": "how much peshgi (advance) did I take this week", "expect": "ASK WEEK ADVANCE", "supported": true}
@@ -112,7 +112,7 @@
 {"id": "hi_112", "lang": "hi", "text": "सुनो इस हफ्ते खाने पीने में कितना गया बता दो ना", "english": "listen, how much went on food this week, please tell me", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "hi_113", "lang": "hi", "text": "साल भर में कितने का काम किया", "english": "how much work (in money) did I do over the year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "hi_114", "lang": "hi", "text": "इस वीक का बकाया कितना है", "english": "how much are the dues this week", "expect": "ASK WEEK DUE", "supported": true}
-{"id": "hi_115", "lang": "hi", "text": "कल का पूरा हिसाब बताओ", "english": "tell me the full account yesterday", "expect": "ASK YESTERDAY ALL", "supported": false}
+{"id": "hi_115", "lang": "hi", "text": "कल का पूरा हिसाब बताओ", "english": "tell me the full account yesterday", "expect": "ASK YESTERDAY ALL", "supported": true}
 {"id": "hi_116", "lang": "hi", "text": "इस साल काम करके कितना मिला", "english": "how much did I get for my work this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "hi_117", "lang": "hi", "text": "सुनो महीने भर में कितना खर्चा हुआ बताओ", "english": "listen, how much was spent over the month, tell me", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "hi_118", "lang": "hi", "text": "मालिक ने अभी कितना नहीं दिया", "english": "how much has the owner not paid yet", "expect": "ASK ANY DUE", "supported": true}
@@ -127,7 +127,7 @@
 {"id": "hi_127", "lang": "hi", "text": "आज का हिसाब किताब सुनाओ", "english": "read out the accounts today", "expect": "ASK DAY ALL", "supported": true}
 {"id": "hi_128", "lang": "hi", "text": "आज ठेकेदार से कितना पैसा लिया बताओ", "english": "how much money did I take from the contractor today, tell me", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "hi_129", "lang": "hi", "text": "राशन कब मिलेगा", "english": "when will we get ration", "expect": "NONE", "supported": true}
-{"id": "hi_130", "lang": "hi", "text": "भाई कल की रिपोर्ट दिखाओ", "english": "brother, show the report yesterday", "expect": "ASK YESTERDAY ALL", "supported": false}
+{"id": "hi_130", "lang": "hi", "text": "भाई कल की रिपोर्ट दिखाओ", "english": "brother, show the report yesterday", "expect": "ASK YESTERDAY ALL", "supported": true}
 {"id": "hi_131", "lang": "hi", "text": "आज दिन भर में सेठ से कितना उठाया", "english": "how much did I draw from the seth all day today", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "hi_132", "lang": "hi", "text": "इस हफ्ते कितना कमा लिया", "english": "how much have I earned this week", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "hi_133", "lang": "hi", "text": "इस वीक मैंने कितना खर्च किया", "english": "how much did I spend this week", "expect": "ASK WEEK EXPENSE", "supported": true}
@@ -150,33 +150,33 @@
 {"id": "hi_150", "lang": "hi", "text": "इस बरस का पूरा हिसाब बताओ", "english": "tell me the full account this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "hi_151", "lang": "hi", "text": "इस साल मैंने कितना खर्च किया", "english": "how much did I spend this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "hi_152", "lang": "hi", "text": "इस मंथ घर कितना भेजा", "english": "how much did I send home this month", "expect": "ASK MONTH EXPENSE", "supported": true}
-{"id": "hi_153", "lang": "hi", "text": "पिछले महीने की कमाई कितनी है", "english": "what are the earnings last month", "expect": "ASK LAST_MONTH EARNED", "supported": false}
+{"id": "hi_153", "lang": "hi", "text": "पिछले महीने की कमाई कितनी है", "english": "what are the earnings last month", "expect": "ASK LAST_MONTH EARNED", "supported": true}
 {"id": "hi_154", "lang": "hi", "text": "आज दिन भर में पैसे कहाँ गए", "english": "where did the money go all day today", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "hi_155", "lang": "hi", "text": "अरे मालिक ने अभी कितना नहीं दिया", "english": "hey, how much has the owner not paid yet", "expect": "ASK ANY DUE", "supported": true}
 {"id": "hi_156", "lang": "hi", "text": "इस हफ्ते की रिपोर्ट दिखाओ", "english": "show the report this week", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "hi_157", "lang": "hi", "text": "इस मंथ कितने का काम किया", "english": "how much work (in money) did I do this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "hi_158", "lang": "hi", "text": "आज दिन भर की इनकम कितनी है", "english": "what is the income all day today", "expect": "ASK DAY EARNED", "supported": true}
-{"id": "hi_159", "lang": "hi", "text": "सुनो पिछले महीने ठेकेदार से कितना पैसा लिया", "english": "listen, how much money did I take from the contractor last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
-{"id": "hi_160", "lang": "hi", "text": "कल मैंने कितना कमाया बता दो ना", "english": "how much did I earn yesterday, please tell me", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "hi_159", "lang": "hi", "text": "सुनो पिछले महीने ठेकेदार से कितना पैसा लिया", "english": "listen, how much money did I take from the contractor last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
+{"id": "hi_160", "lang": "hi", "text": "कल मैंने कितना कमाया बता दो ना", "english": "how much did I earn yesterday, please tell me", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "hi_161", "lang": "hi", "text": "इस वीक किराए भाड़े में कितना लगा", "english": "how much went on fares this week", "expect": "ASK WEEK EXPENSE", "supported": true}
-{"id": "hi_162", "lang": "hi", "text": "कल मुंशी से कितना एडवांस लिया", "english": "how much advance did I take from the munshi yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": false}
+{"id": "hi_162", "lang": "hi", "text": "कल मुंशी से कितना एडवांस लिया", "english": "how much advance did I take from the munshi yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": true}
 {"id": "hi_163", "lang": "hi", "text": "मेरा हिसाब कोई और देख सकता है क्या", "english": "can anyone else see my accounts", "expect": "TALK PRIVACY", "supported": true}
 {"id": "hi_164", "lang": "hi", "text": "हफ्ते भर का हिसाब किताब सुनाओ", "english": "read out the accounts over the week", "expect": "ASK WEEK ALL", "supported": true}
-{"id": "hi_165", "lang": "hi", "text": "पिछले महीने कितना लेना बाकी है बताओ", "english": "how much is left to collect last month, tell me", "expect": "ASK LAST_MONTH DUE", "supported": false}
+{"id": "hi_165", "lang": "hi", "text": "पिछले महीने कितना लेना बाकी है बताओ", "english": "how much is left to collect last month, tell me", "expect": "ASK LAST_MONTH DUE", "supported": true}
 {"id": "hi_166", "lang": "hi", "text": "महीने भर में कितना लेना बाकी है बता दो ना", "english": "how much is left to collect over the month, please tell me", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "hi_167", "lang": "hi", "text": "इस हफ्ते मालिक से कितने पैसे पहले ले लिए बता दो ना", "english": "how much did I take early from the owner this week, please tell me", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "hi_168", "lang": "hi", "text": "इस महीने मालिक से कितने पैसे पहले ले लिए बताओ", "english": "how much did I take early from the owner this month, tell me", "expect": "ASK MONTH ADVANCE", "supported": true}
-{"id": "hi_169", "lang": "hi", "text": "कल कितने पैसे उड़ गए", "english": "how much money flew away yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": false}
+{"id": "hi_169", "lang": "hi", "text": "कल कितने पैसे उड़ गए", "english": "how much money flew away yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": true}
 {"id": "hi_170", "lang": "hi", "text": "इस महीने कितने का काम किया", "english": "how much work (in money) did I do this month", "expect": "ASK MONTH EARNED", "supported": true}
-{"id": "hi_171", "lang": "hi", "text": "पिछले हफ्ते मैंने कितना कमाया", "english": "how much did I earn last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "hi_171", "lang": "hi", "text": "पिछले हफ्ते मैंने कितना कमाया", "english": "how much did I earn last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "hi_172", "lang": "hi", "text": "क्रिकेट का स्कोर क्या है", "english": "what is the cricket score", "expect": "NONE", "supported": true}
-{"id": "hi_173", "lang": "hi", "text": "पिछले महीने मैंने कितना कमाया", "english": "how much did I earn last month", "expect": "ASK LAST_MONTH EARNED", "supported": false}
-{"id": "hi_174", "lang": "hi", "text": "पिछले हफ्ते काम करके कितना मिला", "english": "how much did I get for my work last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "hi_173", "lang": "hi", "text": "पिछले महीने मैंने कितना कमाया", "english": "how much did I earn last month", "expect": "ASK LAST_MONTH EARNED", "supported": true}
+{"id": "hi_174", "lang": "hi", "text": "पिछले हफ्ते काम करके कितना मिला", "english": "how much did I get for my work last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "hi_175", "lang": "hi", "text": "आज दिन भर का पूरा हिसाब बताओ", "english": "tell me the full account all day today", "expect": "ASK DAY ALL", "supported": true}
 {"id": "hi_176", "lang": "hi", "text": "भाई साल भर का पूरा हिसाब बताओ", "english": "brother, tell me the full account over the year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "hi_177", "lang": "hi", "text": "मेरा मोबाइल रिचार्ज कर दो", "english": "recharge my mobile", "expect": "NONE", "supported": true}
 {"id": "hi_178", "lang": "hi", "text": "मेरा कितना पैसा फंसा हुआ है बताओ", "english": "how much of my money is stuck, tell me", "expect": "ASK ANY DUE", "supported": true}
-{"id": "hi_179", "lang": "hi", "text": "अरे कल किराए भाड़े में कितना लगा", "english": "hey, how much went on fares yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": false}
+{"id": "hi_179", "lang": "hi", "text": "अरे कल किराए भाड़े में कितना लगा", "english": "hey, how much went on fares yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": true}
 {"id": "hi_180", "lang": "hi", "text": "सुनो साल भर का सब कुछ बताओ", "english": "listen, tell me everything over the year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "hi_181", "lang": "hi", "text": "इस महीने का पूरा पैसा मिला क्या", "english": "did I get all the money this month", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "hi_182", "lang": "hi", "text": "इस मंथ की इनकम कितनी है बताओ", "english": "what is the income this month, tell me", "expect": "ASK MONTH EARNED", "supported": true}
@@ -191,7 +191,7 @@
 {"id": "hi_191", "lang": "hi", "text": "इस वीक का खर्चा बताओ", "english": "tell me the spending this week", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "hi_192", "lang": "hi", "text": "इस मंथ कितना खर्चा हुआ बताओ", "english": "how much was spent this month, tell me", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "hi_193", "lang": "hi", "text": "इस बरस कितना कमा लिया", "english": "how much have I earned this year", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "hi_194", "lang": "hi", "text": "भाई पिछले महीने का एडवांस कितना हुआ", "english": "brother, how much is the advance last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
+{"id": "hi_194", "lang": "hi", "text": "भाई पिछले महीने का एडवांस कितना हुआ", "english": "brother, how much is the advance last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
 {"id": "hi_195", "lang": "hi", "text": "भाई इस मंथ किराए भाड़े में कितना लगा", "english": "brother, how much went on fares this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "hi_196", "lang": "hi", "text": "इस बरस का हिसाब किताब सुनाओ", "english": "read out the accounts this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "hi_197", "lang": "hi", "text": "इस महीने का बकाया कितना है बता दो ना", "english": "how much are the dues this month, please tell me", "expect": "ASK MONTH DUE", "supported": true}
@@ -199,19 +199,19 @@
 {"id": "hi_199", "lang": "hi", "text": "महीने भर में मैंने कितना खर्च किया", "english": "how much did I spend over the month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "hi_200", "lang": "hi", "text": "साल भर में पेशगी कितनी ली बता दो ना", "english": "how much peshgi (advance) did I take over the year, please tell me", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "or_001", "lang": "or", "text": "ସର୍ଦ୍ଦାର ମୋତେ କେତେ ଦେବା କଥା", "english": "how much is the sardar supposed to give me", "expect": "ASK ANY DUE", "supported": true}
-{"id": "or_002", "lang": "or", "text": "କାଲି ମୁଁ କେତେ ଖର୍ଚ୍ଚ କଲି", "english": "how much did I spend yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": false}
+{"id": "or_002", "lang": "or", "text": "କାଲି ମୁଁ କେତେ ଖର୍ଚ୍ଚ କଲି", "english": "how much did I spend yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": true}
 {"id": "or_003", "lang": "or", "text": "ଆଜି କେତେ ଟଙ୍କା କମେଇଲି ଟିକେ କହିଲ", "english": "how many rupees did I make today, please tell me", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "or_004", "lang": "or", "text": "ଚଳିତ ମାସରେ ଖାଇବାରେ କେତେ ଗଲା ଟିକେ କହିଲ", "english": "how much went on food this current month, please tell me", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "or_005", "lang": "or", "text": "ଆରେ ଏ ବର୍ଷ ଖାଇବାରେ କେତେ ଗଲା ଟିକେ କହିଲ", "english": "hey, how much went on food this year, please tell me", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "or_006", "lang": "or", "text": "ଆରେ ଆଜି ଟଙ୍କା କୁଆଡେ ଗଲା", "english": "hey, where did the money go today", "expect": "ASK DAY EXPENSE", "supported": true}
-{"id": "or_007", "lang": "or", "text": "ଗଲା ସପ୍ତାହର ହିସାବ କିତାବ କହିଲ", "english": "tell me the accounts last week", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "or_007", "lang": "or", "text": "ଗଲା ସପ୍ତାହର ହିସାବ କିତାବ କହିଲ", "english": "tell me the accounts last week", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "or_008", "lang": "or", "text": "ଭାଇ ଚଳିତ ବର୍ଷରେ ଗାଡି ଭଡାରେ କେତେ ଗଲା", "english": "brother, how much went on vehicle fare this current year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "or_009", "lang": "or", "text": "ଶୁଣ ଆଜି ମୁଁ କେତେ ରୋଜଗାର କଲି", "english": "listen, how much did I earn today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "or_010", "lang": "or", "text": "ଏ ସପ୍ତାହରେ କେତେ ଖର୍ଚ୍ଚ ହେଲା ଟିକେ କହିଲ", "english": "how much was spent this week, please tell me", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "or_011", "lang": "or", "text": "ଭାଇ ଚଳିତ ମାସର ରିପୋର୍ଟ ଦେଖାଅ", "english": "brother, show the report this current month", "expect": "ASK MONTH ALL", "supported": true}
-{"id": "or_012", "lang": "or", "text": "କାଲି କେତେ ଆଡଭାନ୍ସ ନେଲି ଟିକେ କହିଲ", "english": "how much advance did I take yesterday, please tell me", "expect": "ASK YESTERDAY ADVANCE", "supported": false}
+{"id": "or_012", "lang": "or", "text": "କାଲି କେତେ ଆଡଭାନ୍ସ ନେଲି ଟିକେ କହିଲ", "english": "how much advance did I take yesterday, please tell me", "expect": "ASK YESTERDAY ADVANCE", "supported": true}
 {"id": "or_013", "lang": "or", "text": "ଆରେ ଏ ବର୍ଷ ଗାଡି ଭଡାରେ କେତେ ଗଲା", "english": "hey, how much went on vehicle fare this year", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "or_014", "lang": "or", "text": "ଗତ ମାସରେ କେତେ ଟଙ୍କା ବାକି ରହିଲା", "english": "how much money is left pending last month", "expect": "ASK LAST_MONTH DUE", "supported": false}
+{"id": "or_014", "lang": "or", "text": "ଗତ ମାସରେ କେତେ ଟଙ୍କା ବାକି ରହିଲା", "english": "how much money is left pending last month", "expect": "ASK LAST_MONTH DUE", "supported": true}
 {"id": "or_015", "lang": "or", "text": "ଏ ବର୍ଷ କେତେ ଟଙ୍କା ବାକି ରହିଲା", "english": "how much money is left pending this year", "expect": "ASK YEAR DUE", "supported": true}
 {"id": "or_016", "lang": "or", "text": "ମିନିମମ୍ ୱେଜ୍ କେତେ", "english": "how much is the minimum wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "or_017", "lang": "or", "text": "ଭାଇ ଏ ବର୍ଷ ମାଲିକଙ୍କଠୁ କେତେ ଧାର ନେଲି", "english": "brother, how much did I borrow from the owner this year", "expect": "ASK YEAR ADVANCE", "supported": true}
@@ -229,19 +229,19 @@
 {"id": "or_029", "lang": "or", "text": "ଚଳିତ ବର୍ଷରେ କେତେ ଆଡଭାନ୍ସ ନେଲି", "english": "how much advance did I take this current year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "or_030", "lang": "or", "text": "ଏ ବର୍ଷ କେତେ କମେଇଲି କହିଲ", "english": "say how much I earned this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "or_031", "lang": "or", "text": "ଏ ବର୍ଷ ମୁଁ କେତେ ଖର୍ଚ୍ଚ କଲି", "english": "how much did I spend this year", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "or_032", "lang": "or", "text": "ଗତ ମାସର ରୋଜଗାର କେତେ", "english": "what are the earnings last month", "expect": "ASK LAST_MONTH EARNED", "supported": false}
-{"id": "or_033", "lang": "or", "text": "କାଲିର ପୁରା ମଜୁରି ମିଳିଲା କି ଟିକେ କହିଲ", "english": "did I get the full wages yesterday, please tell me", "expect": "ASK YESTERDAY DUE", "supported": false}
+{"id": "or_032", "lang": "or", "text": "ଗତ ମାସର ରୋଜଗାର କେତେ", "english": "what are the earnings last month", "expect": "ASK LAST_MONTH EARNED", "supported": true}
+{"id": "or_033", "lang": "or", "text": "କାଲିର ପୁରା ମଜୁରି ମିଳିଲା କି ଟିକେ କହିଲ", "english": "did I get the full wages yesterday, please tell me", "expect": "ASK YESTERDAY DUE", "supported": true}
 {"id": "or_034", "lang": "or", "text": "ଆଜି କେତେ ଖର୍ଚ୍ଚ ହେଲା", "english": "how much was spent today", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "or_035", "lang": "or", "text": "ଭାଇ ଏ ସପ୍ତାହର ଆଡଭାନ୍ସ କେତେ", "english": "brother, how much is the advance this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "or_036", "lang": "or", "text": "ଆରେ ଆଜିର ବାକି ପଇସା କେତେ କୁହ", "english": "hey, how much money is pending today, tell me", "expect": "ASK DAY DUE", "supported": true}
 {"id": "or_037", "lang": "or", "text": "ଏ ମାସର ପୁରା ହିସାବ କୁହ", "english": "tell me the full account this month", "expect": "ASK MONTH ALL", "supported": true}
-{"id": "or_038", "lang": "or", "text": "ଗଲା ସପ୍ତାହର ହିସାବ ଦେଖାଅ", "english": "show the account last week", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "or_038", "lang": "or", "text": "ଗଲା ସପ୍ତାହର ହିସାବ ଦେଖାଅ", "english": "show the account last week", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "or_039", "lang": "or", "text": "ଭାଇ ଏ ୱିକର ରୋଜଗାର କେତେ ଟିକେ କହିଲ", "english": "brother, what are the earnings this week, please tell me", "expect": "ASK WEEK EARNED", "supported": true}
-{"id": "or_040", "lang": "or", "text": "ଆରେ ଗଲା ସପ୍ତାହର ପୁରା ଲେଖାଜୋଖା", "english": "hey, the full ledger last week", "expect": "ASK LAST_WEEK ALL", "supported": false}
-{"id": "or_041", "lang": "or", "text": "ଗତ ମାସର ପୁରା ମଜୁରି ମିଳିଲା କି", "english": "did I get the full wages last month", "expect": "ASK LAST_MONTH DUE", "supported": false}
+{"id": "or_040", "lang": "or", "text": "ଆରେ ଗଲା ସପ୍ତାହର ପୁରା ଲେଖାଜୋଖା", "english": "hey, the full ledger last week", "expect": "ASK LAST_WEEK ALL", "supported": true}
+{"id": "or_041", "lang": "or", "text": "ଗତ ମାସର ପୁରା ମଜୁରି ମିଳିଲା କି", "english": "did I get the full wages last month", "expect": "ASK LAST_MONTH DUE", "supported": true}
 {"id": "or_042", "lang": "or", "text": "ଏ ମାସର ରିପୋର୍ଟ ଦେଖାଅ", "english": "show the report this month", "expect": "ASK MONTH ALL", "supported": true}
 {"id": "or_043", "lang": "or", "text": "ଶୁଣ ଚଳିତ ମାସର ଆଡଭାନ୍ସ କେତେ", "english": "listen, how much is the advance this current month", "expect": "ASK MONTH ADVANCE", "supported": true}
-{"id": "or_044", "lang": "or", "text": "ଆରେ ଗତ ମାସରେ ସର୍ଦ୍ଦାରଙ୍କଠୁ କେତେ ନେଇଛି", "english": "hey, how much have I taken from the sardar last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
+{"id": "or_044", "lang": "or", "text": "ଆରେ ଗତ ମାସରେ ସର୍ଦ୍ଦାରଙ୍କଠୁ କେତେ ନେଇଛି", "english": "hey, how much have I taken from the sardar last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
 {"id": "or_045", "lang": "or", "text": "ଆଜି ବର୍ଷା ହେବ କି", "english": "will it rain today", "expect": "NONE", "supported": true}
 {"id": "or_046", "lang": "or", "text": "ମୋ ହିସାବ ଆଉ କେହି ଦେଖିପାରିବେ କି", "english": "can anyone else see my accounts", "expect": "TALK PRIVACY", "supported": true}
 {"id": "or_047", "lang": "or", "text": "ଆରେ ଆଜି କାମରେ କେତେ ଟଙ୍କା ହେଲା", "english": "hey, how much money did the work make today", "expect": "ASK DAY EARNED", "supported": true}
@@ -283,19 +283,19 @@
 {"id": "or_083", "lang": "or", "text": "ଶୁଣ ଏ ହପ୍ତାରେ କେତେ ଟଙ୍କା କମେଇଲି", "english": "listen, how many rupees did I make this week (hapta)", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "or_084", "lang": "or", "text": "ଆଜି ଖାଇବାରେ କେତେ ଗଲା", "english": "how much went on food today", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "or_085", "lang": "or", "text": "ଚଳିତ ମାସର ପୁରା ଲେଖାଜୋଖା", "english": "the full ledger this current month", "expect": "ASK MONTH ALL", "supported": true}
-{"id": "or_086", "lang": "or", "text": "କାଲି ମୋ ମଜୁରି କେତେ ହେଲା କୁହ", "english": "how much did my wages come to yesterday, tell me", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "or_086", "lang": "or", "text": "କାଲି ମୋ ମଜୁରି କେତେ ହେଲା କୁହ", "english": "how much did my wages come to yesterday, tell me", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "or_087", "lang": "or", "text": "ଏ ବର୍ଷ ମୁଁ କେତେ ରୋଜଗାର କଲି", "english": "how much did I earn this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "or_088", "lang": "or", "text": "ଏ ବର୍ଷ ଘରକୁ କେତେ ପଠାଇଲି", "english": "how much did I send home this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "or_089", "lang": "or", "text": "ଏ ସପ୍ତାହରେ କେତେ ଟଙ୍କା କମେଇଲି", "english": "how many rupees did I make this week", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "or_090", "lang": "or", "text": "ଏ ୱିକର ହିସାବ ଦେଖାଅ", "english": "show the account this week", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "or_091", "lang": "or", "text": "ତୁମକୁ କିଏ ତିଆରି କଲା", "english": "who made you", "expect": "TALK MAKER", "supported": true}
-{"id": "or_092", "lang": "or", "text": "ଭାଇ ଗତ ମାସରେ ସର୍ଦ୍ଦାରଙ୍କଠୁ କେତେ ନେଇଛି", "english": "brother, how much have I taken from the sardar last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
+{"id": "or_092", "lang": "or", "text": "ଭାଇ ଗତ ମାସରେ ସର୍ଦ୍ଦାରଙ୍କଠୁ କେତେ ନେଇଛି", "english": "brother, how much have I taken from the sardar last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
 {"id": "or_093", "lang": "or", "text": "ବସ୍ କେତେବେଳେ ଆସିବ", "english": "when will the bus come", "expect": "NONE", "supported": true}
 {"id": "or_094", "lang": "or", "text": "ଏ ସପ୍ତାହରେ ଦାଦନ କେତେ ନେଲି", "english": "how much dadan (advance) did I take this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "or_095", "lang": "or", "text": "ଏ ବର୍ଷର ବାକି ପଇସା କେତେ", "english": "how much money is pending this year", "expect": "ASK YEAR DUE", "supported": true}
 {"id": "or_096", "lang": "or", "text": "ଭାଇ ଏ ବର୍ଷ ମୋ ହାଜିରା କେତେ ହେଲା", "english": "brother, how much did my daily pay (hajira) come to this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "or_097", "lang": "or", "text": "ଏ ମାସର ଖର୍ଚ୍ଚ କହ", "english": "tell me the spending this month", "expect": "ASK MONTH EXPENSE", "supported": true}
-{"id": "or_098", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ କାମରେ କେତେ ଟଙ୍କା ହେଲା", "english": "how much money did the work make last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "or_098", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ କାମରେ କେତେ ଟଙ୍କା ହେଲା", "english": "how much money did the work make last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "or_099", "lang": "or", "text": "ଆଜିର ଇନକମ୍ କେତେ", "english": "what is the income today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "or_100", "lang": "or", "text": "ଚଳିତ ବର୍ଷରେ କେତେ ଟଙ୍କା ବାକି ରହିଲା", "english": "how much money is left pending this current year", "expect": "ASK YEAR DUE", "supported": true}
 {"id": "or_101", "lang": "or", "text": "ଏ ହପ୍ତାର ସବୁ ହିସାବ ଶୁଣାଅ", "english": "read out all the accounts this week (hapta)", "expect": "ASK WEEK ALL", "supported": true}
@@ -303,14 +303,14 @@
 {"id": "or_103", "lang": "or", "text": "ଚଳିତ ବର୍ଷର ରୋଜଗାର କେତେ", "english": "what are the earnings this current year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "or_104", "lang": "or", "text": "ରାସନ୍ କେବେ ମିଳିବ", "english": "when will we get ration", "expect": "NONE", "supported": true}
 {"id": "or_105", "lang": "or", "text": "ଏ ବର୍ଷର ଆଡଭାନ୍ସ କେତେ", "english": "how much is the advance this year", "expect": "ASK YEAR ADVANCE", "supported": true}
-{"id": "or_106", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ ସର୍ଦ୍ଦାରଙ୍କଠୁ କେତେ ନେଇଛି", "english": "how much have I taken from the sardar last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": false}
+{"id": "or_106", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ ସର୍ଦ୍ଦାରଙ୍କଠୁ କେତେ ନେଇଛି", "english": "how much have I taken from the sardar last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": true}
 {"id": "or_107", "lang": "or", "text": "ଏ ହପ୍ତାରେ କେତେ ଟଙ୍କା କମେଇଲି", "english": "how many rupees did I make this week (hapta)", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "or_108", "lang": "or", "text": "ଆଜିର ବାକି ପଇସା କେତେ", "english": "how much money is pending today", "expect": "ASK DAY DUE", "supported": true}
 {"id": "or_109", "lang": "or", "text": "ଟ୍ରେନ୍ କେତେବେଳେ ଛାଡିବ", "english": "when does the train leave", "expect": "NONE", "supported": true}
 {"id": "or_110", "lang": "or", "text": "ଚଳିତ ବର୍ଷରେ କେତେ ଖର୍ଚ୍ଚ ହେଲା", "english": "how much was spent this current year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "or_111", "lang": "or", "text": "ଆଜି ଗାଡି ଭଡାରେ କେତେ ଗଲା", "english": "how much went on vehicle fare today", "expect": "ASK DAY EXPENSE", "supported": true}
-{"id": "or_112", "lang": "or", "text": "କାଲିର ଇନକମ୍ କେତେ", "english": "what is the income yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
-{"id": "or_113", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ କାମ କରି କେତେ ପାଇଲି", "english": "how much did I get for working last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "or_112", "lang": "or", "text": "କାଲିର ଇନକମ୍ କେତେ", "english": "what is the income yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
+{"id": "or_113", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ କାମ କରି କେତେ ପାଇଲି", "english": "how much did I get for working last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "or_114", "lang": "or", "text": "ଏ ୱିକରେ ଦାଦନ କେତେ ନେଲି ଟିକେ କହିଲ", "english": "how much dadan (advance) did I take this week, please tell me", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "or_115", "lang": "or", "text": "ଭାଇ ଚଳିତ ବର୍ଷରେ ମାଲିକଙ୍କଠୁ କେତେ ଧାର ନେଲି ଟିକେ କହିଲ", "english": "brother, how much did I borrow from the owner this current year, please tell me", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "or_116", "lang": "or", "text": "ସରକାରୀ ମଜୁରି କେତେ", "english": "how much is the government wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
@@ -320,13 +320,13 @@
 {"id": "or_120", "lang": "or", "text": "ମୋର କେତେ ଟଙ୍କା ଅଟକିଛି", "english": "how much of my money is stuck", "expect": "ASK ANY DUE", "supported": true}
 {"id": "or_121", "lang": "or", "text": "ଆଜିର ହିସାବ କିତାବ କହିଲ", "english": "tell me the accounts today", "expect": "ASK DAY ALL", "supported": true}
 {"id": "or_122", "lang": "or", "text": "ଏ ମାସର ରୋଜଗାର କେତେ କୁହ", "english": "what are the earnings this month, tell me", "expect": "ASK MONTH EARNED", "supported": true}
-{"id": "or_123", "lang": "or", "text": "ଗଲା ସପ୍ତାହର ଖର୍ଚ୍ଚ କହ", "english": "tell me the spending last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": false}
+{"id": "or_123", "lang": "or", "text": "ଗଲା ସପ୍ତାହର ଖର୍ଚ୍ଚ କହ", "english": "tell me the spending last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": true}
 {"id": "or_124", "lang": "or", "text": "ଏ ହପ୍ତାର ହିସାବ କିତାବ କହିଲ", "english": "tell me the accounts this week (hapta)", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "or_125", "lang": "or", "text": "ଶୁଣ ଠିକାଦାର ମୋତେ ଆଉ କେତେ ଦେବେ", "english": "listen, how much more will the contractor give me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "or_126", "lang": "or", "text": "ଚଳିତ ମାସରେ କେତେ ଟଙ୍କା ବାକି ରହିଲା", "english": "how much money is left pending this current month", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "or_127", "lang": "or", "text": "ଚଳିତ ବର୍ଷର ଖର୍ଚ୍ଚ କହ", "english": "tell me the spending this current year", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "or_128", "lang": "or", "text": "ଶୁଣ ଗଲା ସପ୍ତାହର ହିସାବ କିତାବ କହିଲ", "english": "listen, tell me the accounts last week", "expect": "ASK LAST_WEEK ALL", "supported": false}
-{"id": "or_129", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ ଠିକାଦାରଙ୍କଠୁ କେତେ ଟଙ୍କା ଆଗୁଆ ନେଲି", "english": "how much did I take ahead from the contractor last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": false}
+{"id": "or_128", "lang": "or", "text": "ଶୁଣ ଗଲା ସପ୍ତାହର ହିସାବ କିତାବ କହିଲ", "english": "listen, tell me the accounts last week", "expect": "ASK LAST_WEEK ALL", "supported": true}
+{"id": "or_129", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ ଠିକାଦାରଙ୍କଠୁ କେତେ ଟଙ୍କା ଆଗୁଆ ନେଲି", "english": "how much did I take ahead from the contractor last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": true}
 {"id": "or_130", "lang": "or", "text": "ଏ ୱିକର ସବୁ ହିସାବ ଶୁଣାଅ", "english": "read out all the accounts this week", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "or_131", "lang": "or", "text": "ଏ ମାସରେ ମୋ ମଜୁରି କେତେ ହେଲା", "english": "how much did my wages come to this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "or_132", "lang": "or", "text": "ଚଳିତ ମାସରେ ଗାଡି ଭଡାରେ କେତେ ଗଲା", "english": "how much went on vehicle fare this current month", "expect": "ASK MONTH EXPENSE", "supported": true}
@@ -344,7 +344,7 @@
 {"id": "or_144", "lang": "or", "text": "ଶୁଣ ଚଳିତ ବର୍ଷର ରିପୋର୍ଟ ଦେଖାଅ", "english": "listen, show the report this current year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "or_145", "lang": "or", "text": "ଆଜିର ହିସାବ ଦେଖାଅ", "english": "show the account today", "expect": "ASK DAY ALL", "supported": true}
 {"id": "or_146", "lang": "or", "text": "ଭାଇ ଚଳିତ ମାସର ହିସାବ କିତାବ କହିଲ", "english": "brother, tell me the accounts this current month", "expect": "ASK MONTH ALL", "supported": true}
-{"id": "or_147", "lang": "or", "text": "ଭାଇ କାଲି କେତେ କମେଇଲି କହିଲ", "english": "brother, say how much I earned yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "or_147", "lang": "or", "text": "ଭାଇ କାଲି କେତେ କମେଇଲି କହିଲ", "english": "brother, say how much I earned yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "or_148", "lang": "or", "text": "ଚଳିତ ବର୍ଷର ହିସାବ କିତାବ କହିଲ", "english": "tell me the accounts this current year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "or_149", "lang": "or", "text": "ତୁମ ନାଁ କଣ", "english": "what is your name", "expect": "TALK NAME", "supported": true}
 {"id": "or_150", "lang": "or", "text": "ଭାଇ ଏ ହପ୍ତାର ପୁରା ଲେଖାଜୋଖା", "english": "brother, the full ledger this week (hapta)", "expect": "ASK WEEK ALL", "supported": true}
@@ -356,7 +356,7 @@
 {"id": "or_156", "lang": "or", "text": "ମୋର କେତେ ଟଙ୍କା ଅଟକିଛି ଟିକେ କହିଲ", "english": "how much of my money is stuck, please tell me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "or_157", "lang": "or", "text": "ଠିକାଦାର ମୋତେ ଆଉ କେତେ ଦେବେ କୁହ", "english": "how much more will the contractor give me, tell me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "or_158", "lang": "or", "text": "ସରକାର ଦିନକୁ କେତେ ମଜୁରି ଠିକ୍ କରିଛନ୍ତି", "english": "what daily wage has the government fixed", "expect": "ASK ANY MIN_WAGE", "supported": true}
-{"id": "or_159", "lang": "or", "text": "ଗତ ମାସରେ ମୁଁ କେତେ ଖର୍ଚ୍ଚ କଲି", "english": "how much did I spend last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": false}
+{"id": "or_159", "lang": "or", "text": "ଗତ ମାସରେ ମୁଁ କେତେ ଖର୍ଚ୍ଚ କଲି", "english": "how much did I spend last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": true}
 {"id": "or_160", "lang": "or", "text": "ଚଳିତ ବର୍ଷର ସବୁ ହିସାବ ଶୁଣାଅ", "english": "read out all the accounts this current year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "or_161", "lang": "or", "text": "ଏ ବର୍ଷ ଗାଡି ଭଡାରେ କେତେ ଗଲା", "english": "how much went on vehicle fare this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "or_162", "lang": "or", "text": "ଭାଇ ଚଳିତ ବର୍ଷରେ କେତେ ଟଙ୍କା ବାକି ରହିଲା", "english": "brother, how much money is left pending this current year", "expect": "ASK YEAR DUE", "supported": true}
@@ -373,9 +373,9 @@
 {"id": "or_173", "lang": "or", "text": "ମାଲିକ ପାଖରେ ଆଉ କେତେ ବାକି ଅଛି", "english": "how much more is pending with the owner", "expect": "ASK ANY DUE", "supported": true}
 {"id": "or_174", "lang": "or", "text": "ତୁମେ କିଏ", "english": "who are you", "expect": "TALK NAME", "supported": true}
 {"id": "or_175", "lang": "or", "text": "ସର୍ଦ୍ଦାର ମୋତେ କେତେ ଦେବା କଥା କୁହ", "english": "how much is the sardar supposed to give me, tell me", "expect": "ASK ANY DUE", "supported": true}
-{"id": "or_176", "lang": "or", "text": "ଗତ ମାସରେ ସର୍ଦ୍ଦାରଙ୍କଠୁ କେତେ ନେଇଛି", "english": "how much have I taken from the sardar last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
+{"id": "or_176", "lang": "or", "text": "ଗତ ମାସରେ ସର୍ଦ୍ଦାରଙ୍କଠୁ କେତେ ନେଇଛି", "english": "how much have I taken from the sardar last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
 {"id": "or_177", "lang": "or", "text": "ଏ ମାସର ଆଡଭାନ୍ସ କେତେ", "english": "how much is the advance this month", "expect": "ASK MONTH ADVANCE", "supported": true}
-{"id": "or_178", "lang": "or", "text": "ଗତ ମାସରେ ଗାଡି ଭଡାରେ କେତେ ଗଲା", "english": "how much went on vehicle fare last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": false}
+{"id": "or_178", "lang": "or", "text": "ଗତ ମାସରେ ଗାଡି ଭଡାରେ କେତେ ଗଲା", "english": "how much went on vehicle fare last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": true}
 {"id": "or_179", "lang": "or", "text": "ଏ ହପ୍ତାର ଆଡଭାନ୍ସ କେତେ", "english": "how much is the advance this week (hapta)", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "or_180", "lang": "or", "text": "ଆଜିର ରୋଜଗାର କେତେ", "english": "what are the earnings today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "or_181", "lang": "or", "text": "ଚଳିତ ମାସରେ କେତେ କମେଇଲି କହିଲ", "english": "say how much I earned this current month", "expect": "ASK MONTH EARNED", "supported": true}
@@ -383,7 +383,7 @@
 {"id": "or_183", "lang": "or", "text": "ଏ ସପ୍ତାହରେ ମାଲିକଙ୍କଠୁ କେତେ ଧାର ନେଲି", "english": "how much did I borrow from the owner this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "or_184", "lang": "or", "text": "ଚଳିତ ବର୍ଷରେ କାମ କରି କେତେ ପାଇଲି", "english": "how much did I get for working this current year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "or_185", "lang": "or", "text": "ଏ ବର୍ଷ କେତେ ଟଙ୍କା କମେଇଲି", "english": "how many rupees did I make this year", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "or_186", "lang": "or", "text": "ଗତ ମାସରେ ମାଲିକଙ୍କଠୁ କେତେ ଧାର ନେଲି", "english": "how much did I borrow from the owner last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
+{"id": "or_186", "lang": "or", "text": "ଗତ ମାସରେ ମାଲିକଙ୍କଠୁ କେତେ ଧାର ନେଲି", "english": "how much did I borrow from the owner last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
 {"id": "or_187", "lang": "or", "text": "ଆଜି ଟଙ୍କା କୁଆଡେ ଗଲା ଟିକେ କହିଲ", "english": "where did the money go today, please tell me", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "or_188", "lang": "or", "text": "ସର୍ବନିମ୍ନ ମଜୁରି କେତେ", "english": "how much is the minimum wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "or_189", "lang": "or", "text": "ଆରେ ଚଳିତ ବର୍ଷରେ କେତେ ଟଙ୍କା କମେଇଲି", "english": "hey, how many rupees did I make this current year", "expect": "ASK YEAR EARNED", "supported": true}
@@ -395,7 +395,7 @@
 {"id": "or_195", "lang": "or", "text": "ଏ ହପ୍ତାରେ ଦାଦନ କେତେ ନେଲି", "english": "how much dadan (advance) did I take this week (hapta)", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "or_196", "lang": "or", "text": "ଆଜି କେତେ ଟଙ୍କା ବାକି ରହିଲା", "english": "how much money is left pending today", "expect": "ASK DAY DUE", "supported": true}
 {"id": "or_197", "lang": "or", "text": "ଶୁଣ ଚଳିତ ବର୍ଷରେ ଘରକୁ କେତେ ପଠାଇଲି", "english": "listen, how much did I send home this current year", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "or_198", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ ମୁଁ କେତେ ରୋଜଗାର କଲି", "english": "how much did I earn last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "or_198", "lang": "or", "text": "ଗଲା ସପ୍ତାହରେ ମୁଁ କେତେ ରୋଜଗାର କଲି", "english": "how much did I earn last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "or_199", "lang": "or", "text": "ଏ ବର୍ଷ କାମରେ କେତେ ଟଙ୍କା ହେଲା କୁହ", "english": "how much money did the work make this year, tell me", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "or_200", "lang": "or", "text": "ଏ ହପ୍ତାରେ ମୁଁ କେତେ ଖର୍ଚ୍ଚ କଲି", "english": "how much did I spend this week (hapta)", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "te_001", "lang": "te", "text": "ఏయ్ ఈరోజు లెక్క చూపించు", "english": "hey, show the account today", "expect": "ASK DAY ALL", "supported": true}
@@ -407,7 +407,7 @@
 {"id": "te_007", "lang": "te", "text": "ఈ మంత్ కాంట్రాక్టర్ దగ్గర ఎంత అడ్వాన్స్ తీసుకున్నా", "english": "how much advance did I take from the contractor this month", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "te_008", "lang": "te", "text": "అన్నా ఈ సంవత్సరం లెక్కలు అన్నీ చెప్పు", "english": "brother, tell me all the accounts this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "te_009", "lang": "te", "text": "ఏయ్ ఈ మంత్ బాకీ ఎంత", "english": "hey, how much is pending this month", "expect": "ASK MONTH DUE", "supported": true}
-{"id": "te_010", "lang": "te", "text": "అన్నా నిన్నటి ఖర్చులు చెప్పు", "english": "brother, tell me the expenses yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": false}
+{"id": "te_010", "lang": "te", "text": "అన్నా నిన్నటి ఖర్చులు చెప్పు", "english": "brother, tell me the expenses yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": true}
 {"id": "te_011", "lang": "te", "text": "అన్నా ఈ నెలలో ఎంత ఖర్చు అయింది", "english": "brother, how much was spent within this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "te_012", "lang": "te", "text": "ఈ సంవత్సరం ఓనర్ దగ్గర ఎంత అప్పు తీసుకున్నాను చెప్పు", "english": "how much did I borrow from the owner this year, tell me", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "te_013", "lang": "te", "text": "మేస్త్రి దగ్గర నుంచి ఇంకా ఎంత రావాలి", "english": "how much more is to come from the mestri", "expect": "ASK ANY DUE", "supported": true}
@@ -430,17 +430,17 @@
 {"id": "te_030", "lang": "te", "text": "ఇవాళ్టి కూలి డబ్బులు ఎంత", "english": "how much is the wage money today (ivala)", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "te_031", "lang": "te", "text": "ఈ వారం పూర్తి వివరాలు చెప్పు", "english": "tell me the full details within this week", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "te_032", "lang": "te", "text": "నువ్వు ఏమేమి చేయగలవు", "english": "what all can you do", "expect": "TALK HELP", "supported": true}
-{"id": "te_033", "lang": "te", "text": "నిన్న ఎంత కూలి వచ్చింది", "english": "how much wage came yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "te_033", "lang": "te", "text": "నిన్న ఎంత కూలి వచ్చింది", "english": "how much wage came yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "te_034", "lang": "te", "text": "ఇవాళ్టి ఖర్చులు చెప్పు", "english": "tell me the expenses today (ivala)", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "te_035", "lang": "te", "text": "ఈరోజు మేస్త్రి దగ్గర ఎంత తీసుకున్నా కొంచెం చెప్పు", "english": "how much did I take from the mestri today, please tell me", "expect": "ASK DAY ADVANCE", "supported": true}
-{"id": "te_036", "lang": "te", "text": "నిన్నటి అడ్వాన్స్ ఎంత", "english": "how much is the advance yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": false}
+{"id": "te_036", "lang": "te", "text": "నిన్నటి అడ్వాన్స్ ఎంత", "english": "how much is the advance yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": true}
 {"id": "te_037", "lang": "te", "text": "ఇవాళ్టి ఇన్కమ్ ఎంత కొంచెం చెప్పు", "english": "what is the income today (ivala), please tell me", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "te_038", "lang": "te", "text": "ఈ నెల లెక్కలు అన్నీ చెప్పు", "english": "tell me all the accounts this month", "expect": "ASK MONTH ALL", "supported": true}
 {"id": "te_039", "lang": "te", "text": "ఏయ్ ఈ మంత్ ఎంత సంపాదించానో చెప్పు", "english": "hey, tell me how much I earned this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "te_040", "lang": "te", "text": "ఈ సంవత్సరం ఎంత సంపాదించానో చెప్పు", "english": "tell me how much I earned this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "te_041", "lang": "te", "text": "ఈ నెల పనికి ఎంత డబ్బులు వచ్చాయి చెప్పు", "english": "how much money came for the work this month, tell me", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "te_042", "lang": "te", "text": "నా లెక్కలు ఇంకెవరైనా చూడగలరా", "english": "can anyone else see my accounts", "expect": "TALK PRIVACY", "supported": true}
-{"id": "te_043", "lang": "te", "text": "పోయిన వారం మేస్త్రి దగ్గర ఎంత తీసుకున్నా", "english": "how much did I take from the mestri last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": false}
+{"id": "te_043", "lang": "te", "text": "పోయిన వారం మేస్త్రి దగ్గర ఎంత తీసుకున్నా", "english": "how much did I take from the mestri last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": true}
 {"id": "te_044", "lang": "te", "text": "ఈ వీక్ మేస్త్రి దగ్గర ఎంత తీసుకున్నా", "english": "how much did I take from the mestri this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "te_045", "lang": "te", "text": "ఈ ఏడాది డబ్బులు ఎక్కడికి పోయాయి", "english": "where did the money go this year (yedadi)", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "te_046", "lang": "te", "text": "నా డబ్బులు ఎంత ఆగిపోయాయి", "english": "how much of my money is held up", "expect": "ASK ANY DUE", "supported": true}
@@ -450,11 +450,11 @@
 {"id": "te_050", "lang": "te", "text": "ఈ మంత్ తిండికి ఎంత అయింది", "english": "how much went on food this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "te_051", "lang": "te", "text": "ఇవాళ డబ్బులు ఎక్కడికి పోయాయి చెప్పు", "english": "where did the money go today (ivala), tell me", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "te_052", "lang": "te", "text": "ఈ సంవత్సరం రిపోర్ట్ చూపించు", "english": "show the report this year", "expect": "ASK YEAR ALL", "supported": true}
-{"id": "te_053", "lang": "te", "text": "ఏయ్ నిన్న తిండికి ఎంత అయింది", "english": "hey, how much went on food yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": false}
-{"id": "te_054", "lang": "te", "text": "పోయిన నెల ఇంకా ఎంత బాకీ ఉంది", "english": "how much is still pending last month", "expect": "ASK LAST_MONTH DUE", "supported": false}
+{"id": "te_053", "lang": "te", "text": "ఏయ్ నిన్న తిండికి ఎంత అయింది", "english": "hey, how much went on food yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": true}
+{"id": "te_054", "lang": "te", "text": "పోయిన నెల ఇంకా ఎంత బాకీ ఉంది", "english": "how much is still pending last month", "expect": "ASK LAST_MONTH DUE", "supported": true}
 {"id": "te_055", "lang": "te", "text": "విను ఇవాళ నేను ఎంత ఖర్చు పెట్టాను", "english": "listen, how much did I spend today (ivala)", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "te_056", "lang": "te", "text": "ఇవాళ తేదీ ఎంత", "english": "what is the date today", "expect": "TALK DATE", "supported": true}
-{"id": "te_057", "lang": "te", "text": "నిన్న పనికి ఎంత డబ్బులు వచ్చాయి", "english": "how much money came for the work yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "te_057", "lang": "te", "text": "నిన్న పనికి ఎంత డబ్బులు వచ్చాయి", "english": "how much money came for the work yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "te_058", "lang": "te", "text": "ఈ మంత్ బాకీ ఎంత", "english": "how much is pending this month", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "te_059", "lang": "te", "text": "ఈ వారం కూలి మొత్తం వచ్చిందా", "english": "did the full wage come within this week", "expect": "ASK WEEK DUE", "supported": true}
 {"id": "te_060", "lang": "te", "text": "ఇవాళ్టి పూర్తి వివరాలు చెప్పు", "english": "tell me the full details today (ivala)", "expect": "ASK DAY ALL", "supported": true}
@@ -463,12 +463,12 @@
 {"id": "te_063", "lang": "te", "text": "ఏయ్ నా డబ్బులు ఎంత ఆగిపోయాయి", "english": "hey, how much of my money is held up", "expect": "ASK ANY DUE", "supported": true}
 {"id": "te_064", "lang": "te", "text": "అన్నా ఈ మంత్ సంపాదన ఎంత", "english": "brother, what are the earnings this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "te_065", "lang": "te", "text": "ఈ వీక్ నేను ఎంత సంపాదించాను కొంచెం చెప్పు", "english": "how much did I earn this week, please tell me", "expect": "ASK WEEK EARNED", "supported": true}
-{"id": "te_066", "lang": "te", "text": "నిన్న నేను ఎంత సంపాదించాను", "english": "how much did I earn yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "te_066", "lang": "te", "text": "నిన్న నేను ఎంత సంపాదించాను", "english": "how much did I earn yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "te_067", "lang": "te", "text": "నిన్ను ఎవరు తయారు చేశారు", "english": "who made you", "expect": "TALK MAKER", "supported": true}
 {"id": "te_068", "lang": "te", "text": "ఈ నెల కూలి మొత్తం వచ్చిందా", "english": "did the full wage come within this month", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "te_069", "lang": "te", "text": "ఈ ఏడాది ఓనర్ దగ్గర ఎంత అప్పు తీసుకున్నాను చెప్పు", "english": "how much did I borrow from the owner this year (yedadi), tell me", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "te_070", "lang": "te", "text": "అన్నా ఈరోజు ఎంత సంపాదించానో చెప్పు", "english": "brother, tell me how much I earned today", "expect": "ASK DAY EARNED", "supported": true}
-{"id": "te_071", "lang": "te", "text": "నిన్నటి లెక్కలు అన్నీ చెప్పు", "english": "tell me all the accounts yesterday", "expect": "ASK YESTERDAY ALL", "supported": false}
+{"id": "te_071", "lang": "te", "text": "నిన్నటి లెక్కలు అన్నీ చెప్పు", "english": "tell me all the accounts yesterday", "expect": "ASK YESTERDAY ALL", "supported": true}
 {"id": "te_072", "lang": "te", "text": "ఈ మంత్ ఎంత కూలి వచ్చింది", "english": "how much wage came this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "te_073", "lang": "te", "text": "ఈ వారంలో ఇంకా ఎంత బాకీ ఉంది", "english": "how much is still pending within this week", "expect": "ASK WEEK DUE", "supported": true}
 {"id": "te_074", "lang": "te", "text": "ఇవాళ బస్సు చార్జీలకి ఎంత పోయింది", "english": "how much went on bus fares today (ivala)", "expect": "ASK DAY EXPENSE", "supported": true}
@@ -476,10 +476,10 @@
 {"id": "te_076", "lang": "te", "text": "విను ఇవాళ్టి ఇన్కమ్ ఎంత", "english": "listen, what is the income today (ivala)", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "te_077", "lang": "te", "text": "నువ్వు ఎవరు", "english": "who are you", "expect": "TALK NAME", "supported": true}
 {"id": "te_078", "lang": "te", "text": "ఈ ఏడాది ఎంత అడ్వాన్స్ తీసుకున్నాను", "english": "how much advance did I take this year (yedadi)", "expect": "ASK YEAR ADVANCE", "supported": true}
-{"id": "te_079", "lang": "te", "text": "నిన్నటి మొత్తం లెక్క చెప్పు", "english": "tell me the whole account yesterday", "expect": "ASK YESTERDAY ALL", "supported": false}
-{"id": "te_080", "lang": "te", "text": "పోయిన నెల ఎంత ఖర్చు అయింది", "english": "how much was spent last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": false}
+{"id": "te_079", "lang": "te", "text": "నిన్నటి మొత్తం లెక్క చెప్పు", "english": "tell me the whole account yesterday", "expect": "ASK YESTERDAY ALL", "supported": true}
+{"id": "te_080", "lang": "te", "text": "పోయిన నెల ఎంత ఖర్చు అయింది", "english": "how much was spent last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": true}
 {"id": "te_081", "lang": "te", "text": "ఇవాళ్టి లెక్కలు అన్నీ చెప్పు", "english": "tell me all the accounts today (ivala)", "expect": "ASK DAY ALL", "supported": true}
-{"id": "te_082", "lang": "te", "text": "పోయిన నెల ఎంత ఖర్చు అయింది కొంచెం చెప్పు", "english": "how much was spent last month, please tell me", "expect": "ASK LAST_MONTH EXPENSE", "supported": false}
+{"id": "te_082", "lang": "te", "text": "పోయిన నెల ఎంత ఖర్చు అయింది కొంచెం చెప్పు", "english": "how much was spent last month, please tell me", "expect": "ASK LAST_MONTH EXPENSE", "supported": true}
 {"id": "te_083", "lang": "te", "text": "ఇవాళ నేను ఎంత ఖర్చు పెట్టాను", "english": "how much did I spend today (ivala)", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "te_084", "lang": "te", "text": "ఏయ్ ఈ మంత్ ఎంత ఖర్చు అయింది", "english": "hey, how much was spent this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "te_085", "lang": "te", "text": "ఈ వారంలో మేస్త్రి దగ్గర ఎంత తీసుకున్నా చెప్పు", "english": "how much did I take from the mestri within this week, tell me", "expect": "ASK WEEK ADVANCE", "supported": true}
@@ -513,7 +513,7 @@
 {"id": "te_113", "lang": "te", "text": "ఈ వారం బస్సు చార్జీలకి ఎంత పోయింది", "english": "how much went on bus fares this week", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "te_114", "lang": "te", "text": "ఈరోజు అడ్వాన్స్ ఎంత", "english": "how much is the advance today", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "te_115", "lang": "te", "text": "అన్నా ఈ ఏడాది లెక్కలు అన్నీ చెప్పు", "english": "brother, tell me all the accounts this year (yedadi)", "expect": "ASK YEAR ALL", "supported": true}
-{"id": "te_116", "lang": "te", "text": "నిన్నటి సంపాదన ఎంత", "english": "what are the earnings yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "te_116", "lang": "te", "text": "నిన్నటి సంపాదన ఎంత", "english": "what are the earnings yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "te_117", "lang": "te", "text": "ఈరోజు ఎన్ని రూపాయలు సంపాదించా", "english": "how many rupees did I earn today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "te_118", "lang": "te", "text": "ఏయ్ ఈ నెలలో పనికి ఎంత డబ్బులు వచ్చాయి", "english": "hey, how much money came for the work within this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "te_119", "lang": "te", "text": "ఏయ్ ఈ సంవత్సరం రిపోర్ట్ చూపించు", "english": "hey, show the report this year", "expect": "ASK YEAR ALL", "supported": true}
@@ -523,7 +523,7 @@
 {"id": "te_123", "lang": "te", "text": "ఏయ్ ఈ నెల బాకీ ఎంత", "english": "hey, how much is pending within this month", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "te_124", "lang": "te", "text": "నీ పేరు ఏంటి", "english": "what is your name", "expect": "TALK NAME", "supported": true}
 {"id": "te_125", "lang": "te", "text": "ఏయ్ ఈ ఏడాది ఎంత అడ్వాన్స్ తీసుకున్నాను", "english": "hey, how much advance did I take this year (yedadi)", "expect": "ASK YEAR ADVANCE", "supported": true}
-{"id": "te_126", "lang": "te", "text": "పోయిన వారం పనికి ఎంత డబ్బులు వచ్చాయి", "english": "how much money came for the work last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "te_126", "lang": "te", "text": "పోయిన వారం పనికి ఎంత డబ్బులు వచ్చాయి", "english": "how much money came for the work last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "te_127", "lang": "te", "text": "విను ఈ సంవత్సరం ఎంత సంపాదించానో చెప్పు", "english": "listen, tell me how much I earned this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "te_128", "lang": "te", "text": "ఏయ్ ఇంకా ఎంత రావాల్సి ఉంది", "english": "hey, how much is still to come", "expect": "ASK ANY DUE", "supported": true}
 {"id": "te_129", "lang": "te", "text": "ఈరోజు నేను ఎంత ఖర్చు పెట్టాను", "english": "how much did I spend today", "expect": "ASK DAY EXPENSE", "supported": true}
@@ -541,7 +541,7 @@
 {"id": "te_141", "lang": "te", "text": "ఏయ్ ఈ నెల బస్సు చార్జీలకి ఎంత పోయింది", "english": "hey, how much went on bus fares this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "te_142", "lang": "te", "text": "విను ఈ ఏడాది బాకీ ఎంత కొంచెం చెప్పు", "english": "listen, how much is pending this year (yedadi), please tell me", "expect": "ASK YEAR DUE", "supported": true}
 {"id": "te_143", "lang": "te", "text": "అన్నా నా డబ్బులు ఎంత ఆగిపోయాయి", "english": "brother, how much of my money is held up", "expect": "ASK ANY DUE", "supported": true}
-{"id": "te_144", "lang": "te", "text": "పోయిన వారం ఇంకా ఎంత బాకీ ఉంది", "english": "how much is still pending last week", "expect": "ASK LAST_WEEK DUE", "supported": false}
+{"id": "te_144", "lang": "te", "text": "పోయిన వారం ఇంకా ఎంత బాకీ ఉంది", "english": "how much is still pending last week", "expect": "ASK LAST_WEEK DUE", "supported": true}
 {"id": "te_145", "lang": "te", "text": "ఈ మంత్ పనికి ఎంత డబ్బులు వచ్చాయి", "english": "how much money came for the work this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "te_146", "lang": "te", "text": "మినిమమ్ వేజ్ ఎంత", "english": "how much is the minimum wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "te_147", "lang": "te", "text": "ఇవాళ ఎంత కూలి వచ్చింది కొంచెం చెప్పు", "english": "how much wage came today (ivala), please tell me", "expect": "ASK DAY EARNED", "supported": true}
@@ -551,7 +551,7 @@
 {"id": "te_151", "lang": "te", "text": "ఇవాళ్టి కూలి డబ్బులు ఎంత కొంచెం చెప్పు", "english": "how much is the wage money today (ivala), please tell me", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "te_152", "lang": "te", "text": "ఇవాళ కాంట్రాక్టర్ దగ్గర ఎంత అడ్వాన్స్ తీసుకున్నా", "english": "how much advance did I take from the contractor today (ivala)", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "te_153", "lang": "te", "text": "ఈ నెల డబ్బులు ఎక్కడికి పోయాయి కొంచెం చెప్పు", "english": "where did the money go this month, please tell me", "expect": "ASK MONTH EXPENSE", "supported": true}
-{"id": "te_154", "lang": "te", "text": "పోయిన వారం ఎంత అడ్వాన్స్ తీసుకున్నాను", "english": "how much advance did I take last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": false}
+{"id": "te_154", "lang": "te", "text": "పోయిన వారం ఎంత అడ్వాన్స్ తీసుకున్నాను", "english": "how much advance did I take last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": true}
 {"id": "te_155", "lang": "te", "text": "అన్నా ఇవాళ్టి లెక్కలు అన్నీ చెప్పు", "english": "brother, tell me all the accounts today (ivala)", "expect": "ASK DAY ALL", "supported": true}
 {"id": "te_156", "lang": "te", "text": "విను ఈ నెలలో బస్సు చార్జీలకి ఎంత పోయింది కొంచెం చెప్పు", "english": "listen, how much went on bus fares within this month, please tell me", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "te_157", "lang": "te", "text": "ఈ వారం కాంట్రాక్టర్ దగ్గర ఎంత అడ్వాన్స్ తీసుకున్నా", "english": "how much advance did I take from the contractor this week", "expect": "ASK WEEK ADVANCE", "supported": true}
@@ -600,16 +600,16 @@
 {"id": "te_200", "lang": "te", "text": "విను ఈ వారంలో ఓనర్ దగ్గర ఎంత అప్పు తీసుకున్నాను", "english": "listen, how much did I borrow from the owner within this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "kn_001", "lang": "kn", "text": "ಇವತ್ತು ದಿನಾಂಕ ಎಷ್ಟು", "english": "what is the date today", "expect": "TALK DATE", "supported": true}
 {"id": "kn_002", "lang": "kn", "text": "ಈ ವರ್ಷ ಮನೆಗೆ ಎಷ್ಟು ಕಳಿಸಿದೆ ಹೇಳು", "english": "how much did I send home this year, tell me", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "kn_003", "lang": "kn", "text": "ಏ ಹೋದ ತಿಂಗಳು ಇನ್ನೂ ಎಷ್ಟು ಬಾಕಿ ಇದೆ", "english": "hey, how much is still pending last month", "expect": "ASK LAST_MONTH DUE", "supported": false}
+{"id": "kn_003", "lang": "kn", "text": "ಏ ಹೋದ ತಿಂಗಳು ಇನ್ನೂ ಎಷ್ಟು ಬಾಕಿ ಇದೆ", "english": "hey, how much is still pending last month", "expect": "ASK LAST_MONTH DUE", "supported": true}
 {"id": "kn_004", "lang": "kn", "text": "ಈ ತಿಂಗಳಲ್ಲಿ ಮುಂಗಡ ಎಷ್ಟು ತಗೊಂಡೆ ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much mungada (advance) did I take within this month, please tell me", "expect": "ASK MONTH ADVANCE", "supported": true}
-{"id": "kn_005", "lang": "kn", "text": "ಕೇಳು ನಿನ್ನೆ ನನ್ನ ಸಂಬಳ ಎಷ್ಟಾಯ್ತು", "english": "listen, how much did my pay come to yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "kn_005", "lang": "kn", "text": "ಕೇಳು ನಿನ್ನೆ ನನ್ನ ಸಂಬಳ ಎಷ್ಟಾಯ್ತು", "english": "listen, how much did my pay come to yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "kn_006", "lang": "kn", "text": "ಈ ತಿಂಗಳು ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "english": "where did the money go this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "kn_007", "lang": "kn", "text": "ಕೇಳು ಇಂದಿನ ಲೆಕ್ಕ ತೋರಿಸು", "english": "listen, show the account today (formal)", "expect": "ASK DAY ALL", "supported": true}
 {"id": "kn_008", "lang": "kn", "text": "ಈ ವರ್ಷದಲ್ಲಿ ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "english": "where did the money go within this year", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "kn_009", "lang": "kn", "text": "ಅಣ್ಣಾ ಹೋದ ತಿಂಗಳ ಪೂರ್ತಿ ವಿವರ ಕೊಡು", "english": "brother, give the full details last month", "expect": "ASK LAST_MONTH ALL", "supported": false}
+{"id": "kn_009", "lang": "kn", "text": "ಅಣ್ಣಾ ಹೋದ ತಿಂಗಳ ಪೂರ್ತಿ ವಿವರ ಕೊಡು", "english": "brother, give the full details last month", "expect": "ASK LAST_MONTH ALL", "supported": true}
 {"id": "kn_010", "lang": "kn", "text": "ಈ ವರ್ಷದ ರಿಪೋರ್ಟ್ ತೋರಿಸು", "english": "show the report this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "kn_011", "lang": "kn", "text": "ಈ ವಾರದ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "english": "did I get the full wage within this week", "expect": "ASK WEEK DUE", "supported": true}
-{"id": "kn_012", "lang": "kn", "text": "ಕೇಳು ಹೋದ ವಾರದ ಲೆಕ್ಕ ತೋರಿಸು", "english": "listen, show the account last week", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "kn_012", "lang": "kn", "text": "ಕೇಳು ಹೋದ ವಾರದ ಲೆಕ್ಕ ತೋರಿಸು", "english": "listen, show the account last week", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "kn_013", "lang": "kn", "text": "ಈ ವರ್ಷ ಬಸ್ ಚಾರ್ಜ್‌ಗೆ ಎಷ್ಟು ಆಯ್ತು ಹೇಳು", "english": "how much went on bus fare this year, tell me", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "kn_014", "lang": "kn", "text": "ಈ ತಿಂಗಳ ಬಾಕಿ ಎಷ್ಟು", "english": "how much is pending this month", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "kn_015", "lang": "kn", "text": "ಈ ವಾರದ ರಿಪೋರ್ಟ್ ತೋರಿಸು", "english": "show the report within this week", "expect": "ASK WEEK ALL", "supported": true}
@@ -620,7 +620,7 @@
 {"id": "kn_020", "lang": "kn", "text": "ಕೇಳು ಇಂದು ಎಷ್ಟು ಖರ್ಚಾಯ್ತು", "english": "listen, how much was spent today (formal)", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "kn_021", "lang": "kn", "text": "ಈ ವರ್ಷದ ಇನ್ಕಮ್ ಎಷ್ಟು", "english": "what is the income within this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "kn_022", "lang": "kn", "text": "ಅಣ್ಣಾ ಈ ವರ್ಷದಲ್ಲಿ ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "english": "brother, where did the money go within this year", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "kn_023", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳು ಎಷ್ಟು ಖರ್ಚಾಯ್ತು", "english": "how much was spent last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": false}
+{"id": "kn_023", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳು ಎಷ್ಟು ಖರ್ಚಾಯ್ತು", "english": "how much was spent last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": true}
 {"id": "kn_024", "lang": "kn", "text": "ಏ ಈ ತಿಂಗಳ ಹಿಸಾಬ್ ಹೇಳು", "english": "hey, tell me the hisab this month", "expect": "ASK MONTH ALL", "supported": true}
 {"id": "kn_025", "lang": "kn", "text": "ಏ ಈ ತಿಂಗಳ ಎಲ್ಲಾ ಲೆಕ್ಕ ಹೇಳು", "english": "hey, tell me all the accounts this month", "expect": "ASK MONTH ALL", "supported": true}
 {"id": "kn_026", "lang": "kn", "text": "ಈ ವರ್ಷ ಕಂಟ್ರಾಕ್ಟರ್ ಹತ್ರ ಎಷ್ಟು ದುಡ್ಡು ಇಸ್ಕೊಂಡೆ ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much money did I take from the contractor this year, please tell me", "expect": "ASK YEAR ADVANCE", "supported": true}
@@ -630,7 +630,7 @@
 {"id": "kn_030", "lang": "kn", "text": "ಅಣ್ಣಾ ಇಂದಿನ ಪೂರ್ತಿ ಲೆಕ್ಕ ಹೇಳು", "english": "brother, tell me the full account today (formal)", "expect": "ASK DAY ALL", "supported": true}
 {"id": "kn_031", "lang": "kn", "text": "ಈ ವರ್ಷ ಮೇಸ್ತ್ರಿ ಹತ್ರ ಎಷ್ಟು ತಗೊಂಡಿದೀನಿ ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much have I taken from the mestri this year, please tell me", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "kn_032", "lang": "kn", "text": "ಈ ವೀಕ್ ಪೂರ್ತಿ ಲೆಕ್ಕ ಹೇಳು", "english": "tell me the full account this week", "expect": "ASK WEEK ALL", "supported": true}
-{"id": "kn_033", "lang": "kn", "text": "ಅಣ್ಣಾ ಹೋದ ವಾರದ ಪೂರ್ತಿ ಲೆಕ್ಕ ಹೇಳು", "english": "brother, tell me the full account last week", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "kn_033", "lang": "kn", "text": "ಅಣ್ಣಾ ಹೋದ ವಾರದ ಪೂರ್ತಿ ಲೆಕ್ಕ ಹೇಳು", "english": "brother, tell me the full account last week", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "kn_034", "lang": "kn", "text": "ಈ ವರ್ಷ ಎಷ್ಟು ಸಂಪಾದನೆ ಆಯ್ತು", "english": "how much was earned this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "kn_035", "lang": "kn", "text": "ಕೇಳು ಈ ವಾರದಲ್ಲಿ ನಾನು ಎಷ್ಟು ದುಡಿದೆ", "english": "listen, how much did I earn within this week", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "kn_036", "lang": "kn", "text": "ಕೇಳು ಈ ತಿಂಗಳ ಅಡ್ವಾನ್ಸ್ ಎಷ್ಟು", "english": "listen, how much is the advance within this month", "expect": "ASK MONTH ADVANCE", "supported": true}
@@ -639,23 +639,23 @@
 {"id": "kn_039", "lang": "kn", "text": "ಸರ್ಕಾರ ದಿನಕ್ಕೆ ಎಷ್ಟು ಕೂಲಿ ಕೊಡಬೇಕು ಅಂತ ಹೇಳಿದೆ", "english": "how much daily wage has the government said to pay", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "kn_040", "lang": "kn", "text": "ಏ ಇಂದು ನನ್ನ ಸಂಬಳ ಎಷ್ಟಾಯ್ತು", "english": "hey, how much did my pay come to today (formal)", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "kn_041", "lang": "kn", "text": "ಈ ತಿಂಗಳಲ್ಲಿ ಮುಂಗಡ ಎಷ್ಟು ತಗೊಂಡೆ", "english": "how much mungada (advance) did I take within this month", "expect": "ASK MONTH ADVANCE", "supported": true}
-{"id": "kn_042", "lang": "kn", "text": "ಕೇಳು ಹೋದ ತಿಂಗಳ ಕೂಲಿ ಎಷ್ಟು", "english": "listen, how much is the wage last month", "expect": "ASK LAST_MONTH EARNED", "supported": false}
+{"id": "kn_042", "lang": "kn", "text": "ಕೇಳು ಹೋದ ತಿಂಗಳ ಕೂಲಿ ಎಷ್ಟು", "english": "listen, how much is the wage last month", "expect": "ASK LAST_MONTH EARNED", "supported": true}
 {"id": "kn_043", "lang": "kn", "text": "ನೀನು ಯಾರು", "english": "who are you", "expect": "TALK NAME", "supported": true}
-{"id": "kn_044", "lang": "kn", "text": "ನಿನ್ನೆಯ ಖರ್ಚು ಹೇಳು", "english": "tell me the spending yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": false}
+{"id": "kn_044", "lang": "kn", "text": "ನಿನ್ನೆಯ ಖರ್ಚು ಹೇಳು", "english": "tell me the spending yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": true}
 {"id": "kn_045", "lang": "kn", "text": "ಈ ತಿಂಗಳಲ್ಲಿ ಎಷ್ಟು ಖರ್ಚಾಯ್ತು ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much was spent within this month, please tell me", "expect": "ASK MONTH EXPENSE", "supported": true}
-{"id": "kn_046", "lang": "kn", "text": "ನಿನ್ನೆ ಮುಂಗಡ ಎಷ್ಟು ತಗೊಂಡೆ", "english": "how much mungada (advance) did I take yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": false}
+{"id": "kn_046", "lang": "kn", "text": "ನಿನ್ನೆ ಮುಂಗಡ ಎಷ್ಟು ತಗೊಂಡೆ", "english": "how much mungada (advance) did I take yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": true}
 {"id": "kn_047", "lang": "kn", "text": "ಈ ವರ್ಷದ ಒಟ್ಟು ಸಂಪಾದನೆ ಎಷ್ಟು", "english": "what are the total earnings within this year", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "kn_048", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳು ಎಷ್ಟು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "english": "how much advance did I take last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
+{"id": "kn_048", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳು ಎಷ್ಟು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "english": "how much advance did I take last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
 {"id": "kn_049", "lang": "kn", "text": "ಇವತ್ತು ಮಳೆ ಬರುತ್ತಾ", "english": "will it rain today", "expect": "NONE", "supported": true}
 {"id": "kn_050", "lang": "kn", "text": "ಇವತ್ತು ಕಂಟ್ರಾಕ್ಟರ್ ಹತ್ರ ಎಷ್ಟು ದುಡ್ಡು ಇಸ್ಕೊಂಡೆ ಹೇಳು", "english": "how much money did I take from the contractor today, tell me", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "kn_051", "lang": "kn", "text": "ಈ ವರ್ಷದ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "english": "did I get the full wage within this year", "expect": "ASK YEAR DUE", "supported": true}
 {"id": "kn_052", "lang": "kn", "text": "ಈ ತಿಂಗಳಲ್ಲಿ ನಾನು ಎಷ್ಟು ದುಡಿದೆ", "english": "how much did I earn within this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "kn_053", "lang": "kn", "text": "ಈ ವರ್ಷದ ಇನ್ಕಮ್ ಎಷ್ಟು ಹೇಳು", "english": "what is the income this year, tell me", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "kn_054", "lang": "kn", "text": "ಈ ವರ್ಷದ ಎಲ್ಲಾ ಲೆಕ್ಕ ಹೇಳು", "english": "tell me all the accounts this year", "expect": "ASK YEAR ALL", "supported": true}
-{"id": "kn_055", "lang": "kn", "text": "ನಿನ್ನೆಯ ಪೂರ್ತಿ ಲೆಕ್ಕ ಹೇಳು", "english": "tell me the full account yesterday", "expect": "ASK YESTERDAY ALL", "supported": false}
+{"id": "kn_055", "lang": "kn", "text": "ನಿನ್ನೆಯ ಪೂರ್ತಿ ಲೆಕ್ಕ ಹೇಳು", "english": "tell me the full account yesterday", "expect": "ASK YESTERDAY ALL", "supported": true}
 {"id": "kn_056", "lang": "kn", "text": "ಈ ವರ್ಷದ ಪೂರ್ತಿ ವಿವರ ಕೊಡು", "english": "give the full details within this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "kn_057", "lang": "kn", "text": "ಈ ತಿಂಗಳ ಎಲ್ಲಾ ಲೆಕ್ಕ ಹೇಳು", "english": "tell me all the accounts within this month", "expect": "ASK MONTH ALL", "supported": true}
-{"id": "kn_058", "lang": "kn", "text": "ಹೋದ ವಾರದ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ ಹೇಳು", "english": "did I get the full wage last week, tell me", "expect": "ASK LAST_WEEK DUE", "supported": false}
+{"id": "kn_058", "lang": "kn", "text": "ಹೋದ ವಾರದ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ ಹೇಳು", "english": "did I get the full wage last week, tell me", "expect": "ASK LAST_WEEK DUE", "supported": true}
 {"id": "kn_059", "lang": "kn", "text": "ಈ ವೀಕ್ ಬಸ್ ಚಾರ್ಜ್‌ಗೆ ಎಷ್ಟು ಆಯ್ತು", "english": "how much went on bus fare this week", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "kn_060", "lang": "kn", "text": "ಈ ವರ್ಷದಲ್ಲಿ ಎಷ್ಟು ಸಂಪಾದನೆ ಆಯ್ತು", "english": "how much was earned within this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "kn_061", "lang": "kn", "text": "ಏ ಓನರ್ ನನಗೆ ಇನ್ನೂ ಎಷ್ಟು ಕೊಡಬೇಕು", "english": "hey, how much more does the owner have to give me", "expect": "ASK ANY DUE", "supported": true}
@@ -669,17 +669,17 @@
 {"id": "kn_069", "lang": "kn", "text": "ಏ ಈ ವರ್ಷ ದುಡ್ಡು ಎಲ್ಲಿ ಹೋಯ್ತು", "english": "hey, where did the money go this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "kn_070", "lang": "kn", "text": "ಈ ವರ್ಷ ಬಸ್ ಚಾರ್ಜ್‌ಗೆ ಎಷ್ಟು ಆಯ್ತು", "english": "how much went on bus fare this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "kn_071", "lang": "kn", "text": "ಈ ವರ್ಷದ ಲೆಕ್ಕ ತೋರಿಸು", "english": "show the account within this year", "expect": "ASK YEAR ALL", "supported": true}
-{"id": "kn_072", "lang": "kn", "text": "ಕೇಳು ನಿನ್ನೆಯ ರಿಪೋರ್ಟ್ ತೋರಿಸು", "english": "listen, show the report yesterday", "expect": "ASK YESTERDAY ALL", "supported": false}
+{"id": "kn_072", "lang": "kn", "text": "ಕೇಳು ನಿನ್ನೆಯ ರಿಪೋರ್ಟ್ ತೋರಿಸು", "english": "listen, show the report yesterday", "expect": "ASK YESTERDAY ALL", "supported": true}
 {"id": "kn_073", "lang": "kn", "text": "ಈ ವರ್ಷ ಓನರ್ ಹತ್ರ ಎಷ್ಟು ಸಾಲ ತಗೊಂಡೆ ಹೇಳು", "english": "how much did I borrow from the owner this year, tell me", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "kn_074", "lang": "kn", "text": "ಈ ವರ್ಷದಲ್ಲಿ ಎಷ್ಟು ಸಂಪಾದನೆ ಆಯ್ತು ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much was earned within this year, please tell me", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "kn_075", "lang": "kn", "text": "ಕೇಳು ಓನರ್ ನನಗೆ ಇನ್ನೂ ಎಷ್ಟು ಕೊಡಬೇಕು", "english": "listen, how much more does the owner have to give me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "kn_076", "lang": "kn", "text": "ಹೇಗಿದ್ದೀಯ", "english": "how are you", "expect": "TALK HOW_ARE_YOU", "supported": true}
 {"id": "kn_077", "lang": "kn", "text": "ರೇಷನ್ ಯಾವಾಗ ಕೊಡ್ತಾರೆ", "english": "when will they give ration", "expect": "NONE", "supported": true}
 {"id": "kn_078", "lang": "kn", "text": "ಕೇಳು ಈ ವರ್ಷ ನಾನು ಎಷ್ಟು ಖರ್ಚು ಮಾಡಿದೆ", "english": "listen, how much did I spend this year", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "kn_079", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳ ಒಟ್ಟು ಸಂಪಾದನೆ ಎಷ್ಟು", "english": "what are the total earnings last month", "expect": "ASK LAST_MONTH EARNED", "supported": false}
+{"id": "kn_079", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳ ಒಟ್ಟು ಸಂಪಾದನೆ ಎಷ್ಟು", "english": "what are the total earnings last month", "expect": "ASK LAST_MONTH EARNED", "supported": true}
 {"id": "kn_080", "lang": "kn", "text": "ಅಣ್ಣಾ ನನ್ನ ಎಷ್ಟು ದುಡ್ಡು ನಿಂತಿದೆ", "english": "brother, how much of my money is held up", "expect": "ASK ANY DUE", "supported": true}
 {"id": "kn_081", "lang": "kn", "text": "ಈ ವರ್ಷ ಎಷ್ಟು ದುಡ್ಡು ಮಾಡಿದೆ ಹೇಳು", "english": "tell me how much money I made this year", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "kn_082", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳ ಖರ್ಚು ಹೇಳು", "english": "tell me the spending last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": false}
+{"id": "kn_082", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳ ಖರ್ಚು ಹೇಳು", "english": "tell me the spending last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": true}
 {"id": "kn_083", "lang": "kn", "text": "ಬಸ್ ಯಾವಾಗ ಬರುತ್ತೆ", "english": "when will the bus come", "expect": "NONE", "supported": true}
 {"id": "kn_084", "lang": "kn", "text": "ಈ ತಿಂಗಳು ಮುಂಗಡ ಎಷ್ಟು ತಗೊಂಡೆ", "english": "how much mungada (advance) did I take this month", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "kn_085", "lang": "kn", "text": "ಅಣ್ಣಾ ಇವತ್ತು ಕಂಟ್ರಾಕ್ಟರ್ ಹತ್ರ ಎಷ್ಟು ದುಡ್ಡು ಇಸ್ಕೊಂಡೆ", "english": "brother, how much money did I take from the contractor today", "expect": "ASK DAY ADVANCE", "supported": true}
@@ -688,11 +688,11 @@
 {"id": "kn_088", "lang": "kn", "text": "ಇವತ್ತು ಮುಂಗಡ ಎಷ್ಟು ತಗೊಂಡೆ", "english": "how much mungada (advance) did I take today", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "kn_089", "lang": "kn", "text": "ಕೇಳು ಈ ವಾರ ಕಂಟ್ರಾಕ್ಟರ್ ಹತ್ರ ಎಷ್ಟು ದುಡ್ಡು ಇಸ್ಕೊಂಡೆ", "english": "listen, how much money did I take from the contractor this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "kn_090", "lang": "kn", "text": "ಈ ವಾರದ ಪೂರ್ತಿ ವಿವರ ಕೊಡು", "english": "give the full details within this week", "expect": "ASK WEEK ALL", "supported": true}
-{"id": "kn_091", "lang": "kn", "text": "ನಿನ್ನೆ ಎಷ್ಟು ಖರ್ಚಾಯ್ತು", "english": "how much was spent yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": false}
+{"id": "kn_091", "lang": "kn", "text": "ನಿನ್ನೆ ಎಷ್ಟು ಖರ್ಚಾಯ್ತು", "english": "how much was spent yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": true}
 {"id": "kn_092", "lang": "kn", "text": "ಈ ತಿಂಗಳು ಮೇಸ್ತ್ರಿ ಹತ್ರ ಎಷ್ಟು ತಗೊಂಡಿದೀನಿ ಹೇಳು", "english": "how much have I taken from the mestri this month, tell me", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "kn_093", "lang": "kn", "text": "ಏ ಇಂದು ಮನೆಗೆ ಎಷ್ಟು ಕಳಿಸಿದೆ", "english": "hey, how much did I send home today (formal)", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "kn_094", "lang": "kn", "text": "ಇವತ್ತಿನ ಹಿಸಾಬ್ ಹೇಳು", "english": "tell me the hisab today", "expect": "ASK DAY ALL", "supported": true}
-{"id": "kn_095", "lang": "kn", "text": "ಏ ನಿನ್ನೆಯ ಒಟ್ಟು ಸಂಪಾದನೆ ಎಷ್ಟು", "english": "hey, what are the total earnings yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "kn_095", "lang": "kn", "text": "ಏ ನಿನ್ನೆಯ ಒಟ್ಟು ಸಂಪಾದನೆ ಎಷ್ಟು", "english": "hey, what are the total earnings yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "kn_096", "lang": "kn", "text": "ಇವತ್ತು ಎಷ್ಟು ದುಡ್ಡು ಮಾಡಿದೆ ಹೇಳು", "english": "tell me how much money I made today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "kn_097", "lang": "kn", "text": "ಓನರ್ ನನಗೆ ಇನ್ನೂ ಎಷ್ಟು ಕೊಡಬೇಕು ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much more does the owner have to give me, please tell me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "kn_098", "lang": "kn", "text": "ಈ ವಾರ ಮೇಸ್ತ್ರಿ ಹತ್ರ ಎಷ್ಟು ತಗೊಂಡಿದೀನಿ", "english": "how much have I taken from the mestri this week", "expect": "ASK WEEK ADVANCE", "supported": true}
@@ -709,12 +709,12 @@
 {"id": "kn_109", "lang": "kn", "text": "ಇನ್ನೂ ಎಷ್ಟು ಬರೋದಿದೆ ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much is still to come, please tell me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "kn_110", "lang": "kn", "text": "ಈ ವರ್ಷ ಮೇಸ್ತ್ರಿ ಹತ್ರ ಎಷ್ಟು ತಗೊಂಡಿದೀನಿ", "english": "how much have I taken from the mestri this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "kn_111", "lang": "kn", "text": "ಕೇಳು ಈ ವರ್ಷ ನಾನು ಎಷ್ಟು ದುಡಿದೆ ಹೇಳು", "english": "listen, how much did I earn this year, tell me", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "kn_112", "lang": "kn", "text": "ಕೇಳು ನಿನ್ನೆಯ ಇನ್ಕಮ್ ಎಷ್ಟು", "english": "listen, what is the income yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "kn_112", "lang": "kn", "text": "ಕೇಳು ನಿನ್ನೆಯ ಇನ್ಕಮ್ ಎಷ್ಟು", "english": "listen, what is the income yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "kn_113", "lang": "kn", "text": "ಈ ವರ್ಷದ ಅಡ್ವಾನ್ಸ್ ಎಷ್ಟು", "english": "how much is the advance within this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "kn_114", "lang": "kn", "text": "ಈ ವಾರ ಎಷ್ಟು ದುಡ್ಡು ಮಾಡಿದೆ ಹೇಳು", "english": "tell me how much money I made this week", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "kn_115", "lang": "kn", "text": "ಈ ವರ್ಷ ಎಷ್ಟು ಖರ್ಚಾಯ್ತು ಹೇಳು", "english": "how much was spent this year, tell me", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "kn_116", "lang": "kn", "text": "ಇಂದು ಎಷ್ಟು ದುಡ್ಡು ಮಾಡಿದೆ ಹೇಳು", "english": "tell me how much money I made today (formal)", "expect": "ASK DAY EARNED", "supported": true}
-{"id": "kn_117", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳು ಊಟಕ್ಕೆ ಎಷ್ಟು ಹೋಯ್ತು", "english": "how much went on meals last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": false}
+{"id": "kn_117", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳು ಊಟಕ್ಕೆ ಎಷ್ಟು ಹೋಯ್ತು", "english": "how much went on meals last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": true}
 {"id": "kn_118", "lang": "kn", "text": "ಇಂದು ಮನೆಗೆ ಎಷ್ಟು ಕಳಿಸಿದೆ ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much did I send home today (formal), please tell me", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "kn_119", "lang": "kn", "text": "ಅಣ್ಣಾ ಇವತ್ತು ಕೆಲಸ ಮಾಡಿ ಎಷ್ಟು ಬಂತು ಹೇಳು", "english": "brother, how much came from working today, tell me", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "kn_120", "lang": "kn", "text": "ಈ ವರ್ಷದ ಕೂಲಿ ಎಷ್ಟು ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much is the wage this year, please tell me", "expect": "ASK YEAR EARNED", "supported": true}
@@ -725,7 +725,7 @@
 {"id": "kn_125", "lang": "kn", "text": "ಕೇಳು ಈ ತಿಂಗಳ ಬಾಕಿ ಎಷ್ಟು", "english": "listen, how much is pending this month", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "kn_126", "lang": "kn", "text": "ಈ ತಿಂಗಳಲ್ಲಿ ಕಂಟ್ರಾಕ್ಟರ್ ಹತ್ರ ಎಷ್ಟು ದುಡ್ಡು ಇಸ್ಕೊಂಡೆ", "english": "how much money did I take from the contractor within this month", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "kn_127", "lang": "kn", "text": "ಇನ್ನೂ ಎಷ್ಟು ಬರೋದಿದೆ", "english": "how much is still to come", "expect": "ASK ANY DUE", "supported": true}
-{"id": "kn_128", "lang": "kn", "text": "ಏ ನಿನ್ನೆಯ ಖರ್ಚು ಹೇಳು", "english": "hey, tell me the spending yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": false}
+{"id": "kn_128", "lang": "kn", "text": "ಏ ನಿನ್ನೆಯ ಖರ್ಚು ಹೇಳು", "english": "hey, tell me the spending yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": true}
 {"id": "kn_129", "lang": "kn", "text": "ಈ ತಿಂಗಳು ಎಷ್ಟು ಅಡ್ವಾನ್ಸ್ ತಗೊಂಡೆ", "english": "how much advance did I take this month", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "kn_130", "lang": "kn", "text": "ಇಂದಿನ ಪೂರ್ತಿ ವಿವರ ಕೊಡು", "english": "give the full details today (formal)", "expect": "ASK DAY ALL", "supported": true}
 {"id": "kn_131", "lang": "kn", "text": "ಟ್ರೈನ್ ಎಷ್ಟು ಗಂಟೆಗೆ", "english": "what time is the train", "expect": "NONE", "supported": true}
@@ -740,7 +740,7 @@
 {"id": "kn_140", "lang": "kn", "text": "ಕೇಳು ಇಂದಿನ ಬಾಕಿ ಎಷ್ಟು", "english": "listen, how much is pending today (formal)", "expect": "ASK DAY DUE", "supported": true}
 {"id": "kn_141", "lang": "kn", "text": "ಈ ವೀಕ್ ಪೂರ್ತಿ ವಿವರ ಕೊಡು", "english": "give the full details this week", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "kn_142", "lang": "kn", "text": "ಅಣ್ಣಾ ಈ ತಿಂಗಳ ಕೂಲಿ ಎಷ್ಟು", "english": "brother, how much is the wage this month", "expect": "ASK MONTH EARNED", "supported": true}
-{"id": "kn_143", "lang": "kn", "text": "ಹೋದ ವಾರ ಎಷ್ಟು ಸಂಪಾದನೆ ಆಯ್ತು", "english": "how much was earned last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "kn_143", "lang": "kn", "text": "ಹೋದ ವಾರ ಎಷ್ಟು ಸಂಪಾದನೆ ಆಯ್ತು", "english": "how much was earned last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "kn_144", "lang": "kn", "text": "ಈ ತಿಂಗಳಲ್ಲಿ ಎಷ್ಟು ಖರ್ಚಾಯ್ತು", "english": "how much was spent within this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "kn_145", "lang": "kn", "text": "ಈ ವರ್ಷದಲ್ಲಿ ಮನೆಗೆ ಎಷ್ಟು ಕಳಿಸಿದೆ", "english": "how much did I send home within this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "kn_146", "lang": "kn", "text": "ಈ ವರ್ಷದ ಕೂಲಿ ಎಷ್ಟು", "english": "how much is the wage this year", "expect": "ASK YEAR EARNED", "supported": true}
@@ -749,7 +749,7 @@
 {"id": "kn_149", "lang": "kn", "text": "ಈ ವರ್ಷ ಎಷ್ಟು ಖರ್ಚಾಯ್ತು", "english": "how much was spent this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "kn_150", "lang": "kn", "text": "ಈ ವರ್ಷದಲ್ಲಿ ಊಟಕ್ಕೆ ಎಷ್ಟು ಹೋಯ್ತು", "english": "how much went on meals within this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "kn_151", "lang": "kn", "text": "ನೀನು ಏನೇನು ಮಾಡ್ತೀಯ", "english": "what all can you do", "expect": "TALK HELP", "supported": true}
-{"id": "kn_152", "lang": "kn", "text": "ಏ ಹೋದ ವಾರ ಕೆಲಸ ಮಾಡಿ ಎಷ್ಟು ಬಂತು", "english": "hey, how much came from working last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "kn_152", "lang": "kn", "text": "ಏ ಹೋದ ವಾರ ಕೆಲಸ ಮಾಡಿ ಎಷ್ಟು ಬಂತು", "english": "hey, how much came from working last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "kn_153", "lang": "kn", "text": "ಸರ್ಕಾರದ ಕೂಲಿ ದರ ಎಷ್ಟು", "english": "what is the government wage rate", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "kn_154", "lang": "kn", "text": "ಏ ಈ ತಿಂಗಳ ಬಾಕಿ ಎಷ್ಟು", "english": "hey, how much is pending this month", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "kn_155", "lang": "kn", "text": "ಹಾಡು ಹಾಕು", "english": "play a song", "expect": "NONE", "supported": true}
@@ -763,8 +763,8 @@
 {"id": "kn_163", "lang": "kn", "text": "ಈ ತಿಂಗಳ ಪೂರ್ತಿ ಲೆಕ್ಕ ಹೇಳು", "english": "tell me the full account within this month", "expect": "ASK MONTH ALL", "supported": true}
 {"id": "kn_164", "lang": "kn", "text": "ಇವತ್ತು ಕೆಲಸ ಮಾಡಿ ಎಷ್ಟು ಬಂತು", "english": "how much came from working today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "kn_165", "lang": "kn", "text": "ಅಣ್ಣಾ ಈ ತಿಂಗಳ ಒಟ್ಟು ಸಂಪಾದನೆ ಎಷ್ಟು", "english": "brother, what are the total earnings this month", "expect": "ASK MONTH EARNED", "supported": true}
-{"id": "kn_166", "lang": "kn", "text": "ಹೋದ ವಾರ ಇನ್ನೂ ಎಷ್ಟು ಬಾಕಿ ಇದೆ", "english": "how much is still pending last week", "expect": "ASK LAST_WEEK DUE", "supported": false}
-{"id": "kn_167", "lang": "kn", "text": "ಅಣ್ಣಾ ನಿನ್ನೆ ಮುಂಗಡ ಎಷ್ಟು ತಗೊಂಡೆ ಸ್ವಲ್ಪ ಹೇಳು", "english": "brother, how much mungada (advance) did I take yesterday, please tell me", "expect": "ASK YESTERDAY ADVANCE", "supported": false}
+{"id": "kn_166", "lang": "kn", "text": "ಹೋದ ವಾರ ಇನ್ನೂ ಎಷ್ಟು ಬಾಕಿ ಇದೆ", "english": "how much is still pending last week", "expect": "ASK LAST_WEEK DUE", "supported": true}
+{"id": "kn_167", "lang": "kn", "text": "ಅಣ್ಣಾ ನಿನ್ನೆ ಮುಂಗಡ ಎಷ್ಟು ತಗೊಂಡೆ ಸ್ವಲ್ಪ ಹೇಳು", "english": "brother, how much mungada (advance) did I take yesterday, please tell me", "expect": "ASK YESTERDAY ADVANCE", "supported": true}
 {"id": "kn_168", "lang": "kn", "text": "ಏ ಮೇಸ್ತ್ರಿ ಇಂದ ಇನ್ನೂ ಎಷ್ಟು ಬರಬೇಕು", "english": "hey, how much more is to come from the mestri", "expect": "ASK ANY DUE", "supported": true}
 {"id": "kn_169", "lang": "kn", "text": "ಇವತ್ತಿನ ಪೂರ್ತಿ ಕೂಲಿ ಸಿಕ್ತಾ", "english": "did I get the full wage today", "expect": "ASK DAY DUE", "supported": true}
 {"id": "kn_170", "lang": "kn", "text": "ಏ ಇವತ್ತು ನಾನು ಎಷ್ಟು ದುಡಿದೆ", "english": "hey, how much did I earn today", "expect": "ASK DAY EARNED", "supported": true}
@@ -776,7 +776,7 @@
 {"id": "kn_176", "lang": "kn", "text": "ಅಣ್ಣಾ ಇವತ್ತಿನ ಅಡ್ವಾನ್ಸ್ ಎಷ್ಟು", "english": "brother, how much is the advance today", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "kn_177", "lang": "kn", "text": "ಮಿನಿಮಮ್ ವೇಜ್ ಎಷ್ಟು", "english": "how much is the minimum wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "kn_178", "lang": "kn", "text": "ಇವತ್ತು ಇನ್ನೂ ಎಷ್ಟು ಬಾಕಿ ಇದೆ ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much is still pending today, please tell me", "expect": "ASK DAY DUE", "supported": true}
-{"id": "kn_179", "lang": "kn", "text": "ಅಣ್ಣಾ ಹೋದ ತಿಂಗಳ ಎಲ್ಲಾ ಲೆಕ್ಕ ಹೇಳು", "english": "brother, tell me all the accounts last month", "expect": "ASK LAST_MONTH ALL", "supported": false}
+{"id": "kn_179", "lang": "kn", "text": "ಅಣ್ಣಾ ಹೋದ ತಿಂಗಳ ಎಲ್ಲಾ ಲೆಕ್ಕ ಹೇಳು", "english": "brother, tell me all the accounts last month", "expect": "ASK LAST_MONTH ALL", "supported": true}
 {"id": "kn_180", "lang": "kn", "text": "ಏ ಈ ತಿಂಗಳಲ್ಲಿ ಮೇಸ್ತ್ರಿ ಹತ್ರ ಎಷ್ಟು ತಗೊಂಡಿದೀನಿ", "english": "hey, how much have I taken from the mestri within this month", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "kn_181", "lang": "kn", "text": "ಈ ವಾರದಲ್ಲಿ ನನ್ನ ಸಂಬಳ ಎಷ್ಟಾಯ್ತು", "english": "how much did my pay come to within this week", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "kn_182", "lang": "kn", "text": "ಈ ವರ್ಷ ಎಷ್ಟು ಖರ್ಚಾಯ್ತು ಸ್ವಲ್ಪ ಹೇಳು", "english": "how much was spent this year, please tell me", "expect": "ASK YEAR EXPENSE", "supported": true}
@@ -796,7 +796,7 @@
 {"id": "kn_196", "lang": "kn", "text": "ಈ ತಿಂಗಳ ಇನ್ಕಮ್ ಎಷ್ಟು", "english": "what is the income within this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "kn_197", "lang": "kn", "text": "ಇಂದು ಮುಂಗಡ ಎಷ್ಟು ತಗೊಂಡೆ", "english": "how much mungada (advance) did I take today (formal)", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "kn_198", "lang": "kn", "text": "ಕೇಳು ಈ ತಿಂಗಳ ಒಟ್ಟು ಸಂಪಾದನೆ ಎಷ್ಟು", "english": "listen, what are the total earnings within this month", "expect": "ASK MONTH EARNED", "supported": true}
-{"id": "kn_199", "lang": "kn", "text": "ನಿನ್ನೆ ಕಂಟ್ರಾಕ್ಟರ್ ಹತ್ರ ಎಷ್ಟು ದುಡ್ಡು ಇಸ್ಕೊಂಡೆ", "english": "how much money did I take from the contractor yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": false}
+{"id": "kn_199", "lang": "kn", "text": "ನಿನ್ನೆ ಕಂಟ್ರಾಕ್ಟರ್ ಹತ್ರ ಎಷ್ಟು ದುಡ್ಡು ಇಸ್ಕೊಂಡೆ", "english": "how much money did I take from the contractor yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": true}
 {"id": "kn_200", "lang": "kn", "text": "ಇಂದು ಇನ್ನೂ ಎಷ್ಟು ಬಾಕಿ ಇದೆ", "english": "how much is still pending today (formal)", "expect": "ASK DAY DUE", "supported": true}
 {"id": "ta_001", "lang": "ta", "text": "ஏய் மேஸ்திரிகிட்ட இருந்து இன்னும் எவ்வளவு வரணும்", "english": "hey, how much more is to come from the mestri", "expect": "ASK ANY DUE", "supported": true}
 {"id": "ta_002", "lang": "ta", "text": "இந்த வருஷ முழு கணக்கு சொல்லு", "english": "tell me the full account this year", "expect": "ASK YEAR ALL", "supported": true}
@@ -837,16 +837,16 @@
 {"id": "ta_037", "lang": "ta", "text": "இந்த மாசம் வேலை செஞ்சு எவ்வளவு கிடைச்சுது", "english": "how much did I get for working this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "ta_038", "lang": "ta", "text": "இந்த வாரம் முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "how much did I borrow from the owner this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "ta_039", "lang": "ta", "text": "இன்னைக்கு கணக்கு எல்லாம் சொல்லு", "english": "tell me all the accounts today", "expect": "ASK DAY ALL", "supported": true}
-{"id": "ta_040", "lang": "ta", "text": "நேத்து கணக்கு எல்லாம் சொல்லு", "english": "tell me all the accounts yesterday", "expect": "ASK YESTERDAY ALL", "supported": false}
+{"id": "ta_040", "lang": "ta", "text": "நேத்து கணக்கு எல்லாம் சொல்லு", "english": "tell me all the accounts yesterday", "expect": "ASK YESTERDAY ALL", "supported": true}
 {"id": "ta_041", "lang": "ta", "text": "நீ என்னென்ன செய்வ", "english": "what all can you do", "expect": "TALK HELP", "supported": true}
 {"id": "ta_042", "lang": "ta", "text": "இன்னும் எவ்வளவு வர வேண்டியிருக்கு கொஞ்சம் சொல்லு", "english": "how much is still to come, please tell me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "ta_043", "lang": "ta", "text": "இந்த வருஷம் மேஸ்திரிகிட்ட எவ்வளவு வாங்கினேன்", "english": "how much did I take from the mestri this year", "expect": "ASK YEAR ADVANCE", "supported": true}
-{"id": "ta_044", "lang": "ta", "text": "அண்ணா போன வாரம் சாப்பாட்டுக்கு எவ்வளவு போச்சு", "english": "brother, how much went on food last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": false}
+{"id": "ta_044", "lang": "ta", "text": "அண்ணா போன வாரம் சாப்பாட்டுக்கு எவ்வளவு போச்சு", "english": "brother, how much went on food last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": true}
 {"id": "ta_045", "lang": "ta", "text": "இந்த வருடம் என் சம்பளம் எவ்வளவு ஆச்சு", "english": "how much did my pay come to this year (formal)", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "ta_046", "lang": "ta", "text": "இந்த வருடம் எவ்வளவு சம்பாதிச்சேன்னு சொல்லு", "english": "tell me how much I earned this year (formal)", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "ta_047", "lang": "ta", "text": "இந்த வார செலவு சொல்லு", "english": "tell me the spending this week", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "ta_048", "lang": "ta", "text": "மினிமம் வேஜ் எவ்வளவு", "english": "how much is the minimum wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
-{"id": "ta_049", "lang": "ta", "text": "போன வார கணக்கு காட்டு", "english": "show the account last week", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "ta_049", "lang": "ta", "text": "போன வார கணக்கு காட்டு", "english": "show the account last week", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "ta_050", "lang": "ta", "text": "இன்றைய வருமானம் எவ்வளவு", "english": "what is the income today (formal)", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "ta_051", "lang": "ta", "text": "இன்னைக்கு வேலை செஞ்சு எவ்வளவு கிடைச்சுது", "english": "how much did I get for working today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "ta_052", "lang": "ta", "text": "இந்த மாசம் சாப்பாட்டுக்கு எவ்வளவு போச்சு", "english": "how much went on food this month", "expect": "ASK MONTH EXPENSE", "supported": true}
@@ -856,7 +856,7 @@
 {"id": "ta_056", "lang": "ta", "text": "இந்த வீக் கான்ட்ராக்டர்கிட்ட எவ்வளவு பணம் வாங்கினேன்", "english": "how much money did I take from the contractor this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "ta_057", "lang": "ta", "text": "இந்த மாசம் எத்தனை ரூபா வந்துச்சு", "english": "how many rupees came this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "ta_058", "lang": "ta", "text": "இந்த மாத இன்கம் எவ்வளவு சொல்லு", "english": "what is the income this month (formal), tell me", "expect": "ASK MONTH EARNED", "supported": true}
-{"id": "ta_059", "lang": "ta", "text": "போன மாசம் எவ்வளவு கூலி வந்துச்சு", "english": "how much wage came last month", "expect": "ASK LAST_MONTH EARNED", "supported": false}
+{"id": "ta_059", "lang": "ta", "text": "போன மாசம் எவ்வளவு கூலி வந்துச்சு", "english": "how much wage came last month", "expect": "ASK LAST_MONTH EARNED", "supported": true}
 {"id": "ta_060", "lang": "ta", "text": "இந்த மாதம் காசு எங்க போச்சு", "english": "where did the money go this month (formal)", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "ta_061", "lang": "ta", "text": "இந்த வருடம் கான்ட்ராக்டர்கிட்ட எவ்வளவு பணம் வாங்கினேன்", "english": "how much money did I take from the contractor this year (formal)", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "ta_062", "lang": "ta", "text": "இந்த மாசம் முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "how much did I borrow from the owner this month", "expect": "ASK MONTH ADVANCE", "supported": true}
@@ -876,18 +876,18 @@
 {"id": "ta_076", "lang": "ta", "text": "இந்த வருஷ அட்வான்ஸ் எவ்வளவு", "english": "how much is the advance this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "ta_077", "lang": "ta", "text": "அண்ணா இந்த வருஷம் வேலை செஞ்சு எவ்வளவு கிடைச்சுது", "english": "brother, how much did I get for working this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "ta_078", "lang": "ta", "text": "இந்த வாரம் காசு எங்க போச்சு கொஞ்சம் சொல்லு", "english": "where did the money go this week, please tell me", "expect": "ASK WEEK EXPENSE", "supported": true}
-{"id": "ta_079", "lang": "ta", "text": "போன மாச ரிப்போர்ட் காட்டு", "english": "show the report last month", "expect": "ASK LAST_MONTH ALL", "supported": false}
+{"id": "ta_079", "lang": "ta", "text": "போன மாச ரிப்போர்ட் காட்டு", "english": "show the report last month", "expect": "ASK LAST_MONTH ALL", "supported": true}
 {"id": "ta_080", "lang": "ta", "text": "இந்த வீக் ரிப்போர்ட் காட்டு", "english": "show the report this week", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "ta_081", "lang": "ta", "text": "ஏய் இந்த மாச பாக்கி எவ்வளவு", "english": "hey, how much is pending this month", "expect": "ASK MONTH DUE", "supported": true}
-{"id": "ta_082", "lang": "ta", "text": "நேத்து முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "how much did I borrow from the owner yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": false}
+{"id": "ta_082", "lang": "ta", "text": "நேத்து முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "how much did I borrow from the owner yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": true}
 {"id": "ta_083", "lang": "ta", "text": "இந்த மாதம் எவ்வளவு அட்வான்ஸ் வாங்கினேன் கொஞ்சம் சொல்லு", "english": "how much advance did I take this month (formal), please tell me", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "ta_084", "lang": "ta", "text": "இந்த வார முழு கூலி கிடைச்சுதா", "english": "did I get the full wage this week", "expect": "ASK WEEK DUE", "supported": true}
-{"id": "ta_085", "lang": "ta", "text": "கேளு போன மாச முழு கணக்கு சொல்லு", "english": "listen, tell me the full account last month", "expect": "ASK LAST_MONTH ALL", "supported": false}
+{"id": "ta_085", "lang": "ta", "text": "கேளு போன மாச முழு கணக்கு சொல்லு", "english": "listen, tell me the full account last month", "expect": "ASK LAST_MONTH ALL", "supported": true}
 {"id": "ta_086", "lang": "ta", "text": "இந்த மாத முழு கூலி கிடைச்சுதா", "english": "did I get the full wage this month (formal)", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "ta_087", "lang": "ta", "text": "இந்த வாரம் வீட்டுக்கு எவ்வளவு அனுப்பினேன்", "english": "how much did I send home this week", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "ta_088", "lang": "ta", "text": "அண்ணா இந்த வார செலவு சொல்லு", "english": "brother, tell me the spending this week", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "ta_089", "lang": "ta", "text": "இன்னைக்கு முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "how much did I borrow from the owner today", "expect": "ASK DAY ADVANCE", "supported": true}
-{"id": "ta_090", "lang": "ta", "text": "நேத்து ரிப்போர்ட் காட்டு", "english": "show the report yesterday", "expect": "ASK YESTERDAY ALL", "supported": false}
+{"id": "ta_090", "lang": "ta", "text": "நேத்து ரிப்போர்ட் காட்டு", "english": "show the report yesterday", "expect": "ASK YESTERDAY ALL", "supported": true}
 {"id": "ta_091", "lang": "ta", "text": "இன்னைக்கு முழு கணக்கு சொல்லு", "english": "tell me the full account today", "expect": "ASK DAY ALL", "supported": true}
 {"id": "ta_092", "lang": "ta", "text": "ஏய் இந்த மாதம் வேலை செஞ்சு எவ்வளவு கிடைச்சுது சொல்லு", "english": "hey, how much did I get for working this month (formal), tell me", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "ta_093", "lang": "ta", "text": "இன்றைய கணக்கு எல்லாம் சொல்லு", "english": "tell me all the accounts today (formal)", "expect": "ASK DAY ALL", "supported": true}
@@ -896,12 +896,12 @@
 {"id": "ta_096", "lang": "ta", "text": "இந்த வருஷம் எவ்வளவு செலவு ஆச்சு", "english": "how much was spent this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "ta_097", "lang": "ta", "text": "அண்ணா இந்த மாசம் காசு எங்க போச்சு", "english": "brother, where did the money go this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "ta_098", "lang": "ta", "text": "இந்த வீக் நான் எவ்வளவு செலவு பண்ணேன்", "english": "how much did I spend this week", "expect": "ASK WEEK EXPENSE", "supported": true}
-{"id": "ta_099", "lang": "ta", "text": "அண்ணா போன மாசம் முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "brother, how much did I borrow from the owner last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
-{"id": "ta_100", "lang": "ta", "text": "போன மாச கணக்கு வழக்கு சொல்லு", "english": "tell me the accounts last month", "expect": "ASK LAST_MONTH ALL", "supported": false}
+{"id": "ta_099", "lang": "ta", "text": "அண்ணா போன மாசம் முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "brother, how much did I borrow from the owner last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
+{"id": "ta_100", "lang": "ta", "text": "போன மாச கணக்கு வழக்கு சொல்லு", "english": "tell me the accounts last month", "expect": "ASK LAST_MONTH ALL", "supported": true}
 {"id": "ta_101", "lang": "ta", "text": "இந்த மாத இன்கம் எவ்வளவு", "english": "what is the income this month (formal)", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "ta_102", "lang": "ta", "text": "அண்ணா முதலாளி இன்னும் எனக்கு எவ்வளவு தரணும்", "english": "brother, how much more does the owner have to give me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "ta_103", "lang": "ta", "text": "இந்த மாசம் பஸ் சார்ஜுக்கு எவ்வளவு ஆச்சு", "english": "how much went on bus fare this month", "expect": "ASK MONTH EXPENSE", "supported": true}
-{"id": "ta_104", "lang": "ta", "text": "போன வார இன்கம் எவ்வளவு கொஞ்சம் சொல்லு", "english": "what is the income last week, please tell me", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "ta_104", "lang": "ta", "text": "போன வார இன்கம் எவ்வளவு கொஞ்சம் சொல்லு", "english": "what is the income last week, please tell me", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "ta_105", "lang": "ta", "text": "இந்த வருஷம் எவ்வளவு அட்வான்ஸ் வாங்கினேன்", "english": "how much advance did I take this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "ta_106", "lang": "ta", "text": "கேளு இந்த மாதம் இன்னும் எவ்வளவு பாக்கி இருக்கு", "english": "listen, how much is still pending this month (formal)", "expect": "ASK MONTH DUE", "supported": true}
 {"id": "ta_107", "lang": "ta", "text": "இந்த வாரம் வேலை செஞ்சு எவ்வளவு கிடைச்சுது", "english": "how much did I get for working this week", "expect": "ASK WEEK EARNED", "supported": true}
@@ -919,8 +919,8 @@
 {"id": "ta_119", "lang": "ta", "text": "இந்த வாரம் பஸ் சார்ஜுக்கு எவ்வளவு ஆச்சு சொல்லு", "english": "how much went on bus fare this week, tell me", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "ta_120", "lang": "ta", "text": "முதலாளி இன்னும் எனக்கு எவ்வளவு தரணும்", "english": "how much more does the owner have to give me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "ta_121", "lang": "ta", "text": "கேளு இந்த மாதம் முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன் சொல்லு", "english": "listen, how much did I borrow from the owner this month (formal), tell me", "expect": "ASK MONTH ADVANCE", "supported": true}
-{"id": "ta_122", "lang": "ta", "text": "போன வாரம் வீட்டுக்கு எவ்வளவு அனுப்பினேன்", "english": "how much did I send home last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": false}
-{"id": "ta_123", "lang": "ta", "text": "போன மாசம் மேஸ்திரிகிட்ட எவ்வளவு வாங்கினேன் சொல்லு", "english": "how much did I take from the mestri last month, tell me", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
+{"id": "ta_122", "lang": "ta", "text": "போன வாரம் வீட்டுக்கு எவ்வளவு அனுப்பினேன்", "english": "how much did I send home last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": true}
+{"id": "ta_123", "lang": "ta", "text": "போன மாசம் மேஸ்திரிகிட்ட எவ்வளவு வாங்கினேன் சொல்லு", "english": "how much did I take from the mestri last month, tell me", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
 {"id": "ta_124", "lang": "ta", "text": "அண்ணா இந்த வருஷ கணக்கு வழக்கு சொல்லு", "english": "brother, tell me the accounts this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "ta_125", "lang": "ta", "text": "இந்த வார இன்கம் எவ்வளவு", "english": "what is the income this week", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "ta_126", "lang": "ta", "text": "இன்று வீட்டுக்கு எவ்வளவு அனுப்பினேன்", "english": "how much did I send home today (formal)", "expect": "ASK DAY EXPENSE", "supported": true}
@@ -952,12 +952,12 @@
 {"id": "ta_152", "lang": "ta", "text": "ஏய் இன்றைய அட்வான்ஸ் எவ்வளவு", "english": "hey, how much is the advance today (formal)", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "ta_153", "lang": "ta", "text": "என் காசு எவ்வளவு நிக்குது", "english": "how much of my money is held up", "expect": "ASK ANY DUE", "supported": true}
 {"id": "ta_154", "lang": "ta", "text": "இந்த வருடம் பஸ் சார்ஜுக்கு எவ்வளவு ஆச்சு", "english": "how much went on bus fare this year (formal)", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "ta_155", "lang": "ta", "text": "அண்ணா போன வாரம் எவ்வளவு கூலி வந்துச்சு", "english": "brother, how much wage came last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "ta_155", "lang": "ta", "text": "அண்ணா போன வாரம் எவ்வளவு கூலி வந்துச்சு", "english": "brother, how much wage came last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "ta_156", "lang": "ta", "text": "இந்த வருஷம் எத்தனை ரூபா வந்துச்சு", "english": "how many rupees came this year", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "ta_157", "lang": "ta", "text": "நேத்து எவ்வளவு செலவு ஆச்சு", "english": "how much was spent yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": false}
+{"id": "ta_157", "lang": "ta", "text": "நேத்து எவ்வளவு செலவு ஆச்சு", "english": "how much was spent yesterday", "expect": "ASK YESTERDAY EXPENSE", "supported": true}
 {"id": "ta_158", "lang": "ta", "text": "கேளு இந்த வீக் எவ்வளவு அட்வான்ஸ் வாங்கினேன்", "english": "listen, how much advance did I take this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "ta_159", "lang": "ta", "text": "இன்றைய கணக்கு வழக்கு சொல்லு", "english": "tell me the accounts today (formal)", "expect": "ASK DAY ALL", "supported": true}
-{"id": "ta_160", "lang": "ta", "text": "போன வாரம் காசு எங்க போச்சு", "english": "where did the money go last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": false}
+{"id": "ta_160", "lang": "ta", "text": "போன வாரம் காசு எங்க போச்சு", "english": "where did the money go last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": true}
 {"id": "ta_161", "lang": "ta", "text": "இந்த வாரம் சாப்பாட்டுக்கு எவ்வளவு போச்சு", "english": "how much went on food this week", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "ta_162", "lang": "ta", "text": "அரசு ஒரு நாளுக்கு எவ்வளவு கூலி நிர்ணயிச்சிருக்கு", "english": "what daily wage has the government fixed", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "ta_163", "lang": "ta", "text": "இந்த வருஷம் எவ்வளவு செலவு ஆச்சு சொல்லு", "english": "how much was spent this year, tell me", "expect": "ASK YEAR EXPENSE", "supported": true}
@@ -967,7 +967,7 @@
 {"id": "ta_167", "lang": "ta", "text": "இந்த வருட கணக்கு எல்லாம் சொல்லு", "english": "tell me all the accounts this year (formal)", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "ta_168", "lang": "ta", "text": "இந்த வருஷம் இன்னும் எவ்வளவு பாக்கி இருக்கு", "english": "how much is still pending this year", "expect": "ASK YEAR DUE", "supported": true}
 {"id": "ta_169", "lang": "ta", "text": "இந்த வருஷம் முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "how much did I borrow from the owner this year", "expect": "ASK YEAR ADVANCE", "supported": true}
-{"id": "ta_170", "lang": "ta", "text": "அண்ணா நேத்து முன்பணம் எவ்வளவு வாங்கினேன்", "english": "brother, how much munpanam (advance) did I take yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": false}
+{"id": "ta_170", "lang": "ta", "text": "அண்ணா நேத்து முன்பணம் எவ்வளவு வாங்கினேன்", "english": "brother, how much munpanam (advance) did I take yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": true}
 {"id": "ta_171", "lang": "ta", "text": "இந்த வீக் கணக்கு எல்லாம் சொல்லு", "english": "tell me all the accounts this week", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "ta_172", "lang": "ta", "text": "இந்த மாதம் எவ்வளவு சம்பாதிச்சேன்னு சொல்லு", "english": "tell me how much I earned this month (formal)", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "ta_173", "lang": "ta", "text": "இந்த வருடம் நான் எவ்வளவு சம்பாதிச்சேன்", "english": "how much did I earn this year (formal)", "expect": "ASK YEAR EARNED", "supported": true}
@@ -976,11 +976,11 @@
 {"id": "ta_176", "lang": "ta", "text": "இந்த மாதம் பஸ் சார்ஜுக்கு எவ்வளவு ஆச்சு சொல்லு", "english": "how much went on bus fare this month (formal), tell me", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "ta_177", "lang": "ta", "text": "அண்ணா மேஸ்திரிகிட்ட இருந்து இன்னும் எவ்வளவு வரணும்", "english": "brother, how much more is to come from the mestri", "expect": "ASK ANY DUE", "supported": true}
 {"id": "ta_178", "lang": "ta", "text": "கேளு இந்த மாச செலவு சொல்லு", "english": "listen, tell me the spending this month", "expect": "ASK MONTH EXPENSE", "supported": true}
-{"id": "ta_179", "lang": "ta", "text": "போன வார வருமானம் எவ்வளவு சொல்லு", "english": "what is the income last week, tell me", "expect": "ASK LAST_WEEK EARNED", "supported": false}
-{"id": "ta_180", "lang": "ta", "text": "அண்ணா நேத்து பாக்கி எவ்வளவு", "english": "brother, how much is pending yesterday", "expect": "ASK YESTERDAY DUE", "supported": false}
+{"id": "ta_179", "lang": "ta", "text": "போன வார வருமானம் எவ்வளவு சொல்லு", "english": "what is the income last week, tell me", "expect": "ASK LAST_WEEK EARNED", "supported": true}
+{"id": "ta_180", "lang": "ta", "text": "அண்ணா நேத்து பாக்கி எவ்வளவு", "english": "brother, how much is pending yesterday", "expect": "ASK YESTERDAY DUE", "supported": true}
 {"id": "ta_181", "lang": "ta", "text": "என் காசு எவ்வளவு நிக்குது சொல்லு", "english": "how much of my money is held up, tell me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "ta_182", "lang": "ta", "text": "இந்த மாசம் இன்னும் எவ்வளவு பாக்கி இருக்கு", "english": "how much is still pending this month", "expect": "ASK MONTH DUE", "supported": true}
-{"id": "ta_183", "lang": "ta", "text": "போன வார முழு விவரம் சொல்லு", "english": "tell me the full details last week", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "ta_183", "lang": "ta", "text": "போன வார முழு விவரம் சொல்லு", "english": "tell me the full details last week", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "ta_184", "lang": "ta", "text": "இன்றைய செலவு சொல்லு", "english": "tell me the spending today (formal)", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "ta_185", "lang": "ta", "text": "இந்த மாச இன்கம் எவ்வளவு", "english": "what is the income this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "ta_186", "lang": "ta", "text": "இந்த மாசம் எவ்வளவு அட்வான்ஸ் வாங்கினேன்", "english": "how much advance did I take this month", "expect": "ASK MONTH ADVANCE", "supported": true}
@@ -988,13 +988,13 @@
 {"id": "ta_188", "lang": "ta", "text": "என் கணக்கை வேற யாராவது பார்க்க முடியுமா", "english": "can anyone else see my accounts", "expect": "TALK PRIVACY", "supported": true}
 {"id": "ta_189", "lang": "ta", "text": "இந்த வீக் பாக்கி எவ்வளவு கொஞ்சம் சொல்லு", "english": "how much is pending this week, please tell me", "expect": "ASK WEEK DUE", "supported": true}
 {"id": "ta_190", "lang": "ta", "text": "இந்த வருஷம் எவ்வளவு கூலி வந்துச்சு கொஞ்சம் சொல்லு", "english": "how much wage came this year, please tell me", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "ta_191", "lang": "ta", "text": "போன வாரம் முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "how much did I borrow from the owner last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": false}
+{"id": "ta_191", "lang": "ta", "text": "போன வாரம் முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "how much did I borrow from the owner last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": true}
 {"id": "ta_192", "lang": "ta", "text": "இன்று முதலாளிகிட்ட எவ்வளவு கடன் வாங்கினேன்", "english": "how much did I borrow from the owner today (formal)", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "ta_193", "lang": "ta", "text": "இதை எப்படி யூஸ் பண்றது", "english": "how do I use this", "expect": "TALK HELP", "supported": true}
 {"id": "ta_194", "lang": "ta", "text": "என் காசு எவ்வளவு நிக்குது கொஞ்சம் சொல்லு", "english": "how much of my money is held up, please tell me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "ta_195", "lang": "ta", "text": "இந்த வாரம் கான்ட்ராக்டர்கிட்ட எவ்வளவு பணம் வாங்கினேன்", "english": "how much money did I take from the contractor this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "ta_196", "lang": "ta", "text": "இன்னைக்கு தேதி என்ன", "english": "what is the date today", "expect": "TALK DATE", "supported": true}
-{"id": "ta_197", "lang": "ta", "text": "நேத்து மேஸ்திரிகிட்ட எவ்வளவு வாங்கினேன்", "english": "how much did I take from the mestri yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": false}
+{"id": "ta_197", "lang": "ta", "text": "நேத்து மேஸ்திரிகிட்ட எவ்வளவு வாங்கினேன்", "english": "how much did I take from the mestri yesterday", "expect": "ASK YESTERDAY ADVANCE", "supported": true}
 {"id": "ta_198", "lang": "ta", "text": "இன்றைய முழு கணக்கு சொல்லு", "english": "tell me the full account today (formal)", "expect": "ASK DAY ALL", "supported": true}
 {"id": "ta_199", "lang": "ta", "text": "இந்த வார அட்வான்ஸ் எவ்வளவு", "english": "how much is the advance this week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "ta_200", "lang": "ta", "text": "இந்த மாசம் என் சம்பளம் எவ்வளவு ஆச்சு", "english": "how much did my pay come to this month", "expect": "ASK MONTH EARNED", "supported": true}
@@ -1009,7 +1009,7 @@
 {"id": "en_009", "lang": "en", "text": "tell me everything for this month", "english": "tell me everything for this month", "expect": "ASK MONTH ALL", "supported": true}
 {"id": "en_010", "lang": "en", "text": "how much went on food today", "english": "how much went on food today", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "en_011", "lang": "en", "text": "how much loan I took from seth for today", "english": "how much loan I took from seth for today", "expect": "ASK DAY ADVANCE", "supported": true}
-{"id": "en_012", "lang": "en", "text": "bro show me last month's report", "english": "bro show me last month's report", "expect": "ASK LAST_MONTH ALL", "supported": false}
+{"id": "en_012", "lang": "en", "text": "bro show me last month's report", "english": "bro show me last month's report", "expect": "ASK LAST_MONTH ALL", "supported": true}
 {"id": "en_013", "lang": "en", "text": "this year's summary", "english": "this year's summary", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "en_014", "lang": "en", "text": "how much money did I take from the contractor for today", "english": "how much money did I take from the contractor for today", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "en_015", "lang": "en", "text": "how much is pending in this month", "english": "how much is pending in this month", "expect": "ASK MONTH DUE", "supported": true}
@@ -1017,24 +1017,24 @@
 {"id": "en_017", "lang": "en", "text": "how much I earned in this month", "english": "how much I earned in this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "en_018", "lang": "en", "text": "full details for this whole week please", "english": "full details for this whole week please", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "en_019", "lang": "en", "text": "how much of my money is stuck with the contractor please", "english": "how much of my money is stuck with the contractor please", "expect": "ASK ANY DUE", "supported": true}
-{"id": "en_020", "lang": "en", "text": "last week's summary", "english": "last week's summary", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "en_020", "lang": "en", "text": "last week's summary", "english": "last week's summary", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "en_021", "lang": "en", "text": "how are you", "english": "how are you", "expect": "TALK HOW_ARE_YOU", "supported": true}
 {"id": "en_022", "lang": "en", "text": "listen how much did I spend this year", "english": "listen how much did I spend this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "en_023", "lang": "en", "text": "what is the government rate for one day of labour", "english": "what is the government rate for one day of labour", "expect": "ASK ANY MIN_WAGE", "supported": true}
-{"id": "en_024", "lang": "en", "text": "bro how much loan I took from seth last week", "english": "bro how much loan I took from seth last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": false}
-{"id": "en_025", "lang": "en", "text": "how much went on food last month", "english": "how much went on food last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": false}
+{"id": "en_024", "lang": "en", "text": "bro how much loan I took from seth last week", "english": "bro how much loan I took from seth last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": true}
+{"id": "en_025", "lang": "en", "text": "how much went on food last month", "english": "how much went on food last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": true}
 {"id": "en_026", "lang": "en", "text": "how much went on food in this month", "english": "how much went on food in this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "en_027", "lang": "en", "text": "hey how much loan I took from seth this month", "english": "hey how much loan I took from seth this month", "expect": "ASK MONTH ADVANCE", "supported": true}
-{"id": "en_028", "lang": "en", "text": "what are my expenses last month", "english": "what are my expenses last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": false}
+{"id": "en_028", "lang": "en", "text": "what are my expenses last month", "english": "what are my expenses last month", "expect": "ASK LAST_MONTH EXPENSE", "supported": true}
 {"id": "en_029", "lang": "en", "text": "listen this month's advance amount", "english": "listen this month's advance amount", "expect": "ASK MONTH ADVANCE", "supported": true}
-{"id": "en_030", "lang": "en", "text": "listen how much I earned last week", "english": "listen how much I earned last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "en_030", "lang": "en", "text": "listen how much I earned last week", "english": "listen how much I earned last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "en_031", "lang": "en", "text": "play a song", "english": "play a song", "expect": "NONE", "supported": true}
-{"id": "en_032", "lang": "en", "text": "how much wages I made last week", "english": "how much wages I made last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "en_032", "lang": "en", "text": "how much wages I made last week", "english": "how much wages I made last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "en_033", "lang": "en", "text": "hey how much balance is due to me tell me", "english": "hey how much balance is due to me tell me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "en_034", "lang": "en", "text": "how much I earned this week", "english": "how much I earned this week", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "en_035", "lang": "en", "text": "tell me this year's total earning", "english": "tell me this year's total earning", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "en_036", "lang": "en", "text": "how much did I earn so far this year", "english": "how much did I earn so far this year", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "en_037", "lang": "en", "text": "tell me everything for yesterday", "english": "tell me everything for yesterday", "expect": "ASK YESTERDAY ALL", "supported": false}
+{"id": "en_037", "lang": "en", "text": "tell me everything for yesterday", "english": "tell me everything for yesterday", "expect": "ASK YESTERDAY ALL", "supported": true}
 {"id": "en_038", "lang": "en", "text": "how much is pending this whole week", "english": "how much is pending this whole week", "expect": "ASK WEEK DUE", "supported": true}
 {"id": "en_039", "lang": "en", "text": "listen this week's pending amount", "english": "listen this week's pending amount", "expect": "ASK WEEK DUE", "supported": true}
 {"id": "en_040", "lang": "en", "text": "how much balance is due to me", "english": "how much balance is due to me", "expect": "ASK ANY DUE", "supported": true}
@@ -1044,11 +1044,11 @@
 {"id": "en_044", "lang": "en", "text": "what did I get for my work for today", "english": "what did I get for my work for today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "en_045", "lang": "en", "text": "hey what are my expenses this week", "english": "hey what are my expenses this week", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "en_046", "lang": "en", "text": "how much loan I took from seth today", "english": "how much loan I took from seth today", "expect": "ASK DAY ADVANCE", "supported": true}
-{"id": "en_047", "lang": "en", "text": "last month's advance amount", "english": "last month's advance amount", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
+{"id": "en_047", "lang": "en", "text": "last month's advance amount", "english": "last month's advance amount", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
 {"id": "en_048", "lang": "en", "text": "what did I get for my work this week", "english": "what did I get for my work this week", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "en_049", "lang": "en", "text": "hey how much is pending today", "english": "hey how much is pending today", "expect": "ASK DAY DUE", "supported": true}
 {"id": "en_050", "lang": "en", "text": "hey give me today's full account", "english": "hey give me today's full account", "expect": "ASK DAY ALL", "supported": true}
-{"id": "en_051", "lang": "en", "text": "show last month's hisaab", "english": "show last month's hisaab", "expect": "ASK LAST_MONTH ALL", "supported": false}
+{"id": "en_051", "lang": "en", "text": "show last month's hisaab", "english": "show last month's hisaab", "expect": "ASK LAST_MONTH ALL", "supported": true}
 {"id": "en_052", "lang": "en", "text": "who made you", "english": "who made you", "expect": "TALK MAKER", "supported": true}
 {"id": "en_053", "lang": "en", "text": "how much went on food in this month please", "english": "how much went on food in this month please", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "en_054", "lang": "en", "text": "how much went on food for today", "english": "how much went on food for today", "expect": "ASK DAY EXPENSE", "supported": true}
@@ -1066,15 +1066,15 @@
 {"id": "en_066", "lang": "en", "text": "how much is pending today", "english": "how much is pending today", "expect": "ASK DAY DUE", "supported": true}
 {"id": "en_067", "lang": "en", "text": "how much money did I take from the contractor so far this year", "english": "how much money did I take from the contractor so far this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "en_068", "lang": "en", "text": "bro how much more I have to get", "english": "bro how much more I have to get", "expect": "ASK ANY DUE", "supported": true}
-{"id": "en_069", "lang": "en", "text": "bro show me last week's report", "english": "bro show me last week's report", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "en_069", "lang": "en", "text": "bro show me last week's report", "english": "bro show me last week's report", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "en_070", "lang": "en", "text": "full details for so far this year please", "english": "full details for so far this year please", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "en_071", "lang": "en", "text": "listen did I get my full wages for today", "english": "listen did I get my full wages for today", "expect": "ASK DAY DUE", "supported": true}
-{"id": "en_072", "lang": "en", "text": "hey how much did I send home last week", "english": "hey how much did I send home last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": false}
+{"id": "en_072", "lang": "en", "text": "hey how much did I send home last week", "english": "hey how much did I send home last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": true}
 {"id": "en_073", "lang": "en", "text": "bro tell me everything for this whole week", "english": "bro tell me everything for this whole week", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "en_074", "lang": "en", "text": "how much money did I take from the contractor this year", "english": "how much money did I take from the contractor this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "en_075", "lang": "en", "text": "how much salary came this month", "english": "how much salary came this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "en_076", "lang": "en", "text": "bro did I get my full wages this year", "english": "bro did I get my full wages this year", "expect": "ASK YEAR DUE", "supported": true}
-{"id": "en_077", "lang": "en", "text": "how much did the maistry give me in advance last week", "english": "how much did the maistry give me in advance last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": false}
+{"id": "en_077", "lang": "en", "text": "how much did the maistry give me in advance last week", "english": "how much did the maistry give me in advance last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": true}
 {"id": "en_078", "lang": "en", "text": "how much did I borrow from the owner so far this year tell me", "english": "how much did I borrow from the owner so far this year tell me", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "en_079", "lang": "en", "text": "bro full details for this week please", "english": "bro full details for this week please", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "en_080", "lang": "en", "text": "show today's hisaab", "english": "show today's hisaab", "expect": "ASK DAY ALL", "supported": true}
@@ -1083,7 +1083,7 @@
 {"id": "en_083", "lang": "en", "text": "hey how much did I send home so far this year", "english": "hey how much did I send home so far this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "en_084", "lang": "en", "text": "full details for this week please", "english": "full details for this week please", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "en_085", "lang": "en", "text": "today's spending please", "english": "today's spending please", "expect": "ASK DAY EXPENSE", "supported": true}
-{"id": "en_086", "lang": "en", "text": "what is my income last week", "english": "what is my income last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "en_086", "lang": "en", "text": "what is my income last week", "english": "what is my income last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "en_087", "lang": "en", "text": "bro did I get my full wages so far this year", "english": "bro did I get my full wages so far this year", "expect": "ASK YEAR DUE", "supported": true}
 {"id": "en_088", "lang": "en", "text": "what is the minimum daily wage", "english": "what is the minimum daily wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "en_089", "lang": "en", "text": "show this week's hisaab", "english": "show this week's hisaab", "expect": "ASK WEEK ALL", "supported": true}
@@ -1095,9 +1095,9 @@
 {"id": "en_095", "lang": "en", "text": "tell me everything for for today", "english": "tell me everything for for today", "expect": "ASK DAY ALL", "supported": true}
 {"id": "en_096", "lang": "en", "text": "how much more I have to get", "english": "how much more I have to get", "expect": "ASK ANY DUE", "supported": true}
 {"id": "en_097", "lang": "en", "text": "how much did I spend this month", "english": "how much did I spend this month", "expect": "ASK MONTH EXPENSE", "supported": true}
-{"id": "en_098", "lang": "en", "text": "show me last month's report", "english": "show me last month's report", "expect": "ASK LAST_MONTH ALL", "supported": false}
+{"id": "en_098", "lang": "en", "text": "show me last month's report", "english": "show me last month's report", "expect": "ASK LAST_MONTH ALL", "supported": true}
 {"id": "en_099", "lang": "en", "text": "this week's pending amount", "english": "this week's pending amount", "expect": "ASK WEEK DUE", "supported": true}
-{"id": "en_100", "lang": "en", "text": "hey full details for last week please", "english": "hey full details for last week please", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "en_100", "lang": "en", "text": "hey full details for last week please", "english": "hey full details for last week please", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "en_101", "lang": "en", "text": "today's earnings please", "english": "today's earnings please", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "en_102", "lang": "en", "text": "how much does the owner still have to pay me", "english": "how much does the owner still have to pay me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "en_103", "lang": "en", "text": "how do I use this app", "english": "how do I use this app", "expect": "TALK HELP", "supported": true}
@@ -1107,7 +1107,7 @@
 {"id": "en_107", "lang": "en", "text": "bro what is my income this whole week", "english": "bro what is my income this whole week", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "en_108", "lang": "en", "text": "bro give me today's full account", "english": "bro give me today's full account", "expect": "ASK DAY ALL", "supported": true}
 {"id": "en_109", "lang": "en", "text": "did I get my full wages this whole week", "english": "did I get my full wages this whole week", "expect": "ASK WEEK DUE", "supported": true}
-{"id": "en_110", "lang": "en", "text": "hey show yesterday's hisaab", "english": "hey show yesterday's hisaab", "expect": "ASK YESTERDAY ALL", "supported": false}
+{"id": "en_110", "lang": "en", "text": "hey show yesterday's hisaab", "english": "hey show yesterday's hisaab", "expect": "ASK YESTERDAY ALL", "supported": true}
 {"id": "en_111", "lang": "en", "text": "how much went on bus fare so far this year please", "english": "how much went on bus fare so far this year please", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "en_112", "lang": "en", "text": "this month's summary", "english": "this month's summary", "expect": "ASK MONTH ALL", "supported": true}
 {"id": "en_113", "lang": "en", "text": "how much did I send home this whole week", "english": "how much did I send home this whole week", "expect": "ASK WEEK EXPENSE", "supported": true}
@@ -1118,9 +1118,9 @@
 {"id": "en_118", "lang": "en", "text": "this month's spending please", "english": "this month's spending please", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "en_119", "lang": "en", "text": "how much did I send home in this month", "english": "how much did I send home in this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "en_120", "lang": "en", "text": "who are you", "english": "who are you", "expect": "TALK NAME", "supported": true}
-{"id": "en_121", "lang": "en", "text": "give me last week's full account", "english": "give me last week's full account", "expect": "ASK LAST_WEEK ALL", "supported": false}
+{"id": "en_121", "lang": "en", "text": "give me last week's full account", "english": "give me last week's full account", "expect": "ASK LAST_WEEK ALL", "supported": true}
 {"id": "en_122", "lang": "en", "text": "what is my income so far this year", "english": "what is my income so far this year", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "en_123", "lang": "en", "text": "listen how much wages I made yesterday", "english": "listen how much wages I made yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "en_123", "lang": "en", "text": "listen how much wages I made yesterday", "english": "listen how much wages I made yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "en_124", "lang": "en", "text": "how much did I borrow from the owner this year", "english": "how much did I borrow from the owner this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "en_125", "lang": "en", "text": "how much went on food this week", "english": "how much went on food this week", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "en_126", "lang": "en", "text": "bro how much loan I took from seth this whole week", "english": "bro how much loan I took from seth this whole week", "expect": "ASK WEEK ADVANCE", "supported": true}
@@ -1132,7 +1132,7 @@
 {"id": "en_132", "lang": "en", "text": "when will the bus come", "english": "when will the bus come", "expect": "NONE", "supported": true}
 {"id": "en_133", "lang": "en", "text": "what are my expenses this month", "english": "what are my expenses this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "en_134", "lang": "en", "text": "how much money did I make so far this year", "english": "how much money did I make so far this year", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "en_135", "lang": "en", "text": "how much money did I take from the contractor last week", "english": "how much money did I take from the contractor last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": false}
+{"id": "en_135", "lang": "en", "text": "how much money did I take from the contractor last week", "english": "how much money did I take from the contractor last week", "expect": "ASK LAST_WEEK ADVANCE", "supported": true}
 {"id": "en_136", "lang": "en", "text": "listen show this week's hisaab", "english": "listen show this week's hisaab", "expect": "ASK WEEK ALL", "supported": true}
 {"id": "en_137", "lang": "en", "text": "this month's advance amount", "english": "this month's advance amount", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "en_138", "lang": "en", "text": "listen how much loan I took from seth this week", "english": "listen how much loan I took from seth this week", "expect": "ASK WEEK ADVANCE", "supported": true}
@@ -1146,7 +1146,7 @@
 {"id": "en_146", "lang": "en", "text": "how much I earned this whole week tell me", "english": "how much I earned this whole week tell me", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "en_147", "lang": "en", "text": "how much advance I took for today", "english": "how much advance I took for today", "expect": "ASK DAY ADVANCE", "supported": true}
 {"id": "en_148", "lang": "en", "text": "listen full details for in this month please", "english": "listen full details for in this month please", "expect": "ASK MONTH ALL", "supported": true}
-{"id": "en_149", "lang": "en", "text": "how much salary came yesterday", "english": "how much salary came yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "en_149", "lang": "en", "text": "how much salary came yesterday", "english": "how much salary came yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "en_150", "lang": "en", "text": "how much salary came so far this year", "english": "how much salary came so far this year", "expect": "ASK YEAR EARNED", "supported": true}
 {"id": "en_151", "lang": "en", "text": "what is the government minimum wage", "english": "what is the government minimum wage", "expect": "ASK ANY MIN_WAGE", "supported": true}
 {"id": "en_152", "lang": "en", "text": "how much did I earn for today please", "english": "how much did I earn for today please", "expect": "ASK DAY EARNED", "supported": true}
@@ -1155,39 +1155,39 @@
 {"id": "en_155", "lang": "en", "text": "full details for in this month please", "english": "full details for in this month please", "expect": "ASK MONTH ALL", "supported": true}
 {"id": "en_156", "lang": "en", "text": "how much did I borrow from the owner this month", "english": "how much did I borrow from the owner this month", "expect": "ASK MONTH ADVANCE", "supported": true}
 {"id": "en_157", "lang": "en", "text": "how much I earned so far this year", "english": "how much I earned so far this year", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "en_158", "lang": "en", "text": "hey what is my income last month please", "english": "hey what is my income last month please", "expect": "ASK LAST_MONTH EARNED", "supported": false}
+{"id": "en_158", "lang": "en", "text": "hey what is my income last month please", "english": "hey what is my income last month please", "expect": "ASK LAST_MONTH EARNED", "supported": true}
 {"id": "en_159", "lang": "en", "text": "when will we get ration", "english": "when will we get ration", "expect": "NONE", "supported": true}
-{"id": "en_160", "lang": "en", "text": "how much did the maistry give me in advance last month", "english": "how much did the maistry give me in advance last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": false}
+{"id": "en_160", "lang": "en", "text": "how much did the maistry give me in advance last month", "english": "how much did the maistry give me in advance last month", "expect": "ASK LAST_MONTH ADVANCE", "supported": true}
 {"id": "en_161", "lang": "en", "text": "how much did the maistry give me in advance this year", "english": "how much did the maistry give me in advance this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "en_162", "lang": "en", "text": "what did I get for my work today", "english": "what did I get for my work today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "en_163", "lang": "en", "text": "how much should I get per day as per government", "english": "how much should I get per day as per government", "expect": "ASK ANY MIN_WAGE", "supported": true}
-{"id": "en_164", "lang": "en", "text": "bro last week's earnings please", "english": "bro last week's earnings please", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "en_164", "lang": "en", "text": "bro last week's earnings please", "english": "bro last week's earnings please", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "en_165", "lang": "en", "text": "tell me everything for this year", "english": "tell me everything for this year", "expect": "ASK YEAR ALL", "supported": true}
-{"id": "en_166", "lang": "en", "text": "where did all my money go last week", "english": "where did all my money go last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": false}
-{"id": "en_167", "lang": "en", "text": "how much did I spend last week", "english": "how much did I spend last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": false}
+{"id": "en_166", "lang": "en", "text": "where did all my money go last week", "english": "where did all my money go last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": true}
+{"id": "en_167", "lang": "en", "text": "how much did I spend last week", "english": "how much did I spend last week", "expect": "ASK LAST_WEEK EXPENSE", "supported": true}
 {"id": "en_168", "lang": "en", "text": "how much wages I made today", "english": "how much wages I made today", "expect": "ASK DAY EARNED", "supported": true}
 {"id": "en_169", "lang": "en", "text": "bro how much does the owner still have to pay me", "english": "bro how much does the owner still have to pay me", "expect": "ASK ANY DUE", "supported": true}
 {"id": "en_170", "lang": "en", "text": "how much did I borrow from the owner so far this year", "english": "how much did I borrow from the owner so far this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "en_171", "lang": "en", "text": "where is the nearest hospital", "english": "where is the nearest hospital", "expect": "NONE", "supported": true}
 {"id": "en_172", "lang": "en", "text": "bro how much did I spend this year", "english": "bro how much did I spend this year", "expect": "ASK YEAR EXPENSE", "supported": true}
-{"id": "en_173", "lang": "en", "text": "bro how much is pending last week", "english": "bro how much is pending last week", "expect": "ASK LAST_WEEK DUE", "supported": false}
+{"id": "en_173", "lang": "en", "text": "bro how much is pending last week", "english": "bro how much is pending last week", "expect": "ASK LAST_WEEK DUE", "supported": true}
 {"id": "en_174", "lang": "en", "text": "where did all my money go for today please", "english": "where did all my money go for today please", "expect": "ASK DAY EXPENSE", "supported": true}
 {"id": "en_175", "lang": "en", "text": "this week's earnings please", "english": "this week's earnings please", "expect": "ASK WEEK EARNED", "supported": true}
 {"id": "en_176", "lang": "en", "text": "bro how much loan I took from seth so far this year", "english": "bro how much loan I took from seth so far this year", "expect": "ASK YEAR ADVANCE", "supported": true}
-{"id": "en_177", "lang": "en", "text": "how much money did I make yesterday", "english": "how much money did I make yesterday", "expect": "ASK YESTERDAY EARNED", "supported": false}
+{"id": "en_177", "lang": "en", "text": "how much money did I make yesterday", "english": "how much money did I make yesterday", "expect": "ASK YESTERDAY EARNED", "supported": true}
 {"id": "en_178", "lang": "en", "text": "hey how much went on food so far this year", "english": "hey how much went on food so far this year", "expect": "ASK YEAR EXPENSE", "supported": true}
 {"id": "en_179", "lang": "en", "text": "how much did I borrow from the owner this whole week", "english": "how much did I borrow from the owner this whole week", "expect": "ASK WEEK ADVANCE", "supported": true}
 {"id": "en_180", "lang": "en", "text": "listen tell me everything for this year", "english": "listen tell me everything for this year", "expect": "ASK YEAR ALL", "supported": true}
 {"id": "en_181", "lang": "en", "text": "hey how much did the maistry give me in advance this year", "english": "hey how much did the maistry give me in advance this year", "expect": "ASK YEAR ADVANCE", "supported": true}
 {"id": "en_182", "lang": "en", "text": "bro how much of my money is stuck with the contractor", "english": "bro how much of my money is stuck with the contractor", "expect": "ASK ANY DUE", "supported": true}
-{"id": "en_183", "lang": "en", "text": "bro how much I earned last week", "english": "bro how much I earned last week", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "en_183", "lang": "en", "text": "bro how much I earned last week", "english": "bro how much I earned last week", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "en_184", "lang": "en", "text": "what time is the train", "english": "what time is the train", "expect": "NONE", "supported": true}
 {"id": "en_185", "lang": "en", "text": "bro how much I earned in this month tell me", "english": "bro how much I earned in this month tell me", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "en_186", "lang": "en", "text": "how much did I spend in this month", "english": "how much did I spend in this month", "expect": "ASK MONTH EXPENSE", "supported": true}
 {"id": "en_187", "lang": "en", "text": "this week's spending please", "english": "this week's spending please", "expect": "ASK WEEK EXPENSE", "supported": true}
 {"id": "en_188", "lang": "en", "text": "can anyone else see my accounts", "english": "can anyone else see my accounts", "expect": "TALK PRIVACY", "supported": true}
 {"id": "en_189", "lang": "en", "text": "how much money did I make this year tell me", "english": "how much money did I make this year tell me", "expect": "ASK YEAR EARNED", "supported": true}
-{"id": "en_190", "lang": "en", "text": "what is my income last week please", "english": "what is my income last week please", "expect": "ASK LAST_WEEK EARNED", "supported": false}
+{"id": "en_190", "lang": "en", "text": "what is my income last week please", "english": "what is my income last week please", "expect": "ASK LAST_WEEK EARNED", "supported": true}
 {"id": "en_191", "lang": "en", "text": "how much I earned this month", "english": "how much I earned this month", "expect": "ASK MONTH EARNED", "supported": true}
 {"id": "en_192", "lang": "en", "text": "which day is it today", "english": "which day is it today", "expect": "TALK DATE", "supported": true}
 {"id": "en_193", "lang": "en", "text": "how much went on food this month", "english": "how much went on food this month", "expect": "ASK MONTH EXPENSE", "supported": true}

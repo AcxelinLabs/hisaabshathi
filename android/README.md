@@ -180,6 +180,35 @@ The fine-tuned model was trained on sentences built from the same templates as t
 (with no overlapping sentences), so 95% shows it can learn the task, not how it does on real
 speech.
 
+### Understanding questions without the model (19 Nov 2026)
+
+The rules (`core/.../QuestionWords.kt`, `RuleBasedExtractor.query`) read ledger questions in
+all six languages with no model:
+
+- **Topic from what the sentence says:** "still owed", "took from the contractor" (advance),
+  "where did the money go" (spent), "did I get my full wages" (still owed). Looser clues,
+  such as a thing bought, "work" or "came", count only with "how much", and only when the
+  word after it is about money ("कितने लोग", how many people, is not).
+- **Local and mixed words:** dihadi, peshgi, hajira, dadan, sardar, mestri, mungada,
+  munpanam, hisab, income, pending. Word roots ("कमा*", "సంపాద*", "செலவ*") match endings
+  that aren't listed.
+- **New periods:** yesterday, last week and last month can now be asked about.
+- **Fewer false readings:** short words must match exactly, since one letter turns
+  "कितने" (how many) into "किसने" (who). Clock-time and price questions ("ट्रेन कितने बजे",
+  "petrol price") are left alone, and "बता दो" (please tell) is no longer read as 2.
+
+| Test (typed text, rules alone) | Before | After |
+|---|---|---|
+| `questions_unseen.jsonl`: 155 questions written after the rules, never tuned on | 61 (39%) | 142 (92%) |
+| Everyday questions in it taken as ledger questions | 8 of 31 | 1 of 31 |
+| `questions_heldout.jsonl` (167) | 46 | 167 |
+| `voice_questions.jsonl` (1,200, `tools/make_voice_questions.py`; tuned on) | 29–62% per language | 100% |
+| Corpus (638) / real-speech entries (168) | 638 / 95 | 638 / 95 |
+
+`QuestionRulesTest` keeps the main cases and 52 everyday questions that must be left alone.
+The voice set's workbook is for recording real voices, to measure speech and understanding
+together.
+
 ### Choosing the language model (18 Nov 2026)
 
 Three small models were fine-tuned the same way on identical data (`tools/finetune_compare.py`:

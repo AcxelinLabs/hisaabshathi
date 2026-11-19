@@ -210,8 +210,34 @@ object NumberWords {
         return out
     }
 
+    /**
+     * Hindi "दो" is also "give / do" after a verb: "बता दो ना" (please tell), "रिचार्ज कर दो"
+     * (do the recharge), "दे दो" (give it). There it is not 2, unless an amount follows
+     * ("बता दो सौ" is still two hundred).
+     */
+    private val hindiVerbBeforeDo: Set<String> = setOf(
+        "बता", "दे", "कर", "ले", "दिखा", "सुना", "भेज", "लिख", "डाल", "रख", "जोड़", "जोड", "हटा", "बना", "करवा", "समझा",
+        "बोल", "मिला", "लगा", "चला", "रोक", "छोड़", "छोड", "खोल", "बचा", "गिन", "सुन", "देख", "निकाल", "बदल", "मिटा",
+    ).map { Text.normalize(it) }.toSet()
+    private val hindiDo = Text.normalize("दो")
+    private val hindiDoEnders = setOf("ना", "न", "जी", "भाई", "यार", "please", "प्लीज", "भैया").map { Text.normalize(it) }.toSet()
+    /** Words that make "दो" a count even after a verb: "कर दो घंटे" is two hours. */
+    private val hindiCounted: Set<String> = setOf("घंटे", "घंटा", "घण्टे", "पीस", "दिन", "किलो", "हफ्ते", "महीने", "साल", "बार", "लोग", "जन")
+        .map { Text.normalize(it) }.toSet()
+
+    /** Odia "କି ବାର" / "କେଉଁ ବାର" (which day of the week) is not twelve. */
+    private val odiaWhich = setOf("କି", "କେଉଁ", "କଣ", "କେଉଁଦିନ").map { Text.normalize(it) }.toSet()
+    private val odiaBara = Text.normalize("ବାର")
+
     private fun unitValue(tokens: List<String>, i: Int): Double? {
         val t = tokens[i]
+        // "पूरा ब्यौरा दो", "पैसे दो": a final "दो" is "give".
+        if (t == hindiDo && i > 0 && (tokens.getOrNull(i + 1) == null || tokens[i + 1] in hindiDoEnders)) return null
+        if (t == hindiDo && i > 0 && tokens[i - 1] in hindiVerbBeforeDo) {
+            val next = tokens.getOrNull(i + 1)
+            if (next == null || (next !in multipliers && next !in currency && next !in hindiCounted && !digits.matches(next))) return null
+        }
+        if (t == odiaBara && i > 0 && tokens[i - 1] in odiaWhich) return null
         units[t]?.let { return it }
         // A misheard number word ("ಅರುವತ್ತು" for "ಅರವತ್ತು"): accept only an unambiguous match.
         if (t !in multipliers && t !in fractionPrefix && t !in notNumbers && t !in englishSaidAmbiguous) Fuzzy.unique(t, units)?.let { return it }

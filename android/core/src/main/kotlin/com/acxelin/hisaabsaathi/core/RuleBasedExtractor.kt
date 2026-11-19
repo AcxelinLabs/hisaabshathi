@@ -114,7 +114,7 @@ object RuleBasedExtractor {
         val toks = NumberWords.parse(tokens)
         val wordSet = tokens.toSet()
 
-        query(wordSet, toks)?.let { return Extraction(transcript, query = it) }
+        query(tokens, toks)?.let { return Extraction(transcript, query = it) }
 
         val dayOffset = when {
             wordSet.any { it in dayBefore } -> -2
@@ -256,23 +256,118 @@ object RuleBasedExtractor {
     private fun categoryNear(toks: List<Tok>, i: Int): ExpenseCategory? =
         window(toks, i).mapNotNull { (w, d) -> categoryOf(w)?.let { it to d } }.minByOrNull { it.second }?.first
 
-    private fun query(wordSet: Set<String>, toks: List<Tok>): Query? {
-        if (wordSet.any { it in minWageWords.exact }) return Query(QueryPeriod.DAY, QueryTopic.MIN_WAGE)
-        val asksHowMuch = wordSet.any { it in questionWords.exact }
-        if (!asksHowMuch) return null
+    private val lastWeek = QueryPeriod.LAST_WEEK
+    private val periodSets: List<Pair<QueryPeriod, Keywords>> = listOf(
+        QueryPeriod.DAY to (QuestionWords.day + periodWords[0].second),
+        QueryPeriod.WEEK to (QuestionWords.week + periodWords[1].second),
+        QueryPeriod.MONTH to (QuestionWords.month + periodWords[2].second),
+        QueryPeriod.YEAR to (QuestionWords.year + periodWords[3].second),
+    )
+    private val yesterdayAsked = QuestionWords.yesterday + yesterday
+
+    /** The period a question names: "this week", "इस मंथ का", "ଗଲା ସପ୍ତାହ", "நேத்து"; null when none. */
+    private fun periodOf(tokens: List<String>): QueryPeriod? {
+        for ((i, t) in tokens.withIndex()) {
+            // Exact, or one letter off for a long word: short ones ("இந்த", this) are too close to other words.
+            val long = t.codePointCount(0, t.length) >= 6
+            val p = periodSets.firstOrNull { (_, ws) -> t in ws.exact || (long && t in ws) }?.first ?: continue
+            // "last week", "पिछले महीने": the word right before decides.
+            val last = i > 0 && tokens[i - 1] in QuestionWords.last
+            return when {
+                last && p == QueryPeriod.WEEK -> lastWeek
+                last && p == QueryPeriod.MONTH -> QueryPeriod.LAST_MONTH
+                else -> p
+            }
+        }
+        return if (tokens.any { it in yesterdayAsked.exact }) QueryPeriod.YESTERDAY else null
+    }
+
+    /**
+     * A question about the worker's records: its period and topic, or null when the
+     * utterance is not one. Clear topic words ("pending", "took from the contractor", "where
+     * did the money go") decide the topic; looser clues (a category such as "phone", "got",
+     * "work") count only together with a real question word, so "मेरा फोन चार्ज नहीं हो रहा"
+     * or "where is the hospital" never become ledger questions.
+     */
+    private fun query(rawTokens: List<String>, toks: List<Tok>): Query? {
+        val q = QuestionWords
+        val tokens = rawTokens.map { it.removeSuffix("'s") }
+        // Short words must match exactly: one letter turns "कितने" (how many) into "किसने" (who),
+        // "बकाया" (dues) into "बनाया" (made), "ఎన్ని" (how many) into "అన్ని" (all).
+        fun hasExactish(k: Keywords) = tokens.any { t -> t in k.exact || k.hasStem(t) || (t.codePointCount(0, t.length) >= 6 && t in k) }
+
+        if (hasExactish(minWageWords) || hasExactish(q.minimum)) return Query(QueryPeriod.DAY, QueryTopic.MIN_WAGE)
         // "how much" with amounts in it is an entry, not a question.
         if (toks.any { it is Num && abs(it.value) > 1.0 }) return null
-        val saidPeriod = periodWords.firstOrNull { (_, ws) -> wordSet.any { it in (ws as Keywords).exact } }?.first
-        val period = saidPeriod ?: QueryPeriod.WEEK
-        val topic = when {
-            wordSet.any { it in dueWords } -> QueryTopic.DUE
-            wordSet.any { it in advance } -> QueryTopic.ADVANCE
-            wordSet.any { it in expense } -> QueryTopic.EXPENSE
-            wordSet.any { it in wage } -> QueryTopic.EARNED
-            else -> QueryTopic.ALL
+
+        val strongAsk = hasExactish(q.howMuch) || hasExactish(questionWords) || hasExactish(q.request)
+        val weakAsk = hasExactish(q.weakAsk)
+        val ledgerNoun = hasExactish(q.ledger)
+        val period = periodOf(tokens)
+        val employer = hasExactish(q.employer)
+        val money = hasExactish(q.moneyNoun)
+        // "last" before a week or month ("ଗଲା ସପ୍ତାହ", "போன மாசம்") is not "went" (ଗଲା) or "phone" (போன்).
+        val lastBeforePeriod = tokens.indices.filter { i ->
+            tokens[i] in q.last.exact && tokens.getOrNull(i + 1)?.let { n -> periodSets.any { (_, ws) -> n in ws.exact } } == true
+        }.toSet()
+        val went = tokens.withIndex().any { (i, t) ->
+            i !in lastBeforePeriod && (t in q.went.exact || (t.codePointCount(0, t.length) >= 6 && t in q.went))
         }
-        // "What is your name?" has a question word but nothing about the ledger: not ours.
-        if (topic == QueryTopic.ALL && saidPeriod == null) return null
-        return Query(period, topic)
+        val english = tokens.joinToString(" ")
+        // "did I get my full wages", "पूरा पैसा मिला क्या", "முழு கூலி கிடைச்சுதா": a yes/no
+        // question about whether anything is still owed.
+        val fullyPaid = hasExactish(q.full) && hasExactish(q.got) && !hasExactish(q.howMuch) && !ledgerNoun
+
+        val explicit: QueryTopic? = when {
+            hasExactish(dueWords) || hasExactish(q.due) || tokens.any { it in q.dueExact } || fullyPaid || (employer && hasExactish(q.not)) ||
+                (employer && "pay me" in english) || "have to get" in english -> QueryTopic.DUE
+            hasExactish(advance) || hasExactish(q.advance) || (employer && hasExactish(q.took)) -> QueryTopic.ADVANCE
+            hasExactish(expense) || hasExactish(q.spent) || (went && money) -> QueryTopic.EXPENSE
+            hasExactish(wage) || hasExactish(q.earned) || (money && hasExactish(q.made)) -> QueryTopic.EARNED
+            else -> null
+        }
+        val quantity = tokens.any { t -> t in q.howMuch.exact && t !in q.what.exact }
+        val category = tokens.withIndex().any { (i, t) -> i !in lastBeforePeriod && categories.any { (_, ws) -> t in ((ws as? Keywords)?.exact ?: ws) || (t.codePointCount(0, t.length) >= 6 && t in ws) } }
+        val implied: QueryTopic? = when {
+            explicit != null || !strongAsk -> null
+            // A thing bought counts only with money or spending in the sentence: "ट्रेन कितने बजे है" asks the time.
+            // ... and only when it asks "how much", not "what": "ଆଜି ଖାଇବାକୁ କଣ ଅଛି" asks what there is to eat.
+            // "ट्रेन कितने बजे है" asks the time.
+            (hasExactish(q.spendingThings) || category || went) && (money || went || quantity) &&
+                tokens.none { it in q.clock.exact || it in q.price.exact } -> QueryTopic.EXPENSE
+            hasExactish(q.got) || hasExactish(q.work) || hasExactish(workContext) -> QueryTopic.EARNED
+            else -> null
+        }
+        // A guessed topic (from "work", "came", a thing bought) needs "how much" to be about
+        // something the app knows: in "आज कितने लोग काम पर आए", "ఎంత మంది", "எத்தனை பேர்" it
+        // counts people, not money. The word right after "how much" says what is counted.
+        val known: (String) -> Boolean = { t ->
+            t in Keywords.known || t in q.filler.exact || periodSets.any { (_, ws) -> t in ws.exact } || t in yesterdayAsked.exact ||
+                listOf(q.earned, q.spent, q.advance, q.due, q.got, q.went, q.moneyNoun, q.spendingThings).any { it.hasStem(t) }
+        }
+        val counted = tokens.withIndex().firstOrNull { (_, t) -> t in q.howMuch.exact }?.let { (i, _) -> tokens.getOrNull(i + 1) }
+        if (implied != null && counted != null && !known(counted)) return null
+        val topic = explicit ?: implied ?: QueryTopic.ALL
+        // Is it a question at all? "how much", "tell me"; "where"/"did" with a ledger topic;
+        // "this week's earnings please" (a period and a topic); "this week's account".
+        val asks = strongAsk || fullyPaid || (weakAsk && explicit != null) || (period != null && (explicit != null || ledgerNoun))
+        // "सरकारी रेट क्या है", "what is the government rate": the official minimum wage.
+        if (hasExactish(q.government) && (strongAsk || weakAsk)) return Query(QueryPeriod.DAY, QueryTopic.MIN_WAGE)
+        if (!asks) return null
+        if (topic == QueryTopic.ALL) {
+            // "What is your name?", "आज बारिश होगी क्या": asking, but nothing about the records.
+            if (!ledgerNoun && !(strongAsk && period != null)) return null
+            // "how hot is it today", "आज कितनी गर्मी है": every word but the period, "how much"
+            // and fillers must be about the records, or it asks about something else.
+            if (!ledgerNoun && !tokens.all { t ->
+                    t in q.filler.exact || t in q.howMuch.exact || t in questionWords.exact || t in q.request.exact ||
+                        t in q.last.exact || t in q.moneyNoun.exact || t in q.got.exact || t in q.full.exact ||
+                        t in yesterdayAsked.exact || periodSets.any { (_, ws) -> t in ws.exact }
+                }
+            ) return null
+            // "मेरा हिसाब कोई और देख सकता है क्या" is about privacy, not a request for the account.
+            if (!strongAsk && period == null) return null
+        }
+        return Query(period ?: QueryPeriod.WEEK, topic)
     }
 }

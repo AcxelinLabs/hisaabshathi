@@ -1,0 +1,155 @@
+{"id": "hi_u01", "lang": "hi", "text": "मेरी इस हफ्ते की मजदूरी कितनी बनती है", "expect": "ASK WEEK EARNED"}
+{"id": "hi_u02", "lang": "hi", "text": "आज की दिहाड़ी कितनी हुई", "expect": "ASK DAY EARNED"}
+{"id": "hi_u03", "lang": "hi", "text": "इस महीने ठेकेदार से कितना एडवांस ले चुका हूँ", "expect": "ASK MONTH ADVANCE"}
+{"id": "hi_u04", "lang": "hi", "text": "अब तक कितना उधार हो गया", "expect": "ASK ANY ADVANCE"}
+{"id": "hi_u05", "lang": "hi", "text": "महीने का खर्च कितना आया", "expect": "ASK MONTH EXPENSE"}
+{"id": "hi_u06", "lang": "hi", "text": "इस हफ्ते राशन पानी पर कितना लगा", "expect": "ASK WEEK EXPENSE"}
+{"id": "hi_u07", "lang": "hi", "text": "मालिक के पास मेरे कितने रुपये पड़े हैं", "expect": "ASK ANY DUE"}
+{"id": "hi_u08", "lang": "hi", "text": "अभी कितनी पेमेंट आनी बाकी है", "expect": "ASK ANY DUE"}
+{"id": "hi_u09", "lang": "hi", "text": "इस महीने का पूरा हिसाब सुना दो", "expect": "ASK MONTH ALL"}
+{"id": "hi_u10", "lang": "hi", "text": "हफ्ते का लेखा बताइए", "expect": "ASK WEEK ALL"}
+{"id": "hi_u11", "lang": "hi", "text": "सरकार कितनी मजदूरी देने को कहती है", "expect": "ASK ANY MIN_WAGE"}
+{"id": "hi_u12", "lang": "hi", "text": "कल कितने पैसे कमाए", "expect": "ASK YESTERDAY EARNED"}
+{"id": "hi_u13", "lang": "hi", "text": "पिछले महीने कितना खर्च हुआ", "expect": "ASK LAST_MONTH EXPENSE"}
+{"id": "hi_u14", "lang": "hi", "text": "पिछले हफ्ते का बकाया कितना है", "expect": "ASK LAST_WEEK DUE"}
+{"id": "hi_u15", "lang": "hi", "text": "साल भर की कमाई का जोड़ बताओ", "expect": "ASK YEAR EARNED"}
+{"id": "hi_u16", "lang": "hi", "text": "आज घर कितने पैसे भिजवाए", "expect": "ASK DAY EXPENSE"}
+{"id": "hi_u17", "lang": "hi", "text": "इस महीने दवाई में कितना गया", "expect": "ASK MONTH EXPENSE"}
+{"id": "hi_u18", "lang": "hi", "text": "मुझे अभी ठेकेदार से कितना लेना है", "expect": "ASK ANY DUE"}
+{"id": "hi_u19", "lang": "hi", "text": "इस हफ्ते कुल कितना पैसा मिला", "expect": "ASK WEEK EARNED"}
+{"id": "hi_u20", "lang": "hi", "text": "बताओ इस साल कितना एडवांस कटा", "expect": "ASK YEAR ADVANCE"}
+{"id": "hi_u21", "lang": "hi", "text": "क्या इस हफ्ते की पूरी पगार मिल गई", "expect": "ASK WEEK DUE"}
+{"id": "hi_u22", "lang": "hi", "text": "आज कमाई कितनी रही", "expect": "ASK DAY EARNED"}
+{"id": "hi_u23", "lang": "hi", "text": "महीने भर में कितनी दिहाड़ी बनी", "expect": "ASK MONTH EARNED"}
+{"id": "hi_u24", "lang": "hi", "text": "इस हफ्ते मेरा हिसाब क्या है", "expect": "ASK WEEK ALL"}
+{"id": "hi_u25", "lang": "hi", "text": "मेरा बेटा कितने साल का है", "expect": "NONE"}
+{"id": "hi_u26", "lang": "hi", "text": "आज कितने लोग काम पर आए", "expect": "NONE"}
+{"id": "hi_u27", "lang": "hi", "text": "ठेकेदार कब आएगा", "expect": "NONE"}
+{"id": "hi_u28", "lang": "hi", "text": "मुझे गाना सुनाओ", "expect": "NONE"}
+{"id": "hi_u29", "lang": "hi", "text": "इस हफ्ते मौसम कैसा रहेगा", "expect": "NONE"}
+{"id": "hi_u30", "lang": "hi", "text": "बैंक कितने बजे खुलता है", "expect": "NONE"}
+{"id": "or_u01", "lang": "or", "text": "ଏ ହପ୍ତାରେ ମୋର କେତେ ପଇସା ରୋଜଗାର ହେଲା", "expect": "ASK WEEK EARNED"}
+{"id": "or_u02", "lang": "or", "text": "ଆଜି ମୋ ହାଜିରା କେତେ ମିଳିଲା", "expect": "ASK DAY EARNED"}
+{"id": "or_u03", "lang": "or", "text": "ଏ ମାସରେ ଦାଦନ କେତେ ନେଇସାରିଲିଣି", "expect": "ASK MONTH ADVANCE"}
+{"id": "or_u04", "lang": "or", "text": "ଏଯାଏଁ କେତେ ଧାର ହେଲାଣି", "expect": "ASK ANY ADVANCE"}
+{"id": "or_u05", "lang": "or", "text": "ଏ ମାସର ଖର୍ଚ୍ଚ କେତେ ହେଲା", "expect": "ASK MONTH EXPENSE"}
+{"id": "or_u06", "lang": "or", "text": "ଏ ସପ୍ତାହରେ ଚାଉଳ ଡାଲିରେ କେତେ ଗଲା", "expect": "ASK WEEK EXPENSE"}
+{"id": "or_u07", "lang": "or", "text": "ମାଲିକଙ୍କ ପାଖରେ ମୋର କେତେ ଟଙ୍କା ରହିଛି", "expect": "ASK ANY DUE"}
+{"id": "or_u08", "lang": "or", "text": "ଆଉ କେତେ ଟଙ୍କା ମିଳିବା ବାକି", "expect": "ASK ANY DUE"}
+{"id": "or_u09", "lang": "or", "text": "ଏ ମାସର ସବୁ ହିସାବ କହିଦିଅ", "expect": "ASK MONTH ALL"}
+{"id": "or_u10", "lang": "or", "text": "ସପ୍ତାହର ହିସାବ ଦେଖେଇଦିଅ", "expect": "ASK WEEK ALL"}
+{"id": "or_u11", "lang": "or", "text": "ସରକାର ଦିନକୁ କେତେ ମଜୁରି ଦେବାକୁ କହିଛନ୍ତି", "expect": "ASK ANY MIN_WAGE"}
+{"id": "or_u12", "lang": "or", "text": "କାଲି କେତେ ରୋଜଗାର ହେଲା", "expect": "ASK YESTERDAY EARNED"}
+{"id": "or_u13", "lang": "or", "text": "ଗତ ମାସରେ କେତେ ଖର୍ଚ୍ଚ ହେଲା", "expect": "ASK LAST_MONTH EXPENSE"}
+{"id": "or_u14", "lang": "or", "text": "ଗଲା ସପ୍ତାହର ବାକି କେତେ", "expect": "ASK LAST_WEEK DUE"}
+{"id": "or_u15", "lang": "or", "text": "ବର୍ଷ ସାରା କେତେ କମେଇଲି", "expect": "ASK YEAR EARNED"}
+{"id": "or_u16", "lang": "or", "text": "ଆଜି ଘରକୁ କେତେ ଟଙ୍କା ପଠେଇଲି", "expect": "ASK DAY EXPENSE"}
+{"id": "or_u17", "lang": "or", "text": "ଏ ମାସରେ ଔଷଧରେ କେତେ ଗଲା", "expect": "ASK MONTH EXPENSE"}
+{"id": "or_u18", "lang": "or", "text": "ଏ ସପ୍ତାହରେ ମୋଟ କେତେ ଟଙ୍କା ପାଇଲି", "expect": "ASK WEEK EARNED"}
+{"id": "or_u19", "lang": "or", "text": "ଏ ସପ୍ତାହର ପୁରା ଦରମା ମିଳିଲା କି", "expect": "ASK WEEK DUE"}
+{"id": "or_u20", "lang": "or", "text": "ଆଜି ରୋଜଗାର କେତେ ହେଲା କହିଲ", "expect": "ASK DAY EARNED"}
+{"id": "or_u21", "lang": "or", "text": "ମୋ ପୁଅର ବୟସ କେତେ", "expect": "NONE"}
+{"id": "or_u22", "lang": "or", "text": "ଆଜି କେତେ ଲୋକ କାମକୁ ଆସିଲେ", "expect": "NONE"}
+{"id": "or_u23", "lang": "or", "text": "ଠିକାଦାର କେବେ ଆସିବେ", "expect": "NONE"}
+{"id": "or_u24", "lang": "or", "text": "ଏ ସପ୍ତାହରେ ପାଗ କେମିତି ରହିବ", "expect": "NONE"}
+{"id": "or_u25", "lang": "or", "text": "ବ୍ୟାଙ୍କ କେତେବେଳେ ଖୋଲିବ", "expect": "NONE"}
+{"id": "te_u01", "lang": "te", "text": "ఈ వారం నాకు ఎంత కూలి గిట్టింది", "expect": "ASK WEEK EARNED"}
+{"id": "te_u02", "lang": "te", "text": "ఇవాళ ఎంత సంపాదన వచ్చింది", "expect": "ASK DAY EARNED"}
+{"id": "te_u03", "lang": "te", "text": "ఈ నెల మేస్త్రి దగ్గర ఎంత అడ్వాన్సు తీసుకున్నాను", "expect": "ASK MONTH ADVANCE"}
+{"id": "te_u04", "lang": "te", "text": "ఇప్పటిదాకా ఎంత అప్పు అయింది", "expect": "ASK ANY ADVANCE"}
+{"id": "te_u05", "lang": "te", "text": "ఈ నెల ఖర్చు ఎంత అయింది", "expect": "ASK MONTH EXPENSE"}
+{"id": "te_u06", "lang": "te", "text": "ఈ వారం సరుకులకి ఎంత పెట్టాను", "expect": "ASK WEEK EXPENSE"}
+{"id": "te_u07", "lang": "te", "text": "ఓనర్ దగ్గర నా డబ్బులు ఎంత ఉన్నాయి", "expect": "ASK ANY DUE"}
+{"id": "te_u08", "lang": "te", "text": "ఇంకా ఎంత డబ్బు రావాలి నాకు", "expect": "ASK ANY DUE"}
+{"id": "te_u09", "lang": "te", "text": "ఈ నెల లెక్కంతా చెప్పు", "expect": "ASK MONTH ALL"}
+{"id": "te_u10", "lang": "te", "text": "వారం లెక్క చూపించు", "expect": "ASK WEEK ALL"}
+{"id": "te_u11", "lang": "te", "text": "ప్రభుత్వం రోజుకు ఎంత కూలి ఇవ్వాలని చెప్పింది", "expect": "ASK ANY MIN_WAGE"}
+{"id": "te_u12", "lang": "te", "text": "నిన్న ఎంత సంపాదించాను", "expect": "ASK YESTERDAY EARNED"}
+{"id": "te_u13", "lang": "te", "text": "పోయిన నెల ఖర్చు ఎంత", "expect": "ASK LAST_MONTH EXPENSE"}
+{"id": "te_u14", "lang": "te", "text": "పోయిన వారం బాకీ ఎంత ఉంది", "expect": "ASK LAST_WEEK DUE"}
+{"id": "te_u15", "lang": "te", "text": "ఏడాది మొత్తం ఎంత సంపాదించాను", "expect": "ASK YEAR EARNED"}
+{"id": "te_u16", "lang": "te", "text": "ఇవాళ ఇంటికి ఎంత డబ్బు పంపాను", "expect": "ASK DAY EXPENSE"}
+{"id": "te_u17", "lang": "te", "text": "ఈ నెల మందులకు ఎంత అయింది", "expect": "ASK MONTH EXPENSE"}
+{"id": "te_u18", "lang": "te", "text": "ఈ వారం మొత్తం ఎంత డబ్బు వచ్చింది", "expect": "ASK WEEK EARNED"}
+{"id": "te_u19", "lang": "te", "text": "ఈ వారం జీతం పూర్తిగా వచ్చిందా", "expect": "ASK WEEK DUE"}
+{"id": "te_u20", "lang": "te", "text": "ఈ రోజు ఎంత వచ్చింది చెప్పు", "expect": "ASK DAY EARNED"}
+{"id": "te_u21", "lang": "te", "text": "మా అబ్బాయి వయసు ఎంత", "expect": "NONE"}
+{"id": "te_u22", "lang": "te", "text": "ఇవాళ ఎంత మంది పనికి వచ్చారు", "expect": "NONE"}
+{"id": "te_u23", "lang": "te", "text": "మేస్త్రి ఎప్పుడు వస్తాడు", "expect": "NONE"}
+{"id": "te_u24", "lang": "te", "text": "ఈ వారం వాతావరణం ఎలా ఉంటుంది", "expect": "NONE"}
+{"id": "te_u25", "lang": "te", "text": "బ్యాంకు ఎన్ని గంటలకు తెరుస్తారు", "expect": "NONE"}
+{"id": "kn_u01", "lang": "kn", "text": "ಈ ವಾರ ನನಗೆ ಎಷ್ಟು ಕೂಲಿ ಸಿಕ್ಕಿದೆ", "expect": "ASK WEEK EARNED"}
+{"id": "kn_u02", "lang": "kn", "text": "ಇವತ್ತು ಎಷ್ಟು ದುಡಿಮೆ ಆಯ್ತು", "expect": "ASK DAY EARNED"}
+{"id": "kn_u03", "lang": "kn", "text": "ಈ ತಿಂಗಳು ಮೇಸ್ತ್ರಿ ಹತ್ರ ಎಷ್ಟು ಅಡ್ವಾನ್ಸ್ ಇಸ್ಕೊಂಡಿದೀನಿ", "expect": "ASK MONTH ADVANCE"}
+{"id": "kn_u04", "lang": "kn", "text": "ಇಲ್ಲಿವರೆಗೆ ಎಷ್ಟು ಸಾಲ ಆಗಿದೆ", "expect": "ASK ANY ADVANCE"}
+{"id": "kn_u05", "lang": "kn", "text": "ಈ ತಿಂಗಳ ಖರ್ಚು ಎಷ್ಟಾಯ್ತು", "expect": "ASK MONTH EXPENSE"}
+{"id": "kn_u06", "lang": "kn", "text": "ಈ ವಾರ ದಿನಸಿಗೆ ಎಷ್ಟು ಹೋಯ್ತು", "expect": "ASK WEEK EXPENSE"}
+{"id": "kn_u07", "lang": "kn", "text": "ಓನರ್ ಹತ್ರ ನನ್ನ ಎಷ್ಟು ದುಡ್ಡು ಇದೆ", "expect": "ASK ANY DUE"}
+{"id": "kn_u08", "lang": "kn", "text": "ಇನ್ನೂ ಎಷ್ಟು ದುಡ್ಡು ಬರಬೇಕು ನನಗೆ", "expect": "ASK ANY DUE"}
+{"id": "kn_u09", "lang": "kn", "text": "ಈ ತಿಂಗಳ ಲೆಕ್ಕ ಎಲ್ಲಾ ಹೇಳಿ", "expect": "ASK MONTH ALL"}
+{"id": "kn_u10", "lang": "kn", "text": "ವಾರದ ಲೆಕ್ಕ ತೋರಿಸಿ", "expect": "ASK WEEK ALL"}
+{"id": "kn_u11", "lang": "kn", "text": "ಸರ್ಕಾರ ದಿನಕ್ಕೆ ಎಷ್ಟು ಕೂಲಿ ನಿಗದಿ ಮಾಡಿದೆ", "expect": "ASK ANY MIN_WAGE"}
+{"id": "kn_u12", "lang": "kn", "text": "ನಿನ್ನೆ ಎಷ್ಟು ದುಡಿದೆ", "expect": "ASK YESTERDAY EARNED"}
+{"id": "kn_u13", "lang": "kn", "text": "ಹೋದ ತಿಂಗಳು ಎಷ್ಟು ಖರ್ಚಾಯ್ತು", "expect": "ASK LAST_MONTH EXPENSE"}
+{"id": "kn_u14", "lang": "kn", "text": "ಕಳೆದ ವಾರದ ಬಾಕಿ ಎಷ್ಟು", "expect": "ASK LAST_WEEK DUE"}
+{"id": "kn_u15", "lang": "kn", "text": "ವರ್ಷ ಪೂರ್ತಿ ಎಷ್ಟು ಸಂಪಾದಿಸಿದೆ", "expect": "ASK YEAR EARNED"}
+{"id": "kn_u16", "lang": "kn", "text": "ಇವತ್ತು ಊರಿಗೆ ಎಷ್ಟು ದುಡ್ಡು ಕಳಿಸಿದೆ", "expect": "ASK DAY EXPENSE"}
+{"id": "kn_u17", "lang": "kn", "text": "ಈ ತಿಂಗಳು ಔಷಧಿಗೆ ಎಷ್ಟು ಖರ್ಚಾಯ್ತು", "expect": "ASK MONTH EXPENSE"}
+{"id": "kn_u18", "lang": "kn", "text": "ಈ ವಾರ ಒಟ್ಟು ಎಷ್ಟು ದುಡ್ಡು ಬಂತು", "expect": "ASK WEEK EARNED"}
+{"id": "kn_u19", "lang": "kn", "text": "ಈ ವಾರದ ಸಂಬಳ ಪೂರ್ತಿ ಬಂತಾ", "expect": "ASK WEEK DUE"}
+{"id": "kn_u20", "lang": "kn", "text": "ಇವತ್ತು ಎಷ್ಟು ಬಂತು ಹೇಳು", "expect": "ASK DAY EARNED"}
+{"id": "kn_u21", "lang": "kn", "text": "ನಮ್ಮ ಮಗನಿಗೆ ಎಷ್ಟು ವಯಸ್ಸು", "expect": "NONE"}
+{"id": "kn_u22", "lang": "kn", "text": "ಇವತ್ತು ಎಷ್ಟು ಜನ ಕೆಲಸಕ್ಕೆ ಬಂದ್ರು", "expect": "NONE"}
+{"id": "kn_u23", "lang": "kn", "text": "ಮೇಸ್ತ್ರಿ ಯಾವಾಗ ಬರ್ತಾರೆ", "expect": "NONE"}
+{"id": "kn_u24", "lang": "kn", "text": "ಈ ವಾರ ಹವಾಮಾನ ಹೇಗಿರುತ್ತೆ", "expect": "NONE"}
+{"id": "kn_u25", "lang": "kn", "text": "ಬ್ಯಾಂಕ್ ಎಷ್ಟು ಗಂಟೆಗೆ ತೆಗೆಯುತ್ತೆ", "expect": "NONE"}
+{"id": "ta_u01", "lang": "ta", "text": "இந்த வாரம் எனக்கு எவ்வளவு கூலி கிடைச்சிருக்கு", "expect": "ASK WEEK EARNED"}
+{"id": "ta_u02", "lang": "ta", "text": "இன்னைக்கு எவ்வளவு சம்பாத்தியம் ஆச்சு", "expect": "ASK DAY EARNED"}
+{"id": "ta_u03", "lang": "ta", "text": "இந்த மாசம் மேஸ்திரிகிட்ட எவ்வளவு அட்வான்ஸ் வாங்கியிருக்கேன்", "expect": "ASK MONTH ADVANCE"}
+{"id": "ta_u04", "lang": "ta", "text": "இதுவரைக்கும் எவ்வளவு கடன் ஆயிருக்கு", "expect": "ASK ANY ADVANCE"}
+{"id": "ta_u05", "lang": "ta", "text": "இந்த மாச செலவு எவ்வளவு", "expect": "ASK MONTH EXPENSE"}
+{"id": "ta_u06", "lang": "ta", "text": "இந்த வாரம் மளிகைக்கு எவ்வளவு போச்சு", "expect": "ASK WEEK EXPENSE"}
+{"id": "ta_u07", "lang": "ta", "text": "முதலாளிகிட்ட என் பணம் எவ்வளவு இருக்கு", "expect": "ASK ANY DUE"}
+{"id": "ta_u08", "lang": "ta", "text": "இன்னும் எவ்வளவு காசு எனக்கு வரணும்", "expect": "ASK ANY DUE"}
+{"id": "ta_u09", "lang": "ta", "text": "இந்த மாச கணக்கு முழுசா சொல்லுங்க", "expect": "ASK MONTH ALL"}
+{"id": "ta_u10", "lang": "ta", "text": "வார கணக்கு காட்டுங்க", "expect": "ASK WEEK ALL"}
+{"id": "ta_u11", "lang": "ta", "text": "அரசு ஒரு நாளைக்கு எவ்வளவு கூலி கொடுக்கணும்னு சொல்லுது", "expect": "ASK ANY MIN_WAGE"}
+{"id": "ta_u12", "lang": "ta", "text": "நேத்து எவ்வளவு சம்பாதிச்சேன்", "expect": "ASK YESTERDAY EARNED"}
+{"id": "ta_u13", "lang": "ta", "text": "போன மாசம் எவ்வளவு செலவாச்சு", "expect": "ASK LAST_MONTH EXPENSE"}
+{"id": "ta_u14", "lang": "ta", "text": "போன வார பாக்கி எவ்வளவு", "expect": "ASK LAST_WEEK DUE"}
+{"id": "ta_u15", "lang": "ta", "text": "வருஷம் முழுக்க எவ்வளவு சம்பாதிச்சேன்", "expect": "ASK YEAR EARNED"}
+{"id": "ta_u16", "lang": "ta", "text": "இன்னைக்கு ஊருக்கு எவ்வளவு பணம் அனுப்பினேன்", "expect": "ASK DAY EXPENSE"}
+{"id": "ta_u17", "lang": "ta", "text": "இந்த மாசம் மருந்துக்கு எவ்வளவு ஆச்சு", "expect": "ASK MONTH EXPENSE"}
+{"id": "ta_u18", "lang": "ta", "text": "இந்த வாரம் மொத்தம் எவ்வளவு காசு வந்துச்சு", "expect": "ASK WEEK EARNED"}
+{"id": "ta_u19", "lang": "ta", "text": "இந்த வார சம்பளம் முழுசா வந்துச்சா", "expect": "ASK WEEK DUE"}
+{"id": "ta_u20", "lang": "ta", "text": "இன்னைக்கு எவ்வளவு வந்துச்சு சொல்லு", "expect": "ASK DAY EARNED"}
+{"id": "ta_u21", "lang": "ta", "text": "என் பையனுக்கு எத்தனை வயசு", "expect": "NONE"}
+{"id": "ta_u22", "lang": "ta", "text": "இன்னைக்கு எத்தனை பேர் வேலைக்கு வந்தாங்க", "expect": "NONE"}
+{"id": "ta_u23", "lang": "ta", "text": "மேஸ்திரி எப்போ வருவாரு", "expect": "NONE"}
+{"id": "ta_u24", "lang": "ta", "text": "இந்த வாரம் வானிலை எப்படி இருக்கும்", "expect": "NONE"}
+{"id": "ta_u25", "lang": "ta", "text": "பேங்க் எத்தனை மணிக்கு திறக்கும்", "expect": "NONE"}
+{"id": "en_u01", "lang": "en", "text": "what's my take-home this week", "expect": "ASK WEEK EARNED"}
+{"id": "en_u02", "lang": "en", "text": "how much have I made today", "expect": "ASK DAY EARNED"}
+{"id": "en_u03", "lang": "en", "text": "how much advance have I drawn from the contractor this month", "expect": "ASK MONTH ADVANCE"}
+{"id": "en_u04", "lang": "en", "text": "how much do I owe the contractor so far", "expect": "ASK ANY ADVANCE"}
+{"id": "en_u05", "lang": "en", "text": "what did I spend this month", "expect": "ASK MONTH EXPENSE"}
+{"id": "en_u06", "lang": "en", "text": "how much went on groceries this week", "expect": "ASK WEEK EXPENSE"}
+{"id": "en_u07", "lang": "en", "text": "how much money is the owner holding for me", "expect": "ASK ANY DUE"}
+{"id": "en_u08", "lang": "en", "text": "how much money am I still waiting for", "expect": "ASK ANY DUE"}
+{"id": "en_u09", "lang": "en", "text": "read out this month's accounts", "expect": "ASK MONTH ALL"}
+{"id": "en_u10", "lang": "en", "text": "show the weekly account", "expect": "ASK WEEK ALL"}
+{"id": "en_u11", "lang": "en", "text": "how much daily wage does the government say I should get", "expect": "ASK ANY MIN_WAGE"}
+{"id": "en_u12", "lang": "en", "text": "how much did I earn yesterday", "expect": "ASK YESTERDAY EARNED"}
+{"id": "en_u13", "lang": "en", "text": "what were my expenses last month", "expect": "ASK LAST_MONTH EXPENSE"}
+{"id": "en_u14", "lang": "en", "text": "what was pending last week", "expect": "ASK LAST_WEEK DUE"}
+{"id": "en_u15", "lang": "en", "text": "how much have I earned this whole year", "expect": "ASK YEAR EARNED"}
+{"id": "en_u16", "lang": "en", "text": "how much money did I send to my family today", "expect": "ASK DAY EXPENSE"}
+{"id": "en_u17", "lang": "en", "text": "how much did medicines cost me this month", "expect": "ASK MONTH EXPENSE"}
+{"id": "en_u18", "lang": "en", "text": "how much money came in this week in total", "expect": "ASK WEEK EARNED"}
+{"id": "en_u19", "lang": "en", "text": "was my salary paid in full this week", "expect": "ASK WEEK DUE"}
+{"id": "en_u20", "lang": "en", "text": "what's today's income", "expect": "ASK DAY EARNED"}
+{"id": "en_u21", "lang": "en", "text": "how old is my son", "expect": "NONE"}
+{"id": "en_u22", "lang": "en", "text": "how many people came to work today", "expect": "NONE"}
+{"id": "en_u23", "lang": "en", "text": "when is the contractor coming", "expect": "NONE"}
+{"id": "en_u24", "lang": "en", "text": "what will the weather be like this week", "expect": "NONE"}
+{"id": "en_u25", "lang": "en", "text": "what time does the bank open", "expect": "NONE"}
