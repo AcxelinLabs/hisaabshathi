@@ -73,13 +73,6 @@ be installed side by side.
    discarded.
 4. **Replies are spoken** with Indic Tiny TTS voices, or the phone's own voice for English.
 
-On questions written after the rules and never tuned on, the rules alone answer **92%**
-correctly (previously 39%). Details and every benchmark: [`android/README.md`](android/README.md).
-
-The speech, voice and language models are not in the repository. The app downloads them on
-first use, and they are listed in [`android/README.md`](android/README.md). Screen tests save a
-screenshot of every step to `app/build/screens` and `recorder/build/screens`.
-
 ## Voice recordings from real speakers
 
 To measure and improve how well HisaabSaathi hears real workers, field agents use
@@ -91,8 +84,7 @@ To measure and improve how well HisaabSaathi hears real workers, field agents us
 
 Each speaker's recordings come out as one zip. The office uploads them with
 `python android/tools/voices.py upload <folder>` to the organisation's **private** Hugging Face
-dataset. Recordings are never stored in this repository. See
-[`android/recorder/README.md`](android/recorder/README.md).
+dataset.
 
 <p align="center">
   <img src="docs/screens/recorder-overview.png" alt="HisaabSaathi Recorder: speaker details, consent, a checked recording, sessions to share" width="760">
