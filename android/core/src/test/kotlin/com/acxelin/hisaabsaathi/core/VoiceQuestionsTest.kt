@@ -71,15 +71,15 @@ class VoiceQuestionsTest {
         val source = if (heard.isEmpty()) "typed text" else "speech model output of ${heard.size} recordings (voice_heard.jsonl)"
         report.appendLine("Voice question set, through the app's understanding: $source")
         report.appendLine("Right = the app gives the expected answer (any period when none was said).")
-        report.appendLine("Questions 1-200: everyday phrasings. 201-300: new phrasings and hard questions; some ask what the app cannot answer yet.")
+        report.appendLine("Questions 1-200: everyday phrasings. 201-300: new phrasings and hard questions; some ask what the app cannot answer yet. 301-1000: more everyday phrasings.")
         report.appendLine()
         for (lang in listOf("hi", "or", "te", "kn", "ta", "en")) {
-            for ((part, range) in listOf("1-200" to 1..200, "201-300" to 201..300)) {
+            for ((part, range) in listOf("1-200" to 1..200, "201-300" to 201..300, "301-1000" to 301..1000)) {
                 val counts = sortedMapOf<String, Int>()
                 var n = 0; var right = 0; var notYet = 0
                 for (t in takes) {
                     val q = questions[t.id] ?: continue
-                    if (str(q, "lang") != lang || t.id.takeLast(3).toInt() !in range) continue
+                    if (str(q, "lang") != lang || VoiceSamples.number(t.id) !in range) continue
                     val supported = q["supported"]!!.jsonPrimitive.boolean
                     val expect = str(q, "expect")!!
                     val g = got(t.text)

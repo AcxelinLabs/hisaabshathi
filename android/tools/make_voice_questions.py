@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""300 spoken-style questions per app language (Hindi, Odia, Telugu, Kannada, Tamil, English)
+"""1,000 spoken-style questions per app language (Hindi, Odia, Telugu, Kannada, Tamil, English)
 for recording in real voices, to find where the app misses.
 
 Each question is built from a hand-written phrasing (how people actually ask, with local and
@@ -445,6 +445,39 @@ def build_extra(code, rng, base):
     return rows
 
 
+def build_more(code, rng, taken, start=301, end=1000):
+    """Questions 301-1000: every phrasing (1-300's and the new ones) with other periods,
+    openers ("भाई ...") and closers ("... बताओ"), each sentence used once in the language."""
+    import voice_questions_extra as X
+    d = L[code]
+    frames = [(t, g, topic) for topic, fs in d["ledger"].items() for t, g in fs] + \
+             [(t, g, topic) for topic, fs in X.FRAMES[code].items() for t, g in fs]
+    keys = ["today", "week", "month", "year", "yesterday", "last_week", "last_month"]
+    weights = [3, 3, 3, 2, 1.5, 1.2, 1.2]
+    rows, tries = [], 0
+    while len(rows) < end - start + 1 and tries < 400000:
+        tries += 1
+        text, gloss, topic = rng.choice(frames)
+        if "{p}" in text or "{s}" in text:
+            key = rng.choices(keys, weights)[0]
+            adv, mod, eng = rng.choice(d["periods"][key]); period = PERIOD[key][0]
+        else:
+            adv = mod = eng = ""; period = "ANY"
+        pre, pre_e = rng.choice(d["prefixes"]) if rng.random() < 0.4 else ("", "")
+        suf, suf_e = rng.choice(d["suffixes"]) if rng.random() < 0.35 and not any(w in text for w in IMPERATIVE[code]) else ("", "")
+        sentence = clean(pre + text.replace("{p}", adv).replace("{s}", mod) + suf)
+        if sentence in taken:
+            continue
+        taken.add(sentence)
+        english = sentence if code == "en" else clean(pre_e + (gloss or text).replace("{e}", eng) + suf_e)
+        rows.append(dict(text=sentence, english=english, expect=f"ASK {period} {topic}", supported=True, hard=False))
+    assert len(rows) == end - start + 1, (code, len(rows))
+    for i, r in enumerate(rows, start):
+        r["id"] = f"{code}_{i:03d}"
+        r["lang"] = code
+    return rows
+
+
 def main():
     sys.path.insert(0, "tools")
     rng = random.Random(2026)
@@ -454,7 +487,9 @@ def main():
     for code in ["hi", "or", "te", "kn", "ta", "en"]:
         for r in base[code]:
             r["hard"] = False
-        rows += base[code] + build_extra(code, rng2, base[code])
+        extra = build_extra(code, rng2, base[code])
+        more = build_more(code, random.Random(4040 + len(code) * 7 + ord(code[0])), {r["text"] for r in base[code] + extra})
+        rows += base[code] + extra + more
     with open("core/src/test/resources/voice_questions.jsonl", "w", encoding="utf-8") as f:
         for r in rows:
             f.write(json.dumps({k: r[k] for k in ["id", "lang", "text", "english", "expect", "supported", "hard"]}, ensure_ascii=False) + "\n")
@@ -463,7 +498,8 @@ def main():
     with open("recorder/src/main/assets/voice_prompts.jsonl", "w", encoding="utf-8") as f:
         for r in rows:
             f.write(json.dumps({"id": r["id"], "lang": r["lang"], "text": r["text"], "english": r["english"],
-                                "expect": r["expect"], "answer": describe(r["expect"], "")}, ensure_ascii=False) + "\n")
+                                "expect": r["expect"], "answer": describe(r["expect"], ""),
+                                "group": "hard" if r.get("hard") else "everyday"}, ensure_ascii=False) + "\n")
     if len(sys.argv) > 1:
         write_xlsx(rows, sys.argv[1])
 
@@ -483,15 +519,16 @@ def write_xlsx(rows, path):
     ws.title = "How to record"
     guide = [
         ("HisaabSaathi voice questions", True),
-        ("300 questions in each language, asked the way workers really speak. 1-200: everyday ways of asking. 201-300: new and hard ones, including things the app cannot answer yet ('Supported now: no').", False),
+        ("1,000 questions in each language, asked the way workers really speak. 1-200: everyday ways of asking. 201-300: new and hard ones, including things the app cannot answer yet ('Supported now: no'). 301-1000: more everyday ways, with other times, openers and closers.", False),
         ("", False),
-        ("Best way: record in the app. HisaabSaathi > Settings > Voice samples > Record voice samples.", True),
-        ("1. Choose the speaker's language, age group, gender, state, and quiet or noisy place. No names are saved: each speaker gets a code.", False),
-        ("2. Read the consent text to the speaker (or tap Read aloud) and record their 'yes'. Without it the app does not record.", False),
-        ("3. 'Read the sentence': the speaker reads the question shown. 'Say it your own way': for people who do not read; tell them what to ask (the meaning is shown) and let them ask in their own words.", False),
-        ("4. Tap the big button, the speaker talks, tap again. Play it back, then Next. The app names and saves every file and these details for you.", False),
-        ("5. About 25 to 50 questions per speaker is plenty (5-10 minutes). Each new speaker starts where the last one stopped, so together they cover all 300.", False),
-        ("6. At the end tap Export: one zip with all recordings and a list of what was said. Send it to your computer (WhatsApp, Drive, email) and upload it to the one shared place: the private Hugging Face dataset AcxelinLabs/hisaabsaathi-voices, folder sessions/.", False),
+        ("Best way: the HisaabSaathi Recorder app (one zip per speaker, ready for the dataset).", True),
+        ("1. New speaker: choose their language, gender and age. Your state and place are remembered (change them when you move).", False),
+        ("2. Questions: Random (a mix, favouring questions this phone has recorded least), In order, or Hard ones only. 25 to 50 per speaker is plenty (5-10 minutes).", False),
+        ("3. Read the consent to them in their language and record their 'yes'. Without it the app does not record.", False),
+        ("4. 'Reads the sentence' for people who read; 'Says it in own words' for people who do not: explain the meaning shown and let them ask their way.", False),
+        ("5. Tap the big button, they speak, tap again. The app says if it sounds too quiet or too loud. Save & next.", False),
+        ("6. Share zip to the office computer. The office uploads all zips with one command: python voices.py upload <folder of zips>.", False),
+        ("The Recorder can also load your own question list (CSV or text) or record anything the speaker says.", False),
         ("", False),
         ("Without the app (phone voice recorder): record each sentence and save it with the name in column F; fill columns G, H, I (yellow). Zip one folder per language.", True),
         ("Column D says what the app should answer.", False),

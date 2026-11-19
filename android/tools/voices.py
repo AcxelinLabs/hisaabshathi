@@ -8,10 +8,14 @@ Every session the recorder exports is a zip laid out like the shared dataset
     data/<lang>/<session>/metadata.csv        one row per recording
     data/<lang>/<session>/recordings.xlsx     the same, for Excel
     data/<lang>/<session>/session.json        agent, speaker details, phone
+    data/<lang>/<session>/questions.jsonl     the questions the speaker was given
     data/<lang>/<session>/consent.wav         the speaker's spoken yes
 
-Commands (run from android/):
+Commands (run from android/, or anywhere with this file):
 
+  voices.py upload <folder of zips> [--repo AcxelinLabs/hisaabsaathi-voices]
+                                                the office's one step: every zip in the folder goes into the
+                                                private dataset, then moves to <folder>/done (needs hf auth login)
   voices.py unpack <zips or folder> <dataset>   unzip recorder exports into one dataset folder
   voices.py check <dataset>                     counts per language / speaker / place; missing or broken files
   voices.py table <dataset> <out.csv>           one table of every recording (for Excel or pandas)
@@ -43,6 +47,35 @@ def rows(root):
             for r in csv.DictReader(f):
                 r["path"] = os.path.relpath(os.path.join(d, r["file_name"]), root)
                 yield r
+
+
+def upload(folder, repo):
+    """Unpacks every recorder zip in [folder] and uploads them to the dataset in one commit."""
+    import shutil, tempfile
+    from huggingface_hub import HfApi
+    zips = sorted(n for n in os.listdir(folder) if n.lower().endswith(".zip"))
+    if not zips:
+        print(f"No zips in {folder}."); return
+    staging = tempfile.mkdtemp(prefix="hisaab-voices-")
+    try:
+        good = []
+        for n in zips:
+            with zipfile.ZipFile(os.path.join(folder, n)) as zf:
+                names = zf.namelist()
+                if not names or any(not x.startswith("data/") or ".." in x.split("/") for x in names):
+                    print(f"SKIP {n}: not a HisaabSaathi Recorder zip"); continue
+                zf.extractall(staging); good.append(n)
+                print(f"ok   {n}: {sum('/audio/' in x and x.endswith('.wav') for x in names)} recordings")
+        if not good:
+            return
+        HfApi().upload_folder(repo_id=repo, repo_type="dataset", folder_path=staging, path_in_repo=".",
+                              commit_message=f"Add {len(good)} recording sessions")
+        done = os.path.join(folder, "done"); os.makedirs(done, exist_ok=True)
+        for n in good:
+            shutil.move(os.path.join(folder, n), os.path.join(done, n))
+        print(f"Uploaded {len(good)} sessions to {repo}; the zips are now in {done}.")
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
 
 
 def unpack(sources, root):
@@ -88,7 +121,7 @@ def check(root):
             problems.append(f"{os.path.relpath(d, root)}: no consent recording")
     print(f"{sum(by_lang.values())} recordings, {total_s / 3600:.2f} hours")
     for lang, n in sorted(by_lang.items()):
-        print(f"  {lang}: {n} recordings, {len(speakers[lang])} speakers, {len(questions[lang])} of 300 questions")
+        print(f"  {lang}: {n} recordings, {len(speakers[lang])} speakers, {len(questions[lang])} different questions")
     print("  gender:", dict(genders)); print("  place:", dict(places))
     print(f"{len(problems)} problems" + (":" if problems else ""))
     for p in problems[:50]:
@@ -147,7 +180,10 @@ def transcribe(root, models):
 
 
 def main(a):
-    if len(a) >= 3 and a[0] == "unpack":
+    if len(a) >= 2 and a[0] == "upload":
+        repo = a[a.index("--repo") + 1] if "--repo" in a else "AcxelinLabs/hisaabsaathi-voices"
+        upload(a[1], repo)
+    elif len(a) >= 3 and a[0] == "unpack":
         unpack(a[1:-1], a[-1])
     elif len(a) == 2 and a[0] == "check":
         check(a[1])
