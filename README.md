@@ -1,25 +1,31 @@
-# HisaabSaathi
+<p align="center">
+  <img src="docs/brand/banner.png" alt="HisaabSaathi (हिसाब साथी): a wage ledger you speak to, for India's daily-wage workers. Hindi, Odia, Telugu, Kannada, Tamil, English." width="880">
+</p>
 
-**A voice-first, offline wage ledger for India's daily-wage workers.**
+<p align="center">
+  <a href="https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi.apk"><img src="docs/brand/download-app.png" alt="Download HisaabSaathi: for workers, v0.7.3, Android 10+" height="72"></a>
+  &nbsp;
+  <a href="https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi-Recorder.apk"><img src="docs/brand/download-recorder.png" alt="Download HisaabSaathi Recorder: for field agents, v1.1, Android 10+" height="72"></a>
+</p>
+
+<p align="center">
+  <img src="docs/brand/facts.png" alt="Voice first, no typing · Works offline · Private, stays on the phone · Proof of unpaid wages · Minimum-wage check · 6 Indian languages" width="644">
+</p>
 
 A worker taps one button and says what happened, for example *"Today I worked 8 hours,
 120 pieces at 5 rupees each, took 300 rupees advance"*. HisaabSaathi writes it down, reads it
 back, and saves it once they confirm. Later they ask *"How much did I earn this week?"* or *"How
 much does the contractor still owe me?"* and hear the answer. They don't need to read or type.
 
-Works in **Hindi, Odia, Telugu, Kannada, Tamil and English**, entirely on the phone, with no
-internet after a one-time download.
+It works entirely on the phone, with no internet after a one-time download.
 
-![HisaabSaathi: home, confirm, spoken answer, ledger, summary, minimum wage](docs/screens/app-overview.png)
+<p align="center">
+  <img src="docs/screens/app-overview.png" alt="HisaabSaathi: home, confirm, spoken answer, ledger, summary, minimum wage" width="640">
+</p>
 
-## Download
-
-| App | For | Link |
-|---|---|---|
-| **HisaabSaathi** 0.7.3 | Workers: the wage ledger | [HisaabSaathi.apk](https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi.apk) |
-| **HisaabSaathi Recorder** 1.1 | Field agents: recording voice samples for testing | [HisaabSaathi-Recorder.apk](https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi-Recorder.apk) |
-
-Both need Android 10 or newer. They are separate apps and can be installed side by side.
+**HisaabSaathi** is the app for workers. **HisaabSaathi Recorder** is a separate app for field
+agents who record voice samples to test and improve it. Both need Android 10 or newer and can
+be installed side by side.
 
 ## What it does
 
@@ -43,7 +49,9 @@ Both need Android 10 or newer. They are separate apps and can be installed side 
 - **Reminders** at 3 PM and 9 PM, **backup and restore**, and an optional log of the worker's
   corrections that helps improve the app, shared only if they choose.
 
-![Home screen in Odia, Telugu, Kannada, Tamil and English](docs/screens/six-languages.png)
+<p align="center">
+  <img src="docs/screens/six-languages.png" alt="Home screen in Odia, Telugu, Kannada, Tamil and English" width="880">
+</p>
 
 ## Private by design
 
@@ -109,7 +117,9 @@ Each speaker's recordings come out as one zip. The office uploads them with
 dataset. Recordings are never stored in this repository. See
 [`android/recorder/README.md`](android/recorder/README.md).
 
-![HisaabSaathi Recorder: speaker details, consent, a checked recording, sessions to share](docs/screens/recorder-overview.png)
+<p align="center">
+  <img src="docs/screens/recorder-overview.png" alt="HisaabSaathi Recorder: speaker details, consent, a checked recording, sessions to share" width="760">
+</p>
 
 ## Credits and licences
 
@@ -128,4 +138,4 @@ dataset. Recordings are never stored in this repository. See
 
 The fine-tuned model and the English speech model are published at
 [huggingface.co/AcxelinLabs/hisaabsaathi-model](https://huggingface.co/AcxelinLabs/hisaabsaathi-model).
-HisaabSaathi is built by **Acxelin Labs**.
+<p align="center"><b>HisaabSaathi</b> is built by <b>Acxelin Labs</b>.</p>
