@@ -110,9 +110,11 @@ class AppFlowTest {
             .performTextInput("आज आठ घंटे काम किया एक सौ बीस पीस पांच रुपये रेट तीन सौ एडवांस लिया")
         click("आगे")
         waitFor("क्या यह सही है?")
-        rule.onNode(hasSetTextAction() and hasText("600")).assertIsDisplayed()
-        rule.onNode(hasSetTextAction() and hasText("300")).assertExists()
-        rule.onNodeWithText("120 पीस × ₹5, 8 घंटे").assertExists()
+        // Each line is a short summary with a big amount; nothing to edit unless asked.
+        rule.onNodeWithText("₹600").assertIsDisplayed()
+        rule.onNodeWithText("₹300").assertExists()
+        check(rule.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isEmpty()) { "amount boxes should stay folded" }
+        rule.onNodeWithText("120 पीस × ₹5, 8 घंटे", substring = true).assertExists()
         shot("05-confirm")
         click("सही है, सेव करें")
 
@@ -128,7 +130,11 @@ class AppFlowTest {
         rule.onNode(hasSetTextAction()).performTextInput("सब्जी पर अस्सी रुपये खर्च किए")
         click("आगे")
         waitFor("क्या यह सही है?")
+        rule.onNodeWithText("₹80").assertExists()
+        shot("05b-confirm-expense")
+        click("बदलें")
         rule.onNode(hasSetTextAction() and hasText("80")).assertExists()
+        shot("05c-confirm-change")
         // The worker fixes the amount: kept in the correction log (shown in Settings below).
         rule.onNode(hasSetTextAction() and hasText("80")).performTextReplacement("90")
         click("सही है, सेव करें")

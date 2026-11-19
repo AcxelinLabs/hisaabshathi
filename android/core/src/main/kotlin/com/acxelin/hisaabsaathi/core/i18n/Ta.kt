@@ -10,6 +10,7 @@ internal object Ta {
         "Something went wrong understanding your voice. Try again, or type instead." to "உங்க குரலை புரிஞ்சுக்க பிரச்சனை வந்தது. மறுபடி முயற்சி பண்ணுங்க, இல்ல டைப் பண்ணுங்க.",
         "Last problem (for testing)" to "கடைசி பிரச்சனை (சோதனைக்கு)",
         "Change entry" to "மாத்துங்க",
+        "Change" to "மாத்துங்க",
         "Entry removed" to "நீக்கப்பட்டது",
         "Undo" to "திரும்பக் கொண்டு வா",
         "Earlier day" to "முந்தைய நாள்",

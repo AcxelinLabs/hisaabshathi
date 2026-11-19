@@ -52,7 +52,10 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -232,7 +235,12 @@ fun TypeScreen(s: Strings, onBack: () -> Unit, onSubmit: (String) -> Unit) {
 fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer: () -> Unit) {
     Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).systemBarsPadding().imePadding().padding(16.dp)) {
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(s.isThisRight, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(s.isThisRight, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.weight(1f))
+                FilledTonalIconButton(onClick = vm::replay, modifier = Modifier.size(52.dp)) {
+                    Icon(Icons.Default.PlayArrow, s.playAgain, modifier = Modifier.size(28.dp))
+                }
+            }
             Section(color = InkWash) {
                 Text(s.youSaid, fontSize = 13.sp, color = InkSoft)
                 Text("“${r.transcript}”", fontSize = 17.sp)
@@ -245,73 +253,37 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                 }
             }
             r.drafts.forEachIndexed { i, d ->
+                // Each line is a short summary; the choices open only when the worker taps "Change"
+                // (or when the amount must be typed), so the screen stays calm.
+                val mustFix = i in r.invalid || d.amountPaise == 0L
+                var open by remember(i, r.drafts.size) { mutableStateOf(mustFix) }
+                // Stays open once opened for a fix, so it never folds away while the worker types.
+                LaunchedEffect(mustFix) { if (mustFix) open = true }
                 Section {
-                    // All four kinds stay visible (they wrap), so "expense" is never hidden off screen.
-                    Row(verticalAlignment = Alignment.Top) {
-                    FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        EntryType.entries.forEach { type ->
-                            FilterChip(
-                                selected = d.type == type,
-                                onClick = {
-                                    vm.updateDraft(
-                                        i,
-                                        d.copy(type = type, category = if (type == EntryType.EXPENSE) d.category ?: ExpenseCategory.OTHER else null),
-                                    )
-                                },
-                                label = { Text(s.typeName(type), fontSize = 16.sp) },
-                                leadingIcon = { Icon(painterResource(typeIcon(type)), null, tint = Ink, modifier = Modifier.size(18.dp)) },
-                                modifier = Modifier.height(48.dp),
-                            )
+                    if (open || mustFix) {
+                        DraftEditor(vm, r, i, d, s)
+                        if (!mustFix) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                            TextButton(onClick = { open = false }) { Text(s.done, fontSize = 17.sp, fontWeight = FontWeight.Bold) }
                         }
-                    }
-                    // A line the app heard wrongly can be taken out, as long as one line is left.
-                    if (r.drafts.size > 1) IconButton(onClick = { vm.removeDraft(i) }) { Icon(Icons.Default.Delete, s.delete, tint = InkSoft) }
-                    }
-                    val detail = if (d.type == EntryType.WORK) s.workDetail(d.hours, d.pieces, d.ratePaise) else ""
-                    if (detail.isNotEmpty()) Text(detail, fontSize = 18.sp)
-                    if (d.type == EntryType.EXPENSE) {
-                        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            ExpenseCategory.entries.forEach { c ->
-                                FilterChip(
-                                    selected = (d.category ?: ExpenseCategory.OTHER) == c, onClick = { vm.updateDraft(i, d.copy(category = c)) },
-                                    label = { Text(s.categoryName(c), fontSize = 15.sp) }, modifier = Modifier.height(44.dp),
-                                )
+                    } else {
+                        DraftSummary(d, s)
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+                            // A line the app heard wrongly can be taken out, as long as one line is left.
+                            if (r.drafts.size > 1) TextButton(onClick = { vm.removeDraft(i) }) {
+                                Icon(Icons.Default.Delete, null, tint = InkSoft, modifier = Modifier.size(20.dp))
+                                Spacer(Modifier.width(4.dp)); Text(s.delete, fontSize = 16.sp, color = InkSoft)
+                            }
+                            OutlinedButton(onClick = { open = true }, modifier = Modifier.height(48.dp)) {
+                                Icon(Icons.Default.Edit, null, tint = Ink, modifier = Modifier.size(20.dp))
+                                Spacer(Modifier.width(6.dp)); Text(s.change, fontSize = 16.sp)
                             }
                         }
                     }
-                    // Which day: said "yesterday", or forgot to; one tap fixes it.
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        listOf(0 to s.today, -1 to s.yesterday, -2 to s.dayBefore).forEach { (offset, label) ->
-                            FilterChip(
-                                selected = d.dayOffset == offset, onClick = { vm.updateDraft(i, d.copy(dayOffset = offset)) },
-                                label = { Text(label, fontSize = 15.sp) }, modifier = Modifier.height(44.dp),
-                            )
-                        }
-                    }
-                    Spacer(Modifier.height(6.dp))
-                    // Kept as typed; the view model reads it (empty box = 0, a slip blocks saving).
-                    var amount by remember(i, r.drafts.size) { mutableStateOf(if (d.amountPaise == 0L) "" else Money.format(d.amountPaise)) }
-                    val bad = i in r.invalid
-                    OutlinedTextField(
-                        value = amount,
-                        onValueChange = { v -> amount = v; vm.updateAmount(i, v) },
-                        label = { Text(s.amountLabel) },
-                        isError = bad,
-                        supportingText = if (bad) ({ Text(s.amountInvalid) }) else null,
-                        textStyle = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                        singleLine = true, modifier = Modifier.fillMaxWidth(),
-                    )
                 }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedButton(onClick = vm::replay) {
-                    Icon(Icons.Default.PlayArrow, null); Spacer(Modifier.width(4.dp)); Text(s.playAgain)
-                }
-                OutlinedButton(onClick = onSpeakAnswer) {
-                    Icon(painterResource(R.drawable.ic_mic), null, tint = Ink, modifier = Modifier.size(20.dp))
-                    Spacer(Modifier.width(4.dp)); Text("${s.yes} / ${s.no}")
-                }
+            OutlinedButton(onClick = onSpeakAnswer, modifier = Modifier.height(48.dp)) {
+                Icon(painterResource(R.drawable.ic_mic), null, tint = Ink, modifier = Modifier.size(20.dp))
+                Spacer(Modifier.width(6.dp)); Text("${s.yes} / ${s.no}", fontSize = 16.sp)
             }
         }
         Row(Modifier.fillMaxWidth().padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -335,6 +307,90 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
             }
         }
     }
+}
+
+/** One understood line in a few words and a big amount: what the worker checks at a glance. */
+@Composable
+private fun DraftSummary(d: DraftEntry, s: Strings) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.size(48.dp).clip(RoundedCornerShape(24.dp)).background(typeColor(d.type)), contentAlignment = Alignment.Center) {
+            Icon(painterResource(typeIcon(d.type)), null, tint = Color.White, modifier = Modifier.size(26.dp))
+        }
+        Spacer(Modifier.width(12.dp))
+        Column(Modifier.weight(1f)) {
+            val kind = s.typeName(d.type) + if (d.type == EntryType.EXPENSE) " · " + s.categoryName(d.category ?: ExpenseCategory.OTHER) else ""
+            Text(kind, fontSize = 19.sp, fontWeight = FontWeight.Bold)
+            val day = when (d.dayOffset) {
+                0 -> s.today
+                -1 -> s.yesterday
+                -2 -> s.dayBefore
+                else -> LocalDate.now().plusDays(d.dayOffset.toLong()).format(dayFormat)
+            }
+            val detail = if (d.type == EntryType.WORK) s.workDetail(d.hours, d.pieces, d.ratePaise) else ""
+            Text(listOf(day, detail).filter { it.isNotEmpty() }.joinToString(" · "), fontSize = 15.sp, color = InkSoft)
+        }
+        Spacer(Modifier.width(8.dp))
+        Text("₹" + Money.formatGrouped(d.amountPaise), fontSize = 26.sp, fontWeight = FontWeight.ExtraBold)
+    }
+}
+
+/** Every choice for one line: kind, category, day and the amount box. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun DraftEditor(vm: AppViewModel, r: Capture.Review, i: Int, d: DraftEntry, s: Strings) {
+    // All four kinds stay visible (they wrap), so "expense" is never hidden off screen.
+    Row(verticalAlignment = Alignment.Top) {
+        FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            EntryType.entries.forEach { type ->
+                FilterChip(
+                    selected = d.type == type,
+                    onClick = {
+                        vm.updateDraft(i, d.copy(type = type, category = if (type == EntryType.EXPENSE) d.category ?: ExpenseCategory.OTHER else null))
+                    },
+                    label = { Text(s.typeName(type), fontSize = 16.sp) },
+                    leadingIcon = { Icon(painterResource(typeIcon(type)), null, tint = Ink, modifier = Modifier.size(18.dp)) },
+                    modifier = Modifier.height(48.dp),
+                )
+            }
+        }
+        // A line the app heard wrongly can be taken out, as long as one line is left.
+        if (r.drafts.size > 1) IconButton(onClick = { vm.removeDraft(i) }) { Icon(Icons.Default.Delete, s.delete, tint = InkSoft) }
+    }
+    val detail = if (d.type == EntryType.WORK) s.workDetail(d.hours, d.pieces, d.ratePaise) else ""
+    if (detail.isNotEmpty()) Text(detail, fontSize = 18.sp)
+    if (d.type == EntryType.EXPENSE) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            ExpenseCategory.entries.forEach { c ->
+                FilterChip(
+                    selected = (d.category ?: ExpenseCategory.OTHER) == c, onClick = { vm.updateDraft(i, d.copy(category = c)) },
+                    label = { Text(s.categoryName(c), fontSize = 15.sp) }, modifier = Modifier.height(44.dp),
+                )
+            }
+        }
+    }
+    // Which day: said "yesterday", or forgot to; one tap fixes it.
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        listOf(0 to s.today, -1 to s.yesterday, -2 to s.dayBefore).forEach { (offset, label) ->
+            FilterChip(
+                selected = d.dayOffset == offset, onClick = { vm.updateDraft(i, d.copy(dayOffset = offset)) },
+                label = { Text(label, fontSize = 15.sp) }, modifier = Modifier.height(44.dp),
+            )
+        }
+    }
+    Spacer(Modifier.height(6.dp))
+    // Kept as typed; the view model reads it (empty box = 0, a slip blocks saving).
+    var amount by remember(i, r.drafts.size) { mutableStateOf(if (d.amountPaise == 0L) "" else Money.format(d.amountPaise)) }
+    val bad = i in r.invalid
+    OutlinedTextField(
+        value = amount,
+        onValueChange = { v -> amount = v; vm.updateAmount(i, v) },
+        label = { Text(s.amountLabel) },
+        isError = bad,
+        supportingText = if (bad) ({ Text(s.amountInvalid) }) else null,
+        textStyle = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        singleLine = true, modifier = Modifier.fillMaxWidth(),
+    )
 }
 
 // ---------------------------------------------------------------- ledger

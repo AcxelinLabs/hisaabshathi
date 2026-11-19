@@ -82,10 +82,10 @@ private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boole
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun RegionPicker(vm: AppViewModel, settings: Settings) {
+private fun RegionPicker(vm: AppViewModel, settings: Settings, onPicked: () -> Unit = {}) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         vm.wagePack.regions.forEach { r ->
-            FilterChip(selected = settings.region == r, onClick = { vm.setRegion(r) }, label = { Text(r, fontSize = 17.sp) }, modifier = Modifier.height(48.dp))
+            FilterChip(selected = settings.region == r, onClick = { vm.setRegion(r); onPicked() }, label = { Text(r, fontSize = 17.sp) }, modifier = Modifier.height(48.dp))
         }
     }
 }
@@ -172,8 +172,16 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             LanguagePicker(vm, settings)
             HorizontalDivider()
 
-            Text(s.workState, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            RegionPicker(vm, settings)
+            // Chosen once: shown as one line, the full list only when the worker wants to change it.
+            var pickState by rememberSaveable { mutableStateOf(false) }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(s.workState, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text(settings.region, fontSize = 17.sp, color = InkSoft)
+                }
+                if (!pickState) OutlinedButton(onClick = { pickState = true }, modifier = Modifier.height(48.dp)) { Text(s.change, fontSize = 16.sp) }
+            }
+            if (pickState) RegionPicker(vm, settings, onPicked = { pickState = false })
             HorizontalDivider()
 
             Row(verticalAlignment = Alignment.CenterVertically) {

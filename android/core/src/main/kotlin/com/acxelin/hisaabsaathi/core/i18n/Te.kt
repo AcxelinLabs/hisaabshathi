@@ -10,6 +10,7 @@ internal object Te {
         "Something went wrong understanding your voice. Try again, or type instead." to "మీ మాట అర్థం చేసుకోవడంలో సమస్య వచ్చింది. మళ్ళీ ప్రయత్నించండి లేదా టైప్ చేయండి.",
         "Last problem (for testing)" to "గత సమస్య (పరీక్ష కోసం)",
         "Change entry" to "మార్చండి",
+        "Change" to "మార్చండి",
         "Entry removed" to "తీసేశాం",
         "Undo" to "వెనక్కి తెండి",
         "Earlier day" to "ముందు రోజు",

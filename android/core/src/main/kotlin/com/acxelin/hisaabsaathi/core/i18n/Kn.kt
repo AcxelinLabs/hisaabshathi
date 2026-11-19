@@ -10,6 +10,7 @@ internal object Kn {
         "Something went wrong understanding your voice. Try again, or type instead." to "ನಿಮ್ಮ ಮಾತು ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳುವಲ್ಲಿ ತೊಂದರೆ ಆಯ್ತು. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಟೈಪ್ ಮಾಡಿ.",
         "Last problem (for testing)" to "ಹಿಂದಿನ ತೊಂದರೆ (ಪರೀಕ್ಷೆಗಾಗಿ)",
         "Change entry" to "ಬದಲಿಸಿ",
+        "Change" to "ಬದಲಿಸಿ",
         "Entry removed" to "ತೆಗೆದುಹಾಕಲಾಯಿತು",
         "Undo" to "ವಾಪಸ್ ತನ್ನಿ",
         "Earlier day" to "ಹಿಂದಿನ ದಿನ",

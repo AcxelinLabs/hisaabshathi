@@ -97,6 +97,7 @@ class Strings(val lang: Lang) {
 
     // ---- edit, undo, backup, downloads
     val editEntry get() = t("बदलें", "ବଦଳାନ୍ତୁ", "Change entry")
+    val change get() = t("बदलें", "ବଦଳାନ୍ତୁ", "Change")
     val entryRemoved get() = t("हटा दिया", "ହଟାଗଲା", "Entry removed")
     val undo get() = t("वापस लाएं", "ଫେରାନ୍ତୁ", "Undo")
     val earlierDay get() = t("पिछला दिन", "ପୂର୍ବ ଦିନ", "Earlier day")
