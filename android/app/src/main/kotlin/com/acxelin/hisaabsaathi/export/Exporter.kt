@@ -122,10 +122,6 @@ class Exporter(private val context: Context) {
         }.getOrNull()
     }
 
-    /** The worker's corrections, one JSON object per line (core/Corrections.kt). */
-    fun correctionsFile(jsonLines: String): File =
-        File(dir, "hisaab-corrections-${System.currentTimeMillis()}.jsonl").apply { writeText(jsonLines) }
-
     fun share(files: List<File>, chooserTitle: String, mime: String = "application/pdf") {
         val uris = ArrayList(files.map { FileProvider.getUriForFile(context, "${context.packageName}.files", it) })
         val intent = if (uris.size == 1) {

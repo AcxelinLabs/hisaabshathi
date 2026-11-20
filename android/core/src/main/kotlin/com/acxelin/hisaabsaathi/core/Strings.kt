@@ -53,9 +53,9 @@ class Strings(val lang: Lang) {
     val chooseState get() = t("आप किस राज्य में काम करते हैं?", "ଆପଣ କେଉଁ ରାଜ୍ୟରେ କାମ କରନ୍ତି?", "Which state do you work in?")
     val voicePackTitle get() = t("आवाज़ पैक डाउनलोड करें", "ଭଏସ୍ ପ୍ୟାକ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ", "Download the voice pack")
     val voicePackBody get() = t(
-        "एक बार डाउनलोड करने के बाद ऐप बिना इंटरनेट के आपकी आवाज़ समझेगा। आपकी आवाज़ और हिसाब फोन से बाहर नहीं जाते।",
-        "ଥରେ ଡାଉନଲୋଡ୍ କଲା ପରେ ଆପ୍ ବିନା ଇଣ୍ଟରନେଟ୍‌ରେ ଆପଣଙ୍କ କଥା ବୁଝିବ। ଆପଣଙ୍କ ସ୍ୱର ଓ ହିସାବ ଫୋନ୍ ବାହାରକୁ ଯାଏ ନାହିଁ।",
-        "After one download the app understands your voice with no internet. Your voice and your records never leave this phone.",
+        "एक बार डाउनलोड करने के बाद ऐप बिना इंटरनेट के आपकी आवाज़ समझेगा। आपका हिसाब फोन से बाहर नहीं जाता।",
+        "ଥରେ ଡାଉନଲୋଡ୍ କଲା ପରେ ଆପ୍ ବିନା ଇଣ୍ଟରନେଟ୍‌ରେ ଆପଣଙ୍କ କଥା ବୁଝିବ। ଆପଣଙ୍କ ହିସାବ ଫୋନ୍ ବାହାରକୁ ଯାଏ ନାହିଁ।",
+        "After one download the app understands your voice with no internet. Your records never leave this phone.",
     )
     val voicePackReadAloud get() = t("साफ़ आवाज़ में सुनने के लिए", "ସଫା ସ୍ୱରରେ ଶୁଣିବା ପାଇଁ", "For a clear voice when reading aloud")
     val download get() = t("डाउनलोड करें", "ଡାଉନଲୋଡ୍ କରନ୍ତୁ", "Download")
@@ -118,17 +118,34 @@ class Strings(val lang: Lang) {
     )
     val waitingForInternet get() = t("इंटरनेट का इंतज़ार…", "ଇଣ୍ଟରନେଟ୍ ଅପେକ୍ଷା…", "Waiting for internet…")
 
-    // ---- correction log (settings)
+    // ---- help improve the app (asked at setup; changed in Settings)
     val improveTitle get() = t("ऐप को बेहतर बनाने में मदद", "ଆପ୍‌କୁ ଉନ୍ନତ କରିବାରେ ସାହାଯ୍ୟ", "Help improve the app")
-    val improveBody get() = t(
-        "जब आप ऐप की समझी बात ठीक करते हैं, फोन सुनी हुई बात और आपका सुधार रख लेता है। ये इसी फोन में रहते हैं। आप चाहें तो ही इन्हें भेजें, ताकि ऐप आपके बोलने का तरीका सीखे।",
-        "ଆପଣ ଆପ୍ ବୁଝିଥିବା କଥା ଠିକ୍ କଲେ, ଫୋନ୍ ଶୁଣିଥିବା କଥା ଓ ଆପଣଙ୍କ ସଂଶୋଧନ ରଖେ। ଏଗୁଡ଼ିକ ଏହି ଫୋନ୍‌ରେ ରହେ। ଆପଣ ଚାହିଁଲେ ହିଁ ପଠାନ୍ତୁ, ଯାହାଦ୍ୱାରା ଆପ୍ ଆପଣଙ୍କ କହିବା ଶୈଳୀ ଶିଖିବ।",
-        "When you fix what the app understood, the phone keeps what it heard and your fix. They stay on this phone. Share them only if you want to, so the app learns how you speak.",
+    val shareTitle get() = t("हिसाब साथी को बेहतर बनाने में मदद करेंगे?", "ହିସାବ ସାଥୀକୁ ଉନ୍ନତ କରିବାରେ ସାହାଯ୍ୟ କରିବେ?", "Help improve HisaabSaathi?")
+    /** The consent question, shown and read aloud at setup. Says plainly what is kept, where it goes, and how to stop. */
+    val shareBody get() = t(
+        "अगर आप हाँ कहें, तो जब भी आप ऐप से बोलेंगे या लिखेंगे, ऐप आपकी आवाज़, सुनी हुई बात, और जो उसने लिखा या जवाब दिया (रकम समेत) रख लेगा। यह सब Wi-Fi पर हिसाब साथी टीम को भेजा जाएगा, आपके नाम या फोन नंबर के बिना, ताकि ऐप आप जैसे लोगों की बात बेहतर समझना सीखे। आपका हिसाब इसी फोन में रहेगा। आप कभी भी सेटिंग में इसे बंद कर सकते हैं या भेजा हुआ मिटा सकते हैं।",
+        "ଆପଣ ହଁ କହିଲେ, ଯେତେବେଳେ ଆପଣ ଆପ୍ ସହ କଥା ହେବେ କିମ୍ବା ଲେଖିବେ, ଆପ୍ ଆପଣଙ୍କ ସ୍ୱର, ଶୁଣିଥିବା କଥା, ଏବଂ ଯାହା ଲେଖିଲା କିମ୍ବା ଉତ୍ତର ଦେଲା (ଟଙ୍କା ସହିତ) ରଖିବ। ଏସବୁ Wi-Fi ରେ ହିସାବ ସାଥୀ ଟିମ୍‌କୁ ପଠାଯିବ, ଆପଣଙ୍କ ନାମ କିମ୍ବା ଫୋନ୍ ନମ୍ବର ବିନା, ଯାହାଦ୍ୱାରା ଆପ୍ ଆପଣଙ୍କ ପରି ଲୋକଙ୍କ କଥା ଭଲ ଭାବେ ବୁଝିବା ଶିଖିବ। ଆପଣଙ୍କ ହିସାବ ଏହି ଫୋନ୍‌ରେ ରହିବ। ଆପଣ ଯେକୌଣସି ସମୟରେ ସେଟିଂସ୍‌ରେ ଏହା ବନ୍ଦ କରିପାରିବେ କିମ୍ବା ପଠାଯାଇଥିବା ଲିଭାଇ ପାରିବେ।",
+        "If you say yes, each time you speak or type to the app, it keeps your voice, the words it heard, and what it wrote down or answered, including amounts. It sends them over Wi-Fi to the HisaabSaathi team, without your name or phone number, so the app learns to understand people like you better. Your ledger stays on this phone. You can stop this, or delete what was sent, at any time in Settings.",
     )
-    val keepCorrections get() = t("मेरे सुधार रखें", "ମୋ ସଂଶୋଧନ ରଖନ୍ତୁ", "Keep my corrections")
-    fun correctionsCount(n: Int) = tp("$n सुधार रखे हैं", "$n ଟି ସଂଶୋଧନ ରଖାଯାଇଛି", "$n corrections kept", "{0} corrections kept", n)
-    val shareCorrections get() = t("सुधार भेजें", "ସଂଶୋଧନ ପଠାନ୍ତୁ", "Share corrections")
-    val deleteCorrections get() = t("सुधार मिटाएं", "ସଂଶୋଧନ ଲିଭାନ୍ତୁ", "Delete corrections")
+    val shareYes get() = t("हाँ, भेजें", "ହଁ, ପଠାନ୍ତୁ", "Yes, share")
+    val shareNo get() = t("नहीं, धन्यवाद", "ନା, ଧନ୍ୟବାଦ", "No, thanks")
+    val listen get() = t("सुनें", "ଶୁଣନ୍ତୁ", "Listen")
+    val improveBody get() = t(
+        "यह चालू हो तो आप ऐप से जो कहते हैं (आपकी आवाज़, सुनी हुई बात और ऐप का जवाब) Wi-Fi पर हिसाब साथी टीम को भेजा जाता है, आपके नाम के बिना, ताकि ऐप बेहतर समझे। आपका हिसाब इसी फोन में रहता है।",
+        "ଏହା ଚାଲୁ ଥିଲେ, ଆପଣ ଆପ୍‌କୁ ଯାହା କୁହନ୍ତି (ଆପଣଙ୍କ ସ୍ୱର, ଶୁଣିଥିବା କଥା ଓ ଆପ୍‌ର ଉତ୍ତର) Wi-Fi ରେ ହିସାବ ସାଥୀ ଟିମ୍‌କୁ ପଠାଯାଏ, ଆପଣଙ୍କ ନାମ ବିନା, ଯାହାଦ୍ୱାରା ଆପ୍ ଭଲ ବୁଝିବ। ଆପଣଙ୍କ ହିସାବ ଏହି ଫୋନ୍‌ରେ ରହେ।",
+        "When this is on, what you say to the app (your voice, the words it heard and its answer) is sent over Wi-Fi to the HisaabSaathi team, without your name, so it learns to understand better. Your ledger stays on this phone.",
+    )
+    val shareSwitch get() = t("मेरी आवाज़ और सवाल भेजें", "ମୋ ସ୍ୱର ଓ ପ୍ରଶ୍ନ ପଠାନ୍ତୁ", "Share my voice and questions")
+    fun shareWaiting(n: Int) = tp("$n भेजने बाकी", "$n ଟି ପଠାଇବା ବାକି", "$n waiting to be sent", "{0} waiting to be sent", n)
+    fun shareSent(n: Int) = tp("अब तक $n भेजे", "ଏ ପର୍ଯ୍ୟନ୍ତ $n ଟି ପଠାଯାଇଛି", "$n sent so far", "{0} sent so far", n)
+    val sendNow get() = t("अभी भेजें", "ଏବେ ପଠାନ୍ତୁ", "Send now")
+    val deleteShared get() = t("भेजा हुआ मिटाएं", "ପଠାଯାଇଥିବା ଲିଭାନ୍ତୁ", "Delete what I shared")
+    val deleteSharedQ get() = t(
+        "इस फोन से भेजा गया सब कुछ टीम के कंप्यूटर से मिटा दिया जाएगा, और यहाँ बाकी भी। पक्का?",
+        "ଏହି ଫୋନ୍‌ରୁ ପଠାଯାଇଥିବା ସବୁକିଛି ଟିମ୍‌ର କମ୍ପ୍ୟୁଟରରୁ ଲିଭାଯିବ, ଏବଂ ଏଠାରେ ବାକି ଥିବା ବି। ନିଶ୍ଚିତ?",
+        "Everything this phone sent will be deleted from the team's computers, along with what is waiting here. Are you sure?",
+    )
+    val deleteSharedDone get() = t("मिटाया जा रहा है। फोन के इंटरनेट पर आने पर पूरा होगा।", "ଲିଭାଯାଉଛି। ଫୋନ୍ ଇଣ୍ଟରନେଟ୍‌ରେ ଆସିଲେ ଶେଷ ହେବ।", "Deleting. It finishes the next time the phone is online.")
     fun voicePackDownloading(pct: Int): String = tp("आवाज़ पैक अभी डाउनलोड हो रहा है ($pct%)। थोड़ा रुकिए, या लिखकर डालें।", "ଭଏସ୍ ପ୍ୟାକ୍ ଏବେ ଡାଉନଲୋଡ୍ ହେଉଛି ($pct%)। ଟିକେ ଅପେକ୍ଷା କରନ୍ତୁ, କିମ୍ବା ଲେଖି ଦିଅନ୍ତୁ।", "The voice pack is still downloading ($pct%). Please wait, or type instead.", "The voice pack is still downloading ({0}%). Please wait, or type instead.", pct)
 
     // ---- confirm
@@ -195,9 +212,9 @@ class Strings(val lang: Lang) {
     val addFromPhone get() = t("फोन से मॉडल फ़ाइल जोड़ें", "ଫୋନ୍‌ରୁ ମଡେଲ୍ ଫାଇଲ୍ ଯୋଡ଼ନ୍ତୁ", "Add model file from phone")
     val privacyTitle get() = t("आपका डेटा, आपके पास", "ଆପଣଙ୍କ ଡାଟା, ଆପଣଙ୍କ ପାଖରେ", "Your data stays with you")
     val privacyBody get() = t(
-        "• आपका हिसाब इसी फोन में ताले (एन्क्रिप्शन) में रहता है।\n• आवाज़ फोन में ही समझी जाती है और सेव नहीं होती।\n• ठेकेदार, कंपनी या हम — कोई आपका हिसाब नहीं देख सकता।\n• इंटरनेट सिर्फ़ पैक डाउनलोड करने के लिए लगता है।\n• आप जब चाहें सब कुछ मिटा सकते हैं।",
-        "• ଆପଣଙ୍କ ହିସାବ ଏହି ଫୋନ୍‌ରେ ତାଲା (ଏନକ୍ରିପ୍ସନ୍) ଭିତରେ ରହେ।\n• ସ୍ୱର ଫୋନ୍‌ରେ ହିଁ ବୁଝାଯାଏ, ସେଭ୍ ହୁଏ ନାହିଁ।\n• ଠିକାଦାର, କମ୍ପାନୀ କିମ୍ବା ଆମେ — କେହି ଆପଣଙ୍କ ହିସାବ ଦେଖିପାରିବେ ନାହିଁ।\n• ଇଣ୍ଟରନେଟ୍ କେବଳ ପ୍ୟାକ୍ ଡାଉନଲୋଡ୍ ପାଇଁ ଲାଗେ।\n• ଆପଣ ଚାହିଁଲେ ସବୁ ଲିଭାଇ ପାରିବେ।",
-        "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone and is not saved.\n• No contractor, company, or we ourselves can see your records.\n• The internet is used only to download packs.\n• You can erase everything whenever you want.",
+        "• आपका हिसाब इसी फोन में ताले (एन्क्रिप्शन) में रहता है।\n• आवाज़ फोन में ही समझी जाती है। ऐप को बेहतर बनाने के लिए आपने हाँ कहा हो, तभी वह रखी और भेजी जाती है।\n• ठेकेदार या कंपनी आपका हिसाब नहीं देख सकते।\n• इंटरनेट पैक डाउनलोड करने के लिए लगता है, और आपने हाँ कहा हो तो भेजने के लिए।\n• आप जब चाहें सब कुछ मिटा सकते हैं।",
+        "• ଆପଣଙ୍କ ହିସାବ ଏହି ଫୋନ୍‌ରେ ତାଲା (ଏନକ୍ରିପ୍ସନ୍) ଭିତରେ ରହେ।\n• ସ୍ୱର ଫୋନ୍‌ରେ ହିଁ ବୁଝାଯାଏ। ଆପ୍ ଉନ୍ନତି ପାଇଁ ଆପଣ ହଁ କହିଥିଲେ ହିଁ ତାହା ରଖାଯାଏ ଓ ପଠାଯାଏ।\n• ଠିକାଦାର କିମ୍ବା କମ୍ପାନୀ ଆପଣଙ୍କ ହିସାବ ଦେଖିପାରିବେ ନାହିଁ।\n• ଇଣ୍ଟରନେଟ୍ ପ୍ୟାକ୍ ଡାଉନଲୋଡ୍ ପାଇଁ ଲାଗେ, ଏବଂ ଆପଣ ହଁ କହିଥିଲେ ପଠାଇବା ପାଇଁ।\n• ଆପଣ ଚାହିଁଲେ ସବୁ ଲିଭାଇ ପାରିବେ।",
+        "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone. It is kept and sent only if you agreed to help improve the app.\n• No contractor or company can see your records.\n• The internet is used to download packs and, only if you agreed, to send what helps improve the app.\n• You can erase everything whenever you want.",
     )
     val eraseAll get() = t("सारा हिसाब मिटाएं", "ସବୁ ହିସାବ ଲିଭାନ୍ତୁ", "Erase all records")
     val eraseAllQ get() = t("सारा हिसाब हमेशा के लिए मिट जाएगा। पक्का?", "ସବୁ ହିସାବ ସବୁଦିନ ପାଇଁ ଲିଭିଯିବ। ନିଶ୍ଚିତ?", "All records will be erased for ever. Are you sure?")
@@ -214,7 +231,11 @@ class Strings(val lang: Lang) {
     val chatThanks get() = t("आपका स्वागत है।", "ଆପଣଙ୍କୁ ସ୍ୱାଗତ।", "You are welcome.")
     val chatHowAreYou get() = t("मैं ठीक हूँ। आज का हिसाब लिख लें?", "ମୁଁ ଭଲ ଅଛି। ଆଜିର ହିସାବ ଲେଖିବା?", "I am fine. Shall we note today's work?")
     val chatMaker get() = t("मुझे Acxelin Labs ने मजदूर भाई-बहनों के लिए बनाया है।", "ମୋତେ Acxelin Labs ଶ୍ରମିକ ଭାଇ-ଭଉଣୀଙ୍କ ପାଇଁ ତିଆରି କରିଛି।", "Acxelin Labs made me for working people.")
-    val chatPrivacy get() = t("आपका हिसाब सिर्फ़ इसी फोन में ताले में रहता है। ठेकेदार, कंपनी या कोई और इसे नहीं देख सकता।", "ଆପଣଙ୍କ ହିସାବ କେବଳ ଏହି ଫୋନ୍‌ରେ ତାଲା ଭିତରେ ରହେ। ଠିକାଦାର, କମ୍ପାନୀ କିମ୍ବା ଅନ୍ୟ କେହି ଦେଖିପାରିବେ ନାହିଁ।", "Your records stay locked on this phone only. No contractor, company or anyone else can see them.")
+    val chatPrivacy get() = t(
+        "आपका हिसाब सिर्फ़ इसी फोन में ताले में रहता है। ठेकेदार या कंपनी इसे नहीं देख सकते। आपने सेटिंग में हाँ कहा हो, तभी आपकी कही बात ऐप सुधारने के लिए हिसाब साथी टीम को भेजी जाती है, आपके नाम के बिना।",
+        "ଆପଣଙ୍କ ହିସାବ କେବଳ ଏହି ଫୋନ୍‌ରେ ତାଲା ଭିତରେ ରହେ। ଠିକାଦାର କିମ୍ବା କମ୍ପାନୀ ଦେଖିପାରିବେ ନାହିଁ। ଆପଣ ସେଟିଂସ୍‌ରେ ହଁ କହିଥିଲେ ହିଁ, ଆପଣଙ୍କ କଥା ଆପ୍ ଉନ୍ନତି ପାଇଁ ହିସାବ ସାଥୀ ଟିମ୍‌କୁ ପଠାଯାଏ, ଆପଣଙ୍କ ନାମ ବିନା।",
+        "Your records stay locked on this phone only. No contractor or company can see them. Only if you agreed in Settings, what you say to the app is sent to the HisaabSaathi team, without your name, to improve it.",
+    )
     val chatBye get() = t("ठीक है, फिर मिलेंगे।", "ଠିକ୍ ଅଛି, ପୁଣି ଦେଖା ହେବ।", "All right, see you again.")
     val chatFallback get() = t("यह मैं नहीं समझा। मैं काम, एडवांस और खर्च का हिसाब रखता हूँ। ऐसे बोलिए: 500 रुपये मजदूरी मिली।", "ଏହା ମୁଁ ବୁଝିଲି ନାହିଁ। ମୁଁ କାମ, ଆଡଭାନ୍ସ ଓ ଖର୍ଚ୍ଚର ହିସାବ ରଖେ। ଏପରି କୁହନ୍ତୁ: 500 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା।", "I did not understand that. I keep track of work, advances and expenses. Say it like this: got 500 rupees wages.")
     fun chatDate(date: String): String = tp("आज $date है।", "ଆଜି $date।", "Today is $date.", "Today is {0}.", date)

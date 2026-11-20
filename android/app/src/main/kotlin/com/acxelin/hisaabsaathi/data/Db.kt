@@ -19,6 +19,8 @@ import com.acxelin.hisaabsaathi.core.Entry
 import com.acxelin.hisaabsaathi.core.EntryType
 import com.acxelin.hisaabsaathi.core.ExpenseCategory
 import com.acxelin.hisaabsaathi.core.HashChain
+import com.acxelin.hisaabsaathi.core.Improve
+import com.acxelin.hisaabsaathi.core.Sample
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
@@ -165,17 +167,64 @@ abstract class CorrectionDao {
     }
 }
 
-@Database(entities = [EntryRow::class, CorrectionRow::class], version = 2, exportSchema = false)
+/**
+ * One exchange waiting to be sent to help improve the app (core/Improve.kt), only for workers
+ * who agreed. [json] is the [Sample]; [audio] its WAV clip. Kept here so it is encrypted with
+ * the ledger, and deleted once sent.
+ */
+@Entity(tableName = "samples")
+data class SampleRow(
+    @PrimaryKey val id: String,
+    val createdAtMs: Long,
+    val json: String,
+    val audio: ByteArray?,
+)
+
+/** A sample without its clip: listing many clips at once could exceed Android's row window. */
+data class SampleHead(val id: String, val json: String)
+
+@Dao
+abstract class SampleDao {
+    @Query("SELECT COUNT(*) FROM samples")
+    abstract fun count(): Flow<Int>
+
+    @Query("SELECT id, json FROM samples ORDER BY createdAtMs ASC LIMIT :n")
+    abstract suspend fun oldest(n: Int): List<SampleHead>
+
+    @Query("SELECT audio FROM samples WHERE id = :id")
+    abstract suspend fun audio(id: String): ByteArray?
+
+    @Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)
+    abstract suspend fun insert(row: SampleRow)
+
+    @Query("DELETE FROM samples WHERE id IN (:ids)")
+    abstract suspend fun delete(ids: List<String>)
+
+    @Query("DELETE FROM samples WHERE id NOT IN (SELECT id FROM samples ORDER BY createdAtMs DESC LIMIT :keep)")
+    abstract suspend fun trim(keep: Int)
+
+    @Query("DELETE FROM samples")
+    abstract suspend fun clear()
+
+    @Transaction
+    open suspend fun add(row: SampleRow) {
+        insert(row)
+        trim(Improve.LIMIT)
+    }
+}
+
+@Database(entities = [EntryRow::class, CorrectionRow::class, SampleRow::class], version = 3, exportSchema = false)
 abstract class LedgerDb : RoomDatabase() {
     abstract fun entries(): EntryDao
     abstract fun corrections(): CorrectionDao
+    abstract fun samples(): SampleDao
 
     companion object {
         fun open(context: Context): LedgerDb {
             System.loadLibrary("sqlcipher")
             return Room.databaseBuilder(context, LedgerDb::class.java, "ledger.db")
                 .openHelperFactory(SupportOpenHelperFactory(runCatching { DbKey.get(context) }.getOrElse { DbKey.startOver(context, it) }))
-                .addMigrations(ADD_CORRECTIONS)
+                .addMigrations(ADD_CORRECTIONS, ADD_SAMPLES)
                 .build()
         }
 
@@ -186,6 +235,16 @@ abstract class LedgerDb : RoomDatabase() {
                     "CREATE TABLE IF NOT EXISTS `corrections` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                         "`createdAtMs` INTEGER NOT NULL, `lang` TEXT NOT NULL, `source` TEXT NOT NULL, `heard` TEXT NOT NULL, " +
                         "`understood` TEXT NOT NULL, `kept` TEXT)",
+                )
+            }
+        }
+
+        /** 0.8.0 adds the samples waiting to be sent; existing records are untouched. */
+        val ADD_SAMPLES = object : androidx.room.migration.Migration(2, 3) {
+            override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `samples` (`id` TEXT NOT NULL, `createdAtMs` INTEGER NOT NULL, " +
+                        "`json` TEXT NOT NULL, `audio` BLOB, PRIMARY KEY(`id`))",
                 )
             }
         }
@@ -269,5 +328,16 @@ class CorrectionLog(private val dao: CorrectionDao) {
 
     suspend fun add(c: Correction) = dao.add(c)
     suspend fun all(): List<Correction> = dao.all().map { it.toCorrection() }
+    suspend fun clear() = dao.clear()
+}
+
+/** What waits to be sent to help improve the app. */
+class SampleQueue(private val dao: SampleDao) {
+    val count: Flow<Int> = dao.count()
+
+    suspend fun add(sample: Sample, wav: ByteArray?) = dao.add(SampleRow(sample.id, sample.createdAtMs, Improve.toJson(sample), wav))
+    suspend fun oldest(n: Int): List<Sample> = dao.oldest(n).mapNotNull { runCatching { Improve.fromJson(it.json) }.getOrNull() }
+    suspend fun audio(id: String): ByteArray? = dao.audio(id)
+    suspend fun delete(ids: List<String>) = dao.delete(ids)
     suspend fun clear() = dao.clear()
 }

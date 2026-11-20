@@ -6,8 +6,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.acxelin.hisaabsaathi.HisaabApp
 import com.acxelin.hisaabsaathi.core.Confirm
-import com.acxelin.hisaabsaathi.core.Correction
+import com.acxelin.hisaabsaathi.BuildConfig
 import com.acxelin.hisaabsaathi.core.Corrections
+import com.acxelin.hisaabsaathi.core.Improve
+import com.acxelin.hisaabsaathi.core.Sample
+import com.acxelin.hisaabsaathi.core.VoiceSamples
+import com.acxelin.hisaabsaathi.work.Sharing
 import com.acxelin.hisaabsaathi.core.DraftEntry
 import com.acxelin.hisaabsaathi.core.Entry
 import com.acxelin.hisaabsaathi.core.EntryType
@@ -55,6 +59,8 @@ sealed interface Capture {
         val understood: List<DraftEntry> = drafts,
         /** Lines whose amount box holds something that is not an amount; saving waits until fixed. */
         val invalid: Set<Int> = emptySet(),
+        /** What the worker said, kept until they say yes or no (only if they agreed to share). */
+        val said: Said? = null,
     ) : Capture {
         /** Something worth saving, and no amount box left with a typing slip. */
         val canSave: Boolean get() = invalid.isEmpty() && drafts.any { it.amountPaise > 0 || it.hours != null || it.pieces != null }
@@ -65,6 +71,9 @@ sealed interface Capture {
     data class Message(val text: String, val asked: String? = null) : Capture
 }
 
+/** One thing the worker said or typed, and how the app heard it; becomes a [com.acxelin.hisaabsaathi.core.Sample]. */
+class Said(val text: String, val source: String, val audio: FloatArray?, val engine: String, val atMs: Long = System.currentTimeMillis())
+
 class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val app = application as HisaabApp
 
@@ -74,7 +83,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val packStates = app.packs.states
     val capture = MutableStateFlow<Capture>(Capture.Idle)
     val level = MutableStateFlow(0f)
-    val correctionCount: StateFlow<Int> = app.corrections.count.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
+    /** Exchanges waiting to be sent (only when the worker agreed to share). */
+    val waitingCount: StateFlow<Int> = app.samples.count.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
+    /** Whether this build can send at all (has an upload service). */
+    val canSend: Boolean get() = BuildConfig.SHARE_URL.isNotBlank()
     val wagePack get() = app.wagePack
 
     private val lang: Lang get() = settings.value?.lang ?: Lang.HI
@@ -113,6 +125,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             understand(text, "voice")
         }
     }
+
+    /** The recording and engine of the last thing heard, for [Said]. */
+    private var lastAudio: FloatArray? = null
+    private var lastEngine = ""
 
     /** Technical note about the last problem, shown in Settings for testers. */
     val lastProblem = MutableStateFlow(lastExitProblem().ifEmpty { app.slm.problem })
@@ -165,6 +181,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val usePack = app.stt.available(l)
         if (!usePack && !app.systemStt.available()) { voicePackMessage(); return null }
         app.slm.unload() // keep peak memory low on 3 GB phones
+        lastAudio = null; lastEngine = if (usePack) "pack" else "phone"
         capture.value = Capture.Listening
         val heard = try {
             if (usePack) app.stt.listen(l, onLevel = { level.value = it }, onRecorded = { capture.value = Capture.Thinking })
@@ -175,7 +192,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             level.value = 0f
         }
         return when (heard) {
-            is Heard.Text -> heard.text
+            is Heard.Text -> { lastAudio = heard.audio; heard.text }
             Heard.Silence -> { say(strings.heardNothing); null }
             is Heard.Failed -> {
                 note("${if (usePack) "voice pack" else "phone recogniser"}: ${heard.detail}")
@@ -204,11 +221,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private suspend fun understand(text: String, source: String) {
+        val said = Said(text, source, lastAudio.takeIf { source == "voice" }, if (source == "voice") lastEngine else "")
+        lastAudio = null
         if (text.isBlank()) return say(strings.notUnderstood)
         capture.value = Capture.Thinking
         when (val u = Understand.of(text)) {
-            is Understood.Ask -> answer(u.query, text)
-            is Understood.Talk -> say(strings.chat(u.chat, todayText()), asked = text)
+            is Understood.Ask -> { answer(u.query, text); replied(said, Improve.understood(u)) }
+            is Understood.Talk -> { say(strings.chat(u.chat, todayText()), asked = text); replied(said, Improve.understood(u)) }
             is Understood.Entries -> {
                 var result = u.extraction
                 // The rules were unsure: let the language model have a look, if it is installed.
@@ -216,25 +235,60 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     app.stt.unload()
                     result = Slm.choose(result, Slm.prompt(text)?.let { app.slm.generate(it) })
                 }
-                review(Capture.Review(text, result.entries, result.lowConfidence, source))
+                review(Capture.Review(text, result.entries, result.lowConfidence, source, said = said))
             }
             is Understood.Unknown -> {
                 if (app.slm.available()) {
                     app.stt.unload()
                     val found = Slm.choose(Extraction(text), Slm.prompt(text)?.let { app.slm.generate(it) })
-                    if (found.entries.isNotEmpty()) return review(Capture.Review(text, found.entries, true, source))
+                    if (found.entries.isNotEmpty()) return review(Capture.Review(text, found.entries, true, source, said = said))
                     // A ledger question in words the rules do not know ("did I get all my wages this
                     // month?"). The totals are the app's. Only the model's period is trusted: in tests it
                     // named the period right 60 times in 64 but the topic often wrong, so the worker
                     // hears the whole summary for that period rather than one possibly wrong total.
-                    Slm.parseQuestion(app.slm.generate(Slm.questionPrompt(text)))
-                        ?.let { return answer(Query(it.period, QueryTopic.ALL), text) }
+                    Slm.parseQuestion(app.slm.generate(Slm.questionPrompt(text)))?.let {
+                        answer(Query(it.period, QueryTopic.ALL), text)
+                        return replied(said, "MODEL ASK ${it.period.name} ALL")
+                    }
                 }
                 // Never stay silent: say what the app can do and how to phrase it.
                 say(strings.chatFallback, asked = text)
+                replied(said, Improve.understood(u), Improve.Outcome.NOT_UNDERSTOOD)
             }
         }
     }
+
+    /** A question or small talk was answered: keep it with what the app said (if the worker agreed to share). */
+    private fun replied(said: Said, understood: String, outcome: String = Improve.Outcome.ANSWERED) =
+        keep(said, understood, (capture.value as? Capture.Message)?.text.orEmpty(), outcome)
+
+    /**
+     * Keeps one exchange to send later, only while the worker's "share" choice is on. Never
+     * slows or breaks the app: the clip is written in the background and errors are only noted.
+     */
+    private fun keep(said: Said?, understood: String, reply: String, outcome: String, kept: String? = null) {
+        val s = settings.value ?: return
+        if (said == null || s.share != true || !Improve.counts(said.source)) return
+        val l = lang
+        app.scope.launch {
+            runCatching {
+                val pcm = said.audio?.takeIf { it.isNotEmpty() }?.let(VoiceSamples::pcm16)
+                val sample = Sample(
+                    id = Improve.newId(), createdAtMs = said.atMs, lang = l.code, source = said.source, heard = said.text,
+                    understood = understood, reply = reply, outcome = outcome, kept = kept, region = s.region,
+                    appVersion = BuildConfig.VERSION_NAME, engine = said.engine,
+                    audioSeconds = (pcm?.size ?: 0) / VoiceSamples.SAMPLE_RATE.toDouble(),
+                    quality = pcm?.let { VoiceSamples.quality(it).name.lowercase() }.orEmpty(), hasAudio = pcm != null,
+                )
+                app.samples.add(sample, pcm?.let { VoiceSamples.wav(it) })
+            }.onFailure { note("improve: ${it.javaClass.simpleName}: ${it.message}") }
+        }
+    }
+
+    /** How a confirmation card ended. */
+    private fun reviewed(r: Capture.Review, outcome: String) =
+        keep(r.said, "ENTRY " + Corrections.describe(r.understood), strings.readback(r.understood), outcome,
+            kept = if (outcome == Improve.Outcome.SAVED || outcome == Improve.Outcome.CORRECTED) Corrections.describe(r.drafts) else null)
 
     private fun todayText(): String =
         LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("d MMMM yyyy", com.acxelin.hisaabsaathi.speech.locale(lang)))
@@ -318,18 +372,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                 app.speaker.speak(strings.voiceFailed, lang)
                 return@launch
             }
-            log(Corrections.corrected(now, lang, r.source, r.transcript, r.understood, r.drafts))
+            reviewed(r, if (r.understood == r.drafts) Improve.Outcome.SAVED else Improve.Outcome.CORRECTED)
             say(strings.saved)
         }
     }
 
-    /** Keeps the worker's fix on the phone (encrypted), unless they switched that off. */
-    private fun log(c: Correction?) {
-        if (c == null || settings.value?.keepCorrections == false) return
-        app.scope.launch { runCatching { app.corrections.add(c) }.onFailure { note("correction log: ${it.message}") } }
-    }
-
-    private fun rejected(r: Capture.Review) = log(Corrections.rejected(System.currentTimeMillis(), lang, r.source, r.transcript, r.understood))
+    private fun rejected(r: Capture.Review) = reviewed(r, Improve.Outcome.REJECTED)
 
     /**
      * "Say yes or no": yes saves, no starts a new recording. If nothing usable is heard the
@@ -341,7 +389,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         busy = viewModelScope.launch(guard) {
             val heard = try { listenOnce() } catch (e: Exception) { note("yes/no: ${e.javaClass.simpleName}"); null }
             if (heard == null) { capture.value = r; return@launch }
-            when (Confirm.parse(heard)) {
+            val answer = Confirm.parse(heard)
+            keep(Said(heard, "voice", lastAudio, lastEngine), "CONFIRM ${when (answer) { true -> "YES"; false -> "NO"; null -> "NONE" }}", "", Improve.Outcome.CONFIRM)
+            lastAudio = null
+            when (answer) {
                 true -> { capture.value = r; confirmSave() }
                 false -> { rejected(r); capture.value = Capture.Idle; busy = null; listenForEntry() }
                 null -> review(r)
@@ -350,14 +401,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun retry() {
-        (capture.value as? Capture.Review)?.let(::rejected)
-        val wasVoice = (capture.value as? Capture.Review)?.source == "voice"
+        val r = capture.value as? Capture.Review
+        r?.let(::rejected)
+        val wasVoice = r?.source == "voice"
+        r?.let { capture.value = it.copy(said = null) } // already kept as rejected
         dismiss()
         if (wasVoice && !isBusy) listenForEntry()
     }
 
     fun dismiss() {
         app.speaker.stop()
+        (capture.value as? Capture.Review)?.let { reviewed(it, Improve.Outcome.DISMISSED) }
         capture.value = Capture.Idle
     }
 
@@ -412,18 +466,39 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(guard) { app.ledger.replace(changed.copy(note = note)) }
         return true
     }
-    fun eraseAll() = viewModelScope.launch(guard) { app.ledger.eraseAll(); app.corrections.clear() }
+    fun eraseAll() = viewModelScope.launch(guard) { app.ledger.eraseAll(); app.corrections.clear(); app.samples.clear() }
 
-    // ---- correction log
+    // ---- help improve the app (only what the worker agreed to)
 
-    fun setKeepCorrections(on: Boolean) = viewModelScope.launch(guard) { app.settings.setKeepCorrections(on) }
-    fun deleteCorrections() = viewModelScope.launch(guard) { app.corrections.clear() }
-
-    fun shareCorrections() = viewModelScope.launch(guard) {
-        val list = app.corrections.all()
-        if (list.isEmpty()) return@launch
-        app.exporter.share(listOf(app.exporter.correctionsFile(Corrections.toJsonLines(list))), strings.share, mime = "application/json")
+    /**
+     * The worker's choice. Yes: from now on each exchange is kept and sent, with the fixes the
+     * old local log held. No: nothing is kept, and anything waiting is deleted.
+     */
+    fun setShare(on: Boolean) = viewModelScope.launch(guard) {
+        app.settings.setShare(on)
+        val old = runCatching { app.corrections.all() }.getOrDefault(emptyList())
+        if (on) {
+            val region = settings.value?.region.orEmpty()
+            old.forEach { app.samples.add(Improve.fromCorrection(it, region, BuildConfig.VERSION_NAME), null) }
+            Sharing.schedule(app)
+        } else {
+            app.samples.clear()
+            Sharing.cancel(app)
+        }
+        app.corrections.clear()
     }
+
+    fun sendNow() = Sharing.now(app)
+
+    /** Deletes what is waiting here, and asks the team's service to delete what this phone sent. */
+    fun deleteShared() = viewModelScope.launch(guard) {
+        app.samples.clear()
+        app.settings.requestDelete()
+        Sharing.now(app)
+    }
+
+    /** Reads a text aloud in the worker's language (the setup question). */
+    fun readAloud(text: String) = app.speaker.speak(text, lang)
 
     fun setLang(l: Lang) = viewModelScope.launch(guard) { app.settings.setLang(l) }
     fun setRegion(r: String) = viewModelScope.launch(guard) { app.settings.setRegion(r) }
@@ -434,7 +509,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         if (on) Reminders.schedule(app) else Reminders.cancel(app)
     }
 
-    fun finishOnboarding() = viewModelScope.launch(guard) {
+    fun finishOnboarding(share: Boolean) = viewModelScope.launch(guard) {
+        app.settings.setShare(share)
+        if (share) Sharing.schedule(app)
         app.settings.setOnboarded()
         Reminders.schedule(app)
     }

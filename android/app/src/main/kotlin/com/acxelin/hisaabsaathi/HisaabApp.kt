@@ -8,6 +8,12 @@ import com.acxelin.hisaabsaathi.core.Wages
 import com.acxelin.hisaabsaathi.data.CorrectionLog
 import com.acxelin.hisaabsaathi.data.LedgerDb
 import com.acxelin.hisaabsaathi.data.LedgerRepository
+import com.acxelin.hisaabsaathi.data.SampleQueue
+import com.acxelin.hisaabsaathi.core.ShareClient
+import com.acxelin.hisaabsaathi.core.ShareServer
+import com.acxelin.hisaabsaathi.work.Sharing
+import com.acxelin.hisaabsaathi.work.Uploader
+import kotlinx.coroutines.flow.first
 import com.acxelin.hisaabsaathi.data.SettingsStore
 import com.acxelin.hisaabsaathi.export.Exporter
 import com.acxelin.hisaabsaathi.models.PackManager
@@ -26,6 +32,24 @@ open class HisaabApp : Application() {
     private val db by lazy { openDb() }
     val ledger by lazy { LedgerRepository(db.entries()) }
     val corrections by lazy { CorrectionLog(db.corrections()) }
+    val samples by lazy { SampleQueue(db.samples()) }
+
+    /** The team's upload service; none in builds made without one (samples then wait on the phone). */
+    protected open fun shareServer(): ShareServer? =
+        BuildConfig.SHARE_URL.takeIf { it.isNotBlank() }?.let { runCatching { ShareClient(it) }.getOrNull() }
+
+    val uploader by lazy { Uploader(settings, samples, shareServer(), BuildConfig.VERSION_NAME) }
+
+    override fun onCreate() {
+        super.onCreate()
+        // Sending is background work; pick it up again after an update or a restart.
+        scope.launch {
+            runCatching {
+                if (settings.flow.first().share == true) Sharing.schedule(this@HisaabApp)
+                if (settings.pendingDeletes().isNotEmpty()) Sharing.now(this@HisaabApp)
+            }
+        }
+    }
 
     /** Encrypted on a phone; tests replace it with an in-memory database. */
     protected open fun openDb(): LedgerDb = LedgerDb.open(this)

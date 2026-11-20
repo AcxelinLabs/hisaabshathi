@@ -36,7 +36,8 @@ private const val SAMPLE_RATE = 16_000
 
 /** How one attempt to listen ended. Each case gets its own message, so a failure is never reported as "not understood". */
 sealed interface Heard {
-    data class Text(val text: String) : Heard
+    /** [audio]: what was recorded (16 kHz, -1..1), when the app's own engine heard it. */
+    class Text(val text: String, val audio: FloatArray? = null) : Heard
     /** The microphone worked but nobody spoke (or nothing recognisable was said). */
     data object Silence : Heard
     /** Something went wrong; [detail] is technical and shown only in Settings. */
@@ -114,7 +115,7 @@ class OnDeviceStt(private val packs: PackManager) {
                 try {
                     stream.acceptWaveform(samples, SAMPLE_RATE)
                     rec.decode(stream)
-                    rec.getResult(stream).text.trim().let { if (it.isEmpty()) Heard.Silence else Heard.Text(it) }
+                    rec.getResult(stream).text.trim().let { if (it.isEmpty()) Heard.Silence else Heard.Text(it, samples) }
                 } finally {
                     stream.release()
                 }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -111,11 +112,55 @@ private fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean
     }
 }
 
+// ---------------------------------------------------------------- help improve the app
+
+/**
+ * "Help improve HisaabSaathi?", asked once: at setup, or after the update that added it. Read
+ * aloud for workers who do not read. Neither answer is chosen for them; nothing is kept before
+ * they answer, and only "yes" sends anything.
+ */
+@Composable
+private fun ShareQuestion(vm: AppViewModel, s: Strings, choice: Boolean?, onChoice: (Boolean) -> Unit) {
+    val spoken = s.shareTitle + " " + s.shareBody
+    androidx.compose.runtime.LaunchedEffect(s.lang) { vm.readAloud(spoken) }
+    Text(s.shareTitle, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+    Text(s.shareBody, fontSize = 16.sp, lineHeight = 23.sp)
+    OutlinedButton(onClick = { vm.readAloud(spoken) }, modifier = Modifier.height(48.dp)) {
+        Icon(Icons.Default.PlayArrow, null, tint = Ink)
+        Text(s.listen, fontSize = 16.sp, modifier = Modifier.padding(start = 6.dp))
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        for ((label, value) in listOf(s.shareYes to true, s.shareNo to false)) {
+            val selected = choice == value
+            Button(
+                onClick = { onChoice(value) }, modifier = Modifier.weight(1f).height(60.dp), shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = if (selected) Marigold else Paper, contentColor = Ink),
+            ) {
+                if (selected) Icon(Icons.Default.Check, null, tint = Ink)
+                Text(label, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Ink)
+            }
+        }
+    }
+}
+
+/** Workers who set up the app before the question existed answer it once, before anything else. */
+@Composable
+fun ShareAskScreen(vm: AppViewModel, s: Strings) {
+    Column(Modifier.fillMaxSize().background(Chalk).systemBarsPadding().padding(24.dp)) {
+        Text(s.appName, fontSize = 40.sp, fontWeight = FontWeight.ExtraBold, color = Ink)
+        Spacer(Modifier.height(24.dp))
+        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            ShareQuestion(vm, s, null) { vm.setShare(it) }
+        }
+    }
+}
+
 // ---------------------------------------------------------------- first-time setup
 
 @Composable
 fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     var step by rememberSaveable { mutableIntStateOf(0) }
+    var share by rememberSaveable { mutableStateOf<Boolean?>(null) }
     Column(Modifier.fillMaxSize().background(if (step == 0) Ink else Chalk).systemBarsPadding().padding(24.dp)) {
         Text(s.appName, fontSize = 40.sp, fontWeight = FontWeight.ExtraBold, color = if (step == 0) Color.White else Ink)
         Spacer(Modifier.height(24.dp))
@@ -129,6 +174,7 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                     Text(s.chooseState, fontSize = 22.sp)
                     RegionPicker(vm, settings)
                 }
+                3 -> ShareQuestion(vm, s, share) { share = it }
                 else -> {
                     Text(s.voicePackTitle, fontSize = 22.sp)
                     Text(s.voicePackBody, fontSize = 17.sp)
@@ -148,11 +194,11 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             if (step > 0) OutlinedButton(onClick = { step-- }, modifier = Modifier.height(52.dp)) { Icon(Icons.AutoMirrored.Filled.ArrowBack, s.cancel, tint = Ink) }
             Button(
-                onClick = { if (step < 2) step++ else vm.finishOnboarding() },
-                enabled = step != 1 || settings.region.isNotEmpty(),
+                onClick = { if (step < 3) step++ else vm.finishOnboarding(share == true) },
+                enabled = (step != 1 || settings.region.isNotEmpty()) && (step != 3 || share != null),
                 modifier = Modifier.weight(1f).height(52.dp), shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Marigold, contentColor = Ink),
-            ) { Text(if (step < 2) s.next else s.start, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Ink) }
+            ) { Text(if (step < 3) s.next else s.start, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Ink) }
         }
     }
 }
@@ -162,6 +208,8 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
 @Composable
 fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () -> Unit) {
     var confirmErase by remember { mutableStateOf(false) }
+    var confirmDeleteShared by remember { mutableStateOf(false) }
+    val context = androidx.compose.ui.platform.LocalContext.current
     Column(Modifier.fillMaxSize().background(Ink).systemBarsPadding().background(MaterialTheme.colorScheme.background)) {
         Row(Modifier.fillMaxWidth().background(Ink).padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, s.done, tint = Color.White) }
@@ -223,15 +271,18 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             Text(s.improveTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(s.improveBody, fontSize = 15.sp)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(s.keepCorrections, Modifier.weight(1f), fontSize = 16.sp)
-                Switch(checked = settings.keepCorrections, onCheckedChange = { vm.setKeepCorrections(it) })
+                Text(s.shareSwitch, Modifier.weight(1f), fontSize = 16.sp)
+                Switch(checked = settings.share == true, onCheckedChange = { vm.setShare(it) })
             }
-            val kept by vm.correctionCount.collectAsStateWithLifecycle()
-            Text(s.correctionsCount(kept), fontSize = 15.sp, color = InkSoft)
-            if (kept > 0) {
+            val waiting by vm.waitingCount.collectAsStateWithLifecycle()
+            val counts = listOfNotNull(s.shareWaiting(waiting).takeIf { waiting > 0 }, s.shareSent(settings.sharedCount).takeIf { settings.sharedCount > 0 })
+            if (counts.isNotEmpty()) Text(counts.joinToString(" · "), fontSize = 15.sp, color = InkSoft)
+            if (waiting > 0 || settings.sharedCount > 0) {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    OutlinedButton(onClick = { vm.shareCorrections() }, modifier = Modifier.height(52.dp)) { Text(s.shareCorrections) }
-                    OutlinedButton(onClick = { vm.deleteCorrections() }, modifier = Modifier.height(52.dp)) { Text(s.deleteCorrections, color = Red) }
+                    if (vm.canSend && waiting > 0 && settings.share == true) {
+                        OutlinedButton(onClick = { vm.sendNow() }, modifier = Modifier.height(52.dp)) { Text(s.sendNow) }
+                    }
+                    OutlinedButton(onClick = { confirmDeleteShared = true }, modifier = Modifier.height(52.dp)) { Text(s.deleteShared, color = Red) }
                 }
             }
             HorizontalDivider()
@@ -244,6 +295,20 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             OutlinedButton(onClick = { confirmErase = true }) { Text(s.eraseAll, color = Red) }
             Spacer(Modifier.height(24.dp))
         }
+    }
+    if (confirmDeleteShared) {
+        AlertDialog(
+            onDismissRequest = { confirmDeleteShared = false },
+            title = { Text(s.deleteShared) },
+            text = { Text(s.deleteSharedQ) },
+            confirmButton = {
+                TextButton(onClick = {
+                    vm.deleteShared(); confirmDeleteShared = false
+                    android.widget.Toast.makeText(context, s.deleteSharedDone, android.widget.Toast.LENGTH_LONG).show()
+                }) { Text(s.yes, color = Red) }
+            },
+            dismissButton = { TextButton(onClick = { confirmDeleteShared = false }) { Text(s.no) } },
+        )
     }
     if (confirmErase) {
         AlertDialog(

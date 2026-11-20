@@ -42,8 +42,7 @@ It needs Android 10 or newer.
   - an **evidence pack**: every record with a check showing nothing was changed afterwards,
     for a contractor, labour office, union or NGO when wages are disputed.
 - **Bill or advance-slip photo** to amount, read on the phone.
-- **Reminders** at 3 PM and 9 PM, **backup and restore**, and an optional log of the worker's
-  corrections that helps improve the app, shared only if they choose.
+- **Reminders** at 3 PM and 9 PM, and **backup and restore**.
 
 <p align="center">
   <img src="docs/screens/six-languages.png" alt="Home screen in Odia, Telugu, Kannada, Tamil and English" width="880">
@@ -55,6 +54,12 @@ It needs Android 10 or newer.
   never go to a server or a cloud backup.
 - Speech recognition, understanding and the reply voices all run **on the phone**.
 - There are no accounts and no tracking. Only the worker sees their records.
+- **Help improve HisaabSaathi** is asked once, at setup, and read aloud. Nothing is chosen for
+  the worker. Only if they say yes, each time they speak or type to the app, their voice clip,
+  what the app heard, and what it understood and answered are sent to the team over Wi-Fi.
+  Nothing carries their name or phone number. They can turn it off in Settings, which deletes
+  what is still waiting, or have everything already sent deleted. The upload service is in
+  [`server/`](server/README.md).
 
 ## How it understands
 

@@ -87,6 +87,12 @@ class AppFlowTest {
         click("आगे")
         waitFor("आवाज़ पैक")
         shot("03-voice-pack")
+        click("आगे")
+        // Help improve the app: asked, read aloud, nothing chosen for the worker.
+        waitFor("हिसाब साथी को बेहतर बनाने में मदद करेंगे?")
+        check(rule.onAllNodes(hasText("शुरू करें") and androidx.compose.ui.test.isEnabled()).fetchSemanticsNodes().isEmpty()) { "Start must wait for a yes or no" }
+        click("हाँ, भेजें")
+        shot("03b-help-improve")
         click("शुरू करें")
 
         // --- home
@@ -135,7 +141,7 @@ class AppFlowTest {
         click("बदलें")
         rule.onNode(hasSetTextAction() and hasText("80")).assertExists()
         shot("05c-confirm-change")
-        // The worker fixes the amount: kept in the correction log (shown in Settings below).
+        // The worker fixes the amount: kept to send, as they agreed (shown in Settings below).
         rule.onNode(hasSetTextAction() and hasText("80")).performTextReplacement("90")
         click("सही है, सेव करें")
         waitFor("सेव हो गया")
@@ -184,10 +190,11 @@ class AppFlowTest {
         // --- settings, then the same home screen in Odia and English
         rule.onNodeWithContentDescription("सेटिंग").performClick()
         waitFor("ऑफ़लाइन पैक")
-        waitFor("1 सुधार रखे हैं")
         shot("11-settings")
-        rule.onNodeWithText("सुधार भेजें").performScrollTo()
-        shot("11b-settings-corrections")
+        // Two entries (one fixed), a question, a name question and one not understood: 5 kept to send.
+        waitFor("5 भेजने बाकी")
+        rule.onNodeWithText("भेजा हुआ मिटाएं").performScrollTo()
+        shot("11b-settings-help-improve")
         rule.onRoot().performTouchInput { swipeDown() } // back to the top for the language buttons
         // --- a question and its answer in every language (home screen, typed; spoken on a phone)
         val questions = listOf(

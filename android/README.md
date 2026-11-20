@@ -13,6 +13,7 @@ Design notes: `../docs/superpowers/specs/2026-11-16-android-mvp-design.md`.
 - Savings goal, minimum-wage comparison, PDF report, tamper-evident evidence pack.
 - 3 PM and 9 PM local reminders. Bill / advance-slip photo → amount (on-device OCR).
 - Ledger encrypted with SQLCipher; key held by the Android Keystore; no cloud backup.
+- Help improve HisaabSaathi (0.8.0): opt-in, see below.
 
 ## On-device models (downloaded once, then offline)
 
@@ -255,6 +256,37 @@ the app trusts only the period and reads out the whole summary for it.
   in Settings works without internet. The link is `HISAAB_MODEL_URL` in `app/build.gradle.kts`.
 - Not yet checked on a phone: LiteRT-LM loading the model, speed and memory on 3–4 GB
   devices. LiteRT-LM ships only arm64 and x86_64 libraries, so 32-bit phones run on rules alone.
+
+## Help improve HisaabSaathi (0.8.0)
+
+Real workers' speech is what the models need most, so the app can collect it, only from
+workers who agree.
+
+- **Asked once**, as the last setup step (or once after updating), and read aloud. Neither
+  answer is preselected, and Start stays disabled until the worker chooses. Settings has the
+  same switch.
+- **What is kept**, per exchange (`core/.../Improve.kt`, `Sample`): what the speech model heard
+  or what was typed; what the app understood (`ASK WEEK EARNED`, `ENTRY WORK 600 h8`,
+  `TALK DATE`, `NONE`, `MODEL ASK …`); what it said back; how it ended (`answered`,
+  `not_understood`, `saved`, `corrected` with what was kept, `rejected`, `dismissed`, and
+  spoken yes/no as `confirm`); language, state, app version, speech engine; and the voice clip
+  as 16 kHz WAV with its quality (`good`, `quiet`, `loud`, `silent`, `short`). There is no
+  name, phone number, contact or location beyond the chosen state. Scanned bills are not kept.
+- **Where it waits:** in the encrypted ledger database (table `samples`), at most 200, oldest
+  dropped first. Nothing is kept while the answer is "no" or not given yet.
+- **Sending** (`work/Sharing.kt`): WorkManager every 12 hours on Wi-Fi with the battery not low,
+  in zips of 25 (`batch.json`, `samples.jsonl`, `audio/<id>.wav`). "Send now" uses any
+  connection. Each phone is an anonymous install (random id and token from the service).
+- **Turning it off** deletes what is still waiting. **"Delete what I shared"** asks the service
+  to delete everything that install sent, retrying until it is online, and the next upload starts
+  a new, unrelated install. "Erase all records" also deletes what is waiting.
+- **The service** (`server/`) gives the phone short-lived HTTPS upload links to S3 or Azure Blob
+  storage and checks each zip's size and SHA-256. FTP is not used: it sends files and passwords
+  unencrypted. Build the app with the service's address:
+  `./gradlew :app:assembleRelease -Phisaab.shareUrl=https://<service>`. Without it, samples
+  wait on the phone.
+- The old local correction log is folded in: a worker who says yes has it sent as samples (no
+  clips); one who says no has it deleted.
 
 ## Look
 

@@ -22,7 +22,7 @@ class NewLanguagesTest {
             listOf("Unskilled", "Semi-skilled", "Skilled", "Highly skilled").forEach(s::skillName)
             s.readback(drafts); s.workDetail(8.0, 120, 500); s.workDetail(8.0, null, 6000)
             s.voicePackDownloading(40); s.shortfall(100); s.goalProgress(1, 2); s.goalAdvice(1); Chat.entries.forEach { c -> s.chat(c, "16 November 2026") }
-            s.correctionsCount(3)
+            s.shareWaiting(3); s.shareSent(12)
             s.restored(4); s.notEnoughSpace(120)
             s.minWageSpoken(WageRate("CENTRAL", "x", "Unskilled", 783.0, "", ""))
             assertTrue("$lang is missing: ${s.missing}", s.missing.isEmpty())

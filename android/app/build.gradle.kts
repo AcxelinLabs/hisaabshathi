@@ -13,13 +13,17 @@ android {
         applicationId = "com.acxelin.hisaabsaathi"
         minSdk = 29 // Android 10
         targetSdk = 35
-        versionCode = 16
-        versionName = "0.7.3"
+        versionCode = 17
+        versionName = "0.8.0"
         // Where phones download the fine-tuned model from (public, Apache-2.0).
         buildConfigField(
             "String", "HISAAB_MODEL_URL",
             "\"https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/hisaabsaathi-qwen3-ft-q8.litertlm\"",
         )
+        // The team's upload service for "Help improve HisaabSaathi" (server/ in this repository),
+        // e.g. ./gradlew assembleRelease -Phisaab.shareUrl=https://improve.example.org
+        // Empty: what workers agree to share waits on the phone until a build has one.
+        buildConfigField("String", "SHARE_URL", "\"${providers.gradleProperty("hisaab.shareUrl").getOrElse("")}\"")
     }
 
     buildTypes {

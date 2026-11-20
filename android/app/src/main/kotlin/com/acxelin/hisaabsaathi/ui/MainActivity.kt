@@ -78,6 +78,10 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         Onboarding(vm, settings, s)
         return
     }
+    if (settings.share == null) {
+        ShareAskScreen(vm, s)
+        return
+    }
 
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
