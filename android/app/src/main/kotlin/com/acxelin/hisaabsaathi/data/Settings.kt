@@ -60,7 +60,7 @@ class SettingsStore(private val context: Context) {
 
     suspend fun setLang(v: Lang) = context.dataStore.edit { it[lang] = v.code }
     suspend fun setRegion(v: String) = context.dataStore.edit { it[region] = v }
-    suspend fun setOnboarded() = context.dataStore.edit { it[onboarded] = true }
+    suspend fun setOnboarded(v: Boolean = true) = context.dataStore.edit { it[onboarded] = v }
     suspend fun setReminders(v: Boolean) = context.dataStore.edit { it[reminders] = v }
     suspend fun setGoal(paise: Long) = context.dataStore.edit { it[goal] = paise }
     suspend fun setShare(v: Boolean) = context.dataStore.edit { it[share] = v; if (v) it[shareConsent] = Improve.CONSENT_VERSION }

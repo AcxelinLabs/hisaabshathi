@@ -13,8 +13,8 @@ android {
         applicationId = "com.acxelin.hisaabsaathi"
         minSdk = 29 // Android 10
         targetSdk = 35
-        versionCode = 17
-        versionName = "0.8.0"
+        versionCode = 20
+        versionName = "0.9.2"
         // Where phones download the fine-tuned model from (public, Apache-2.0).
         buildConfigField(
             "String", "HISAAB_MODEL_URL",
@@ -90,6 +90,10 @@ dependencies {
     implementation(files("libs/onnxruntime-android-1.29.0-classes.jar"))
     implementation(libs.litertlm)          // on-device small language model (LiteRT-LM)
     implementation(libs.mlkit.text.devanagari) // on-device OCR (Devanagari + Latin)
+    implementation(libs.mlkit.barcode)         // Aadhaar QR from a saved photo, on the phone
+    implementation(libs.camerax.camera2)       // live Aadhaar QR scanner inside the app (CameraX + the bundled ML Kit reader)
+    implementation(libs.camerax.lifecycle)
+    implementation(libs.camerax.view)
 
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)

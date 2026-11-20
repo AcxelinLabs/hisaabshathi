@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
     <cache-path name="exports" path="exports/" />
+    <!-- Aadhaar QR photo and selfie during setup: read, then deleted at once. -->
+    <cache-path name="scans" path="scans/" />
     <files-path name="attachments" path="attachments/" />
 </paths>

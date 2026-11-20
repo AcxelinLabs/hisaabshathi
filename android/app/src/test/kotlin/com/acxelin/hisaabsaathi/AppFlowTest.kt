@@ -34,6 +34,9 @@ import org.robolectric.annotation.GraphicsMode
 class TestApp : HisaabApp() {
     override fun openDb(): LedgerDb =
         Room.inMemoryDatabaseBuilder(this, LedgerDb::class.java).allowMainThreadQueries().build()
+
+    /** No network in tests: setup must not start the voice downloads by itself. */
+    override val autoDownloadVoice: Boolean = false
 }
 
 /**
@@ -78,22 +81,54 @@ class AppFlowTest {
     @Test fun firstSession() {
         org.robolectric.shadows.ShadowLog.stream = System.out
         // --- setup (Hindi is the default language)
+        waitFor("Find your state") // first screen: English, no language chosen yet
+        shot("00-location")
+        click("Choose myself") // location not allowed: language and state by hand
         waitFor("अपनी भाषा चुनें")
         shot("01-language")
+        click("आगे")
+        waitFor("अपनी फोटो लें")
+        shot("01a-photo")
+        click("छोड़ें") // no camera in tests
+        waitFor("आपकी जानकारी")
+        shot("01b-details")
+        click("खुद भरूँगा")
+        waitFor("आपका नाम क्या है?")
+        rule.onNode(hasSetTextAction()).performTextInput("Ramesh Behera")
+        shot("01c-name")
+        click("आगे")
+        waitFor("आपकी उम्र कितनी है?")
+        rule.onNode(hasSetTextAction()).performTextInput("35")
+        shot("01d-age")
         click("आगे")
         waitFor("Odisha")
         click("Odisha")
         shot("02-state")
         click("आगे")
-        waitFor("आवाज़ पैक")
-        shot("03-voice-pack")
+        waitFor("आप किस ज़िले में काम करते हैं?")
+        click("Khordha")
+        shot("02b-district")
+        click("आगे")
+        waitFor("आपका पिन कोड क्या है?")
+        rule.onNode(hasSetTextAction()).performTextInput("751002")
+        shot("02c-pin")
         click("आगे")
         // Help improve the app: asked, read aloud, nothing chosen for the worker.
         waitFor("हिसाब साथी को बेहतर बनाने में मदद करेंगे?")
-        check(rule.onAllNodes(hasText("शुरू करें") and androidx.compose.ui.test.isEnabled()).fetchSemanticsNodes().isEmpty()) { "Start must wait for a yes or no" }
+        check(rule.onAllNodes(hasText("आगे") and androidx.compose.ui.test.isEnabled()).fetchSemanticsNodes().isEmpty()) { "Next must wait for a yes or no" }
         click("हाँ, भेजें")
         shot("03b-help-improve")
+        click("आगे")
+        waitFor("समझदार मॉडल")
+        shot("03-smart-model")
         click("शुरू करें")
+
+        // --- the profile page, from the photo button at the top of the home screen
+        rule.onNodeWithContentDescription("मेरी प्रोफ़ाइल").performClick()
+        waitFor("Ramesh Behera")
+        rule.onNodeWithText("751002").assertExists()
+        shot("03c-profile")
+        rule.onNodeWithContentDescription("हो गया").performClick()
 
         // --- home
         waitFor("दबाएं और काम या खर्च बोलें")

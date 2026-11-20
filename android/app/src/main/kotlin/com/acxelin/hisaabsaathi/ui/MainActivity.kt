@@ -42,6 +42,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -85,6 +88,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
 
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
+    var showProfile by rememberSaveable { mutableStateOf(false) }
     var typing by rememberSaveable { mutableStateOf(false) }
 
     // Microphone permission, asked the first time the mic is tapped.
@@ -111,7 +115,8 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         if (taken && p != null) vm.scanned(p.first, p.second)
         pendingPhoto = null
     }
-    val onScan = {
+    // The app declares the camera permission (for the QR scanner), so the camera app needs it granted too.
+    val onScan = rememberWithCamera(s) {
         val file = File(File(context.filesDir, "attachments").apply { mkdirs() }, "scan-${System.currentTimeMillis()}.jpg")
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
         pendingPhoto = uri to file.path
@@ -130,6 +135,11 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         TypeScreen(s, onBack = { typing = false }, onSubmit = { typing = false; vm.submitText(it) })
         return
     }
+    if (showProfile) {
+        BackHandler { showProfile = false }
+        ProfileScreen(vm, s, onBack = { showProfile = false })
+        return
+    }
     if (showSettings) {
         BackHandler { showSettings = false }
         SettingsScreen(vm, settings, s, onBack = { showSettings = false })
@@ -144,6 +154,11 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
                     containerColor = Ink, titleContentColor = Color.White, actionIconContentColor = Color.White,
                 ),
                 actions = {
+                    // The worker's photo (or a person sign): opens the profile page.
+                    val photo by vm.photo.collectAsStateWithLifecycle()
+                    IconButton(onClick = { showProfile = true }) {
+                        Avatar(photo, 32.dp, Modifier.semantics { contentDescription = s.profileTitle })
+                    }
                     IconButton(onClick = { showSettings = true }) { Icon(Icons.Default.Settings, s.settings) }
                 },
             )

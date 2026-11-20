@@ -65,6 +65,96 @@ class Strings(val lang: Lang) {
     val downloadFailed get() = t("डाउनलोड नहीं हुआ। इंटरनेट देखें और फिर कोशिश करें।", "ଡାଉନଲୋଡ୍ ହେଲା ନାହିଁ। ଇଣ୍ଟରନେଟ୍ ଦେଖି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।", "Download failed. Check the internet and try again.")
     val start get() = t("शुरू करें", "ଆରମ୍ଭ କରନ୍ତୁ", "Start")
 
+    // ---- onboarding: location, details, smart model (Odia, Telugu, Kannada, Tamil need native review)
+    val locationTitle get() = t("आपका राज्य पता करें", "ଆପଣଙ୍କ ରାଜ୍ୟ ଜାଣନ୍ତୁ", "Find your state")
+    val locationBody get() = t(
+        "लोकेशन की अनुमति दें, ताकि ऐप आपका राज्य और भाषा चुन सके। आपकी लोकेशन सिर्फ़ इसी फोन में राज्य पता करने के लिए इस्तेमाल होती है। यह कहीं नहीं भेजी जाती।",
+        "ଲୋକେସନ୍ ଅନୁମତି ଦିଅନ୍ତୁ, ଯାହାଦ୍ୱାରା ଆପ୍ ଆପଣଙ୍କ ରାଜ୍ୟ ଓ ଭାଷା ବାଛିପାରିବ। ଆପଣଙ୍କ ଲୋକେସନ୍ କେବଳ ଏହି ଫୋନ୍‌ରେ ରାଜ୍ୟ ଜାଣିବା ପାଇଁ ବ୍ୟବହାର ହୁଏ। ଏହା କେଉଁଠିକୁ ପଠାଯାଏ ନାହିଁ।",
+        "Allow location so the app can pick your state and language. Your location is used only on this phone to find your state. It is never sent anywhere.",
+    )
+    val allowLocation get() = t("लोकेशन की अनुमति दें", "ଲୋକେସନ୍ ଅନୁମତି ଦିଅନ୍ତୁ", "Allow location")
+    val chooseMyself get() = t("खुद चुनूँगा", "ମୁଁ ନିଜେ ବାଛିବି", "Choose myself")
+    val findingState get() = t("आपका राज्य ढूँढ रहे हैं…", "ଆପଣଙ୍କ ରାଜ୍ୟ ଖୋଜୁଛି…", "Finding your state…")
+    val locationFailed get() = t("लोकेशन नहीं मिली। कृपया खुद चुनें।", "ଲୋକେସନ୍ ମିଳିଲା ନାହିଁ। ଦୟାକରି ନିଜେ ବାଛନ୍ତୁ।", "Could not find your location. Please choose yourself.")
+    fun yourState(state: String) = tp("आपका राज्य: $state", "ଆପଣଙ୍କ ରାଜ୍ୟ: $state", "Your state: $state", "Your state: {0}", state)
+    val languageForState get() = t(
+        "आपके राज्य की भाषा चुनी गई है। कोई और भाषा चाहिए तो उस पर दबाएं।",
+        "ଆପଣଙ୍କ ରାଜ୍ୟର ଭାଷା ବଛାଯାଇଛି। ଅନ୍ୟ ଭାଷା ଚାହିଁଲେ ସେଥିରେ ଦବାନ୍ତୁ।",
+        "We chose your state's language. Tap another language if you prefer.",
+    )
+    fun gettingVoiceReady(pct: Int) = tp("आवाज़ तैयार हो रही है… $pct%", "ସ୍ୱର ପ୍ରସ୍ତୁତ ହେଉଛି… $pct%", "Getting voice ready… $pct%", "Getting voice ready… {0}%", pct)
+    val voiceReady get() = t("आवाज़ तैयार", "ସ୍ୱର ପ୍ରସ୍ତୁତ", "Voice ready")
+    val detailsTitle get() = t("आपकी जानकारी", "ଆପଣଙ୍କ ବିବରଣୀ", "Your details")
+    val detailsPrivacy get() = t(
+        "आपकी जानकारी इसी फोन में ताले में रहती है। कोई और इसे नहीं देख सकता। कुछ भी अपलोड नहीं होता।",
+        "ଆପଣଙ୍କ ବିବରଣୀ ଏହି ଫୋନ୍‌ରେ ତାଲା ପଡ଼ି ରହେ। ଆଉ କେହି ଦେଖିପାରିବେ ନାହିଁ। କିଛି ଅପଲୋଡ୍ ହୁଏ ନାହିଁ।",
+        "Your details stay on this phone, locked. Nobody else can see them. Nothing is uploaded.",
+    )
+    val scanAadhaar get() = t("आधार का QR कोड स्कैन करें", "ଆଧାର QR କୋଡ୍ ସ୍କାନ୍ କରନ୍ତୁ", "Scan Aadhaar QR code")
+    val scanAadhaarHint get() = t(
+        "कैमरा अपने आधार कार्ड के QR कोड पर रखें। सिर्फ़ नाम, उम्र, राज्य, ज़िला और पिन कोड रखे जाते हैं।",
+        "କ୍ୟାମେରାକୁ ଆପଣଙ୍କ ଆଧାର କାର୍ଡର QR କୋଡ୍ ଉପରେ ଧରନ୍ତୁ। କେବଳ ନାମ, ବୟସ, ରାଜ୍ୟ, ଜିଲ୍ଲା ଓ ପିନ୍ କୋଡ୍ ରଖାଯାଏ।",
+        "Point the camera at the QR code on your Aadhaar card. Only your name, age, state, district and PIN are kept.",
+    )
+    val fillMyself get() = t("खुद भरूँगा", "ମୁଁ ନିଜେ ଭରିବି", "Fill it myself")
+    val choosePhoto get() = t("फोटो चुनें", "ଫଟୋ ବାଛନ୍ତୁ", "Choose a photo")
+    val aadhaarFailed get() = t(
+        "QR कोड पढ़ा नहीं गया। कार्ड को सीधा रखकर अच्छी रोशनी में फिर कोशिश करें, या खुद भरें।",
+        "QR କୋଡ୍ ପଢ଼ି ହେଲା ନାହିଁ। କାର୍ଡକୁ ସିଧା ରଖି ଭଲ ଆଲୁଅରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ, କିମ୍ବା ନିଜେ ଭରନ୍ତୁ।",
+        "Could not read the QR code. Hold the card flat in good light and try again, or fill it yourself.",
+    )
+    val checkDetails get() = t("अपनी जानकारी देखें। कुछ गलत हो तो बदलें।", "ଆପଣଙ୍କ ବିବରଣୀ ଦେଖନ୍ତୁ। କିଛି ଭୁଲ୍ ଥିଲେ ବଦଳାନ୍ତୁ।", "Check your details. Change anything that is wrong.")
+    val tryAgain get() = t("फिर कोशिश करें", "ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ", "Try again")
+    val qName get() = t("आपका नाम क्या है?", "ଆପଣଙ୍କ ନାମ କଣ?", "What is your name?")
+    val qAge get() = t("आपकी उम्र कितनी है?", "ଆପଣଙ୍କ ବୟସ କେତେ?", "How old are you?")
+    val qDistrict get() = t("आप किस ज़िले में काम करते हैं?", "ଆପଣ କେଉଁ ଜିଲ୍ଲାରେ କାମ କରନ୍ତି?", "Which district do you work in?")
+    val qPin get() = t("आपका पिन कोड क्या है? इसमें 6 अंक होते हैं।", "ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ କଣ? ଏଥିରେ 6ଟି ଅଙ୍କ ଥାଏ।", "What is your PIN code? It has 6 digits.")
+    val skip get() = t("छोड़ें", "ଛାଡ଼ନ୍ତୁ", "Skip")
+    val speakAnswer get() = t("दबाएं और जवाब बोलें", "ଦବାଇ ଉତ୍ତର କୁହନ୍ତୁ", "Tap and say your answer")
+    val hearAgain get() = t("फिर से सुनें", "ପୁଣି ଶୁଣନ୍ତୁ", "Hear again")
+    val adultsOnly get() = t("यह ऐप 18 साल और उससे ज़्यादा उम्र के लोगों के लिए है।", "ଏହି ଆପ୍ 18 ବର୍ଷ ଓ ତାଠାରୁ ଅଧିକ ବୟସର ଲୋକଙ୍କ ପାଇଁ।", "This app is for adults, 18 years and above.")
+    val pinOtherState get() = t("यह पिन कोड किसी दूसरे राज्य का लगता है। कृपया जाँच लें।", "ଏହି ପିନ୍ କୋଡ୍ ଅନ୍ୟ ରାଜ୍ୟର ପରି ଲାଗୁଛି। ଦୟାକରି ଯାଞ୍ଚ କରନ୍ତୁ।", "This PIN code looks like another state's. Please check it.")
+    val pinSixDigits get() = t("6 अंक डालें", "6ଟି ଅଙ୍କ ଦିଅନ୍ତୁ", "Enter 6 digits")
+    val typeDistrict get() = t("अपना ज़िला लिखें", "ଆପଣଙ୍କ ଜିଲ୍ଲା ଲେଖନ୍ତୁ", "Type your district")
+    val nameLabel get() = t("नाम", "ନାମ", "Name")
+    val ageLabel get() = t("उम्र", "ବୟସ", "Age")
+    val districtLabel get() = t("ज़िला", "ଜିଲ୍ଲା", "District")
+    val pinLabel get() = t("पिन कोड", "ପିନ୍ କୋଡ୍", "PIN code")
+    val notGiven get() = t("नहीं दिया", "ଦିଆଯାଇନି", "Not given")
+    val modelTitle get() = t("समझदार मॉडल (चाहें तो)", "ସ୍ମାର୍ଟ ମଡେଲ୍ (ଇଚ୍ଛାଧୀନ)", "Smart model (optional)")
+    fun modelBody(mb: Long) = tp(
+        "यह ऐप को अधूरी या साफ़ न सुनी बात समझने में मदद करता है। करीब $mb MB, Wi-Fi पर बेहतर। इसके बिना भी ऐप चलता है।",
+        "ଏହା ଆପ୍‌କୁ ଅସ୍ପଷ୍ଟ କଥା ବୁଝିବାରେ ସାହାଯ୍ୟ କରେ। ପ୍ରାୟ $mb MB, Wi-Fi ରେ ଭଲ। ଏହା ବିନା ମଧ୍ୟ ଆପ୍ ଚାଲେ।",
+        "It helps the app understand unclear sentences. About $mb MB, best on Wi-Fi. The app works without it.",
+        "It helps the app understand unclear sentences. About {0} MB, best on Wi-Fi. The app works without it.", mb,
+    )
+    val later get() = t("बाद में", "ପରେ", "Later")
+    val waitForModel get() = t(
+        "कृपया रुकें: समझदार मॉडल डाउनलोड हो रहा है। पूरा होने पर आगे बढ़ें।",
+        "ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ: ସ୍ମାର୍ଟ ମଡେଲ୍ ଡାଉନଲୋଡ୍ ହେଉଛି। ଶେଷ ହେଲେ ଆଗକୁ ଯାଆନ୍ତୁ।",
+        "Please wait: the smart model is downloading. You can go on when it is done.",
+    )
+    val myDetails get() = t("मेरी जानकारी", "ମୋ ବିବରଣୀ", "My details")
+    val changeDetails get() = t("जानकारी बदलें", "ବିବରଣୀ ବଦଳାନ୍ତୁ", "Change my details")
+    val showSetupAgain get() = t("शुरुआती सेटअप फिर दिखाएं", "ଆରମ୍ଭ ସେଟଅପ୍ ପୁଣି ଦେଖାନ୍ତୁ", "Show setup again")
+    val qPhoto get() = t("अपनी फोटो लें", "ଆପଣଙ୍କ ଫଟୋ ନିଅନ୍ତୁ", "Take your photo")
+    val photoHint get() = t(
+        "फोन को अपने चेहरे के सामने रखें और सेल्फ़ी लें। फोटो सिर्फ़ इसी फोन में रहती है।",
+        "ଫୋନ୍‌କୁ ମୁହଁ ସାମ୍ନାରେ ଧରି ସେଲ୍ଫି ନିଅନ୍ତୁ। ଫଟୋ କେବଳ ଏହି ଫୋନ୍‌ରେ ରହେ।",
+        "Hold the phone in front of your face and take a selfie. The photo stays only on this phone.",
+    )
+    val openCamera get() = t("कैमरा खोलें", "କ୍ୟାମେରା ଖୋଲନ୍ତୁ", "Open camera")
+    val takeAgain get() = t("फिर से लें", "ପୁଣି ନିଅନ୍ତୁ", "Take again")
+    val photoLabel get() = t("फोटो", "ଫଟୋ", "Photo")
+    val profileTitle get() = t("मेरी प्रोफ़ाइल", "ମୋ ପ୍ରୋଫାଇଲ୍", "My profile")
+    val cameraNeeded get() = t("स्कैन करने के लिए कैमरा की अनुमति चाहिए।", "ସ୍କାନ୍ କରିବା ପାଇଁ କ୍ୟାମେରା ଅନୁମତି ଦରକାର।", "Camera permission is needed to scan.")
+    val torch get() = t("लाइट", "ଲାଇଟ୍", "Light")
+    val notAadhaarQr get() = t(
+        "यह आधार का QR कोड नहीं है। आधार कार्ड या पत्र पर बड़ा QR कोड स्कैन करें।",
+        "ଏହା ଆଧାରର QR କୋଡ୍ ନୁହେଁ। ଆଧାର କାର୍ଡ କିମ୍ବା ଚିଠିର ବଡ଼ QR କୋଡ୍ ସ୍କାନ୍ କରନ୍ତୁ।",
+        "This is not the Aadhaar QR code. Scan the big QR code on the Aadhaar card or letter.",
+    )
+
     // ---- home
     val today get() = t("आज", "ଆଜି", "Today")
     val yesterday get() = t("कल", "ଗତକାଲି", "Yesterday")

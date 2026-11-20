@@ -28,7 +28,8 @@ class Exporter(private val context: Context) {
     private val dir get() = File(context.cacheDir, "exports").apply { mkdirs() }
     private val dateFmt = DateTimeFormatter.ofPattern("dd-MM-yyyy")
 
-    fun pdf(title: String, entriesNewestFirst: List<Entry>, s: Strings, chainNote: String? = null): File {
+    /** [owner]: the worker's name, district, state and PIN from setup ("" if not given). */
+    fun pdf(title: String, entriesNewestFirst: List<Entry>, s: Strings, chainNote: String? = null, owner: String = ""): File {
         val doc = PdfDocument()
         val width = 595; val height = 842; val margin = 40f
         val body = Paint().apply { textSize = 11f; isAntiAlias = true }
@@ -51,6 +52,7 @@ class Exporter(private val context: Context) {
 
         val t = Ledger.totals(entriesNewestFirst)
         line("${s.appName} — $title", head, gap = 24f)
+        if (owner.isNotBlank()) line(owner, bold, gap = 18f)
         line(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")), small, gap = 20f)
         line("${s.earned}: ${s.rupees(t.earnedPaise)}    ${s.advance}: ${s.rupees(t.advancePaise)}    ${s.received}: ${s.rupees(t.paidPaise)}", bold)
         line("${s.spent}: ${s.rupees(t.expensePaise)}    ${s.due}: ${s.rupees(t.duePaise)}    ${s.daysWorked}: ${t.daysWorked}", bold, gap = 24f)

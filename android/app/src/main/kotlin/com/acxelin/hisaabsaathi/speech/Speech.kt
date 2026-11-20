@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -312,17 +313,59 @@ class Speaker(context: Context, private val packs: com.acxelin.hisaabsaathi.mode
 
     fun canSpeak(lang: Lang): Boolean = voiceDir(lang) != null || systemCanSpeak(lang)
 
+    /**
+     * Speaks [text] with the app's own voice when it is installed, else the phone's. Long text is
+     * spoken sentence by sentence: the first sentence starts within a second or two and the
+     * next is prepared while one plays, instead of waiting (and timing out) for the whole text.
+     */
     fun speak(text: String, lang: Lang): Boolean {
         stop()
         val dir = voiceDir(lang)
         if (dir != null) {
             job = scope.launch {
-                val wav = voice.synthesize(dir, text, lang, voiceName)
-                if (wav != null) play(wav) else speakWithPhone(text, lang)
+                val parts = sentences(text)
+                var next: kotlinx.coroutines.Deferred<java.io.File?>? = null
+                for ((i, part) in parts.withIndex()) {
+                    val wav = next?.await() ?: voice.synthesize(dir, part, lang, voiceName)
+                    if (wav == null) {
+                        if (i == 0) speakWithPhone(text, lang)
+                        break
+                    }
+                    next = parts.getOrNull(i + 1)?.let { p -> async { voice.synthesize(dir, p, lang, voiceName) } }
+                    playAndWait(wav)
+                }
             }
             return true
         }
         return speakWithPhone(text, lang)
+    }
+
+    /** Sentences (split at . ? ! । |), long ones also at commas, so each is quick to make. */
+    private fun sentences(text: String): List<String> =
+        text.split(Regex("(?<=[.?!।|])\\s+")).flatMap { s ->
+            if (s.length <= 140) listOf(s) else s.split(Regex("(?<=,)\\s+")).fold(mutableListOf<String>()) { acc, c ->
+                if (acc.isNotEmpty() && acc.last().length + c.length < 140) acc[acc.size - 1] = acc.last() + " " + c else acc += c
+                acc
+            }
+        }.map { it.trim() }.filter { it.any(Char::isLetterOrDigit) }.ifEmpty { listOf(text) }
+
+    /** Plays one file and returns when it has finished (or right away if it cannot be played). */
+    private suspend fun playAndWait(file: java.io.File) = kotlinx.coroutines.suspendCancellableCoroutine<Unit> { cont ->
+        val ok = runCatching {
+            player = android.media.MediaPlayer().apply {
+                setAudioAttributes(
+                    android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT)
+                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build(),
+                )
+                setDataSource(file.path)
+                setOnCompletionListener { mp ->
+                    mp.release(); if (player === mp) player = null
+                    if (cont.isActive) cont.resumeWith(Result.success(Unit))
+                }
+                prepare(); start()
+            }
+        }.isSuccess
+        if (!ok && cont.isActive) cont.resumeWith(Result.success(Unit))
     }
 
     private fun speakWithPhone(text: String, lang: Lang): Boolean {

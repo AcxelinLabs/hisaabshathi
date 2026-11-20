@@ -301,6 +301,49 @@ workers who agree. The service and pipeline are in `../server/`; how it all fits
   - `RealCasesTest`: real cases from a private snapshot, writing per-language metrics for the
     gates.
 
+## First-time setup and profile (0.9.0)
+
+`ui/OnboardingScreens.kt`, logic in `core/Onboarding.kt` (tested in `OnboardingTest`):
+
+1. **Location (optional).** One approximate fix (`ACCESS_COARSE_LOCATION`) finds the state on the
+   phone, from simplified state borders bundled in the app (`assets/india_states.txt`, Natural
+   Earth admin-1, public domain, about 70 KB). The location is not stored and never sent. Refused
+   or not found: the worker picks language and state by hand.
+2. **Language**, pre-selected from the state (Odisha → Odia, Telangana/Andhra → Telugu,
+   Karnataka → Kannada, Tamil Nadu → Tamil, Hindi states → Hindi, others → English); one tap
+   changes it. **Next starts the voice downloads in the background**: speech pack first, then
+   the read-aloud voice. A small bar on every later screen shows progress.
+3. **Photo (optional):** a selfie (the camera is asked for the front lens), made into a small
+   square JPEG (about 480 × 480), shown on the profile page and the home screen.
+4. **Your details**, with the privacy note on top (read aloud):
+   - **Scan Aadhaar QR**: a photo of the card's QR (or a saved image) is read on the phone with
+     ML Kit; `AadhaarQr` takes only name, age, state, district and PIN from it (Secure QR and the
+     older XML QR). The photo is deleted at once; the Aadhaar digits, photo, gender, mobile and
+     address lines are never kept. The signature is not checked: this saves typing, it is not ID proof.
+   - **Fill it myself**: one question per screen (name → age → state → district → PIN), each
+     read aloud, answered by typing or by the mic once the speech pack is ready (on-device only;
+     never the phone's online recogniser, never kept for "Help improve"). District is tapped from
+     the state's list (`assets/districts_in.txt`); PIN is checked against the state. Name, age,
+     district and PIN can be skipped.
+5. **Help improve HisaabSaathi?** (yes or no, nothing chosen for the worker), as in 0.8.0.
+6. **Smart model**: Download or Later, then Start.
+
+**Profile page:** the round photo button at the top of the home screen opens it: photo, name,
+age, state, district and PIN, with *Change my details* (retake the photo, edit, or fill from the
+Aadhaar QR). Details and photo are stored only on the phone, AES-GCM encrypted with their own
+Android Keystore key (`data/ProfileStore.kt`); they are never uploaded and never part of what
+"Help improve" sends. Name, district, state and PIN are printed at the top of the PDF report and
+evidence pack. "Erase all records" erases them too. Settings → Show setup again reruns setup
+without touching the packs or the ledger.
+
+Spoken questions use recordings in `assets/onboarding_audio/<language>/` when present
+(sentences and file names: `tools/onboarding_audio_script.md`; generate them with
+`python tools/tts/make_onboarding_audio.py`); otherwise the app's voice or the phone's.
+**To do before release:** generate or record those, native review of the new Odia/Telugu/
+Kannada/Tamil text, check the district lists against current state lists, legal review of
+reading Aadhaar QR, and declare location, photo and personal info (collected, not shared) in the
+Play Store data-safety form.
+
 ## Look
 
 Deep ledger green and marigold, styled after a hand-written wage slip; type is Anek (SIL OFL), one

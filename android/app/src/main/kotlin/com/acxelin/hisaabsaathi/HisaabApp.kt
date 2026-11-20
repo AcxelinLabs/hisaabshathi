@@ -67,6 +67,20 @@ open class HisaabApp : Application() {
     val speaker by lazy { Speaker(this, packs) }
     val slm by lazy { SlmEngine(this, packs) }
     val scanner by lazy { Scanner(this) }
+    val qr by lazy { com.acxelin.hisaabsaathi.ai.QrReader(this) }
+    /** The worker's details and photo from setup, encrypted on the phone. */
+    val profile by lazy { com.acxelin.hisaabsaathi.data.ProfileStore(this).also { p -> scope.launch { p.load() } } }
+
+    /** Start the voice downloads as soon as a language is chosen in setup (tests turn this off: no network). */
+    open val autoDownloadVoice: Boolean = true
+
+    /** State borders bundled with the app, to find the worker's state from an approximate location, on the phone. */
+    val stateMap: com.acxelin.hisaabsaathi.core.StateMap by lazy {
+        com.acxelin.hisaabsaathi.core.StateMap.parse(runCatching { assets.open("india_states.txt").bufferedReader().use { it.readText() } }.getOrDefault(""))
+    }
+    val districts: Map<String, List<String>> by lazy {
+        runCatching { com.acxelin.hisaabsaathi.core.Districts.parse(assets.open("districts_in.txt").bufferedReader().use { it.readText() }) }.getOrDefault(emptyMap())
+    }
     val exporter by lazy { Exporter(this) }
     /** Android is short of memory: drop the speech model (it reloads on the next listen). */
     override fun onTrimMemory(level: Int) {

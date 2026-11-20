@@ -135,12 +135,20 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
     val entries by vm.entries.collectAsStateWithLifecycle()
     val level by vm.level.collectAsStateWithLifecycle()
 
+    // Everything fits between the top bar and the bottom bar: on shorter screens the mic and the
+    // gaps get smaller instead of the buttons slipping under the bottom bar.
+    androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize()) {
+    val tight = maxHeight < 700.dp
+    val micBig = (maxHeight - 500.dp).coerceIn(92.dp, 156.dp)
     Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp).widthIn(max = 560.dp),
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = if (tight) 6.dp else 12.dp).widthIn(max = 560.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(if (tight) 6.dp else 10.dp),
     ) {
-        TotalsCard("${s.today}, ${LocalDate.now().format(dayFormat)}", vm.totals(QueryPeriod.DAY, entries), s, compact = true)
+        // The day's bill prints out of the machine's slot when the screen opens and after each new entry.
+        PrintedReceipt(rememberPrintKey(entries)) {
+            TotalsCard("${s.today}, ${LocalDate.now().format(dayFormat)}", vm.totals(QueryPeriod.DAY, entries), s, compact = true)
+        }
 
         (capture as? Capture.Message)?.let {
             // The spoken answer, also in writing. Tap anywhere on it to put it away.
@@ -163,16 +171,17 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
         val thinking = capture == Capture.Thinking
         val pulse by animateFloatAsState(if (listening) 1f + level * 0.35f else 1f, label = "mic")
         val compact = capture is Capture.Message
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(if (compact) 96.dp else 156.dp)) {
+        val mic = if (compact) minOf(96.dp, micBig) else micBig
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(mic)) {
             // The ring swells with the worker's voice while listening.
-            Box(Modifier.size(if (compact) 92.dp else 146.dp).scale(pulse).clip(CircleShape).background(if (listening) Sindoor.copy(alpha = 0.22f) else Marigold.copy(alpha = 0.28f)))
+            Box(Modifier.size(mic * 0.94f).scale(pulse).clip(CircleShape).background(if (listening) Sindoor.copy(alpha = 0.22f) else Marigold.copy(alpha = 0.28f)))
             Box(
-                Modifier.size(if (compact) 78.dp else 126.dp).clip(CircleShape).background(if (listening) Sindoor else Marigold)
+                Modifier.size(mic * 0.81f).clip(CircleShape).background(if (listening) Sindoor else Marigold)
                     .clickable(onClick = if (thinking) vm::cancelThinking else onMic),
                 contentAlignment = Alignment.Center,
             ) {
                 if (thinking) CircularProgressIndicator(color = Ink)
-                else Icon(painterResource(R.drawable.ic_mic), s.tapAndSpeak, tint = if (listening) Color.White else Ink, modifier = Modifier.size(if (compact) 40.dp else 62.dp))
+                else Icon(painterResource(R.drawable.ic_mic), s.tapAndSpeak, tint = if (listening) Color.White else Ink, modifier = Modifier.size(mic * 0.4f))
             }
         }
         Text(
@@ -185,7 +194,7 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
             maxLines = 2, lineHeight = if (compact) 22.sp else 25.sp,
         )
         if (thinking) TextButton(onClick = vm::cancelThinking) { Text(s.cancel, fontSize = 17.sp) }
-        if (!listening && !thinking && !compact) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
+        if (!listening && !thinking && !compact && !tight) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
 
         // While an answer is showing, the answer takes this space; the buttons return when it is closed.
         if (!compact) Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
@@ -199,6 +208,7 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
             }
         }
     }
+}
 }
 
 /**

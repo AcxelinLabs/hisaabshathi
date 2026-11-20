@@ -39,6 +39,7 @@ import com.acxelin.hisaabsaathi.work.Reminders
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -90,6 +91,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val wagePack get() = app.wagePack
 
     private val lang: Lang get() = settings.value?.lang ?: Lang.HI
+
+    init { app.profile } // start reading the saved details now, so reports have them
     private val strings: Strings get() = Strings(lang)
 
     val slmPack: Pack get() = Catalog.slmHisaab
@@ -469,7 +472,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(guard) { app.ledger.replace(changed.copy(note = note)) }
         return true
     }
-    fun eraseAll() = viewModelScope.launch(guard) { app.ledger.eraseAll(); app.corrections.clear(); app.samples.clear() }
+    fun eraseAll() = viewModelScope.launch(guard) { app.ledger.eraseAll(); app.corrections.clear(); app.samples.clear(); app.profile.clear() }
 
     // ---- help improve the app (only what the worker agreed to)
 
@@ -504,7 +507,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun readAloud(text: String) = app.speaker.speak(text, lang)
 
     fun setLang(l: Lang) = viewModelScope.launch(guard) { app.settings.setLang(l) }
-    fun setRegion(r: String) = viewModelScope.launch(guard) { app.settings.setRegion(r) }
+    fun setRegion(r: String) = viewModelScope.launch(guard) {
+        app.settings.setRegion(r)
+        // Keep the saved details' state the same as the work state.
+        app.profile.flow.value.let { if (!it.isEmpty && it.state != r) app.profile.save(it.copy(state = r)) }
+    }
     fun setGoal(paise: Long) = viewModelScope.launch(guard) { app.settings.setGoal(paise) }
 
     fun setReminders(on: Boolean) = viewModelScope.launch(guard) {
@@ -513,10 +520,196 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun finishOnboarding(share: Boolean) = viewModelScope.launch(guard) {
+        app.profile.save(cleanDraft())
+        app.profile.savePhoto(draftPhoto.value)
+        draft.value.state.takeIf { it.isNotEmpty() }?.let { app.settings.setRegion(it) }
         app.settings.setShare(share)
         if (share) Sharing.schedule(app)
         app.settings.setOnboarded()
         Reminders.schedule(app)
+    }
+
+    // ---- setup: location, details, downloads
+
+    /** The worker's saved details (name, age, state, district, PIN), encrypted on the phone. */
+    val profile: StateFlow<com.acxelin.hisaabsaathi.core.Profile> get() = app.profile.flow
+
+    /** Details being filled in during setup (or in Settings → My details), saved when done. */
+    val draft = MutableStateFlow(com.acxelin.hisaabsaathi.core.Profile())
+
+    fun editDraft(change: (com.acxelin.hisaabsaathi.core.Profile) -> com.acxelin.hisaabsaathi.core.Profile) { draft.value = change(draft.value) }
+
+    /** Starts editing from what is saved (Settings → My details, or setup shown again). */
+    fun startDraft() {
+        draft.value = app.profile.flow.value.let { if (it.state.isEmpty()) it.copy(state = settings.value?.region.orEmpty()) else it }
+        draftPhoto.value = app.profile.photo.value
+    }
+
+    /** The draft with only the name in the name field, however it was typed or said. */
+    private fun cleanDraft() = draft.value.let { p ->
+        p.copy(name = if (p.name.isBlank()) "" else com.acxelin.hisaabsaathi.core.SpokenDetails.name(p.name))
+    }
+
+    fun saveDraft() = viewModelScope.launch(guard) {
+        app.profile.save(cleanDraft())
+        app.profile.savePhoto(draftPhoto.value)
+        draft.value.state.takeIf { it.isNotEmpty() }?.let { app.settings.setRegion(it) }
+    }
+
+    /** The worker's saved photo (small JPEG), shown on the profile page and the home screen. */
+    val photo: StateFlow<ByteArray?> get() = app.profile.photo
+
+    /** The photo being taken during setup or on the profile page, saved with the details. */
+    val draftPhoto = MutableStateFlow<ByteArray?>(null)
+
+    /** A selfie was taken into [path]: make it small and square; the camera's file is deleted. */
+    fun selfieTaken(path: String) = viewModelScope.launch(guard) {
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { com.acxelin.hisaabsaathi.data.ProfileStore.selfie(path) }
+            ?.let { draftPhoto.value = it }
+    }
+
+    val districts: Map<String, List<String>> get() = app.districts
+
+    /** The Indian state the phone is in ("Bihar", "Odisha"…), when location was allowed and found. */
+    val detectedState = MutableStateFlow<String?>(null)
+
+    /**
+     * Finds the state from one approximate location fix, on the phone, and picks that state's
+     * language and work state. The location itself is not kept. Returns false if not found.
+     */
+    suspend fun detectState(): Boolean {
+        val loc = runCatching { com.acxelin.hisaabsaathi.data.OneLocation.get(app) }.getOrNull() ?: return false
+        val state = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { app.stateMap.stateAt(loc.latitude, loc.longitude) } ?: return false
+        detectedState.value = state
+        app.settings.setLang(com.acxelin.hisaabsaathi.core.StateInfo.languageFor(state))
+        val region = com.acxelin.hisaabsaathi.core.StateInfo.regionFor(state)
+        app.settings.setRegion(region)
+        editDraft { it.copy(state = region) }
+        return true
+    }
+
+    /**
+     * Downloads what the app needs to hear and speak the chosen language, in the background:
+     * the speech pack first (so the mic works sooner), then the read-aloud voice.
+     */
+    fun startVoiceDownloads() {
+        if (!app.autoDownloadVoice) return
+        val l = lang
+        val stt = Catalog.stt(l)
+        app.packs.download(stt)
+        val voice = Catalog.voice(l) ?: return
+        viewModelScope.launch(guard) {
+            packStates.first { it[stt.id] is PackState.Ready || it[stt.id] is PackState.Failed }
+            app.packs.download(voice)
+        }
+    }
+
+    /** True while the mic is listening for a setup answer. */
+    val answering = MutableStateFlow(false)
+
+    fun speechReady(): Boolean = app.stt.available(lang)
+
+    /**
+     * Listens for one answer (name, age, PIN) with the on-device speech pack only: setup
+     * answers never go to the phone's online recogniser. [onText] takes what was heard and
+     * returns what was understood (just the name, the age…), which is read back; null if nothing.
+     */
+    fun listenForAnswer(onText: (String) -> String?) {
+        if (answering.value) { app.stt.stop(); return }
+        if (!app.stt.available(lang) || isBusy) return
+        busy = viewModelScope.launch(guard) {
+            stopPrompt(); app.speaker.stop()
+            answering.value = true
+            val heard = try {
+                app.stt.listen(lang, maxSeconds = 10, onLevel = { level.value = it })
+            } catch (e: Exception) {
+                Heard.Failed(Heard.Kind.ENGINE, e.message ?: e.javaClass.simpleName)
+            } finally {
+                answering.value = false; level.value = 0f
+            }
+            when (heard) {
+                is Heard.Text -> app.speaker.speak(onText(heard.text) ?: strings.notUnderstood, lang)
+                Heard.Silence -> app.speaker.speak(strings.heardNothing, lang)
+                is Heard.Failed -> { note("setup answer: ${heard.detail}"); app.speaker.speak(if (heard.kind == Heard.Kind.MIC) strings.micFailed else strings.voiceFailed, lang) }
+            }
+        }
+    }
+
+    private var promptPlayer: android.media.MediaPlayer? = null
+
+    private fun stopPrompt() {
+        promptPlayer?.let { runCatching { it.stop(); it.release() } }
+        promptPlayer = null
+    }
+
+    /**
+     * Reads a setup question aloud. A recording bundled with the app is used when there is one
+     * (assets/onboarding_audio/<language code>/<key>.mp3, .ogg, .m4a or .wav), so questions are
+     * spoken before any download; otherwise the app's own voice, or the phone's.
+     */
+    fun speakPrompt(key: String, text: String) {
+        stopPrompt(); app.speaker.stop()
+        val dir = "onboarding_audio/${lang.code}"
+        val name = runCatching { app.assets.list(dir)?.firstOrNull { it.substringBeforeLast('.') == key } }.getOrNull()
+        if (name != null) {
+            fun play(source: android.media.MediaPlayer.() -> Unit): Boolean {
+                val mp = android.media.MediaPlayer()
+                return runCatching {
+                    mp.setAudioAttributes(
+                        android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT)
+                            .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build(),
+                    )
+                    mp.source()
+                    mp.setOnCompletionListener { it.release(); if (promptPlayer === it) promptPlayer = null }
+                    mp.prepare(); mp.start()
+                    promptPlayer = mp
+                }.onFailure { runCatching { mp.release() } }.isSuccess
+            }
+            // Played straight from the app package; if the build compressed the file, from a copy.
+            val ok = play { app.assets.openFd("$dir/$name").use { fd -> setDataSource(fd.fileDescriptor, fd.startOffset, fd.length) } } ||
+                play {
+                    val copy = java.io.File(app.cacheDir, "prompt-${lang.code}-$name")
+                    if (!copy.exists()) app.assets.open("$dir/$name").use { input -> copy.outputStream().use { input.copyTo(it) } }
+                    setDataSource(copy.path)
+                }
+            if (ok) return
+        }
+        app.speaker.speak(text, lang)
+    }
+
+    fun stopSpeaking() { stopPrompt(); app.speaker.stop() }
+
+    /**
+     * Reads the Aadhaar QR in a photo, on the phone, and fills in the details. The photo file
+     * (if it was taken for this) is deleted straight away; only name, age, state, district and
+     * PIN are kept. [onDone] gets false if no Aadhaar QR could be read.
+     */
+    fun readAadhaar(photo: Uri, tempFile: String?, onDone: (Boolean) -> Unit) = viewModelScope.launch(guard) {
+        val codes = try { app.qr.read(photo) } finally { tempFile?.let { runCatching { java.io.File(it).delete() } } }
+        onDone(useAadhaar(codes))
+    }
+
+    /** What the live QR scanner read (the scanner shows nothing else and keeps nothing). */
+    fun readAadhaarCode(raw: String, onDone: (Boolean) -> Unit) = viewModelScope.launch(guard) {
+        onDone(kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { com.acxelin.hisaabsaathi.core.AadhaarQr.read(raw) }
+            ?.let { useAadhaar(listOf(raw)) } ?: false)
+    }
+
+    /** Fills name, age, state, district and PIN from the first Aadhaar QR among [codes]; nothing else is kept. */
+    private suspend fun useAadhaar(codes: List<String>): Boolean {
+        val d = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+            codes.firstNotNullOfOrNull { com.acxelin.hisaabsaathi.core.AadhaarQr.read(it) }
+        } ?: return false
+        val region = com.acxelin.hisaabsaathi.core.StateInfo.regionFor(d.state).ifEmpty { draft.value.state }
+        val district = app.districts[region]?.let { com.acxelin.hisaabsaathi.core.Districts.match(d.district, it) } ?: d.district
+        editDraft { it.copy(name = d.name, age = d.age ?: it.age, state = region, district = district, pin = d.pin.ifEmpty { it.pin }) }
+        return true
+    }
+
+    /** Settings → Show setup again: the downloaded packs and the ledger stay. */
+    fun reopenSetup() = viewModelScope.launch(guard) {
+        startDraft()
+        app.settings.setOnboarded(false)
     }
 
     fun download(pack: Pack) = app.packs.download(pack)
@@ -526,7 +719,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun exportPdf(period: QueryPeriod) = viewModelScope.launch(guard) {
         val s = strings
-        val file = app.exporter.pdf(s.periodName(period), inPeriod(period), s)
+        val file = app.exporter.pdf(s.periodName(period), inPeriod(period), s, owner = app.profile.flow.value.line())
         app.exporter.share(listOf(file), s.share)
     }
 
@@ -563,7 +756,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val s = strings
         val all = app.ledger.oldestFirst()
         val note = if (HashChain.firstBroken(all) < 0) s.recordIntact else s.recordBroken
-        val pdf = app.exporter.pdf(s.evidenceTitle, all.reversed(), s, chainNote = note)
+        val pdf = app.exporter.pdf(s.evidenceTitle, all.reversed(), s, chainNote = note, owner = app.profile.flow.value.line())
         app.exporter.share(listOf(pdf, app.exporter.evidenceJson(all)), s.share)
     }
 

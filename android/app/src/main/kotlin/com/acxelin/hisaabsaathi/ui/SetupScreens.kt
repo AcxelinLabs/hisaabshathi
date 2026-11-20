@@ -56,7 +56,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.acxelin.hisaabsaathi.models.PackState
 
 @Composable
-private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boolean = true, canDownload: Boolean = true) {
+internal fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boolean = true, canDownload: Boolean = true) {
     val states by vm.packStates.collectAsStateWithLifecycle()
     val state = states[pack.id] ?: PackState.Missing
     Column(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
@@ -83,7 +83,7 @@ private fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boole
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun RegionPicker(vm: AppViewModel, settings: Settings, onPicked: () -> Unit = {}) {
+internal fun RegionPicker(vm: AppViewModel, settings: Settings, onPicked: () -> Unit = {}) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         vm.wagePack.regions.forEach { r ->
             FilterChip(selected = settings.region == r, onClick = { vm.setRegion(r); onPicked() }, label = { Text(r, fontSize = 17.sp) }, modifier = Modifier.height(48.dp))
@@ -92,7 +92,7 @@ private fun RegionPicker(vm: AppViewModel, settings: Settings, onPicked: () -> U
 }
 
 @Composable
-private fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean = false) {
+internal fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean = false) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Lang.entries.chunked(2).forEach { pair ->
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -120,9 +120,9 @@ private fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean
  * they answer, and only "yes" sends anything.
  */
 @Composable
-private fun ShareQuestion(vm: AppViewModel, s: Strings, choice: Boolean?, onChoice: (Boolean) -> Unit) {
+internal fun ShareQuestion(vm: AppViewModel, s: Strings, choice: Boolean?, onChoice: (Boolean) -> Unit) {
     val spoken = s.shareTitle + " " + s.shareBody
-    androidx.compose.runtime.LaunchedEffect(s.lang) { vm.readAloud(spoken) }
+    // Read aloud only when the worker presses Listen (not on its own).
     Text(s.shareTitle, fontSize = 22.sp, fontWeight = FontWeight.Bold)
     Text(s.shareBody, fontSize = 16.sp, lineHeight = 23.sp)
     OutlinedButton(onClick = { vm.readAloud(spoken) }, modifier = Modifier.height(48.dp)) {
@@ -155,53 +155,7 @@ fun ShareAskScreen(vm: AppViewModel, s: Strings) {
     }
 }
 
-// ---------------------------------------------------------------- first-time setup
-
-@Composable
-fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
-    var step by rememberSaveable { mutableIntStateOf(0) }
-    var share by rememberSaveable { mutableStateOf<Boolean?>(null) }
-    Column(Modifier.fillMaxSize().background(if (step == 0) Ink else Chalk).systemBarsPadding().padding(24.dp)) {
-        Text(s.appName, fontSize = 40.sp, fontWeight = FontWeight.ExtraBold, color = if (step == 0) Color.White else Ink)
-        Spacer(Modifier.height(24.dp))
-        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            when (step) {
-                0 -> {
-                    Text(s.chooseLanguage, fontSize = 22.sp, color = Color.White)
-                    LanguagePicker(vm, settings, onDark = true)
-                }
-                1 -> {
-                    Text(s.chooseState, fontSize = 22.sp)
-                    RegionPicker(vm, settings)
-                }
-                3 -> ShareQuestion(vm, s, share) { share = it }
-                else -> {
-                    Text(s.voicePackTitle, fontSize = 22.sp)
-                    Text(s.voicePackBody, fontSize = 17.sp)
-                    PackRow(vm, vm.sttPack(), s, allowDelete = false)
-                    vm.voicePack()?.let { Text(s.voicePackReadAloud, fontSize = 15.sp, color = InkSoft); PackRow(vm, it, s, allowDelete = false) }
-                    // Optional: the app works without it, using its built-in rules.
-                    if (Catalog.slmSupported) {
-                        Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
-                        PackRow(vm, vm.slmPack, s, allowDelete = false, canDownload = Catalog.canDownloadSlm)
-                    }
-                    HorizontalDivider()
-                    Text(s.privacyTitle, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                    Text(s.privacyBody, fontSize = 15.sp)
-                }
-            }
-        }
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            if (step > 0) OutlinedButton(onClick = { step-- }, modifier = Modifier.height(52.dp)) { Icon(Icons.AutoMirrored.Filled.ArrowBack, s.cancel, tint = Ink) }
-            Button(
-                onClick = { if (step < 3) step++ else vm.finishOnboarding(share == true) },
-                enabled = (step != 1 || settings.region.isNotEmpty()) && (step != 3 || share != null),
-                modifier = Modifier.weight(1f).height(52.dp), shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Marigold, contentColor = Ink),
-            ) { Text(if (step < 3) s.next else s.start, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Ink) }
-        }
-    }
-}
+// First-time setup is in OnboardingScreens.kt.
 
 // ---------------------------------------------------------------- settings & privacy
 
@@ -292,6 +246,7 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             HorizontalDivider()
             Text("Credits", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text(CREDITS, fontSize = 12.sp, color = InkSoft, lineHeight = 17.sp)
+            OutlinedButton(onClick = { vm.reopenSetup() }) { Text(s.showSetupAgain) }
             OutlinedButton(onClick = { confirmErase = true }) { Text(s.eraseAll, color = Red) }
             Spacer(Modifier.height(24.dp))
         }

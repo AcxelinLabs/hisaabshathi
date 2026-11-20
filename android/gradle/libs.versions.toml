@@ -29,6 +29,10 @@ sherpa-onnx = { module = "com.github.k2-fsa.sherpa-onnx:sherpa-onnx", version.re
 litertlm = { module = "com.google.ai.edge.litertlm:litertlm-android", version.ref = "litertlm" }
 mlkit-text = "com.google.mlkit:text-recognition:16.0.1"
 mlkit-text-devanagari = "com.google.mlkit:text-recognition-devanagari:16.0.1"
+mlkit-barcode = "com.google.mlkit:barcode-scanning:17.3.0"
+camerax-camera2 = "androidx.camera:camera-camera2:1.4.2"
+camerax-lifecycle = "androidx.camera:camera-lifecycle:1.4.2"
+camerax-view = "androidx.camera:camera-view:1.4.2"
 coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
 coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
 serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1"

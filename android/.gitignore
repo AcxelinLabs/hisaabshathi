@@ -9,3 +9,6 @@ captures/
 *.keystore
 
 __pycache__/
+
+# Voices downloaded by tools/tts/make_onboarding_audio.py
+tools/tts/voices/
