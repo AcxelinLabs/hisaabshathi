@@ -141,7 +141,7 @@ internal object Ta {
         "Listening… speak now" to "கேக்குறேன்… சொல்லுங்க",
         "Understanding…" to "புரிஞ்சுக்கிறேன்…",
         "Tap to stop" to "நிறுத்த அழுத்துங்க",
-        "Scan bill / advance slip" to "பில் / அட்வான்ஸ் சீட்டு போட்டோ",
+        "Scan bill / advance slip" to "பில் / சீட்டு போட்டோ",
         "Type instead" to "எழுதிப் போடுங்க",
         "e.g. 120 pieces, rate 5 rupees, 300 advance" to "உதாரணம்: 120 பீஸ், ரேட் 5 ரூபாய், 300 அட்வான்ஸ்",
         "Home" to "ஹோம்",

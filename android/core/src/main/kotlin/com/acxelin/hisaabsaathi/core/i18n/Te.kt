@@ -145,7 +145,7 @@ internal object Te {
         "Listening… speak now" to "వింటున్నాను… చెప్పండి",
         "Understanding…" to "అర్థం చేసుకుంటున్నాను…",
         "Tap to stop" to "ఆపడానికి నొక్కండి",
-        "Scan bill / advance slip" to "బిల్లు / చీటీ ఫోటో తీయండి",
+        "Scan bill / advance slip" to "బిల్లు / చీటీ ఫోటో",
         "Type instead" to "టైప్ చేయండి",
         "e.g. 120 pieces, rate 5 rupees, 300 advance" to "ఉదా: 120 పీసులు, రేటు 5 రూపాయలు, 300 అడ్వాన్స్",
         "Home" to "హోమ్",

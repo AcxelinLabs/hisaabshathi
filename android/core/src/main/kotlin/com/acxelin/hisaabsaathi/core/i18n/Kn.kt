@@ -145,7 +145,7 @@ internal object Kn {
         "Listening… speak now" to "ಕೇಳುತ್ತಿದ್ದೇನೆ… ಹೇಳಿ",
         "Understanding…" to "ಅರ್ಥ ಮಾಡಿಕೊಳ್ಳುತ್ತಿದ್ದೇನೆ…",
         "Tap to stop" to "ನಿಲ್ಲಿಸಲು ಒತ್ತಿ",
-        "Scan bill / advance slip" to "ಬಿಲ್ / ಅಡ್ವಾನ್ಸ್ ಚೀಟಿ ಫೋಟೋ",
+        "Scan bill / advance slip" to "ಬಿಲ್ / ಚೀಟಿ ಫೋಟೋ",
         "Type instead" to "ಬರೆದು ಹಾಕಿ",
         "e.g. 120 pieces, rate 5 rupees, 300 advance" to "ಉದಾ: 120 ಪೀಸ್, ರೇಟ್ 5 ರೂಪಾಯಿ, 300 ಅಡ್ವಾನ್ಸ್",
         "Home" to "ಹೋಮ್",

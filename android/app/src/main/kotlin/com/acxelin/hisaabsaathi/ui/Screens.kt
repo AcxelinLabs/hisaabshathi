@@ -76,6 +76,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -200,10 +201,10 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
             OutlinedButton(onClick = onScan, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
                 Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(6.dp))
-                Text(s.scanBill, fontSize = 14.sp, lineHeight = 16.sp, maxLines = 2, textAlign = TextAlign.Center)
+                Text(s.scanBill, fontSize = 14.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
             }
             OutlinedButton(onClick = onType, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
-                Text(s.typeInstead, fontSize = 14.sp, lineHeight = 16.sp, maxLines = 2, textAlign = TextAlign.Center)
+                Text(s.typeInstead, fontSize = 14.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
             }
         }
     }
@@ -570,7 +571,7 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
             BigButton(s.readAloud, Marigold, Modifier.weight(1f)) { vm.speakSummary(period) }
             OutlinedButton(onClick = { vm.exportPdf(period) }, modifier = Modifier.weight(1f).height(52.dp), contentPadding = PaddingValues(horizontal = 10.dp)) {
                 Icon(Icons.Default.Share, null, modifier = Modifier.size(20.dp)); Spacer(Modifier.width(6.dp))
-                Text(s.exportPdf, fontSize = 14.sp, lineHeight = 16.sp, maxLines = 2, textAlign = TextAlign.Center)
+                Text(s.exportPdf, fontSize = 14.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
             }
         }
 
