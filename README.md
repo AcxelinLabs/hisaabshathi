@@ -4,8 +4,6 @@
 
 <p align="center">
   <a href="https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi.apk"><img src="docs/brand/download-app.png" alt="Download HisaabSaathi: for workers, v0.7.3, Android 10+" height="72"></a>
-  &nbsp;
-  <a href="https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi-Recorder.apk"><img src="docs/brand/download-recorder.png" alt="Download HisaabSaathi Recorder: for field agents, v1.1, Android 10+" height="72"></a>
 </p>
 
 <p align="center">
@@ -23,9 +21,7 @@ It works entirely on the phone, with no internet after a one-time download.
   <img src="docs/screens/app-overview.png" alt="HisaabSaathi: home, confirm, spoken answer, ledger, summary, minimum wage" width="640">
 </p>
 
-**HisaabSaathi** is the app for workers. **HisaabSaathi Recorder** is a separate app for field
-agents who record voice samples to test and improve it. Both need Android 10 or newer and can
-be installed side by side.
+It needs Android 10 or newer.
 
 ## What it does
 
@@ -81,9 +77,8 @@ correctly (previously 39%). Details and every benchmark: [`android/README.md`](a
 ```
 android/
   app/        HisaabSaathi: the Android app (Kotlin, Jetpack Compose)
-  core/       language rules, number reading, ledger maths, voice-sample formats; plain Kotlin, unit-tested
-  recorder/   HisaabSaathi Recorder: the field-agent app for recording voice samples
-  tools/      Python: test sets, model fine-tuning and checks, speech benchmarks, voice dataset tools
+  core/       language rules, number reading, ledger maths, sound formats; plain Kotlin, unit-tested
+  tools/      Python: test sets, model fine-tuning and checks, speech benchmarks
   README.md   engineering notes, models and results
 docs/         design notes and screenshots
 ```
@@ -94,32 +89,13 @@ You need JDK 17 and the Android SDK (API 35).
 
 ```bash
 cd android
-./gradlew :app:assembleDebug        # HisaabSaathi APKs per processor type in app/build/outputs/apk/debug/
-./gradlew :recorder:assembleRelease # HisaabSaathi Recorder
-./gradlew test                      # every unit and screen test (core, app, recorder)
+./gradlew :app:assembleDebug   # APKs per processor type in app/build/outputs/apk/debug/
+./gradlew test                 # every unit and screen test (core and app)
 ```
 
 The speech, voice and language models are not in the repository. The app downloads them on
 first use, and they are listed in [`android/README.md`](android/README.md). Screen tests save a
-screenshot of every step to `app/build/screens` and `recorder/build/screens`.
-
-## Voice recordings from real speakers
-
-To measure and improve how well HisaabSaathi hears real workers, field agents use
-**HisaabSaathi Recorder**. Each speaker:
-- chooses language, gender, age, state and place (quiet room, worksite…);
-- gives spoken consent;
-- reads or freely asks questions from a built-in list of 1,000 per language, from a list
-  loaded on the phone, or says anything about their work.
-
-Each speaker's recordings come out as one zip. The office uploads them with
-`python android/tools/voices.py upload <folder>` to the organisation's **private** Hugging Face
-dataset. Recordings are never stored in this repository. See
-[`android/recorder/README.md`](android/recorder/README.md).
-
-<p align="center">
-  <img src="docs/screens/recorder-overview.png" alt="HisaabSaathi Recorder: speaker details, consent, a checked recording, sessions to share" width="760">
-</p>
+screenshot of every step to `app/build/screens`.
 
 ## Credits and licences
 

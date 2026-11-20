@@ -180,15 +180,6 @@ The fine-tuned model was trained on sentences built from the same templates as t
 (with no overlapping sentences), so 95% shows it can learn the task, not how it does on real
 speech.
 
-### Voice recordings from real speakers
-
-`recorder/` is a separate app, **HisaabSaathi Recorder**, for field agents. It records workers
-asking the 300 questions per language of `tools/make_voice_questions.py`, offline, with each
-speaker's details and spoken consent, and exports one zip per speaker in the layout of the
-private dataset `AcxelinLabs/hisaabsaathi-voices`. `tools/voices.py` checks, lists and
-transcribes the recordings with the app's own speech models; `VoiceQuestionsTest` scores what
-the app understood. See `recorder/README.md`.
-
 ### Understanding questions without the model (19 Nov 2026)
 
 The rules (`core/.../QuestionWords.kt`, `RuleBasedExtractor.query`) read ledger questions in
@@ -215,8 +206,8 @@ all six languages with no model:
 | Corpus (638) / real-speech entries (168) | 638 / 95 | 638 / 95 |
 
 `QuestionRulesTest` keeps the main cases and 52 everyday questions that must be left alone.
-The voice set's workbook is for recording real voices, to measure speech and understanding
-together.
+The voice set's workbook is for testers who ask the app the questions aloud, to measure speech
+and understanding together.
 
 ### Choosing the language model (18 Nov 2026)
 

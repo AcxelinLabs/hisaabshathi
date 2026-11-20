@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """1,000 spoken-style questions per app language (Hindi, Odia, Telugu, Kannada, Tamil, English)
-for recording in real voices, to find where the app misses.
+to ask the app in real voices, to find where it misses.
 
 Each question is built from a hand-written phrasing (how people actually ask, with local and
 mixed-in English words) and a way of saying the period ("this week", "is week", "hafte bhar
@@ -16,7 +16,7 @@ All text is best-effort and should be checked by native speakers while recording
 
 usage (from android/): make_voice_questions.py [xlsx_path]
   writes core/src/test/resources/voice_questions.jsonl (scored by VoiceQuestionsTest)
-  and, when given, a workbook to record from.
+  and, when given, a workbook for testers.
 """
 import json, random, sys
 
@@ -494,12 +494,6 @@ def main():
         for r in rows:
             f.write(json.dumps({k: r[k] for k in ["id", "lang", "text", "english", "expect", "supported", "hard"]}, ensure_ascii=False) + "\n")
     print(len(rows), "questions")
-    # HisaabSaathi Recorder (recorder/) shows these prompts.
-    with open("recorder/src/main/assets/voice_prompts.jsonl", "w", encoding="utf-8") as f:
-        for r in rows:
-            f.write(json.dumps({"id": r["id"], "lang": r["lang"], "text": r["text"], "english": r["english"],
-                                "expect": r["expect"], "answer": describe(r["expect"], ""),
-                                "group": "hard" if r.get("hard") else "everyday"}, ensure_ascii=False) + "\n")
     if len(sys.argv) > 1:
         write_xlsx(rows, sys.argv[1])
 
@@ -521,17 +515,11 @@ def write_xlsx(rows, path):
         ("HisaabSaathi voice questions", True),
         ("1,000 questions in each language, asked the way workers really speak. 1-200: everyday ways of asking. 201-300: new and hard ones, including things the app cannot answer yet ('Supported now: no'). 301-1000: more everyday ways, with other times, openers and closers.", False),
         ("", False),
-        ("Best way: the HisaabSaathi Recorder app (one zip per speaker, ready for the dataset).", True),
-        ("1. New speaker: choose their language, gender and age. Your state and place are remembered (change them when you move).", False),
-        ("2. Questions: Random (a mix, favouring questions this phone has recorded least), In order, or Hard ones only. 25 to 50 per speaker is plenty (5-10 minutes).", False),
-        ("3. Read the consent to them in their language and record their 'yes'. Without it the app does not record.", False),
-        ("4. 'Reads the sentence' for people who read; 'Says it in own words' for people who do not: explain the meaning shown and let them ask their way.", False),
-        ("5. Tap the big button, they speak, tap again. The app says if it sounds too quiet or too loud. Save & next.", False),
-        ("6. Share zip to the office computer. The office uploads all zips with one command: python voices.py upload <folder of zips>.", False),
-        ("The Recorder can also load your own question list (CSV or text) or record anything the speaker says.", False),
-        ("", False),
-        ("Without the app (phone voice recorder): record each sentence and save it with the name in column F; fill columns G, H, I (yellow). Zip one folder per language.", True),
-        ("Column D says what the app should answer.", False),
+        ("How to test", True),
+        ("1. Open HisaabSaathi in the language of the sheet. Tap the big button and ask the sentence in column B (or say it your own way).", False),
+        ("2. Column D says what the app should answer. Write in column F what it did: right, wrong, or did not hear.", False),
+        ("3. If it was wrong, write in column G what the app heard (it shows the words on screen). Column H: quiet or noisy place.", False),
+        ("If 'Help improve HisaabSaathi' is on in Settings, the app also sends what it heard, with the voice clip, to the team.", False),
         ("", False),
         ("Example row (from the Hindi sheet):", True),
     ]
@@ -541,11 +529,11 @@ def write_xlsx(rows, path):
         c.alignment = Alignment(wrap_text=True, vertical="top")
     ws.column_dimensions["A"].width = 120
     ex = len(guide) + 1
-    example = ["1", "इस हफ्ते मैंने कितना कमाया", "how much did I earn this week", "Money earned, this week", "yes", "hi_001.m4a", "इस हफ्ते कितना कमाया", "quiet", "RK"]
+    example = ["1", "इस हफ्ते मैंने कितना कमाया", "how much did I earn this week", "Money earned, this week", "yes", "wrong", "इस हफ्ते कितना कमाना", "quiet"]
     ws.cell(row=ex, column=1, value=" | ".join(example)).font = Font(name="Arial", size=11, italic=True)
 
     cols = [("No.", 6), ("Sentence to say", 46), ("English meaning", 42), ("App should answer", 34), ("Supported now", 11),
-            ("Save recording as", 18), ("What was actually said (if different)", 36), ("Quiet / noisy", 12), ("Speaker", 10)]
+            ("What the app did", 16), ("What the app heard (if wrong)", 36), ("Quiet / noisy", 12)]
     yellow = PatternFill("solid", fgColor="FFF4C2")
     names = {c: L[c]["name"] for c in L}
     for code in ["hi", "or", "te", "kn", "ta", "en"]:
@@ -556,12 +544,12 @@ def write_xlsx(rows, path):
         ws.row_dimensions[1].height = 32
         ws.freeze_panes = "B2"
         for i, r in enumerate([r for r in rows if r["lang"] == code], 2):
-            vals = [i - 1, r["text"], r["english"], describe(r["expect"], names[code]), "yes" if r["supported"] else "no", r["id"] + ".m4a", None, None, None]
+            vals = [i - 1, r["text"], r["english"], describe(r["expect"], names[code]), "yes" if r["supported"] else "no", None, None, None]
             for j, v in enumerate(vals, 1):
                 c = ws.cell(row=i, column=j, value=v)
-                c.font = body if j == 2 else (small if j in (3, 4, 5, 6) else Font(name="Arial", size=11))
+                c.font = body if j == 2 else (small if j in (3, 4, 5) else Font(name="Arial", size=11))
                 c.alignment = wrap; c.border = thin
-                if j >= 7:
+                if j >= 6:
                     c.fill = yellow
     wb.save(path)
     print("wrote", path)

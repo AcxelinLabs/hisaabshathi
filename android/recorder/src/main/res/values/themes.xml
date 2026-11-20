@@ -1,6 +1,0 @@
-<resources>
-    <style name="Theme.Recorder" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#14432A</item>
-        <item name="android:windowBackground">#EFF4EE</item>
-    </style>
-</resources>

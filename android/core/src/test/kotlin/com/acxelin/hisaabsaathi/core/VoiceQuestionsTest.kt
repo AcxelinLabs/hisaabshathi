@@ -10,10 +10,10 @@ import org.junit.Test
 import java.io.File
 
 /**
- * The 1,200 questions to be recorded in real voices (tools/make_voice_questions.py), run
- * through the app's understanding as typed text. Shows which misses are the app's own, before
- * speech recognition adds its errors. With recordings, voice_heard.jsonl ({"id", "heard"})
- * scores what the speech model wrote instead.
+ * The 1,000 questions per language of tools/make_voice_questions.py, run through the app's
+ * understanding as typed text. Shows which misses are the app's own, before speech recognition
+ * adds its errors. With voice_heard.jsonl ({"id", "heard"}: what the speech model wrote for a
+ * spoken question) it scores real speech instead.
  *
  * Writes build/voice-questions-report.txt; nothing is asserted (a measurement, not a gate).
  */
@@ -55,7 +55,7 @@ class VoiceQuestionsTest {
 
     /**
      * One line per recording: {"rec": file name, "id": question id, "heard": what the speech
-     * model wrote} (tools/voices.py transcribe). Several speakers may record one question.
+     * model wrote}. Several speakers may say one question.
      */
     private data class Take(val rec: String, val id: String, val text: String)
 
