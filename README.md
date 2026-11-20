@@ -22,7 +22,8 @@ phone unless the worker chooses: by sharing a report, or by saying yes to help i
   <img src="docs/screens/app-overview.png" alt="HisaabSaathi: home, confirm, spoken answer, ledger, summary, minimum wage" width="640">
 </p>
 
-It needs Android 10 or newer.
+It needs Android 10 or newer. Setup is three screens: language, name and PIN code. The PIN
+fills in the state and district, offline.
 
 ## What it does
 
@@ -60,8 +61,8 @@ It needs Android 10 or newer.
 - There are no accounts, no ads and no tracking. Only the worker sees their records.
 - **Nothing is uploaded unless the worker agrees.** The app sends nothing by itself except what
   the worker said yes to below.
-- **Help improve HisaabSaathi** is asked once, at setup, and read aloud. Nothing is chosen for
-  the worker. Only if they say yes, two things are sent to the team over Wi-Fi:
+- **Help improve HisaabSaathi** is asked once, on Home, after the worker has used the app for a
+  few days, never during setup. It can be read aloud, and nothing is chosen for the worker. Only if they say yes, two things are sent to the team over Wi-Fi:
   - each time they speak or type to the app, their voice clip, what the app heard, and what it
     understood and answered;
   - once a week, counts: how many entries were saved and how often the app got one wrong.
