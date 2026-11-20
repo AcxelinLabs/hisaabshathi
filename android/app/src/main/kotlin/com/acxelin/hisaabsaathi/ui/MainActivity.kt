@@ -112,7 +112,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
     var pendingPhoto by remember { mutableStateOf<Pair<Uri, String>?>(null) }
     val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { taken ->
         val p = pendingPhoto
-        if (taken && p != null) vm.scanned(p.first, p.second)
+        if (taken && p != null) vm.photoTaken(p.first, p.second, com.acxelin.hisaabsaathi.core.PhotoKind.BILL)
         pendingPhoto = null
     }
     // The app declares the camera permission (for the QR scanner), so the camera app needs it granted too.

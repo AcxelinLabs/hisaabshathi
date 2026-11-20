@@ -20,6 +20,7 @@ import com.acxelin.hisaabsaathi.core.Money
 import com.acxelin.hisaabsaathi.core.HashChain
 import com.acxelin.hisaabsaathi.core.Lang
 import com.acxelin.hisaabsaathi.core.Ledger
+import com.acxelin.hisaabsaathi.core.PhotoKind
 import com.acxelin.hisaabsaathi.core.Query
 import com.acxelin.hisaabsaathi.core.QueryPeriod
 import com.acxelin.hisaabsaathi.core.QueryTopic
@@ -400,7 +401,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             lastAudio = null
             when (answer) {
                 true -> { capture.value = r; confirmSave() }
-                false -> { rejected(r); capture.value = Capture.Idle; busy = null; listenForEntry() }
+                false -> { rejected(r); dropPhoto(r); capture.value = Capture.Idle; busy = null; listenForEntry() }
                 null -> review(r)
             }
         }
@@ -417,19 +418,76 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun dismiss() {
         app.speaker.stop()
-        (capture.value as? Capture.Review)?.let { reviewed(it, Improve.Outcome.DISMISSED) }
+        (capture.value as? Capture.Review)?.let { reviewed(it, Improve.Outcome.DISMISSED); dropPhoto(it) }
         capture.value = Capture.Idle
     }
 
-    // ---- scan
+    // ---- photos: bills, slips, salary slips (become lines), bank statements and other papers (kept)
 
-    fun scanned(photo: Uri, path: String) = viewModelScope.launch(guard) {
+    /** One photo the worker took: of a ledger line ([entry]), or a paper kept on its own. */
+    data class Photo(val path: String, val kind: PhotoKind, val takenAtMs: Long, val entry: Entry? = null)
+
+    private val photoDir get() = java.io.File(app.filesDir, "attachments").apply { mkdirs() }
+    private val papersChanged = MutableStateFlow(0)
+
+    /** Every photo, newest first: those of saved lines and the papers. */
+    val photos: StateFlow<List<Photo>> = kotlinx.coroutines.flow.combine(entries, papersChanged) { list, _ ->
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            val ofLines = list.mapNotNull { e ->
+                val p = e.attachment ?: return@mapNotNull null
+                if (!java.io.File(p).exists()) return@mapNotNull null
+                Photo(p, PhotoKind.fromSource(e.source) ?: PhotoKind.BILL, e.createdAtMs, e)
+            }
+            val papers = photoDir.listFiles().orEmpty().mapNotNull { f -> paperOf(f) }
+            (ofLines + papers).sortedByDescending { it.takenAtMs }
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+    private fun paperOf(f: java.io.File): Photo? {
+        val m = Regex("""paper-([A-Z]+)-(\d+)\.jpg""").matchEntire(f.name) ?: return null
+        val kind = PhotoKind.entries.firstOrNull { it.name == m.groupValues[1] } ?: PhotoKind.OTHER
+        return Photo(f.path, kind, m.groupValues[2].toLong())
+    }
+
+    /**
+     * A photo was taken of [kind]. A bank statement or other paper is kept as it is. A bill,
+     * slip or salary slip becomes a line to confirm, with the amount read on the phone; if
+     * it cannot be read, the worker types it. Nothing is saved before they confirm.
+     */
+    fun photoTaken(photo: Uri, path: String, kind: PhotoKind) = viewModelScope.launch(guard) {
+        val type = kind.entryType
+        if (type == null) {
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                val f = java.io.File(path)
+                f.renameTo(java.io.File(f.parentFile, "paper-${kind.name}-${System.currentTimeMillis()}.jpg"))
+            }
+            papersChanged.value++
+            return@launch say(strings.photoKept)
+        }
         capture.value = Capture.Thinking
         val text = app.scanner.text(photo)
         // Same limits as speech: a long run of digits on a bill must not become a ₹ crore line.
-        val draft = ReceiptReader.read(text)?.let { Extraction(text, listOf(it)).sane().entries.single() }
-        if (draft == null) say(strings.notUnderstood)
-        else review(Capture.Review(text.lines().take(6).joinToString(" / "), listOf(draft), true, "scan", path))
+        val draft = ReceiptReader.read(text, kind)?.let { Extraction(text, listOf(it)).sane().entries.single() }
+            ?.takeIf { it.amountPaise > 0 } ?: ReceiptReader.blank(type)
+        val r = Capture.Review(text.lines().filter { it.isNotBlank() }.take(6).joinToString(" / "), listOf(draft), true, "photo:${kind.name}", path)
+        if (draft.amountPaise > 0) review(r) else {
+            capture.value = r
+            app.speaker.speak(strings.photoNoAmount, lang)
+        }
+    }
+
+    /** A photo whose line was not saved is not kept. */
+    private fun dropPhoto(r: Capture.Review) {
+        val p = r.attachment ?: return
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) { java.io.File(p).delete() }
+    }
+
+    fun deletePaper(path: String) = viewModelScope.launch(guard) {
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            // Only papers here: a line's photo goes when the line is deleted.
+            java.io.File(path).takeIf { it.parentFile == photoDir && it.name.startsWith("paper-") }?.delete()
+        }
+        papersChanged.value++
     }
 
     // ---- ledger, settings, export
@@ -439,6 +497,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun delete(id: Long) = viewModelScope.launch(guard) {
         val e = entries.value.firstOrNull { it.id == id } ?: return@launch
+        forgetDeleted()
         app.ledger.delete(id)
         lastDeleted.value = e
     }
@@ -449,7 +508,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         app.ledger.restore(e)
     }
 
-    fun forgetDeleted() { lastDeleted.value = null }
+    /** The undo time is over: the line's photo goes too (unless another line uses it). */
+    fun forgetDeleted() {
+        val d = lastDeleted.value ?: return
+        lastDeleted.value = null
+        val p = d.attachment ?: return
+        if (entries.value.none { it.attachment == p && it.id != d.id }) viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) { java.io.File(p).delete() }
+    }
 
     /**
      * Changes a saved line. Returns false (nothing changed) if the amount is a typing slip.
@@ -472,7 +537,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(guard) { app.ledger.replace(changed.copy(note = note)) }
         return true
     }
-    fun eraseAll() = viewModelScope.launch(guard) { app.ledger.eraseAll(); app.corrections.clear(); app.samples.clear(); app.profile.clear() }
+    fun eraseAll() = viewModelScope.launch(guard) {
+        app.ledger.eraseAll(); app.corrections.clear(); app.samples.clear(); app.profile.clear()
+        // Photos of bills, slips and papers too.
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { photoDir.listFiles().orEmpty().forEach { it.delete() } }
+        papersChanged.value++
+    }
 
     // ---- help improve the app (only what the worker agreed to)
 
@@ -795,7 +865,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val all = app.ledger.oldestFirst()
         val note = if (HashChain.firstBroken(all) < 0) s.recordIntact else s.recordBroken
         val pdf = app.exporter.pdf(s.evidenceTitle, all.reversed(), s, chainNote = note, owner = app.profile.flow.value.line())
-        app.exporter.share(listOf(pdf, app.exporter.evidenceJson(all)), s.share)
+        // With every photo: of the lines, and the papers (salary slips, bank statements, loans).
+        val papers = photos.value.filter { it.entry == null }.map { java.io.File(it.path) to it.kind.name }
+        val pictures = all.mapNotNull { e -> e.attachment?.let { java.io.File(it) }?.takeIf { it.exists() } } + papers.map { it.first }
+        app.exporter.share(listOf(pdf, app.exporter.evidenceJson(all, papers)) + pictures.distinct(), s.share)
     }
 
     private companion object {

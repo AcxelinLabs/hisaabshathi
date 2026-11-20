@@ -632,7 +632,9 @@ private fun Bar(label: String, fraction: Float, color: Color, value: String) {
 @Composable
 fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
     val entries by vm.entries.collectAsStateWithLifecycle()
-    val rates = Wages.forRegion(vm.wagePack, settings.region)
+    val all = Wages.forRegion(vm.wagePack, settings.region)
+    // Where rates differ by zone: the zone paying least, so "below the minimum" is never wrong.
+    val rates = Wages.lowestZone(all)
     val floor = Wages.floor(rates)
     val since = LocalDate.now().minusDays(30).toEpochDay()
     val recent = com.acxelin.hisaabsaathi.core.Ledger.totals(entries.filter { it.epochDay >= since })
@@ -642,23 +644,28 @@ fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
             Text(s.minWageTitle, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
             val hasStateRates = rates.any { it.region.equals(settings.region, ignoreCase = true) }
             Text(if (hasStateRates) settings.region else s.centralRates, color = InkSoft)
+            floor?.let { Text(s.sectorName(it.sector), color = InkSoft) }
+            if (rates.size < all.size) Text(s.outsideCities, fontSize = 14.sp, color = InkSoft)
             Spacer(Modifier.height(8.dp))
-            rates.forEach { r ->
-                LeaderRow(s.skillName(r.skill), s.rupees(Money.rupeesToPaise(r.dailyRupees)))
-                if (r.zone.isNotEmpty()) Text(r.zone, fontSize = 13.sp, color = InkSoft)
-            }
+            rates.forEach { r -> LeaderRow(s.skillName(r.skill), s.rupees(Money.rupeesToPaise(r.dailyRupees))) }
             Text(s.perDay, fontSize = 13.sp, color = InkSoft, modifier = Modifier.align(Alignment.End))
+            if (rates.size < all.size) floor?.let { f ->
+                Wages.topFor(all, f.skill)?.takeIf { it.dailyRupees > f.dailyRupees }?.let { top ->
+                    Text(s.cityRate(s.skillName(f.skill), Money.rupeesToPaise(top.dailyRupees)), fontSize = 14.sp)
+                }
+            }
             floor?.let {
                 Spacer(Modifier.height(8.dp))
-                Text(s.sectorName(it.sector), fontSize = 13.sp, color = InkSoft)
                 Text("${s.effectiveFrom}: ${it.effectiveFrom}", fontSize = 13.sp, color = InkSoft)
+                if (it.validTo.isNotEmpty()) Text("${s.validUntil}: ${it.validTo}", fontSize = 13.sp, color = InkSoft)
                 Text("${s.source}: ${it.source}", fontSize = 13.sp, color = InkSoft)
             }
             Spacer(Modifier.height(8.dp))
+            val unchecked = rates.any { it.confidence == "low" }
             Row(Modifier.clip(RoundedCornerShape(8.dp)).background(Notice).padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.Warning, null, tint = NoticeInk, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(8.dp))
-                Text(s.wageDataNote, fontSize = 14.sp, color = NoticeInk)
+                Text(if (unchecked) s.wageNotChecked + " " + s.wageDataNote else s.wageDataNote, fontSize = 14.sp, color = NoticeInk)
             }
         }
 

@@ -133,8 +133,18 @@ class Strings(val lang: Lang) {
     val stateLabel get() = t("राज्य", "ରାଜ୍ୟ", "State")
     val credits get() = t("आभार", "କୃତଜ୍ଞତା", "Credits")
     /** The wage notification's sector, in the worker's language when it is the usual "all employments". */
-    fun sectorName(sector: String): String =
-        if (sector.equals("All scheduled employments", ignoreCase = true)) t("सभी अनुसूचित रोज़गार", "ସମସ୍ତ ଅନୁସୂଚିତ ନିଯୁକ୍ତି", "All scheduled employments") else sector
+    /** The kinds of work the wage data uses, in the worker's language. */
+    fun sectorName(sector: String): String {
+        val k = sector.lowercase()
+        return when {
+            k == "all scheduled employments" -> t("सभी अनुसूचित रोज़गार", "ସମସ୍ତ ଅନୁସୂଚିତ ନିଯୁକ୍ତି", "All scheduled employments")
+            k.endsWith("scheduled employments") -> t("ज़्यादातर अनुसूचित रोज़गार", "ଅଧିକାଂଶ ଅନୁସୂଚିତ ନିଯୁକ୍ତି", "Most scheduled employments")
+            k.startsWith("construction") -> t("निर्माण काम", "ନିର୍ମାଣ କାମ", "Construction work")
+            k.startsWith("factories") -> t("कारखाने, वर्कशॉप, दुकानें और क्लिनिक", "କାରଖାନା, ୱର୍କସପ୍, ଦୋକାନ ଓ କ୍ଲିନିକ୍", "Factories, workshops, shops and clinics")
+            k.startsWith("shops") -> t("दुकानें और प्रतिष्ठान", "ଦୋକାନ ଓ ପ୍ରତିଷ୍ଠାନ", "Shops and establishments")
+            else -> sector
+        }
+    }
     val noMatch get() = t("कुछ नहीं मिला", "କିଛି ମିଳିଲା ନାହିଁ", "Nothing matches")
     val qPin get() = t("आपका पिन कोड क्या है? इसमें 6 अंक होते हैं।", "ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ କଣ? ଏଥିରେ 6ଟି ଅଙ୍କ ଥାଏ।", "What is your PIN code? It has 6 digits.")
     val skip get() = t("छोड़ें", "ଛାଡ଼ନ୍ତୁ", "Skip")
@@ -307,6 +317,29 @@ class Strings(val lang: Lang) {
         "ଏହି ଦର ପୁରୁଣା ହୋଇଥାଇପାରେ। ନିଜ ଶ୍ରମ କାର୍ଯ୍ୟାଳୟ କିମ୍ବା ୟୁନିଅନ୍‌ରୁ ନିଶ୍ଚିତ କରନ୍ତୁ।",
         "These rates may be out of date. Confirm with your labour office or union.",
     )
+    val photoWhat get() = t("यह किस चीज़ की फोटो है?", "ଏହା କାହାର ଫଟୋ?", "What is this a photo of?")
+    fun photoKindName(k: PhotoKind): String = when (k) {
+        PhotoKind.BILL -> t("बिल या रसीद", "ବିଲ୍ ବା ରସିଦ", "Bill or receipt")
+        PhotoKind.ADVANCE -> t("एडवांस की पर्ची", "ଆଡଭାନ୍ସ ସ୍ଲିପ୍", "Advance slip")
+        PhotoKind.LOAN -> t("उधार / लोन का कागज़", "ଋଣ / ଲୋନ୍ କାଗଜ", "Loan paper")
+        PhotoKind.SALARY -> t("वेतन / मजदूरी की पर्ची", "ଦରମା / ମଜୁରୀ ସ୍ଲିପ୍", "Salary or wage slip")
+        PhotoKind.BANK -> t("बैंक स्टेटमेंट या पासबुक", "ବ୍ୟାଙ୍କ ଷ୍ଟେଟମେଣ୍ଟ ବା ପାସବୁକ୍", "Bank statement or passbook")
+        PhotoKind.OTHER -> t("कोई और कागज़", "ଅନ୍ୟ କାଗଜ", "Other paper")
+    }
+    val photosTitle get() = t("फोटो और कागज़", "ଫଟୋ ଓ କାଗଜ", "Photos and papers")
+    val photoKept get() = t("फोटो आपके कागज़ों में रख ली गई।", "ଫଟୋ ଆପଣଙ୍କ କାଗଜ ସହିତ ରଖାଗଲା।", "Photo kept with your papers.")
+    val photoNoAmount get() = t("रकम पढ़ी नहीं जा सकी। कृपया लिख दें।", "ଟଙ୍କା ପଢ଼ି ହେଲା ନାହିଁ। ଦୟାକରି ଲେଖନ୍ତୁ।", "I could not read the amount. Please type it.")
+    val viewPhoto get() = t("फोटो देखें", "ଫଟୋ ଦେଖନ୍ତୁ", "See photo")
+    val deletePhotoQ get() = t("यह फोटो हटाएं?", "ଏହି ଫଟୋ ହଟାଇବେ?", "Delete this photo?")
+    val addPhoto get() = t("फोटो लें", "ଫଟୋ ନିଅନ୍ତୁ", "Take a photo")
+    val photosEmpty get() = t("बिल, पर्ची, पासबुक की फोटो यहाँ दिखेंगी।", "ବିଲ୍, ସ୍ଲିପ୍, ପାସବୁକ୍‌ର ଫଟୋ ଏଠାରେ ଦେଖାଯିବ।", "Photos of bills, slips and passbooks show here.")
+    val outsideCities get() = t("छोटे शहरों और गाँवों की दरें", "ଛୋଟ ସହର ଓ ଗାଁର ଦର", "Rates for small towns and villages")
+    fun cityRate(skill: String, paise: Long): String = rupees(paise).let {
+        tp("बड़े शहरों में $skill काम की न्यूनतम मजदूरी ज़्यादा है: $it प्रति दिन।", "ବଡ଼ ସହରରେ $skill କାମର ସର୍ବନିମ୍ନ ମଜୁରୀ ଅଧିକ: ଦିନକୁ $it।",
+            "In big cities the minimum for $skill work is higher: $it a day.", "In big cities the minimum for {0} work is higher: {1} a day.", skill, it)
+    }
+    val wageNotChecked get() = t("ये आंकड़े अभी सरकारी सूचना से मिलाए नहीं गए हैं।", "ଏହି ଅଙ୍କ ଏବେ ସରକାରୀ ବିଜ୍ଞପ୍ତି ସହ ମିଳାଯାଇ ନାହିଁ।", "These figures are not yet checked against the government notice.")
+    val validUntil get() = t("कब तक", "କେବେ ପର୍ଯ୍ୟନ୍ତ", "Valid until")
     val notEnoughData get() = t("तुलना के लिए पहले कुछ दिन का काम दर्ज करें।", "ତୁଳନା ପାଇଁ ଆଗେ କିଛି ଦିନର କାମ ଲେଖନ୍ତୁ।", "Log a few days of work to compare.")
     val evidenceTitle get() = t("सबूत फ़ाइल", "ପ୍ରମାଣ ଫାଇଲ୍", "Evidence pack")
     val evidenceBody get() = t(

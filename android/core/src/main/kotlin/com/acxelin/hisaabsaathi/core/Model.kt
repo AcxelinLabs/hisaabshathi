@@ -17,6 +17,28 @@ enum class EntryType { WORK, ADVANCE, PAYMENT, EXPENSE }
 
 enum class ExpenseCategory { FOOD, TRAVEL, RENT, PHONE, HEALTH, HOME, OTHER }
 
+/**
+ * What a photo the worker takes is of. The first four become a ledger line (the amount is
+ * read from the photo and confirmed); a bank statement or other paper is only kept, as proof.
+ */
+enum class PhotoKind(val entryType: EntryType?) {
+    BILL(EntryType.EXPENSE),
+    ADVANCE(EntryType.ADVANCE),
+    LOAN(EntryType.ADVANCE),
+    SALARY(EntryType.PAYMENT),
+    BANK(null),
+    OTHER(null);
+
+    companion object {
+        /** The kind recorded in an entry's source ("photo:LOAN"); old entries say "scan". */
+        fun fromSource(source: String): PhotoKind? = when {
+            source == "scan" -> BILL
+            source.startsWith("photo:") -> entries.firstOrNull { it.name == source.removePrefix("photo:") }
+            else -> null
+        }
+    }
+}
+
 /** One line the worker is about to confirm. Money is in paise. */
 data class DraftEntry(
     val type: EntryType,

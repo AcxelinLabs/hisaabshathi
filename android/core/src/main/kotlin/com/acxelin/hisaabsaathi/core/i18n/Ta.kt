@@ -240,6 +240,28 @@ internal object Ta {
         "To reach your goal, put aside {0} on each working day." to
             "இலக்கை அடைய, வேலை செய்ற ஒவ்வொரு நாளும் {0} தனியா எடுத்து வையுங்க.",
         "Well done! This month's goal is reached." to "சபாஷ்! இந்த மாச இலக்கை அடைஞ்சுட்டீங்க.",
+        "Most scheduled employments" to "பெரும்பாலான அட்டவணை வேலைகள்",
+        "Construction work" to "கட்டுமான வேலை",
+        "Factories, workshops, shops and clinics" to "தொழிற்சாலைகள், பட்டறைகள், கடைகள், கிளினிக்குகள்",
+        "Shops and establishments" to "கடைகள் மற்றும் நிறுவனங்கள்",
+        "Rates for small towns and villages" to "சிறு நகரங்கள் மற்றும் கிராமங்களுக்கான விகிதங்கள்",
+        "In big cities the minimum for {0} work is higher: {1} a day." to "பெரிய நகரங்களில் {0} வேலைக்கான குறைந்தபட்ச கூலி அதிகம்: ஒரு நாளைக்கு {1}.",
+        "These figures are not yet checked against the government notice." to "இந்த எண்கள் இன்னும் அரசு அறிவிப்புடன் சரிபார்க்கப்படவில்லை.",
+        "Valid until" to "எப்போது வரை",
+        "What is this a photo of?" to "இது எதன் போட்டோ?",
+        "Bill or receipt" to "பில் அல்லது ரசீது",
+        "Advance slip" to "அட்வான்ஸ் சீட்டு",
+        "Loan paper" to "கடன் / லோன் காகிதம்",
+        "Salary or wage slip" to "சம்பளம் / கூலி சீட்டு",
+        "Bank statement or passbook" to "வங்கி அறிக்கை அல்லது பாஸ்புக்",
+        "Other paper" to "வேறு காகிதம்",
+        "Photos and papers" to "போட்டோக்கள், காகிதங்கள்",
+        "Photo kept with your papers." to "போட்டோ உங்கள் காகிதங்களுடன் வைக்கப்பட்டது.",
+        "I could not read the amount. Please type it." to "தொகையைப் படிக்க முடியவில்லை. தயவுசெய்து தட்டச்சு செய்யுங்கள்.",
+        "See photo" to "போட்டோ பார்க்க",
+        "Delete this photo?" to "இந்த போட்டோவை நீக்கவா?",
+        "Take a photo" to "போட்டோ எடுங்கள்",
+        "Photos of bills, slips and passbooks show here." to "பில், சீட்டு, பாஸ்புக் போட்டோக்கள் இங்கே தெரியும்.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

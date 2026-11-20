@@ -76,7 +76,7 @@ class Exporter(private val context: Context) {
     }
 
     /** Machine-readable record with every hash, so anyone can re-check the chain. */
-    fun evidenceJson(entriesOldestFirst: List<Entry>): File {
+    fun evidenceJson(entriesOldestFirst: List<Entry>, papers: List<Pair<File, String>> = emptyList()): File {
         val broken = HashChain.firstBroken(entriesOldestFirst)
         val root = JSONObject()
             .put("app", "HisaabSaathi")
@@ -94,10 +94,21 @@ class Exporter(private val context: Context) {
                         .put("ratePaise", e.ratePaise ?: JSONObject.NULL)
                         .put("category", e.category?.name ?: JSONObject.NULL)
                         .put("source", e.source).put("note", e.note)
-                        .put("prevHash", e.prevHash).put("hash", e.hash),
+                        .put("prevHash", e.prevHash).put("hash", e.hash)
+                        // The photo sent with this file, and its fingerprint so a changed photo shows.
+                        .put("photo", e.attachment?.let(::File)?.takeIf { it.exists() }?.let { photoInfo(it) } ?: JSONObject.NULL),
                 )
             })
+            .put("papers", JSONArray().apply {
+                for ((f, kind) in papers) if (f.exists()) put(photoInfo(f).put("kind", kind))
+            })
         return File(dir, "hisaab-evidence-${System.currentTimeMillis()}.json").apply { writeText(root.toString(2)) }
+    }
+
+    private fun photoInfo(f: File): JSONObject {
+        val digest = java.security.MessageDigest.getInstance("SHA-256")
+        f.inputStream().use { input -> val buf = ByteArray(64 * 1024); while (true) { val n = input.read(buf); if (n < 0) break; digest.update(buf, 0, n) } }
+        return JSONObject().put("file", f.name).put("sha256", digest.digest().joinToString("") { "%02x".format(it) })
     }
 
     companion object {
