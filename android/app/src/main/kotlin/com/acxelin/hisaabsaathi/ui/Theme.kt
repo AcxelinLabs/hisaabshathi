@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -123,15 +124,20 @@ fun Slip(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
 /** "Label ........ ₹600": the dotted leader of a hand-written bill. */
 @Composable
 fun LeaderRow(label: String, value: String, valueColor: Color = Ink, big: Boolean = false, top: Dp = 6.dp) {
-    Row(Modifier.fillMaxWidth().padding(top = top), verticalAlignment = Alignment.Bottom) {
-        Text(label, fontSize = if (big) 19.sp else 17.sp, fontWeight = if (big) FontWeight.SemiBold else FontWeight.Normal)
-        Canvas(Modifier.weight(1f).height(if (big) 12.dp else 8.dp).padding(horizontal = 8.dp)) {
-            drawLine(
-                Rule, Offset(0f, size.height / 2), Offset(size.width, size.height / 2), strokeWidth = 3f,
-                pathEffect = PathEffect.dashPathEffect(floatArrayOf(3f, 9f)),
-            )
+    androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxWidth().padding(top = top)) {
+        // A long label wraps within 60% of the row; the amount never wraps (never a column of digits).
+        val labelMax = maxWidth * 0.6f
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
+            Text(label, fontSize = if (big) 19.sp else 17.sp, fontWeight = if (big) FontWeight.SemiBold else FontWeight.Normal,
+                modifier = Modifier.widthIn(max = labelMax))
+            Canvas(Modifier.weight(1f).height(if (big) 12.dp else 8.dp).padding(horizontal = 8.dp)) {
+                drawLine(
+                    Rule, Offset(0f, size.height / 2), Offset(size.width, size.height / 2), strokeWidth = 3f,
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(3f, 9f)),
+                )
+            }
+            Text(value, fontSize = if (big) 32.sp else 20.sp, fontWeight = FontWeight.ExtraBold, color = valueColor, maxLines = 1, softWrap = false)
         }
-        Text(value, fontSize = if (big) 32.sp else 20.sp, fontWeight = FontWeight.ExtraBold, color = valueColor)
     }
 }
 

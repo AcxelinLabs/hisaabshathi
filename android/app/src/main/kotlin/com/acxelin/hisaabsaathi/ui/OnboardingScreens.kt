@@ -236,14 +236,12 @@ private fun Question(text: String, onHear: () -> Unit) {
 
 @Composable
 private fun PrivacyNote(s: Strings, onHear: () -> Unit) {
-    Row(
-        Modifier.fillMaxWidth().background(Notice, RoundedCornerShape(10.dp)).padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(Icons.Default.Lock, null, tint = NoticeInk, modifier = Modifier.size(28.dp))
+    // A plain line, not a warning box: it reassures, it does not alarm.
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Icon(Icons.Default.Lock, null, tint = InkSoft, modifier = Modifier.size(22.dp))
         Spacer(Modifier.width(10.dp))
-        Text(s.detailsPrivacy, fontSize = 16.sp, color = NoticeInk, lineHeight = 22.sp, modifier = Modifier.weight(1f))
-        IconButton(onClick = onHear) { Icon(painterResource(R.drawable.ic_speaker), s.hearAgain, tint = NoticeInk) }
+        Text(s.detailsPrivacy, fontSize = 15.sp, color = InkSoft, lineHeight = 21.sp, modifier = Modifier.weight(1f))
+        IconButton(onClick = onHear) { Icon(painterResource(R.drawable.ic_speaker), s.hearAgain, tint = Ink) }
     }
 }
 
@@ -256,6 +254,8 @@ private fun MicAnswer(vm: AppViewModel, s: Strings, onText: (String) -> String?)
     val states by vm.packStates.collectAsStateWithLifecycle()
     val stt = states[vm.sttPack().id]
     val ready = stt is PackState.Ready
+    // Until speech works there is nothing to press: no grey button that looks broken.
+    if (!ready) return
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) vm.listenForAnswer(onText)
     }

@@ -42,6 +42,19 @@ needed to write down a day's wage.
 | 13 | P2 | Tabs | The tab "हिसाब" and the app "हिसाब साथी" share a word | *Next:* name the tab "कुल" (totals) in Hindi, and check the other languages with workers. |
 | 14 | P3 | Everywhere | Light theme only | Fine for outdoor use in daylight. Revisit if testers use the app at night. |
 
+## Second pass (0.9.6)
+
+We went through the screenshots of the redesigned app again, screen by screen:
+
+| # | Sev | Where | What we found | Change |
+|---|---|---|---|---|
+| 15 | P0 | Wage | The 30-day average "₹600" broke into a column of single characters: the long label pushed it aside | **The amount never wraps.** A label takes at most 60% of a row and wraps inside it; this holds on every receipt row in the app. |
+| 16 | P1 | Setup | A large grey "Tap and say your answer" button while the voice download is still going. It looks broken. | **The button appears only once speech works.** Until then, typing is the only way, and that is clear. |
+| 17 | P1 | Everywhere | Some buttons were round pills (Material's default), others had 10 dp corners | **One shape:** every filled and outlined button has 10 dp corners. |
+| 18 | P2 | Summary | Period choices were Material filter chips, the look of every template | **Ledger-book tabs:** today, week, month, year, with the chosen one underlined in marigold. |
+| 19 | P2 | Summary | The receipt was titled "Week" right under the "Week" tab | **Title removed:** the tab says it. |
+| 20 | P2 | Profile | The privacy sentence sat in a yellow warning box | **A plain line with a lock icon:** it reassures, it does not alarm. |
+
 ## Why it looked generic
 
 The things that made the app look like a template rather than a ledger built for one job:

@@ -106,7 +106,7 @@ private fun Section(modifier: Modifier = Modifier, color: Color = Paper, content
 @Composable
 private fun TotalsCard(title: String, t: Totals, s: Strings, compact: Boolean = false) {
     Slip {
-        Text(title, fontSize = 15.sp, color = InkSoft)
+        if (title.isNotEmpty()) Text(title, fontSize = 15.sp, color = InkSoft)
         LeaderRow(s.earned, s.rupees(t.earnedPaise), Leaf)
         // On Home, a line that is ₹0 says nothing: only what happened is shown.
         if (!compact || t.advancePaise != 0L) LeaderRow(s.advance, s.rupees(t.advancePaise))
@@ -622,7 +622,7 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
                 }
             }
         }
-        TotalsCard(s.periodName(period), t, s)
+        TotalsCard("", t, s) // the tab above already names the period
 
         (capture as? Capture.Message)?.let {
             Section(color = Notice) { Text(it.text, fontSize = 18.sp, color = NoticeInk) }
