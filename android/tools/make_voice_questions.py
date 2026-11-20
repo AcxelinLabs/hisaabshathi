@@ -510,7 +510,7 @@ def write_xlsx(rows, path):
     wrap = Alignment(wrap_text=True, vertical="top")
 
     ws = wb.active
-    ws.title = "How to record"
+    ws.title = "How to test"
     guide = [
         ("HisaabSaathi voice questions", True),
         ("1,000 questions in each language, asked the way workers really speak. 1-200: everyday ways of asking. 201-300: new and hard ones, including things the app cannot answer yet ('Supported now: no'). 301-1000: more everyday ways, with other times, openers and closers.", False),

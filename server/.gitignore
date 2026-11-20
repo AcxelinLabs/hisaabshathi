@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+.venv/
+# Worker data must never be committed.
+data/
+work/

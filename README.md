@@ -85,7 +85,8 @@ android/
   core/       language rules, number reading, ledger maths, sound formats; plain Kotlin, unit-tested
   tools/      Python: test sets, model fine-tuning and checks, speech benchmarks
   README.md   engineering notes, models and results
-docs/         design notes and screenshots
+server/       Help improve HisaabSaathi: upload service (AWS or Azure) and training pipeline
+docs/         design notes, screenshots, the improvement loop
 ```
 
 ## Build and test
@@ -97,6 +98,8 @@ cd android
 ./gradlew :app:assembleDebug   # APKs per processor type in app/build/outputs/apk/debug/
 ./gradlew test                 # every unit and screen test (core and app)
 ```
+
+The upload service and pipeline are tested separately: see [`server/README.md`](server/README.md).
 
 The speech, voice and language models are not in the repository. The app downloads them on
 first use, and they are listed in [`android/README.md`](android/README.md). Screen tests save a

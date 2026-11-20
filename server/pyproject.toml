@@ -1,0 +1,10 @@
+[project]
+name = "hisaab-improve"
+version = "1.0.0"
+description = "HisaabSaathi Help improve: upload service and training pipeline"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
