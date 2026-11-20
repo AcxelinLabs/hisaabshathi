@@ -57,6 +57,8 @@ class SettingsStore(private val context: Context) {
     private val installId = stringPreferencesKey("install_id")
     private val installToken = stringPreferencesKey("install_token")
     private val pendingDeletes = stringSetPreferencesKey("pending_deletes")
+    private val usage = stringPreferencesKey("usage_counts")
+    private val usageDay = longPreferencesKey("usage_last_day")
 
     val flow: Flow<Settings> = context.dataStore.data.map {
         Settings(
@@ -78,7 +80,38 @@ class SettingsStore(private val context: Context) {
     suspend fun setSetupDone(v: Int) = context.dataStore.edit { it[setupDone] = v }
     suspend fun setReminders(v: Boolean) = context.dataStore.edit { it[reminders] = v }
     suspend fun setGoal(paise: Long) = context.dataStore.edit { it[goal] = paise }
-    suspend fun setShare(v: Boolean) = context.dataStore.edit { it[share] = v; if (v) it[shareConsent] = Improve.CONSENT_VERSION }
+    /** Saying no (or turning it off) also drops the weekly counts not yet sent. */
+    suspend fun setShare(v: Boolean) = context.dataStore.edit {
+        it[share] = v
+        if (v) it[shareConsent] = Improve.CONSENT_VERSION else { it.remove(usage); it.remove(usageDay) }
+    }
+
+    // ---- weekly counts (core/Usage.kt), only while the worker's yes covers them
+
+    /** Counts [events] for this week, and the day as a day the app was used. Nothing without consent. */
+    suspend fun countUsage(today: java.time.LocalDate, vararg events: String) = context.dataStore.edit {
+        if (it[share] != true || (it[shareConsent] ?: 1) < Improve.COUNTS_FROM_CONSENT) return@edit
+        val week = com.acxelin.hisaabsaathi.core.Usage.week(today)
+        var store = com.acxelin.hisaabsaathi.core.Usage.read(it[usage])
+        for (e in events) store = com.acxelin.hisaabsaathi.core.Usage.add(store, week, e)
+        if (it[usageDay] != today.toEpochDay()) {
+            store = com.acxelin.hisaabsaathi.core.Usage.add(store, week, com.acxelin.hisaabsaathi.core.Usage.Event.DAYS)
+            it[usageDay] = today.toEpochDay()
+        }
+        it[usage] = com.acxelin.hisaabsaathi.core.Usage.write(store)
+    }
+
+    /** Finished weeks waiting to be sent. */
+    suspend fun usageToSend(today: java.time.LocalDate, appVersion: String): List<com.acxelin.hisaabsaathi.core.WeekCounts> =
+        context.dataStore.data.first().let { p ->
+            if (p[share] != true) emptyList()
+            else com.acxelin.hisaabsaathi.core.Usage.finished(com.acxelin.hisaabsaathi.core.Usage.read(p[usage]), today, p[shareConsent] ?: 1, appVersion)
+        }
+
+    /** These weeks reached the team: they leave the phone. */
+    suspend fun usageSent(weeks: Collection<String>) = context.dataStore.edit {
+        it[usage] = com.acxelin.hisaabsaathi.core.Usage.write(com.acxelin.hisaabsaathi.core.Usage.read(it[usage]) - weeks.toSet())
+    }
 
     // ---- this install's anonymous identity at the upload service (never shown, never in Settings)
 
@@ -104,6 +137,7 @@ class SettingsStore(private val context: Context) {
         val id = it[installId]; val token = it[installToken]
         if (!id.isNullOrEmpty() && !token.isNullOrEmpty()) it[pendingDeletes] = (it[pendingDeletes] ?: emptySet()) + "$id $token"
         it.remove(installId); it.remove(installToken); it[sharedCount] = 0
+        it.remove(usage) // counts not yet sent go too
     }
 
     /** Deletions still to send, as (install id, token). */

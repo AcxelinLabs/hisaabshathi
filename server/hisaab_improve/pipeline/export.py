@@ -152,8 +152,43 @@ def report(work, included: list[str], held_back: dict, quotes: bool = True) -> s
     return "\n".join(lines) + "\n"
 
 
+# A week is shown only when at least this many phones sent counts for it, so no single phone shows.
+MIN_PHONES_PER_WEEK = 3
+
+
+def usage_report(work) -> tuple[str, str]:
+    """Weekly use across all phones that agreed: totals and the share of entries the app got wrong.
+    No phone ids; weeks with fewer than MIN_PHONES_PER_WEEK phones are left out."""
+    from .common import USAGE_KEYS
+
+    weeks = defaultdict(list)
+    for key in work.keys("usage/"):
+        for week, counts in read_json(work, key, {}).items():
+            weeks[week].append(counts)
+    cols = sorted(USAGE_KEYS)
+    csv_lines = [",".join(["week", "phones"] + cols)]
+    md = ["# Use per week", "", "Weekly counts from phones whose worker agreed to help improve the app. Numbers only; "
+          f"a week shows when at least {MIN_PHONES_PER_WEEK} phones sent counts.", "",
+          "| Week | Phones | Entries saved | Fixed before saving | Said wrong | Edited later | Questions | Not understood | Days used per phone |",
+          "|---|---|---|---|---|---|---|---|---|"]
+    for week in sorted(weeks):
+        rows = weeks[week]
+        if len(rows) < MIN_PHONES_PER_WEEK:
+            continue
+        total = {c: sum(r.get(c, 0) for r in rows) for c in cols}
+        csv_lines.append(",".join([week, str(len(rows))] + [str(total[c]) for c in cols]))
+        saved = max(total["entries_saved"], 1)
+        md.append(f"| {week} | {len(rows)} | {total['entries_saved']} | {total['entries_fixed_before_saving']} "
+                  f"({total['entries_fixed_before_saving'] * 100 // saved}%) | {total['said_wrong']} | {total['entries_edited_later']} | "
+                  f"{total['questions_answered']} | {total['not_understood']} | {total['days_used'] / len(rows):.1f} |")
+    return "\n".join(md) + "\n", "\n".join(csv_lines) + "\n"
+
+
 def export(work) -> dict:
     held_back = screen(work)
     m = snapshot(work, held_back)
     work.put("reports/latest.md", read_bytes(work, f"snapshots/{m['snapshot']}/report.md") or b"")
+    md, csv = usage_report(work)
+    work.put("reports/usage.md", md.encode())
+    work.put("reports/usage.csv", csv.encode())
     return m

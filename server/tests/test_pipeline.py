@@ -225,3 +225,29 @@ def test_old_raw_batches_are_tidied(stores):
     assert sorted(k.split("/")[2] for k in raw.keys("incoming/")) == [
         "20260801T000000-later.json", "20260901T000000-unread.json", "20260901T000000-unread.zip",
         "20261119T000000-new0.json", "20261119T000000-new0.zip"]
+
+
+def counts_line(week, consent=2, **counts):
+    return json.dumps({"week": week, "counts": counts, "consent": consent, "appVersion": "0.9.6"}) + "\n"
+
+
+def test_weekly_counts_add_up_without_phone_ids_and_go_on_deletion(stores):
+    raw, work = stores
+    phones = [install_in("train", 100 + 50 * n) for n in range(3)] + [install_in("eval", 400)]
+    for n, p in enumerate(phones[:3]):
+        put_batch(raw, p, f"20261101T000000-c{n}", [], extra={"counts.jsonl": counts_line(
+            "2026-W46", entries_saved=10, entries_fixed_before_saving=2, days_used=4, made_up=99)})
+    # Only one phone sent this week: not shown (a single phone must not show).
+    put_batch(raw, phones[3], "20261101T000000-c3", [], extra={"counts.jsonl":
+        counts_line("2026-W45", entries_saved=5) + counts_line("2026-W46", consent=1, entries_saved=500) + "not json\n"})
+    r = run(raw, work, KEYS)
+    assert r["ingest"]["weeks_of_counts"] == 4  # the consent-1 week and the junk line are dropped
+    csv = read_bytes(work, "reports/usage.csv").decode()
+    md = read_bytes(work, "reports/usage.md").decode()
+    assert "2026-W46,3," in csv and "2026-W45" not in csv and "made_up" not in csv
+    assert "| 2026-W46 | 3 | 30 | 6 (20%) |" in md
+    assert not any(p in csv + md for p in phones)
+    raw.put(f"deleted/{phones[0]}", b"now")
+    run(raw, work, KEYS)
+    assert not work.exists(f"usage/{phones[0]}.json")
+    assert "2026-W46" not in read_bytes(work, "reports/usage.csv").decode()  # now only 2 phones that week

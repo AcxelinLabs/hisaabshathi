@@ -29,7 +29,16 @@ SAMPLE_ID = re.compile(r"^[0-9a-f]{16}$")
 INSTALL_ID = re.compile(r"^i[0-9a-f]{24}$")
 OUTCOMES = {"answered", "not_understood", "saved", "corrected", "rejected", "dismissed", "confirm"}
 # Versions of the "Help improve HisaabSaathi?" question this pipeline knows (Improve.CONSENT_VERSION).
-KNOWN_CONSENT = {1}
+KNOWN_CONSENT = {1, 2}
+# From this version on, the worker's yes also covers weekly counts (core/Usage.kt in the app).
+COUNTS_FROM_CONSENT = 2
+WEEK = re.compile(r"^20\d\d-W(0[1-9]|[1-4]\d|5[0-3])$")
+# What the app counts each week (Usage.Event); nothing else is kept.
+USAGE_KEYS = {
+    "entries_saved", "entries_by_voice", "entries_typed", "entries_from_photo", "entries_fixed_before_saving",
+    "said_wrong", "entries_edited_later", "entries_deleted", "questions_answered", "not_understood",
+    "photos_taken", "evidence_packs_shared", "reports_shared", "days_used",
+}
 
 
 def now() -> datetime:

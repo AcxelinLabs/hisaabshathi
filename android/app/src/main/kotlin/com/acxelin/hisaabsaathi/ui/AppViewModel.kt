@@ -30,6 +30,7 @@ import com.acxelin.hisaabsaathi.core.Understand
 import com.acxelin.hisaabsaathi.core.Understood
 import com.acxelin.hisaabsaathi.core.Slm
 import com.acxelin.hisaabsaathi.core.Strings
+import com.acxelin.hisaabsaathi.core.Usage
 import com.acxelin.hisaabsaathi.core.Wages
 import com.acxelin.hisaabsaathi.data.Settings
 import com.acxelin.hisaabsaathi.models.Catalog
@@ -230,7 +231,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         if (text.isBlank()) return say(strings.notUnderstood)
         capture.value = Capture.Thinking
         when (val u = Understand.of(text)) {
-            is Understood.Ask -> { answer(u.query, text); replied(said, Improve.understood(u)) }
+            is Understood.Ask -> { answer(u.query, text); replied(said, Improve.understood(u)); count(Usage.Event.QUESTIONS) }
             is Understood.Talk -> { say(strings.chat(u.chat, todayText()), asked = text); replied(said, Improve.understood(u)) }
             is Understood.Entries -> {
                 var result = u.extraction
@@ -252,12 +253,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     // hears the whole summary for that period rather than one possibly wrong total.
                     Slm.parseQuestion(app.slm.generate(Slm.questionPrompt(text)))?.let {
                         answer(Query(it.period, QueryTopic.ALL), text)
+                        count(Usage.Event.QUESTIONS)
                         return replied(said, "MODEL ASK ${it.period.name} ALL")
                     }
                 }
                 // Never stay silent: say what the app can do and how to phrase it.
                 say(strings.chatFallback, asked = text)
                 replied(said, Improve.understood(u), Improve.Outcome.NOT_UNDERSTOOD)
+                count(Usage.Event.NOT_UNDERSTOOD)
             }
         }
     }
@@ -292,8 +295,28 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /** Weekly counts, only for workers whose yes covers them (the store checks). Never fails the app. */
+    private fun count(vararg events: String) {
+        app.scope.launch { runCatching { app.settings.countUsage(LocalDate.now(), *events) } }
+    }
+
     /** How a confirmation card ended. */
-    private fun reviewed(r: Capture.Review, outcome: String) =
+    private fun reviewed(r: Capture.Review, outcome: String) {
+        val saved = outcome == Improve.Outcome.SAVED || outcome == Improve.Outcome.CORRECTED
+        if (saved) {
+            val how = when {
+                r.source.startsWith("photo") || r.source == "scan" -> Usage.Event.FROM_PHOTO
+                r.source == "voice" -> Usage.Event.BY_VOICE
+                else -> Usage.Event.TYPED
+            }
+            val lines = r.drafts.count { it.amountPaise > 0 || it.hours != null || it.pieces != null }.coerceAtLeast(1)
+            count(*(List(lines) { Usage.Event.SAVED } + List(lines) { how } +
+                listOfNotNull(Usage.Event.FIXED.takeIf { outcome == Improve.Outcome.CORRECTED })).toTypedArray())
+        } else if (outcome == Improve.Outcome.REJECTED) count(Usage.Event.SAID_WRONG)
+        recordReview(r, outcome)
+    }
+
+    private fun recordReview(r: Capture.Review, outcome: String) =
         keep(r.said, "ENTRY " + Corrections.describe(r.understood), strings.readback(r.understood), outcome,
             kept = if (outcome == Improve.Outcome.SAVED || outcome == Improve.Outcome.CORRECTED) Corrections.describe(r.drafts) else null)
 
@@ -455,6 +478,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * it cannot be read, the worker types it. Nothing is saved before they confirm.
      */
     fun photoTaken(photo: Uri, path: String, kind: PhotoKind) = viewModelScope.launch(guard) {
+        count(Usage.Event.PHOTOS)
         val type = kind.entryType
         if (type == null) {
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
@@ -499,6 +523,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val e = entries.value.firstOrNull { it.id == id } ?: return@launch
         forgetDeleted()
         app.ledger.delete(id)
+        count(Usage.Event.DELETED)
         lastDeleted.value = e
     }
 
@@ -535,6 +560,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val was = "${original.type.name} ${Money.format(original.amountPaise)} ${LocalDate.ofEpochDay(original.epochDay)}"
         val note = "${original.note} · edited ${LocalDate.now()}, was $was".trim()
         viewModelScope.launch(guard) { app.ledger.replace(changed.copy(note = note)) }
+        count(Usage.Event.EDITED)
         return true
     }
     fun eraseAll() = viewModelScope.launch(guard) {
@@ -826,6 +852,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun voicePack(): Pack? = Catalog.voice(lang)
 
     fun exportPdf(period: QueryPeriod) = viewModelScope.launch(guard) {
+        count(Usage.Event.REPORTS)
         val s = strings
         val file = app.exporter.pdf(s.periodName(period), inPeriod(period), s, owner = app.profile.flow.value.line())
         app.exporter.share(listOf(file), s.share)
@@ -861,6 +888,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun exportEvidence() = viewModelScope.launch(guard) {
+        count(Usage.Event.EVIDENCE)
         val s = strings
         val all = app.ledger.oldestFirst()
         val note = if (HashChain.firstBroken(all) < 0) s.recordIntact else s.recordBroken

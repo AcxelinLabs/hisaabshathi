@@ -9,7 +9,7 @@ from collections import Counter
 
 from ..crypto import SealError, open_sealed
 from ..storage import delete_prefix
-from .common import INSTALL_ID, jsonl, read_bytes, read_json, read_jsonl, write_json
+from .common import COUNTS_FROM_CONSENT, INSTALL_ID, USAGE_KEYS, WEEK, jsonl, read_bytes, read_json, read_jsonl, write_json
 from .screening import sensitive, valid
 
 MAX_UNZIPPED = 200 * 1024 * 1024
@@ -25,6 +25,8 @@ def purge(work, dead: set[str]) -> dict:
     included them (a frozen export must not keep a deleted phone's data)."""
     stats = Counter()
     for install in sorted(dead):
+        if work.exists(f"usage/{install}.json"):
+            work.delete(f"usage/{install}.json")
         if work.exists(f"index/{install}.jsonl"):
             stats["phones"] += 1
             stats["exchanges"] += len(read_jsonl(work, f"index/{install}.jsonl"))
@@ -75,6 +77,28 @@ def read_batch(data: bytes) -> tuple[list[dict], dict[str, bytes], int]:
     return samples, clips, dropped
 
 
+def read_counts(data: bytes) -> list[dict]:
+    """The weekly counts in one opened batch (numbers only), checked: a known week, known names,
+    whole numbers in a sane range, and a consent that covers counts. Anything else is dropped."""
+    with zipfile.ZipFile(io.BytesIO(data)) as z:
+        if "counts.jsonl" not in z.namelist() or z.getinfo("counts.jsonl").file_size > 64 * 1024:
+            return []
+        out = []
+        for line in z.read("counts.jsonl").decode("utf-8").splitlines():
+            try:
+                w = json.loads(line) if line.strip() else None
+            except ValueError:
+                continue
+            if not isinstance(w, dict) or not WEEK.match(str(w.get("week", ""))) or not isinstance(w.get("consent"), int):
+                continue
+            if w["consent"] < COUNTS_FROM_CONSENT or not isinstance(w.get("counts"), dict):
+                continue
+            counts = {k: v for k, v in w["counts"].items() if k in USAGE_KEYS and isinstance(v, int) and 0 <= v <= 10_000}
+            if counts:
+                out.append({"week": w["week"], "counts": counts, "app_version": str(w.get("appVersion", ""))[:20]})
+        return out
+
+
 def ingest(raw, work, keys: dict) -> dict:
     """Reads each checked batch once: verifies its fingerprint, opens the seal, drops anything
     malformed, without consent, or holding identifying numbers, and files the rest by phone.
@@ -95,7 +119,9 @@ def ingest(raw, work, keys: dict) -> dict:
             work.put(f"state/ingested/{install}/{batch}", b"damaged")
             continue
         try:
-            samples, clips, dropped = read_batch(open_sealed(data, keys))
+            opened = open_sealed(data, keys)
+            samples, clips, dropped = read_batch(opened)
+            weeks = read_counts(opened)
         except SealError as e:
             if "does not hold" in str(e):
                 stats["batches_waiting_for_key"] += 1  # tried again next run, once the key is configured
@@ -123,6 +149,12 @@ def ingest(raw, work, keys: dict) -> dict:
             seen.add(s["id"])
             stats["exchanges"] += 1
         stats["exchanges_dropped"] += dropped
+        if weeks:
+            usage = read_json(work, f"usage/{install}.json", {})
+            for w in weeks:
+                usage[w["week"]] = w["counts"]  # a week is sent once; a resend replaces it
+            write_json(work, f"usage/{install}.json", usage)
+            stats["weeks_of_counts"] += len(weeks)
         work.put(f"index/{install}.jsonl", jsonl(index))
         work.put(f"state/ingested/{install}/{batch}", b"ok")
         stats["batches"] += 1

@@ -46,6 +46,8 @@ phone ── sealed zip ──▶ upload service ──▶ improve/  (only ciphe
    - screens phones, and holds back any that look like replays, floods or junk;
    - freezes a **snapshot**. About one phone in ten is held out for evaluation. No phone may
      supply more than 300 exchanges, and the agent gets its own text-only folder;
+   - adds up the weekly counts (entries saved, how often the app got them wrong…) into
+     `reports/usage.md` and `usage.csv`, with no phone ids;
    - registers the snapshot as versioned Azure ML datasets, writes the failure report, tidies
      old raw files, keeps an audit record, and messages the team.
 5. **People decide.** They accept labels, release held-back phones, merge code, and approve
@@ -55,6 +57,7 @@ phone ── sealed zip ──▶ upload service ──▶ improve/  (only ciphe
 
 | Risk | Protection |
 |---|---|
+| Weekly counts showing one person | Counts only (no words, amounts or dates), part of the yes (consent 2); the usage report shows a week only when 3 or more phones sent counts, and never phone ids; deleted with the phone |
 | Collecting without consent | Asked aloud, no preselected answer; nothing kept before a yes; the consent version is on every sample; a new question asks again |
 | Workers' identity | No names or phone numbers; identifying numbers never kept (phone, then pipeline); random install ids; no IP addresses logged |
 | Someone reading uploads in transit or in storage | HTTPS; sealed on the phone to a key only the nightly job holds; private storage with no public access and no account keys |
@@ -74,7 +77,7 @@ phone ── sealed zip ──▶ upload service ──▶ improve/  (only ciphe
 ```bash
 cd server
 python -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/pytest                      # 33 tests: service, S3 (moto), Azure links, sealing, pipeline, gates, leak check
+.venv/bin/pytest                      # 34 tests: service, S3 (moto), Azure links, sealing, pipeline, weekly counts, gates, leak check
 HISAAB_SECRET=$(python -c "import secrets; print(secrets.token_urlsafe(48))") \
 HISAAB_LOCAL_DIR=./data HISAAB_PUBLIC_URL=http://127.0.0.1:8080 HISAAB_TRUSTED_PROXY_HOPS=0 \
   .venv/bin/python -m hisaab_improve.app

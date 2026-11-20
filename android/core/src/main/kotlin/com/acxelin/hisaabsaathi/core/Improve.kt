@@ -52,7 +52,10 @@ object Improve {
      * The version of the "Help improve" question the worker answered. Raise it when the
      * question's text changes what is collected or where it goes: everyone is asked again.
      */
-    const val CONSENT_VERSION = 1
+    const val CONSENT_VERSION = 2
+
+    /** From this consent version on, weekly counts ([Usage]) are part of what the worker agreed to. */
+    const val COUNTS_FROM_CONSENT = 2
 
     /** At most this many wait on the phone; the oldest go first. */
     const val LIMIT = 200
@@ -116,10 +119,11 @@ object Improve {
      * One upload, a zip:
      * - `batch.json`: format, app version, when it was made, how many samples;
      * - `samples.jsonl`: one [Sample] per line, oldest first;
-     * - `audio/<id>.wav`: 16 kHz mono 16-bit, for samples with a clip.
+     * - `audio/<id>.wav`: 16 kHz mono 16-bit, for samples with a clip;
+ * - `counts.jsonl`: one [WeekCounts] per finished week (numbers only), when there are any.
      * Clips are stored (not compressed again): WAV hardly shrinks and the phone saves the work.
      */
-    fun batch(samples: List<Sample>, audio: (String) -> ByteArray?, appVersion: String, nowMs: Long): ByteArray {
+    fun batch(samples: List<Sample>, audio: (String) -> ByteArray?, appVersion: String, nowMs: Long, weeks: List<WeekCounts> = emptyList()): ByteArray {
         val out = ByteArrayOutputStream()
         ZipOutputStream(out).use { zip ->
             fun put(name: String, bytes: ByteArray, store: Boolean = false) {
@@ -134,8 +138,20 @@ object Improve {
             put("batch.json", """{"format":1,"app_version":${json.encodeToString(appVersion)},"created_at_ms":$nowMs,"count":${sorted.size}}""".toByteArray())
             put("samples.jsonl", sorted.joinToString("\n", postfix = "\n") { toJson(it) }.toByteArray())
             for (s in sorted) if (s.hasAudio) audio(s.id)?.let { put("audio/${s.id}.wav", it, store = true) }
+            if (weeks.isNotEmpty()) put("counts.jsonl", weeks.joinToString("\n", postfix = "\n") { Usage.toJson(it) }.toByteArray())
         }
         return out.toByteArray()
+    }
+
+    /** The weekly counts in a [batch] (for checks and tests). */
+    fun readCounts(zip: ByteArray): List<WeekCounts> {
+        ZipInputStream(ByteArrayInputStream(zip)).use { z ->
+            while (true) {
+                val e = z.nextEntry ?: break
+                if (e.name == "counts.jsonl") return z.readBytes().decodeToString().lines().filter { it.isNotBlank() }.map(Usage::fromJson)
+            }
+        }
+        return emptyList()
     }
 
     /** The samples and clips in a [batch] (for checks and tests). */

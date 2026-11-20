@@ -75,6 +75,31 @@ class SharingTest {
         app.samples.clear()
     }
 
+    @Test fun weeklyCountsOnlyWithYesNumbersOnlyAndSentWhenTheWeekIsOver() = runBlocking {
+        val monday = java.time.LocalDate.now().minusWeeks(3).with(java.time.DayOfWeek.MONDAY)
+        app.settings.setShare(false)
+        app.settings.countUsage(monday, com.acxelin.hisaabsaathi.core.Usage.Event.SAVED)
+        app.settings.setShare(true)
+        assertTrue("nothing counted before yes", app.settings.usageToSend(monday.plusWeeks(1), "test").isEmpty())
+        app.settings.countUsage(monday, com.acxelin.hisaabsaathi.core.Usage.Event.SAVED, com.acxelin.hisaabsaathi.core.Usage.Event.FIXED)
+        app.settings.countUsage(monday.plusDays(1), com.acxelin.hisaabsaathi.core.Usage.Event.SAVED, "anything else")
+        assertTrue("the week is not over", app.settings.usageToSend(monday.plusDays(3), "test").isEmpty())
+        val weeks = app.settings.usageToSend(monday.plusWeeks(1), "test")
+        assertEquals(listOf(com.acxelin.hisaabsaathi.core.Usage.week(monday)), weeks.map { it.week })
+        assertEquals(mapOf("entries_saved" to 2, "entries_fixed_before_saving" to 1, "days_used" to 2), weeks.single().counts)
+        assertEquals(Improve.CONSENT_VERSION, weeks.single().consent)
+        // Sent alone (no exchanges waiting), sealed, inside the batch; then gone from the phone.
+        assertTrue(uploader.run())
+        val counts = Improve.readCounts(open(server.batches.single().second))
+        assertEquals(weeks, counts)
+        assertTrue(app.settings.usageToSend(java.time.LocalDate.now().plusWeeks(1), "test").none { it.week == weeks.single().week })
+        // Saying no drops what was not sent.
+        app.settings.countUsage(java.time.LocalDate.now(), com.acxelin.hisaabsaathi.core.Usage.Event.SAVED)
+        app.settings.setShare(false)
+        app.settings.setShare(true)
+        assertTrue(app.settings.usageToSend(java.time.LocalDate.now().plusWeeks(1), "test").isEmpty())
+    }
+
     @Test fun sendsOnlyAfterYes() = runBlocking {
         app.settings.setShare(false)
         repeat(3) { app.samples.add(sample(it), null) }

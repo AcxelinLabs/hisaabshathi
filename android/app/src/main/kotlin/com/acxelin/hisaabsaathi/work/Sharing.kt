@@ -57,20 +57,23 @@ class Uploader(
                     settings.deleteDone(id)
                 }
                 if (settings.flow.first().share != true) return@withContext true
-                repeat(maxBatches) {
+                repeat(maxBatches) { round ->
                     val batch = queue.oldest(Improve.BATCH)
-                    if (batch.isEmpty()) return@withContext true
+                    // Finished weeks' counts go with the first upload of a run (alone if nothing else waits).
+                    val weeks = if (round == 0) settings.usageToSend(java.time.LocalDate.now(), appVersion) else emptyList()
+                    if (batch.isEmpty() && weeks.isEmpty()) return@withContext true
                     val (id, token) = settings.install() ?: server.register(appVersion).also { settings.setInstall(it.installId, it.token) }
                         .let { it.installId to it.token }
                     val clips = batch.filter { it.hasAudio }.associate { it.id to queue.audio(it.id) }
-                    val sealed = seal.seal(Improve.batch(batch, { clips[it] }, appVersion, System.currentTimeMillis()))
+                    val sealed = seal.seal(Improve.batch(batch, { clips[it] }, appVersion, System.currentTimeMillis(), weeks))
                     try {
-                        server.upload(token, sealed, batch.size)
+                        server.upload(token, sealed, batch.size + weeks.size)
                     } catch (e: ShareClient.Refused) {
                         if (e.code == 401) settings.forgetInstall() // the service forgot this install: register again
                         throw e
                     }
                     queue.delete(batch.map { it.id })
+                    settings.usageSent(weeks.map { it.week })
                     settings.addShared(id, batch.size)
                 }
                 true
