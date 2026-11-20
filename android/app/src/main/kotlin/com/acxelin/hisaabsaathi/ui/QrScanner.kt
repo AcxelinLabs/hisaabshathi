@@ -180,7 +180,7 @@ fun QrScannerScreen(s: Strings, accept: (String) -> Boolean = { true }, onCode: 
                     },
                     modifier = Modifier.weight(1f).height(52.dp), shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = if (torch) Marigold else Color.White.copy(alpha = 0.2f), contentColor = if (torch) Ink else Color.White),
-                ) { Text("💡 ${s.torch}", fontSize = 16.sp) }
+                ) { Text(s.torch, fontSize = 16.sp, fontWeight = FontWeight.SemiBold) }
                 OutlinedButton(onClick = onPickPhoto, modifier = Modifier.weight(1f).height(52.dp), shape = RoundedCornerShape(10.dp)) {
                     Text(s.choosePhoto, fontSize = 16.sp, color = Color.White, textAlign = TextAlign.Center)
                 }

@@ -22,7 +22,7 @@ internal object Kn {
         "Your details" to "ನಿಮ್ಮ ವಿವರಗಳು",
         "Your details stay on this phone, locked. Nobody else can see them. Nothing is uploaded." to "ನಿಮ್ಮ ವಿವರಗಳು ಈ ಫೋನ್‌ನಲ್ಲೇ ಬೀಗ ಹಾಕಿ ಇರುತ್ತವೆ. ಬೇರೆ ಯಾರೂ ನೋಡಲಾರರು. ಏನೂ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ.",
         "Scan Aadhaar QR code" to "ಆಧಾರ್ QR ಕೋಡ್ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ",
-        "Point the camera at the QR code on your Aadhaar card. Only your name, age, state, district and PIN are kept." to "ಕ್ಯಾಮೆರಾವನ್ನು ನಿಮ್ಮ ಆಧಾರ್ ಕಾರ್ಡ್‌ನ QR ಕೋಡ್ ಕಡೆಗೆ ಹಿಡಿಯಿರಿ. ಹೆಸರು, ವಯಸ್ಸು, ರಾಜ್ಯ, ಜಿಲ್ಲೆ ಮತ್ತು ಪಿನ್ ಕೋಡ್ ಮಾತ್ರ ಇಡಲಾಗುತ್ತದೆ.",
+        "This is optional. Point the camera at the QR code on your Aadhaar card. Only your name, age, state, district and PIN are kept." to "ಇದು ಕಡ್ಡಾಯವಲ್ಲ. ಕ್ಯಾಮೆರಾವನ್ನು ನಿಮ್ಮ ಆಧಾರ್ ಕಾರ್ಡ್‌ನ QR ಕೋಡ್ ಕಡೆಗೆ ಹಿಡಿಯಿರಿ. ಹೆಸರು, ವಯಸ್ಸು, ರಾಜ್ಯ, ಜಿಲ್ಲೆ ಮತ್ತು ಪಿನ್ ಕೋಡ್ ಮಾತ್ರ ಇಡಲಾಗುತ್ತದೆ.",
         "Fill it myself" to "ನಾನೇ ತುಂಬುತ್ತೇನೆ",
         "Choose a photo" to "ಫೋಟೋ ಆರಿಸಿ",
         "Could not read the QR code. Hold the card flat in good light and try again, or fill it yourself." to "QR ಕೋಡ್ ಓದಲಾಗಲಿಲ್ಲ. ಕಾರ್ಡನ್ನು ಸಮತಟ್ಟಾಗಿ ಇಟ್ಟು ಒಳ್ಳೆಯ ಬೆಳಕಿನಲ್ಲಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ, ಅಥವಾ ನೀವೇ ತುಂಬಿ.",

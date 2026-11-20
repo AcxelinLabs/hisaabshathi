@@ -92,9 +92,9 @@ class Strings(val lang: Lang) {
     )
     val scanAadhaar get() = t("आधार का QR कोड स्कैन करें", "ଆଧାର QR କୋଡ୍ ସ୍କାନ୍ କରନ୍ତୁ", "Scan Aadhaar QR code")
     val scanAadhaarHint get() = t(
-        "कैमरा अपने आधार कार्ड के QR कोड पर रखें। सिर्फ़ नाम, उम्र, राज्य, ज़िला और पिन कोड रखे जाते हैं।",
-        "କ୍ୟାମେରାକୁ ଆପଣଙ୍କ ଆଧାର କାର୍ଡର QR କୋଡ୍ ଉପରେ ଧରନ୍ତୁ। କେବଳ ନାମ, ବୟସ, ରାଜ୍ୟ, ଜିଲ୍ଲା ଓ ପିନ୍ କୋଡ୍ ରଖାଯାଏ।",
-        "Point the camera at the QR code on your Aadhaar card. Only your name, age, state, district and PIN are kept.",
+        "यह ज़रूरी नहीं है। कैमरा अपने आधार कार्ड के QR कोड पर रखें। सिर्फ़ नाम, उम्र, राज्य, ज़िला और पिन कोड रखे जाते हैं।",
+        "ଏହା ଜରୁରୀ ନୁହେଁ। କ୍ୟାମେରାକୁ ଆପଣଙ୍କ ଆଧାର କାର୍ଡର QR କୋଡ୍ ଉପରେ ଧରନ୍ତୁ। କେବଳ ନାମ, ବୟସ, ରାଜ୍ୟ, ଜିଲ୍ଲା ଓ ପିନ୍ କୋଡ୍ ରଖାଯାଏ।",
+        "This is optional. Point the camera at the QR code on your Aadhaar card. Only your name, age, state, district and PIN are kept.",
     )
     val fillMyself get() = t("खुद भरूँगा", "ମୁଁ ନିଜେ ଭରିବି", "Fill it myself")
     val choosePhoto get() = t("फोटो चुनें", "ଫଟୋ ବାଛନ୍ତୁ", "Choose a photo")

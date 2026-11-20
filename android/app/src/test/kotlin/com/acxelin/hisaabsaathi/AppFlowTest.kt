@@ -124,6 +124,8 @@ class AppFlowTest {
         click("शुरू करें")
 
         // --- the profile page, from the photo button at the top of the home screen
+        // Setup saves in the background: wait for the home screen before tapping.
+        rule.waitUntil(15_000) { pump(); rule.onAllNodesWithContentDescription("मेरी प्रोफ़ाइल").fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithContentDescription("मेरी प्रोफ़ाइल").performClick()
         waitFor("Ramesh Behera")
         rule.onNodeWithText("751002").assertExists()

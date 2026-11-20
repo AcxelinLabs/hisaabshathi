@@ -22,7 +22,7 @@ internal object Ta {
         "Your details" to "உங்கள் விவரங்கள்",
         "Your details stay on this phone, locked. Nobody else can see them. Nothing is uploaded." to "உங்கள் விவரங்கள் இந்த போனிலேயே பூட்டப்பட்டு இருக்கும். வேறு யாரும் பார்க்க முடியாது. எதுவும் பதிவேற்றப்படாது.",
         "Scan Aadhaar QR code" to "ஆதார் QR குறியீட்டை ஸ்கேன் செய்யுங்கள்",
-        "Point the camera at the QR code on your Aadhaar card. Only your name, age, state, district and PIN are kept." to "கேமராவை உங்கள் ஆதார் அட்டையில் உள்ள QR குறியீட்டை நோக்கிக் காட்டுங்கள். பெயர், வயது, மாநிலம், மாவட்டம், பின் கோடு மட்டுமே வைக்கப்படும்.",
+        "This is optional. Point the camera at the QR code on your Aadhaar card. Only your name, age, state, district and PIN are kept." to "இது கட்டாயம் இல்லை. கேமராவை உங்கள் ஆதார் அட்டையில் உள்ள QR குறியீட்டை நோக்கிக் காட்டுங்கள். பெயர், வயது, மாநிலம், மாவட்டம், பின் கோடு மட்டுமே வைக்கப்படும்.",
         "Fill it myself" to "நானே நிரப்புகிறேன்",
         "Choose a photo" to "புகைப்படத்தைத் தேர்வு செய்யுங்கள்",
         "Could not read the QR code. Hold the card flat in good light and try again, or fill it yourself." to "QR குறியீட்டைப் படிக்க முடியவில்லை. அட்டையை நேராக வைத்து நல்ல வெளிச்சத்தில் மீண்டும் முயலுங்கள், அல்லது நீங்களே நிரப்புங்கள்.",

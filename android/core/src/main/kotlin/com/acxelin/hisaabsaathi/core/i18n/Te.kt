@@ -22,7 +22,7 @@ internal object Te {
         "Your details" to "మీ వివరాలు",
         "Your details stay on this phone, locked. Nobody else can see them. Nothing is uploaded." to "మీ వివరాలు ఈ ఫోన్‌లోనే తాళం వేసి ఉంటాయి. వేరెవరూ చూడలేరు. ఏదీ అప్‌లోడ్ కాదు.",
         "Scan Aadhaar QR code" to "ఆధార్ QR కోడ్ స్కాన్ చేయండి",
-        "Point the camera at the QR code on your Aadhaar card. Only your name, age, state, district and PIN are kept." to "కెమెరాను మీ ఆధార్ కార్డుపై ఉన్న QR కోడ్ వైపు చూపండి. పేరు, వయసు, రాష్ట్రం, జిల్లా, పిన్ కోడ్ మాత్రమే ఉంచుతాం.",
+        "This is optional. Point the camera at the QR code on your Aadhaar card. Only your name, age, state, district and PIN are kept." to "ఇది తప్పనిసరి కాదు. కెమెరాను మీ ఆధార్ కార్డుపై ఉన్న QR కోడ్ వైపు చూపండి. పేరు, వయసు, రాష్ట్రం, జిల్లా, పిన్ కోడ్ మాత్రమే ఉంచుతాం.",
         "Fill it myself" to "నేనే నింపుతాను",
         "Choose a photo" to "ఫోటో ఎంచుకోండి",
         "Could not read the QR code. Hold the card flat in good light and try again, or fill it yourself." to "QR కోడ్ చదవలేకపోయాం. కార్డును సమంగా పెట్టి మంచి వెలుతురులో మళ్ళీ ప్రయత్నించండి, లేదా మీరే నింపండి.",

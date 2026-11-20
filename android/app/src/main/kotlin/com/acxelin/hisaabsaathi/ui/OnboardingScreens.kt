@@ -27,6 +27,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
@@ -152,9 +153,11 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
 
     val dark = step == Step.LOCATION || step == Step.LANGUAGE
     val onBg = if (dark) Color.White else Ink
-    // No language is chosen yet on the first screen: it is all in English.
+    // No language is chosen yet on the first screen: it speaks the app's starting language
+    // (Hindi), like every other screen, with English underneath for those who read it.
     val en = remember { Strings(Lang.EN) }
-    val head = if (step == Step.LOCATION) en else s
+    val both = s.lang != Lang.EN
+    val head = s
     Column(Modifier.fillMaxSize().background(if (dark) Ink else Chalk).systemBarsPadding().imePadding().padding(horizontal = 24.dp, vertical = 16.dp)) {
         Text(head.appName, fontSize = 34.sp, fontWeight = FontWeight.ExtraBold, color = onBg)
         if (!dark) { Spacer(Modifier.height(8.dp)); VoiceProgress(vm, s) }
@@ -163,12 +166,16 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
             when (step) {
                 Step.LOCATION -> {
                     Icon(Icons.Default.LocationOn, null, tint = Marigold, modifier = Modifier.size(64.dp))
-                    Text(en.locationTitle, fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Color.White)
-                    Text(en.locationBody, fontSize = 18.sp, color = Color.White, lineHeight = 26.sp)
+                    Text(s.locationTitle, fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                    Text(s.locationBody, fontSize = 18.sp, color = Color.White, lineHeight = 26.sp)
+                    if (both) {
+                        Text(en.locationTitle, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Color.White.copy(alpha = 0.75f))
+                        Text(en.locationBody, fontSize = 15.sp, color = Color.White.copy(alpha = 0.75f), lineHeight = 21.sp)
+                    }
                     if (finding) Row(verticalAlignment = Alignment.CenterVertically) {
                         CircularProgressIndicator(color = Marigold, modifier = Modifier.size(28.dp))
                         Spacer(Modifier.width(12.dp))
-                        Text(en.findingState, color = Color.White, fontSize = 17.sp)
+                        Text(s.findingState, color = Color.White, fontSize = 17.sp)
                     }
                 }
                 Step.LANGUAGE -> {
@@ -177,7 +184,7 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                         Text(s.yourState(it), fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Marigold)
                         Text(s.languageForState, fontSize = 17.sp, color = Color.White)
                     }
-                    if (detected == null && locationFailed) Text(s.locationFailed, fontSize = 16.sp, color = Color(0xFFFFD27A))
+                    if (detected == null && locationFailed) Text(s.locationFailed, fontSize = 16.sp, color = Marigold)
                     Text(s.chooseLanguage, fontSize = 22.sp, color = Color.White)
                     LanguagePicker(vm, settings, onDark = true)
                 }
@@ -197,27 +204,30 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                 Step.DETAILS -> {
                     Text(s.detailsTitle, fontSize = 26.sp, fontWeight = FontWeight.Bold)
                     PrivacyNote(s, onHear = { vm.speakPrompt("details_privacy", s.detailsPrivacy) })
+                    // Two equal choices, like the app's other choices: nothing nudges a worker towards Aadhaar.
+                    val choice = ButtonDefaults.buttonColors(containerColor = Paper, contentColor = Ink)
                     Button(
-                        onClick = scan.takePhoto, enabled = !reading,
-                        modifier = Modifier.fillMaxWidth().height(72.dp), shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Marigold, contentColor = Ink),
-                    ) {
-                        Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(28.dp))
-                        Spacer(Modifier.width(12.dp))
-                        Text(s.scanAadhaar, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Ink)
-                    }
-                    Text(s.scanAadhaarHint, fontSize = 15.sp, color = InkSoft)
-                    TextButton(onClick = scan.pickPhoto, enabled = !reading) { Text(s.choosePhoto, fontSize = 16.sp) }
-                    if (reading) CircularProgressIndicator(color = Green)
-                    if (qrFailed) Text(s.aadhaarFailed, fontSize = 16.sp, color = Red)
-                    OutlinedButton(
-                        onClick = { go(Step.NAME) }, enabled = !reading,
+                        onClick = { go(Step.NAME) }, enabled = !reading, colors = choice,
                         modifier = Modifier.fillMaxWidth().height(72.dp), shape = RoundedCornerShape(12.dp),
                     ) {
                         Icon(Icons.Default.Edit, null, tint = Ink, modifier = Modifier.size(26.dp))
                         Spacer(Modifier.width(12.dp))
                         Text(s.fillMyself, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Ink)
                     }
+                    Button(
+                        onClick = scan.takePhoto, enabled = !reading, colors = choice,
+                        modifier = Modifier.fillMaxWidth().height(72.dp), shape = RoundedCornerShape(12.dp),
+                    ) {
+                        Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(28.dp))
+                        Spacer(Modifier.width(12.dp))
+                        Text(s.scanAadhaar, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Ink)
+                    }
+                    Text(s.scanAadhaarHint, fontSize = 15.sp, color = InkSoft)
+                    OutlinedButton(onClick = scan.pickPhoto, enabled = !reading, modifier = Modifier.height(52.dp), shape = RoundedCornerShape(10.dp)) {
+                        Text(s.choosePhoto, fontSize = 16.sp, color = Ink)
+                    }
+                    if (reading) CircularProgressIndicator(color = Green)
+                    if (qrFailed) Text(s.aadhaarFailed, fontSize = 16.sp, color = Red)
                 }
                 Step.REVIEW -> {
                     Question(s.checkDetails) { vm.speakPrompt("check_details", s.checkDetails) }
@@ -294,11 +304,11 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                     },
                     enabled = !finding, modifier = Modifier.fillMaxWidth().height(60.dp), shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Marigold, contentColor = Ink),
-                ) { Text(en.allowLocation, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Ink, textAlign = TextAlign.Center) }
+                ) { Label2(s.allowLocation, en.allowLocation.takeIf { both }, Ink, 18) }
                 OutlinedButton(
                     onClick = { go(Step.LANGUAGE) }, enabled = !finding,
-                    modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(10.dp),
-                ) { Text(en.chooseMyself, fontSize = 17.sp, color = Color.White, textAlign = TextAlign.Center) }
+                    modifier = Modifier.fillMaxWidth().height(60.dp), shape = RoundedCornerShape(10.dp),
+                ) { Label2(s.chooseMyself, en.chooseMyself.takeIf { both }, Color.White, 17) }
             }
             Step.LANGUAGE -> SetupButtons(s, onBack, null, s.next, onBackTint = Color.White) { vm.startVoiceDownloads(); go(Step.PHOTO) }
             Step.PHOTO -> SetupButtons(s, onBack, { go(Step.DETAILS) }, s.next, photo != null) { go(Step.DETAILS) }
@@ -385,7 +395,10 @@ private fun VoiceProgress(vm: AppViewModel, s: Strings) {
     val pct = (f * 100).toInt()
     Column(Modifier.fillMaxWidth().background(InkWash, RoundedCornerShape(8.dp)).padding(horizontal = 12.dp, vertical = 8.dp)) {
         when {
-            st.all { it is PackState.Ready } -> Text("✓ ${s.voiceReady}", fontSize = 15.sp, color = Leaf, fontWeight = FontWeight.SemiBold)
+            st.all { it is PackState.Ready } -> Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.Check, null, tint = Leaf, modifier = Modifier.size(20.dp))
+                Text(s.voiceReady, fontSize = 15.sp, color = Leaf, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
+            }
             st.any { it is PackState.Failed } -> Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(s.downloadFailed, fontSize = 14.sp, color = Red, modifier = Modifier.weight(1f))
                 TextButton(onClick = { vm.startVoiceDownloads() }) { Text(s.tryAgain) }
@@ -687,5 +700,14 @@ private fun ProfileLine(label: String, value: String) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Text(label, fontSize = 16.sp, color = InkSoft, modifier = Modifier.weight(1f))
         Text(value, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.End, modifier = Modifier.weight(1.4f))
+    }
+}
+
+/** A button label in the app's language, with the English underneath when the screen shows both. */
+@Composable
+private fun Label2(main: String, english: String?, color: Color, size: Int) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(main, fontSize = size.sp, fontWeight = FontWeight.SemiBold, color = color, textAlign = TextAlign.Center, lineHeight = (size + 2).sp)
+        english?.let { Text(it, fontSize = 13.sp, color = color.copy(alpha = 0.8f), textAlign = TextAlign.Center, lineHeight = 15.sp) }
     }
 }
