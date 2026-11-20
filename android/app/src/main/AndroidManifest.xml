@@ -7,6 +7,9 @@
     <!-- Internet: only to download offline model packs when the worker asks. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Approximate location, once, only when the worker taps "Use my location": finds the nearest
+         PIN code on the phone. Never stored or sent; never changes the language. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- The live Aadhaar QR scanner (the picture never leaves the phone). Also needed by the camera app for bill photos and the selfie. -->
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- Model packs download in the background with a progress notification. -->
@@ -15,6 +18,7 @@
 
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.location" android:required="false" />
 
     <queries>
         <intent>

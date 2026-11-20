@@ -84,10 +84,34 @@ class PlaceFieldsTest {
         rule.waitUntil(5_000) { pump(); vm.draft.value.state == "Bihar" }
         assertEquals("", vm.draft.value.district) // a new state: the district is chosen again
 
+        // "Use my location" (permission given): one fix, the nearest PIN fills in PIN, state and district.
+        org.robolectric.Shadows.shadowOf(rule.activity.application).grantPermissions(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+        TestApp.fakeLocation = 13.6288 to 79.4192 // Tirupati
+        rule.onNodeWithText("Your location is used once", substring = true).assertExists()
+        rule.onNodeWithText("Use my location").performClick()
+        // The nearest-PIN search runs off the main thread: give it real time.
+        val until = System.currentTimeMillis() + 10_000
+        while (vm.draft.value.pin != "517501" && System.currentTimeMillis() < until) { pump(); Thread.sleep(50) }
+        assertEquals("517501", vm.draft.value.pin)
+        waitFor("Filled in from your location: please check the PIN code.")
+        waitFor("Found: Tirupati, Andhra Pradesh")
+        assertEquals("Andhra Pradesh" to "Tirupati", vm.draft.value.state to vm.draft.value.district)
+        shot("33-location-filled")
+        // The language is the worker's choice: location never changes it.
+        assertEquals(Lang.HI, vm.settings.value?.lang ?: Lang.HI)
+
+        // No fix (location off, or nowhere near a known post office): said plainly.
+        TestApp.fakeLocation = null
+        rule.onNodeWithText("Use my location").performClick()
+        val until2 = System.currentTimeMillis() + 10_000
+        while (rule.onAllNodesWithText("Could not find your place", substring = true).fetchSemanticsNodes().isEmpty() && System.currentTimeMillis() < until2) { pump(); Thread.sleep(50) }
+        waitFor("Could not find your place")
+        assertEquals("517501", vm.draft.value.pin) // nothing changed
+
         // A PIN no place has, and one that cannot be a PIN: said plainly, nothing else changes.
         pin.performTextReplacement("111111")
         waitFor("No place has this PIN code")
-        assertEquals("Bihar", vm.draft.value.state)
+        assertEquals("Andhra Pradesh", vm.draft.value.state)
         shot("32-pin-unknown")
         pin.performTextReplacement("012345")
         waitFor("A PIN code has 6 digits and starts with 1 to 8.")

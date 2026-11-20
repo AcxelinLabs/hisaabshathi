@@ -59,6 +59,9 @@ open class HisaabApp : Application() {
         }
     }
 
+    /** One approximate location fix (only for "Use my location"); tests give a fixed position. */
+    open suspend fun oneLocation(): android.location.Location? = com.acxelin.hisaabsaathi.data.OneLocation.get(this)
+
     /** Encrypted on a phone; tests replace it with an in-memory database. */
     protected open fun openDb(): LedgerDb = LedgerDb.open(this)
 

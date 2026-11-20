@@ -324,8 +324,14 @@ to 0.9.3 (`Settings.SETUP_VERSION`), keeping what was already chosen. Every deta
      for "Help improve").
 3. **Where you work:** typing the **PIN code fills in the state and the district**, from India
    Post's All India Pincode Directory bundled in the app (`assets/pin_in.txt`, 19,297 PIN codes,
-   36 states and union territories, about 250 KB; Government Open Data Licence – India; built by
-   `tools/make_pin_directory.py`).
+   36 states and union territories, about 520 KB with positions; Government Open Data Licence –
+   India; built by `tools/make_pin_directory.py`).
+   - **Use my location (optional, 0.9.4):** asks for approximate location once
+     (`ACCESS_COARSE_LOCATION`, `data/Location.kt`) and finds the nearest PIN code on the phone,
+     from the middle of each PIN's post offices (18,712 PINs have a position; 543 with wrong
+     positions in India Post's data are left out). That fills in PIN, state and district; the
+     worker is asked to check the PIN. Nothing within 60 km, or no fix: said plainly. The
+     location is not stored, never sent, and never changes the language.
    - District names are today's for the app's ten work states (`tools/districts_in.txt`) and India
      Post's elsewhere. Where a postal district has since been split (Andhra Pradesh 2022,
      Warangal, Vijayanagara, Vav-Tharad, Mumbai City/Suburban), the PIN offers the districts it
@@ -339,8 +345,8 @@ to 0.9.3 (`Settings.SETUP_VERSION`), keeping what was already chosen. Every deta
 5. **Help improve HisaabSaathi?** (yes or no, nothing chosen for the worker), as in 0.8.0.
 6. **Smart model**: Download or Later, then Start.
 
-No location permission is asked: the PIN gives the state more reliably, and the language is the
-worker's choice.
+Location is only asked for when the worker taps *Use my location*; the language is always the
+worker's own choice.
 
 **Profile page:** the round photo button at the top of the home screen opens it: photo, name,
 age, state, district and PIN, with *Change my details* (retake the photo, edit, or fill from the
@@ -355,8 +361,9 @@ Spoken questions use recordings in `assets/onboarding_audio/<language>/` when pr
 `python tools/tts/make_onboarding_audio.py`); otherwise the app's voice or the phone's.
 **To do before release:** generate or record those, native review of the new Odia/Telugu/
 Kannada/Tamil text, check the district lists against current state lists and refresh the PIN
-directory from data.gov.in, legal review of reading Aadhaar QR, and declare photo and personal
-info (collected, not shared) in the Play Store data-safety form.
+directory from data.gov.in, legal review of reading Aadhaar QR, and declare approximate location
+(used on the phone only), photo and personal info (collected, not shared) in the Play Store
+data-safety form.
 
 ## Look
 

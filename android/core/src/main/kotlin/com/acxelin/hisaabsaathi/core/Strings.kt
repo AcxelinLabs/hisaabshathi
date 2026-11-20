@@ -93,9 +93,26 @@ class Strings(val lang: Lang) {
     // ---- language and place (setup and My details)
     val languageLater get() = t("भाषा आप कभी भी सेटिंग में बदल सकते हैं।", "ଭାଷା ଆପଣ ଯେକୌଣସି ସମୟରେ ସେଟିଂସ୍‌ରେ ବଦଳାଇ ପାରିବେ।", "You can change the language any time in Settings.")
     val pinHelp get() = t(
-        "अपना पिन कोड लिखें: राज्य और ज़िला अपने आप भर जाएंगे। पता नहीं? नीचे से चुनें।",
-        "ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ ଲେଖନ୍ତୁ: ରାଜ୍ୟ ଓ ଜିଲ୍ଲା ନିଜେ ଭରିଯିବ। ଜାଣି ନାହାନ୍ତି? ତଳୁ ବାଛନ୍ତୁ।",
-        "Type your PIN code: the state and district fill in by themselves. Don't know it? Choose them below.",
+        "अपना पिन कोड लिखें या लोकेशन से भरें: राज्य और ज़िला अपने आप भर जाएंगे। या नीचे से चुनें।",
+        "ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ ଲେଖନ୍ତୁ କିମ୍ବା ଲୋକେସନ୍‌ରୁ ଭରନ୍ତୁ: ରାଜ୍ୟ ଓ ଜିଲ୍ଲା ନିଜେ ଭରିଯିବ। କିମ୍ବା ତଳୁ ବାଛନ୍ତୁ।",
+        "Type your PIN code, or use your location: the state and district fill in by themselves. Or choose them below.",
+    )
+    val useLocation get() = t("मेरी लोकेशन से भरें", "ମୋ ଲୋକେସନ୍‌ରୁ ଭରନ୍ତୁ", "Use my location")
+    val findingPlace get() = t("आपकी जगह ढूँढ रहे हैं…", "ଆପଣଙ୍କ ଜାଗା ଖୋଜୁଛି…", "Finding your place…")
+    val locationNote get() = t(
+        "आपकी लोकेशन सिर्फ़ एक बार, इसी फोन में, पिन कोड ढूँढने के लिए इस्तेमाल होती है। यह कभी सेव या भेजी नहीं जाती।",
+        "ଆପଣଙ୍କ ଲୋକେସନ୍ କେବଳ ଥରେ, ଏହି ଫୋନ୍‌ରେ, ପିନ୍ କୋଡ୍ ଖୋଜିବା ପାଇଁ ବ୍ୟବହାର ହୁଏ। ଏହା କେବେ ସେଭ୍ ହୁଏ ନାହିଁ କି ପଠାଯାଏ ନାହିଁ।",
+        "Your location is used once, only on this phone, to find your PIN code. It is never saved or sent.",
+    )
+    val locationNotFound get() = t(
+        "आपकी जगह नहीं मिली। अपना पिन कोड लिखें, या नीचे राज्य और ज़िला चुनें।",
+        "ଆପଣଙ୍କ ଜାଗା ମିଳିଲା ନାହିଁ। ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ ଲେଖନ୍ତୁ, କିମ୍ବା ତଳେ ରାଜ୍ୟ ଓ ଜିଲ୍ଲା ବାଛନ୍ତୁ।",
+        "Could not find your place. Type your PIN code, or choose your state and district below.",
+    )
+    val locationCheckPin get() = t(
+        "आपकी लोकेशन से भरा गया: पिन कोड एक बार जाँच लें।",
+        "ଆପଣଙ୍କ ଲୋକେସନ୍‌ରୁ ଭରାଗଲା: ପିନ୍ କୋଡ୍ ଥରେ ଯାଞ୍ଚ କରନ୍ତୁ।",
+        "Filled in from your location: please check the PIN code.",
     )
     val pinNotFound get() = t(
         "यह पिन कोड किसी जगह का नहीं मिला। अंक जाँचें, या नीचे राज्य और ज़िला चुनें।",

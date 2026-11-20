@@ -1,5 +1,7 @@
 package com.acxelin.hisaabsaathi.ui
 
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -446,6 +448,7 @@ internal fun PlaceFields(vm: AppViewModel, draft: Profile, s: Strings, spoken: B
     val result = remember(draft.pin) { vm.pins.lookup(draft.pin) }
     val found = result as? PinDirectory.Result.Found
     Text(s.pinHelp, fontSize = 16.sp, color = InkSoft, lineHeight = 22.sp)
+    LocationButton(vm, s)
     OutlinedTextField(
         value = draft.pin, onValueChange = vm::setDraftPin,
         label = { Text(s.pinLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
@@ -471,6 +474,42 @@ internal fun PlaceFields(vm: AppViewModel, draft: Profile, s: Strings, spoken: B
     if (draft.state.isNotEmpty()) {
         val likely = found?.takeIf { it.state == draft.state && it.districts.size > 1 }?.districts.orEmpty()
         PickList(s.districtLabel, draft.district, vm.pins.districts(draft.state), s, first = likely) { d -> vm.editDraft { it.copy(district = d) } }
+    }
+}
+
+/**
+ * "Use my location" (optional): asks for approximate location once, then fills in the nearest PIN,
+ * state and district on the phone. The location is not kept and never changes the language.
+ */
+@Composable
+private fun LocationButton(vm: AppViewModel, s: Strings) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var finding by remember { mutableStateOf(false) }
+    var outcome by rememberSaveable { mutableStateOf<Boolean?>(null) } // true: filled in; false: not found
+    fun locate() {
+        finding = true
+        scope.launch { outcome = vm.locatePlace() != null; finding = false }
+    }
+    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) locate() else outcome = false
+    }
+    OutlinedButton(
+        onClick = {
+            val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            if (granted) locate() else permission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+        },
+        enabled = !finding, modifier = Modifier.fillMaxWidth().height(52.dp), shape = RoundedCornerShape(10.dp),
+    ) {
+        if (finding) CircularProgressIndicator(color = Ink, strokeWidth = 2.dp, modifier = Modifier.size(20.dp))
+        else Icon(Icons.Default.LocationOn, null, tint = Ink, modifier = Modifier.size(22.dp))
+        Spacer(Modifier.width(8.dp))
+        Text(if (finding) s.findingPlace else s.useLocation, fontSize = 17.sp, color = Ink)
+    }
+    when (outcome) {
+        true -> Text(s.locationCheckPin, fontSize = 15.sp, color = NoticeInk)
+        false -> Text(s.locationNotFound, fontSize = 15.sp, color = NoticeInk)
+        null -> Text(s.locationNote, fontSize = 13.sp, color = InkSoft, lineHeight = 18.sp)
     }
 }
 

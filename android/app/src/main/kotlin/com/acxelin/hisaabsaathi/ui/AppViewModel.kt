@@ -583,6 +583,20 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * "Use my location": one approximate fix finds the nearest PIN code on the phone, which fills
+     * in PIN, state and district (never the language). Null if no fix or nothing near.
+     */
+    suspend fun locatePlace(): com.acxelin.hisaabsaathi.core.PinDirectory.Nearby? {
+        val loc = runCatching { app.oneLocation() }.getOrNull() ?: return null
+        return kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { app.pins.nearest(loc.latitude, loc.longitude) }
+            ?.also { setDraftPin(it.pin) }
+    }
+
+    /** The same from a known position (tests). */
+    fun placeFrom(lat: Double, lon: Double): com.acxelin.hisaabsaathi.core.PinDirectory.Nearby? =
+        app.pins.nearest(lat, lon)?.also { setDraftPin(it.pin) }
+
     /** A state chosen by hand: the district is chosen again unless the state stayed the same. */
     fun setDraftState(state: String) = editDraft { it.copy(state = state, district = if (state == it.state) it.district else "") }
 

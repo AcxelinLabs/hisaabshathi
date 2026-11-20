@@ -83,6 +83,20 @@ class OnboardingTest {
         assertNull(AadhaarQr.read("1234", today))
     }
 
+    /** A location finds the nearest PIN code (and so state and district), on the phone. */
+    @Test fun locationFindsNearestPin() {
+        val tirupati = pins.nearest(13.6288, 79.4192)!!   // Tirupati town
+        assertEquals("Andhra Pradesh", tirupati.place.state)
+        assertEquals("Tirupati", tirupati.place.districts.first())
+        assertTrue(tirupati.km < 5)
+        val bbsr = pins.nearest(20.2961, 85.8245)!!       // Bhubaneswar
+        assertEquals("Odisha" to "Khordha (Khurda)", bbsr.place.state to bbsr.place.districts.first())
+        assertEquals("Delhi", pins.nearest(28.6139, 77.2090)!!.place.state)
+        assertEquals("Bihar", pins.nearest(25.5941, 85.1376)!!.place.state) // Patna
+        assertEquals(null, pins.nearest(37.422, -122.084))  // California: nothing near
+        assertEquals(null, pins.nearest(15.0, 65.0))        // the Arabian Sea
+    }
+
     @Test fun districtsFromAadhaar() {
         val odisha = pins.districts("Odisha")
         assertEquals(30, odisha.size)

@@ -17,11 +17,15 @@ India Post's own district names.
 
 Output format:
     S|<state>|<district>;<district>;...            one line per state, in order (index 0, 1, ...)
-    <pin>|<state index>|[*]<district index>[,<district index>...]   (* = the first is a confident guess)
+    <pin>|<state index>|[*]<district index>[,<district index>...][|<lat>,<lon>]
+        (* = the first is a confident guess; lat,lon = the middle of its post offices, for "use my
+        location"; left out where India Post has no usable position)
 """
 import collections
 import csv
+import math
 import re
+import statistics
 import sys
 from datetime import date
 
@@ -116,12 +120,19 @@ def main(csv_path: str, curated_path: str, out_path: str) -> None:
         raise SystemExit(f"{state}: no current district for postal district {raw_district!r}: add it to ALIASES or SPLITS")
 
     offices = collections.defaultdict(list)  # pin -> [(state, district, office name)]
+    points = collections.defaultdict(list)   # pin -> [(lat, lon)] of its post offices
     with open(csv_path, encoding="utf-8", errors="replace") as f:
         for r in csv.DictReader(f):
             pin = (r.get("Pincode") or "").strip()
             # 9xxxxx is the Army Postal Service: not a place (the few such rows are data errors).
             if re.fullmatch(r"[1-8]\d{5}", pin) and r.get("StateName") and r.get("District"):
                 offices[pin].append((state_name(r["StateName"]), r["District"].strip(), r.get("OfficeName", "")))
+                try:
+                    la, lo = float(r.get("Latitude") or ""), float(r.get("Longitude") or "")
+                except ValueError:
+                    continue
+                if 6 <= la <= 37.6 and 68 <= lo <= 97.5:  # inside India's box
+                    points[pin].append((la, lo))
 
     districts = collections.defaultdict(set)
     for st, ds in curated.items():
@@ -150,6 +161,20 @@ def main(csv_path: str, curated_path: str, out_path: str) -> None:
         districts[state].update(cands)
         pins[pin] = (state, cands)
 
+    # Where each PIN is: the middle (median) of its post offices. A PIN far from the other PINs
+    # sharing its first three digits (its sorting area) has a wrong position: left out.
+    where = {p: (statistics.median(a for a, _ in v), statistics.median(b for _, b in v)) for p, v in points.items() if p in pins}
+    def km(a, b):
+        x = math.radians(b[1] - a[1]) * math.cos(math.radians((a[0] + b[0]) / 2))
+        return 6371 * math.hypot(x, math.radians(b[0] - a[0]))
+    areas = collections.defaultdict(list)
+    for p, c in where.items():
+        areas[p[:3]].append(c)
+    area = {k: (statistics.median(a for a, _ in v), statistics.median(b for _, b in v)) for k, v in areas.items()}
+    dropped = [p for p, c in where.items() if km(c, area[p[:3]]) > 150]
+    for p in dropped:
+        del where[p]
+
     states = sorted(districts)
     order = {st: sorted(districts[st], key=str.lower) for st in states}
     with open(out_path, "w", encoding="utf-8") as out:
@@ -162,9 +187,11 @@ def main(csv_path: str, curated_path: str, out_path: str) -> None:
         for pin in sorted(pins):
             st, cands = pins[pin]
             # "*": the first district is a confident guess (its town is named); otherwise the worker chooses.
-            out.write(f"{pin}|{si[st]}|{'*' if sure.get(pin) else ''}{','.join(str(order[st].index(c)) for c in cands)}\n")
+            pos = f"|{where[pin][0]:.3f},{where[pin][1]:.3f}" if pin in where else ""
+            out.write(f"{pin}|{si[st]}|{'*' if sure.get(pin) else ''}{','.join(str(order[st].index(c)) for c in cands)}{pos}\n")
     print(f"{len(pins)} PIN codes, {len(states)} states/UTs, {sum(len(v) for v in order.values())} districts; "
-          f"{multi} PINs may be in more than one district, {len(sure)} of them with a confident first guess")
+          f"{multi} PINs may be in more than one district, {len(sure)} of them with a confident first guess; "
+          f"{len(where)} with a position ({len(dropped)} wrong positions left out)")
 
 
 if __name__ == "__main__":
