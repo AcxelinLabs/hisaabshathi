@@ -41,6 +41,9 @@ class TestApp : HisaabApp() {
     /** Tests start on the app itself; the welcome has its own test. */
     override val showWelcome: Boolean = false
 
+    /** What the text reader "sees" on a photo in tests. */
+    override suspend fun readPhoto(photo: android.net.Uri): String = fakePhotoText
+
     /** Where "Use my location" finds the phone in tests (Robolectric's location service is not used). */
     override suspend fun oneLocation(): android.location.Location? = fakeLocation?.let { (la, lo) ->
         android.location.Location("test").apply { latitude = la; longitude = lo; time = System.currentTimeMillis() }
@@ -48,6 +51,7 @@ class TestApp : HisaabApp() {
 
     companion object {
         var fakeLocation: Pair<Double, Double>? = null
+        var fakePhotoText: String = ""
     }
 }
 

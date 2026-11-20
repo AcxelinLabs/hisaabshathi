@@ -467,19 +467,42 @@ private fun DayCard(day: Long, today: Long, list: List<Entry>, open: Boolean, s:
 }
 
 @Composable
-fun LedgerScreen(vm: AppViewModel, s: Strings) {
+fun LedgerScreen(vm: AppViewModel, s: Strings, onTakePhoto: () -> Unit = {}) {
     val entries by vm.entries.collectAsStateWithLifecycle()
+    val photos by vm.photos.collectAsStateWithLifecycle()
     val deleted by vm.lastDeleted.collectAsStateWithLifecycle()
     var toDelete by remember { mutableStateOf<Entry?>(null) }
     var editing by remember { mutableStateOf<Entry?>(null) }
+    var showPhotos by rememberSaveable { mutableStateOf(false) }
+    var viewing by remember { mutableStateOf<AppViewModel.Photo?>(null) }
+    if (showPhotos) {
+        PhotosScreen(vm, s, onBack = { showPhotos = false }, onTakePhoto = onTakePhoto)
+        return
+    }
     Box(Modifier.fillMaxSize()) {
-    if (entries.isEmpty()) {
+    if (entries.isEmpty() && photos.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(s.noEntries, fontSize = 18.sp, color = InkSoft) }
     } else {
     val byDay = remember(entries) { entries.groupBy { it.epochDay } }
     val open = remember { androidx.compose.runtime.mutableStateMapOf<Long, Boolean>() }
     LazyColumn(Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         val today = LocalDate.now().toEpochDay()
+        // Photos of bills, slips and papers: one row that opens them all.
+        if (photos.isNotEmpty()) item(key = "photos") {
+            Row(
+                Modifier.fillMaxWidth().padding(top = 8.dp).clip(RoundedCornerShape(10.dp)).background(Paper)
+                    .clickable { showPhotos = true }.padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)).background(InkWash), contentAlignment = Alignment.Center) {
+                    Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(22.dp))
+                }
+                Spacer(Modifier.width(12.dp))
+                Text(s.photosTitle, fontSize = 17.sp, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
+                Text("${photos.size}", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = InkSoft)
+                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null, tint = InkSoft)
+            }
+        }
         byDay.forEach { (day, list) ->
             // One card per day: its name and totals. Tap to see that day's lines (today starts open).
             val isOpen = open[day] ?: (day == today)
@@ -500,6 +523,11 @@ fun LedgerScreen(vm: AppViewModel, s: Strings) {
                             )
                             val detail = s.workDetail(e.hours, e.pieces, e.ratePaise)
                             if (e.type == EntryType.WORK && detail.isNotEmpty()) Text(detail, color = InkSoft)
+                            // From a photo: what it was of (a loan paper is an advance with its paper).
+                            com.acxelin.hisaabsaathi.core.PhotoKind.fromSource(e.source)?.let { Text(s.photoKindName(it), color = InkSoft, fontSize = 14.sp) }
+                        }
+                        photos.firstOrNull { it.entry?.id == e.id }?.let { p ->
+                            IconButton(onClick = { viewing = p }) { Icon(painterResource(R.drawable.ic_camera), s.viewPhoto, tint = Ink, modifier = Modifier.size(22.dp)) }
                         }
                         Text(
                             s.rupees(e.amountPaise), fontSize = 22.sp, fontWeight = FontWeight.ExtraBold,
@@ -526,6 +554,7 @@ fun LedgerScreen(vm: AppViewModel, s: Strings) {
     }
     }
     editing?.let { e -> EditEntryDialog(vm, e, s) { editing = null } }
+    viewing?.let { p -> PhotoViewer(p, s, onClose = { viewing = null }, onDelete = null) }
     toDelete?.let { e ->
         AlertDialog(
             onDismissRequest = { toDelete = null },

@@ -71,6 +71,9 @@ open class HisaabApp : Application() {
     val speaker by lazy { Speaker(this, packs) }
     val slm by lazy { SlmEngine(this, packs) }
     val scanner by lazy { Scanner(this) }
+
+    /** The text on a photo, read on the phone (tests give their own). */
+    open suspend fun readPhoto(photo: android.net.Uri): String = scanner.text(photo)
     val qr by lazy { com.acxelin.hisaabsaathi.ai.QrReader(this) }
     /** The worker's details and photo from setup, encrypted on the phone. */
     val profile by lazy { com.acxelin.hisaabsaathi.data.ProfileStore(this).also { p -> scope.launch { p.load() } } }

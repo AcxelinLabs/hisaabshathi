@@ -114,20 +114,33 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         if (granted) vm.confirmByVoice() else answerPermission.launch(Manifest.permission.RECORD_AUDIO)
     }
 
-    // Camera: the photo goes straight into app-private storage.
-    var pendingPhoto by remember { mutableStateOf<Pair<Uri, String>?>(null) }
+    // Camera: the worker first says what the photo is of; the photo goes straight into
+    // app-private storage. Kept across the camera app, even if Android closes this one meanwhile.
+    var pendingPath by rememberSaveable { mutableStateOf<String?>(null) }
+    var pendingKind by rememberSaveable { mutableStateOf(com.acxelin.hisaabsaathi.core.PhotoKind.BILL.name) }
+    var choosingPhoto by rememberSaveable { mutableStateOf(false) }
     val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { taken ->
-        val p = pendingPhoto
-        if (taken && p != null) vm.photoTaken(p.first, p.second, com.acxelin.hisaabsaathi.core.PhotoKind.BILL)
-        pendingPhoto = null
+        val p = pendingPath
+        pendingPath = null
+        if (p == null) return@rememberLauncherForActivityResult
+        if (taken) {
+            val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", File(p))
+            vm.photoTaken(uri, p, com.acxelin.hisaabsaathi.core.PhotoKind.valueOf(pendingKind))
+        } else File(p).delete()
     }
     // The app declares the camera permission (for the QR scanner), so the camera app needs it granted too.
-    val onScan = rememberWithCamera(s) {
+    val takePhoto = rememberWithCamera(s) {
         val file = File(File(context.filesDir, "attachments").apply { mkdirs() }, "scan-${System.currentTimeMillis()}.jpg")
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
-        pendingPhoto = uri to file.path
+        pendingPath = file.path
         runCatching { camera.launch(uri) }
         Unit
+    }
+    val onScan = { choosingPhoto = true }
+    if (choosingPhoto) PhotoKindDialog(s, onDismiss = { choosingPhoto = false }) { k ->
+        choosingPhoto = false
+        pendingKind = k.name
+        takePhoto()
     }
 
     val review = capture as? Capture.Review
@@ -190,7 +203,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         Box(Modifier.fillMaxSize().padding(pad)) {
             when (tab) {
                 0 -> HomeScreen(vm, settings, s, capture, onMic, onScan, onType = { typing = true })
-                1 -> LedgerScreen(vm, s)
+                1 -> LedgerScreen(vm, s, onScan)
                 2 -> SummaryScreen(vm, settings, s)
                 else -> WageScreen(vm, settings, s)
             }

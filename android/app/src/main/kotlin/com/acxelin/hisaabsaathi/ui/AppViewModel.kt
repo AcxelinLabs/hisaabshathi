@@ -465,7 +465,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             return@launch say(strings.photoKept)
         }
         capture.value = Capture.Thinking
-        val text = app.scanner.text(photo)
+        val text = app.readPhoto(photo)
         // Same limits as speech: a long run of digits on a bill must not become a ₹ crore line.
         val draft = ReceiptReader.read(text, kind)?.let { Extraction(text, listOf(it)).sane().entries.single() }
             ?.takeIf { it.amountPaise > 0 } ?: ReceiptReader.blank(type)
