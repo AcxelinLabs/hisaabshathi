@@ -253,6 +253,14 @@ internal object Kn {
         "To reach your goal, put aside {0} on each working day." to "ಗುರಿ ಮುಟ್ಟಲು ಕೆಲಸ ಮಾಡಿದ ಪ್ರತಿ ದಿನ {0} ತೆಗೆದಿಡಿ.",
         "Well done! This month's goal is reached." to "ಶಭಾಷ್! ಈ ತಿಂಗಳ ಗುರಿ ಮುಟ್ಟಿದ್ದೀರಿ.",
         "Welcome to your HisaabSaathi" to "ನಿಮ್ಮ ಹಿಸಾಬ್ ಸಾಥಿಗೆ ಸ್ವಾಗತ",
+        "Most scheduled employments" to "ಹೆಚ್ಚಿನ ಅನುಸೂಚಿತ ಉದ್ಯೋಗಗಳು",
+        "Construction work" to "ನಿರ್ಮಾಣ ಕೆಲಸ",
+        "Factories, workshops, shops and clinics" to "ಕಾರ್ಖಾನೆಗಳು, ವರ್ಕ್‌ಶಾಪ್‌ಗಳು, ಅಂಗಡಿಗಳು, ಕ್ಲಿನಿಕ್‌ಗಳು",
+        "Shops and establishments" to "ಅಂಗಡಿಗಳು ಮತ್ತು ಸಂಸ್ಥೆಗಳು",
+        "Rates for small towns and villages" to "ಸಣ್ಣ ಪಟ್ಟಣ ಮತ್ತು ಹಳ್ಳಿಗಳ ದರಗಳು",
+        "In big cities the minimum for {0} work is higher: {1} a day." to "ದೊಡ್ಡ ನಗರಗಳಲ್ಲಿ {0} ಕೆಲಸಕ್ಕೆ ಕನಿಷ್ಠ ಕೂಲಿ ಹೆಚ್ಚು: ದಿನಕ್ಕೆ {1}.",
+        "These figures are not yet checked against the government notice." to "ಈ ಅಂಕಿಗಳನ್ನು ಇನ್ನೂ ಸರ್ಕಾರಿ ಸೂಚನೆಯೊಂದಿಗೆ ಹೋಲಿಸಿ ನೋಡಿಲ್ಲ.",
+        "Valid until" to "ಯಾವಾಗಿನವರೆಗೆ",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

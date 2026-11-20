@@ -241,6 +241,14 @@ internal object Ta {
             "இலக்கை அடைய, வேலை செய்ற ஒவ்வொரு நாளும் {0} தனியா எடுத்து வையுங்க.",
         "Well done! This month's goal is reached." to "சபாஷ்! இந்த மாச இலக்கை அடைஞ்சுட்டீங்க.",
         "Welcome to your HisaabSaathi" to "உங்கள் ஹிசாப் சாத்திக்கு வரவேற்கிறோம்",
+        "Most scheduled employments" to "பெரும்பாலான அட்டவணை வேலைகள்",
+        "Construction work" to "கட்டுமான வேலை",
+        "Factories, workshops, shops and clinics" to "தொழிற்சாலைகள், பட்டறைகள், கடைகள், கிளினிக்குகள்",
+        "Shops and establishments" to "கடைகள் மற்றும் நிறுவனங்கள்",
+        "Rates for small towns and villages" to "சிறு நகரங்கள் மற்றும் கிராமங்களுக்கான விகிதங்கள்",
+        "In big cities the minimum for {0} work is higher: {1} a day." to "பெரிய நகரங்களில் {0} வேலைக்கான குறைந்தபட்ச கூலி அதிகம்: ஒரு நாளைக்கு {1}.",
+        "These figures are not yet checked against the government notice." to "இந்த எண்கள் இன்னும் அரசு அறிவிப்புடன் சரிபார்க்கப்படவில்லை.",
+        "Valid until" to "எப்போது வரை",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

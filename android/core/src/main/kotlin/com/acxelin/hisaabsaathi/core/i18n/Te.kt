@@ -255,6 +255,14 @@ internal object Te {
         "To reach your goal, put aside {0} on each working day." to "లక్ష్యం చేరడానికి, పని చేసిన ప్రతి రోజు {0} పక్కన పెట్టండి.",
         "Well done! This month's goal is reached." to "శభాష్! ఈ నెల లక్ష్యం పూర్తయింది.",
         "Welcome to your HisaabSaathi" to "మీ హిసాబ్ సాథీకి స్వాగతం",
+        "Most scheduled employments" to "చాలా షెడ్యూల్డ్ ఉపాధులు",
+        "Construction work" to "నిర్మాణ పని",
+        "Factories, workshops, shops and clinics" to "కర్మాగారాలు, వర్క్‌షాపులు, దుకాణాలు, క్లినిక్‌లు",
+        "Shops and establishments" to "దుకాణాలు, సంస్థలు",
+        "Rates for small towns and villages" to "చిన్న పట్టణాలు, గ్రామాల రేట్లు",
+        "In big cities the minimum for {0} work is higher: {1} a day." to "పెద్ద నగరాల్లో {0} పనికి కనీస కూలి ఎక్కువ: రోజుకు {1}.",
+        "These figures are not yet checked against the government notice." to "ఈ అంకెలను ఇంకా ప్రభుత్వ నోటీసుతో సరిచూడలేదు.",
+        "Valid until" to "ఎప్పటి వరకు",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */
