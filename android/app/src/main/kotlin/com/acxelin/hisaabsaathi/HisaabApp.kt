@@ -53,6 +53,10 @@ open class HisaabApp : Application() {
         scope.launch { pins } // read the PIN directory early, off the main thread
         scope.launch {
             runCatching {
+                // The day the app was first used (installs from before this was kept: today).
+                // Written here, off the main thread: a settings change started from a screen
+                // runs on the main thread and can be left half-done when the screen goes.
+                settings.setFirstUse(java.time.LocalDate.now(), onlyIfUnset = true)
                 if (settings.flow.first().share == true) Sharing.schedule(this@HisaabApp)
                 if (settings.pendingDeletes().isNotEmpty()) Sharing.now(this@HisaabApp)
             }

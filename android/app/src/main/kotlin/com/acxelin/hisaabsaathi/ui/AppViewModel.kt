@@ -149,11 +149,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         capture.value = Capture.Message(strings.voiceFailed)
     }
 
-    init {
-        // Installs from before this was kept: count from today.
-        viewModelScope.launch(guard) { app.settings.setFirstUse(LocalDate.now(), onlyIfUnset = true) }
-    }
-
     /**
      * Why the app last closed, if it crashed or was killed for memory (Android 11+). Read
      * once per crash so testers can report it without a computer.
