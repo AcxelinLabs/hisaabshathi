@@ -314,7 +314,8 @@ Needs JDK 17+ and the Android SDK (platform 35). Set `sdk.dir` in `local.propert
 This was built without an emulator. Unit and screen tests pass and the speech models were
 checked on Linux, but microphone capture, model speed and memory on 3–4 GB phones, the
 language model, camera/OCR, notifications and the downloadable voices (their separate
-process and runtime) need testing on devices.
+process and runtime) need testing on devices. "Help improve" was tested against the real
+upload service on a computer (`ShareClientLiveTest`), not yet from a phone over Wi-Fi.
 
 ## Known gaps
 
