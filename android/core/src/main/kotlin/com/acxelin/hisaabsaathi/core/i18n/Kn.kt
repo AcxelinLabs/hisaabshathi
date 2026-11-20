@@ -275,6 +275,14 @@ internal object Kn {
         "Take a photo" to "ಫೋಟೋ ತೆಗೆಯಿರಿ",
         "Photos of bills, slips and passbooks show here." to "ಬಿಲ್, ಚೀಟಿ, ಪಾಸ್‌ಬುಕ್ ಫೋಟೋಗಳು ಇಲ್ಲಿ ಕಾಣುತ್ತವೆ.",
         "Welcome to your HisaabSaathi" to "ನಿಮ್ಮ ಹಿಸಾಬ್ ಸಾಥಿಗೆ ಸ್ವಾಗತ",
+        "Fill from Aadhaar card" to "ಆಧಾರ್ ಕಾರ್ಡ್‌ನಿಂದ ತುಂಬಿ",
+        "No PIN?" to "ಪಿನ್ ಗೊತ್ತಿಲ್ಲವೇ?",
+        "Teach the app the way you speak?" to "ನೀವು ಮಾತನಾಡುವ ರೀತಿಯನ್ನು ಆ್ಯಪ್‌ಗೆ ಕಲಿಸುತ್ತೀರಾ?",
+        "If you say yes, what you say to the app is sent to the team without your name. You can stop it any time in Settings." to "ಹೌದು ಎಂದರೆ, ನೀವು ಆ್ಯಪ್‌ಗೆ ಹೇಳುವುದು ನಿಮ್ಮ ಹೆಸರಿಲ್ಲದೆ ತಂಡಕ್ಕೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ. ಯಾವಾಗ ಬೇಕಾದರೂ ಸೆಟ್ಟಿಂಗ್ಸ್‌ನಲ್ಲಿ ನಿಲ್ಲಿಸಬಹುದು.",
+        "Read all" to "ಪೂರ್ತಿ ಓದಿ",
+        "More options" to "ಇನ್ನಷ್ಟು ಆಯ್ಕೆಗಳು",
+        "To understand your voice" to "ನಿಮ್ಮ ಧ್ವನಿಯನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು",
+        "Say yes or no" to "ಹೌದು ಅಥವಾ ಇಲ್ಲ ಎಂದು ಹೇಳಿ",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

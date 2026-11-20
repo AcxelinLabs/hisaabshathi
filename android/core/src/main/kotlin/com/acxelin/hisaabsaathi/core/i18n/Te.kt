@@ -277,6 +277,14 @@ internal object Te {
         "Take a photo" to "ఫోటో తీయండి",
         "Photos of bills, slips and passbooks show here." to "బిల్లులు, చీటీలు, పాస్‌బుక్‌ల ఫోటోలు ఇక్కడ కనిపిస్తాయి.",
         "Welcome to your HisaabSaathi" to "మీ హిసాబ్ సాథీకి స్వాగతం",
+        "Fill from Aadhaar card" to "ఆధార్ కార్డు నుండి నింపండి",
+        "No PIN?" to "పిన్ తెలియదా?",
+        "Teach the app the way you speak?" to "మీరు మాట్లాడే విధానం యాప్‌కు నేర్పిస్తారా?",
+        "If you say yes, what you say to the app is sent to the team without your name. You can stop it any time in Settings." to "అవును అంటే, మీరు యాప్‌తో చెప్పేది మీ పేరు లేకుండా టీమ్‌కు పంపబడుతుంది. ఎప్పుడైనా సెట్టింగ్స్‌లో ఆపవచ్చు.",
+        "Read all" to "పూర్తిగా చదవండి",
+        "More options" to "మరిన్ని ఎంపికలు",
+        "To understand your voice" to "మీ గొంతు అర్థం చేసుకోవడానికి",
+        "Say yes or no" to "అవును లేదా కాదు అని చెప్పండి",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

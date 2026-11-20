@@ -149,6 +149,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         capture.value = Capture.Message(strings.voiceFailed)
     }
 
+    init {
+        // Installs from before this was kept: count from today.
+        viewModelScope.launch(guard) { app.settings.setFirstUse(LocalDate.now(), onlyIfUnset = true) }
+    }
+
     /**
      * Why the app last closed, if it crashed or was killed for memory (Android 11+). Read
      * once per crash so testers can report it without a computer.
@@ -576,6 +581,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * The worker's choice. Yes: from now on each exchange is kept and sent, with the fixes the
      * old local log held. No: nothing is kept, and anything waiting is deleted.
      */
+    /**
+     * "Help improve" is asked once, on Home, after the worker has used the app for a few days
+     * (and saved a few lines), never during setup. "Later" hides it for a week.
+     */
+    val askShareNow: StateFlow<Boolean> = kotlinx.coroutines.flow.combine(settings, entries) { st, list ->
+        val today = LocalDate.now().toEpochDay()
+        st != null && st.onboarded && st.share == null && list.size >= SHARE_ASK_AFTER_LINES &&
+            st.firstUseDay in 1..(today - SHARE_ASK_AFTER_DAYS) && today >= st.shareAskAfterDay
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+    fun askShareLater() = viewModelScope.launch(guard) { app.settings.setShareAskAfter(LocalDate.now().plusDays(7)) }
+
     fun setShare(on: Boolean) = viewModelScope.launch(guard) {
         app.settings.setShare(on)
         val old = runCatching { app.corrections.all() }.getOrDefault(emptyList())
@@ -620,12 +637,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         if (on) Reminders.schedule(app) else Reminders.cancel(app)
     }
 
-    fun finishOnboarding(share: Boolean) = viewModelScope.launch(guard) {
+    /**
+     * Setup is done. Sensible defaults instead of questions: reminders on, the smart model
+     * downloads by itself on Wi-Fi. "Help improve" is not decided here: it is asked on Home
+     * after a few days ([askShareNow]).
+     */
+    fun finishOnboarding() = viewModelScope.launch(guard) {
         app.profile.save(cleanDraft())
         app.profile.savePhoto(draftPhoto.value)
         draft.value.state.takeIf { it.isNotEmpty() }?.let { app.settings.setRegion(com.acxelin.hisaabsaathi.core.StateInfo.regionFor(it)) }
-        app.settings.setShare(share)
-        if (share) Sharing.schedule(app)
+        app.settings.setFirstUse(LocalDate.now())
+        if (app.autoDownloadVoice && Catalog.slmSupported && Catalog.canDownloadSlm) app.packs.download(slmPack, wifiOnly = true)
         app.settings.setOnboarded()
         app.settings.setSetupDone(com.acxelin.hisaabsaathi.data.Settings.SETUP_VERSION)
         Reminders.schedule(app)
@@ -901,6 +923,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     private companion object {
         const val MAX_BACKUP_BYTES = 20 * 1024 * 1024
+        const val SHARE_ASK_AFTER_DAYS = 3
+        const val SHARE_ASK_AFTER_LINES = 3
     }
 
     override fun onCleared() {

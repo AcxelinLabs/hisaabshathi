@@ -20,6 +20,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -90,22 +92,17 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 /**
- * Setup: on a new phone, and once after an update that adds to it. In the worker's own language
- * from the first screen:
- * language (the worker's choice, never guessed from location) → your details (one question per
- * screen, typed or said, or from an Aadhaar QR; all optional) → where you work (the PIN fills in
- * state and district) → photo (optional) → help improve the app (yes or no) → smart model
- * (optional) → start. The voice packs download in the background from the language screen on.
+ * Setup, as short as it can be: language → name → PIN code (which fills in state and
+ * district) → Home. Name and PIN can be skipped, typed or said, or read from an Aadhaar QR.
+ * Everything else waits: age and photo are on the profile page; the speech packs download in
+ * the background from the language screen on, the smart model on Wi-Fi; "Help improve" is asked
+ * once on Home after a few days of use, never during setup.
  */
-private enum class Step { LANGUAGE, DETAILS, REVIEW, NAME, AGE, PLACE, PHOTO, SHARE, MODEL }
+private enum class Step { LANGUAGE, NAME, PLACE }
 
 /** Setup questions that are read aloud on arrival: (recording name, text). */
 private fun prompt(step: Step, s: Strings): Pair<String, String>? = when (step) {
-    Step.PHOTO -> "q_photo" to "${s.qPhoto}. ${s.photoHint}"
-    Step.DETAILS -> "details_privacy" to s.detailsPrivacy
-    Step.REVIEW -> "check_details" to s.checkDetails
     Step.NAME -> "q_name" to s.qName
-    Step.AGE -> "q_age" to s.qAge
     Step.PLACE -> "q_pin" to s.qPin
     else -> null
 }
@@ -113,46 +110,47 @@ private fun prompt(step: Step, s: Strings): Pair<String, String>? = when (step) 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
-    // The steps visited, so Back retraces the worker's own path (Aadhaar or questions).
-    var path by rememberSaveable { mutableStateOf(Step.LANGUAGE.name) }
-    val steps = path.split(',').map { Step.valueOf(it) }
-    val step = steps.last()
-    fun go(to: Step) { vm.stopSpeaking(); path = "$path,${to.name}" }
-    fun back() { vm.stopSpeaking(); if (steps.size > 1) path = steps.dropLast(1).joinToString(",") { it.name } }
+    var stepName by rememberSaveable { mutableStateOf(Step.LANGUAGE.name) }
+    val step = Step.valueOf(stepName)
+    fun go(to: Step) { vm.stopSpeaking(); stepName = to.name }
+    fun back() { vm.stopSpeaking(); if (step.ordinal > 0) stepName = Step.entries[step.ordinal - 1].name }
     val draft by vm.draft.collectAsStateWithLifecycle()
-    // Once the worker taps Download, setup waits on this screen until the smart model is in.
-    val allPacks by vm.packStates.collectAsStateWithLifecycle()
-    val modelDownloading = step == Step.MODEL && allPacks[vm.slmPack.id] is PackState.Downloading
-    BackHandler(enabled = steps.size > 1) { if (!modelDownloading) back() }
+    BackHandler(enabled = step != Step.LANGUAGE) { back() }
 
     var reading by remember { mutableStateOf(false) }
     var qrFailed by rememberSaveable { mutableStateOf(false) }
-    // "Help improve HisaabSaathi?": nothing chosen for the worker (kept if setup is shown again).
-    var share by rememberSaveable { mutableStateOf(settings.share) }
-    val photo by vm.draftPhoto.collectAsStateWithLifecycle()
-    val takeSelfie = rememberSelfie(vm, s)
 
     // A new phone starts from its own language, if the app has it (the worker still chooses);
     // setup shown again after an update starts from the details already saved.
     LaunchedEffect(Unit) { vm.suggestPhoneLanguage(); if (settings.onboarded) vm.startDraft() }
     LaunchedEffect(step, settings.lang) { prompt(step, s)?.let { (key, text) -> vm.speakPrompt(key, text) } }
 
+    // An Aadhaar QR fills in name, age and place at once: straight on to the PIN, to check it.
     val scan = rememberAadhaarScan(vm, s, onReading = { busy -> reading = busy; if (busy) { qrFailed = false } }) { ok ->
-        if (ok) go(Step.REVIEW) else { qrFailed = true }
+        if (ok) go(Step.PLACE) else { qrFailed = true }
     }
     if (scan.open) {
         BackHandler { scan.close() }
         QrScannerScreen(s, accept = { com.acxelin.hisaabsaathi.core.AadhaarQr.read(it) != null }, onCode = scan.onCode, onPickPhoto = { scan.close(); scan.pickPhoto() }, onClose = scan.close)
         return
     }
-    fun finish() { vm.stopSpeaking(); vm.finishOnboarding(share == true) }
+    fun finish() { vm.stopSpeaking(); vm.finishOnboarding() }
 
     val dark = step == Step.LANGUAGE
     val onBg = if (dark) Color.White else Ink
     Column(Modifier.fillMaxSize().background(if (dark) Ink else Chalk).systemBarsPadding().imePadding().padding(horizontal = 24.dp, vertical = 16.dp)) {
-        Text(s.appName, fontSize = 34.sp, fontWeight = FontWeight.ExtraBold, color = onBg)
-        if (!dark) { Spacer(Modifier.height(8.dp)); VoiceProgress(vm, s) }
-        Spacer(Modifier.height(16.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(s.appName, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, color = onBg, modifier = Modifier.weight(1f))
+            // Where the worker is: three dots, the current one filled.
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Step.entries.forEach { st ->
+                    Box(Modifier.size(if (st == step) 10.dp else 8.dp).background(
+                        if (st.ordinal <= step.ordinal) (if (dark) Marigold else Ink) else onBg.copy(alpha = 0.25f), CircleShape,
+                    ))
+                }
+            }
+        }
+        Spacer(Modifier.height(24.dp))
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             when (step) {
                 Step.LANGUAGE -> {
@@ -165,52 +163,6 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                         }
                     }
                     LanguagePicker(vm, settings, onDark = true)
-                    Text(s.languageLater, fontSize = 15.sp, color = Color.White.copy(alpha = 0.8f), lineHeight = 21.sp)
-                }
-                Step.PHOTO -> {
-                    Question(s.qPhoto) { vm.speakPrompt("q_photo", "${s.qPhoto}. ${s.photoHint}") }
-                    Text(s.photoHint, fontSize = 17.sp, color = InkSoft, lineHeight = 24.sp)
-                    Avatar(photo, 180.dp, Modifier.align(Alignment.CenterHorizontally))
-                    Button(
-                        onClick = takeSelfie, modifier = Modifier.fillMaxWidth().height(72.dp), shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Marigold, contentColor = Ink),
-                    ) {
-                        Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(28.dp))
-                        Spacer(Modifier.width(12.dp))
-                        Text(if (photo == null) s.openCamera else s.takeAgain, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Ink)
-                    }
-                }
-                Step.DETAILS -> {
-                    Text(s.detailsTitle, fontSize = 26.sp, fontWeight = FontWeight.Bold)
-                    PrivacyNote(s, onHear = { vm.speakPrompt("details_privacy", s.detailsPrivacy) })
-                    // Two equal choices, like the app's other choices: nothing nudges a worker towards Aadhaar.
-                    val choice = ButtonDefaults.buttonColors(containerColor = Paper, contentColor = Ink)
-                    Button(
-                        onClick = { go(Step.NAME) }, enabled = !reading, colors = choice,
-                        modifier = Modifier.fillMaxWidth().height(72.dp), shape = RoundedCornerShape(12.dp),
-                    ) {
-                        Icon(Icons.Default.Edit, null, tint = Ink, modifier = Modifier.size(26.dp))
-                        Spacer(Modifier.width(12.dp))
-                        Text(s.fillMyself, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Ink)
-                    }
-                    Button(
-                        onClick = scan.takePhoto, enabled = !reading, colors = choice,
-                        modifier = Modifier.fillMaxWidth().height(72.dp), shape = RoundedCornerShape(12.dp),
-                    ) {
-                        Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(28.dp))
-                        Spacer(Modifier.width(12.dp))
-                        Text(s.scanAadhaar, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Ink)
-                    }
-                    Text(s.scanAadhaarHint, fontSize = 15.sp, color = InkSoft)
-                    OutlinedButton(onClick = scan.pickPhoto, enabled = !reading, modifier = Modifier.height(52.dp), shape = RoundedCornerShape(10.dp)) {
-                        Text(s.choosePhoto, fontSize = 16.sp, color = Ink)
-                    }
-                    if (reading) CircularProgressIndicator(color = Green)
-                    if (qrFailed) Text(s.aadhaarFailed, fontSize = 16.sp, color = Red)
-                }
-                Step.REVIEW -> {
-                    Question(s.checkDetails) { vm.speakPrompt("check_details", s.checkDetails) }
-                    DetailsForm(vm, draft, s)
                 }
                 Step.NAME -> {
                     Question(s.qName) { vm.speakPrompt("q_name", s.qName) }
@@ -221,60 +173,27 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                     )
                     // "mera naam Aditya hai" → "Aditya": only the name goes in the box.
                     MicAnswer(vm, s) { text -> SpokenDetails.name(text).take(60).also { n -> vm.editDraft { it.copy(name = n) } } }
-                }
-                Step.AGE -> {
-                    Question(s.qAge) { vm.speakPrompt("q_age", s.qAge) }
-                    OutlinedTextField(
-                        value = draft.age?.toString().orEmpty(),
-                        onValueChange = { v -> vm.editDraft { it.copy(age = v.filter(Char::isDigit).take(3).toIntOrNull()) } },
-                        label = { Text(s.ageLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 22.sp),
-                    )
-                    MicAnswer(vm, s) { text -> SpokenDetails.age(text)?.also { a -> vm.editDraft { it.copy(age = a) } }?.toString() }
-                    if (draft.age?.let { it < 18 } == true) Text(s.adultsOnly, fontSize = 17.sp, color = Red)
+                    // For those who carry it: one scan fills in the rest too. Quiet, never pushed.
+                    TextButton(onClick = scan.takePhoto, enabled = !reading, modifier = Modifier.heightIn(min = 48.dp)) {
+                        Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(s.fillFromAadhaar, fontSize = 16.sp, color = Ink)
+                    }
+                    if (reading) CircularProgressIndicator(color = Green)
+                    if (qrFailed) Text(s.aadhaarFailed, fontSize = 16.sp, color = Red)
                 }
                 Step.PLACE -> {
                     Question(s.qPin) { vm.speakPrompt("q_pin", s.qPin) }
                     PlaceFields(vm, draft, s, spoken = true)
                 }
-                Step.SHARE -> ShareQuestion(vm, s, share) { share = it }
-                Step.MODEL -> {
-                    Text(s.modelTitle, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    if (Catalog.slmSupported) {
-                        Text(s.modelBody(vm.slmPack.bytes / 1_000_000), fontSize = 17.sp, lineHeight = 24.sp)
-                        val states by vm.packStates.collectAsStateWithLifecycle()
-                        val slm = states[vm.slmPack.id] ?: PackState.Missing
-                        if (slm is PackState.Missing && Catalog.canDownloadSlm) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                Button(
-                                    onClick = { vm.download(vm.slmPack) }, modifier = Modifier.weight(1f).height(56.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Green, contentColor = Color.White),
-                                ) { Text(s.download, fontSize = 18.sp) }
-                                OutlinedButton(onClick = { finish() }, modifier = Modifier.weight(1f).height(56.dp)) { Text(s.later, fontSize = 18.sp, color = Ink) }
-                            }
-                        } else {
-                            PackRow(vm, vm.slmPack, s, allowDelete = false, canDownload = Catalog.canDownloadSlm)
-                            if (modelDownloading) Text(s.waitForModel, fontSize = 16.sp, color = NoticeInk, lineHeight = 22.sp,
-                                modifier = Modifier.fillMaxWidth().background(Notice, RoundedCornerShape(10.dp)).padding(12.dp))
-                        }
-                    }
-                }
             }
         }
         Spacer(Modifier.height(12.dp))
-        val onBack: (() -> Unit)? = if (steps.size > 1 && !reading) ({ back() }) else null
+        val onBack: (() -> Unit)? = if (step != Step.LANGUAGE && !reading) ({ back() }) else null
         when (step) {
-            Step.LANGUAGE -> SetupButtons(s, null, null, s.next) { vm.startVoiceDownloads(); go(Step.DETAILS) }
-            // Every detail is optional: Skip goes straight on to the photo.
-            Step.DETAILS -> SetupButtons(s, onBack, { go(Step.PHOTO) }, null)
-            Step.REVIEW -> SetupButtons(s, onBack, null, s.next) { go(Step.PHOTO) }
-            Step.NAME -> SetupButtons(s, onBack, { go(Step.AGE) }, s.next, draft.name.isNotBlank()) { go(Step.AGE) }
-            Step.AGE -> SetupButtons(s, onBack, { go(Step.PLACE) }, s.next, draft.age != null) { go(Step.PLACE) }
-            Step.PLACE -> SetupButtons(s, onBack, { go(Step.PHOTO) }, s.next, draft.state.isNotEmpty()) { go(Step.PHOTO) }
-            Step.PHOTO -> SetupButtons(s, onBack, { go(Step.SHARE) }, s.next, photo != null) { go(Step.SHARE) }
-            Step.SHARE -> SetupButtons(s, onBack, null, s.next, share != null) { go(Step.MODEL) }
-            Step.MODEL -> SetupButtons(s, if (modelDownloading) null else onBack, null, s.start, nextEnabled = !modelDownloading) { finish() }
+            Step.LANGUAGE -> SetupButtons(s, null, null, s.next) { vm.startVoiceDownloads(); go(Step.NAME) }
+            Step.NAME -> SetupButtons(s, onBack, { go(Step.PLACE) }, s.next, draft.name.isNotBlank()) { go(Step.PLACE) }
+            Step.PLACE -> SetupButtons(s, onBack, { finish() }, s.start, draft.state.isNotEmpty()) { finish() }
         }
     }
 }
@@ -311,7 +230,7 @@ private fun SetupButtons(
 private fun Question(text: String, onHear: () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(text, fontSize = 26.sp, fontWeight = FontWeight.Bold, lineHeight = 32.sp, modifier = Modifier.weight(1f))
-        IconButton(onClick = onHear, modifier = Modifier.size(56.dp)) { Icon(Icons.Default.PlayArrow, text, tint = Green, modifier = Modifier.size(36.dp)) }
+        IconButton(onClick = onHear, modifier = Modifier.size(56.dp)) { Icon(painterResource(R.drawable.ic_speaker), text, tint = Ink, modifier = Modifier.size(30.dp)) }
     }
 }
 
@@ -324,44 +243,10 @@ private fun PrivacyNote(s: Strings, onHear: () -> Unit) {
         Icon(Icons.Default.Lock, null, tint = NoticeInk, modifier = Modifier.size(28.dp))
         Spacer(Modifier.width(10.dp))
         Text(s.detailsPrivacy, fontSize = 16.sp, color = NoticeInk, lineHeight = 22.sp, modifier = Modifier.weight(1f))
-        IconButton(onClick = onHear) { Icon(Icons.Default.PlayArrow, s.hearAgain, tint = NoticeInk) }
+        IconButton(onClick = onHear) { Icon(painterResource(R.drawable.ic_speaker), s.hearAgain, tint = NoticeInk) }
     }
 }
 
-/**
- * The voice downloads started on the language screen: a small bar on every later setup
- * screen, so the worker knows something is happening.
- */
-@Composable
-private fun VoiceProgress(vm: AppViewModel, s: Strings) {
-    val states by vm.packStates.collectAsStateWithLifecycle()
-    val packs = listOfNotNull(vm.sttPack(), vm.voicePack())
-    val st = packs.map { states[it.id] ?: PackState.Missing }
-    if (st.all { it is PackState.Missing }) return
-    val total = packs.sumOf { it.bytes }.toDouble()
-    val done = packs.zip(st).sumOf { (p, x) ->
-        p.bytes * when (x) { is PackState.Ready -> 1.0; is PackState.Downloading -> x.fraction.toDouble(); else -> 0.0 }
-    }
-    val f = (done / total).toFloat().coerceIn(0f, 1f)
-    val pct = (f * 100).toInt()
-    Column(Modifier.fillMaxWidth().background(InkWash, RoundedCornerShape(8.dp)).padding(horizontal = 12.dp, vertical = 8.dp)) {
-        when {
-            st.all { it is PackState.Ready } -> Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Check, null, tint = Leaf, modifier = Modifier.size(20.dp))
-                Text(s.voiceReady, fontSize = 15.sp, color = Leaf, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
-            }
-            st.any { it is PackState.Failed } -> Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(s.downloadFailed, fontSize = 14.sp, color = Red, modifier = Modifier.weight(1f))
-                TextButton(onClick = { vm.startVoiceDownloads() }) { Text(s.tryAgain) }
-            }
-            else -> {
-                val waiting = st.any { it is PackState.Downloading && it.waiting }
-                Text(if (waiting) "${s.waitingForInternet} $pct%" else "🎙️ ${s.gettingVoiceReady(pct)}", fontSize = 15.sp, color = Ink)
-                LinearProgressIndicator(progress = { f }, modifier = Modifier.fillMaxWidth().padding(top = 4.dp), color = Green)
-            }
-        }
-    }
-}
 
 /** Big mic button for a spoken answer; works once the speech pack is downloaded. */
 @Composable
@@ -439,41 +324,52 @@ internal fun PickList(label: String, value: String, options: List<String>, s: St
 }
 
 /**
- * Where the worker works: the PIN fills in the state, and the district when the PIN has only
- * one; otherwise the districts it may be in are offered first. State and district can always be
- * chosen by hand (no PIN needed). An unknown or mistyped PIN says so and never blocks.
+ * Where the worker works, with as little on screen as possible: the PIN box, and one line
+ * saying what it found. State and district show only when the PIN does not settle them (not
+ * found, several districts) or the worker taps Change or "No PIN?". Never blocks.
  */
 @Composable
 internal fun PlaceFields(vm: AppViewModel, draft: Profile, s: Strings, spoken: Boolean = false) {
     val result = remember(draft.pin) { vm.pins.lookup(draft.pin) }
     val found = result as? PinDirectory.Result.Found
-    Text(s.pinHelp, fontSize = 16.sp, color = InkSoft, lineHeight = 22.sp)
-    LocationButton(vm, s)
+    var picking by rememberSaveable { mutableStateOf(false) }
     OutlinedTextField(
         value = draft.pin, onValueChange = vm::setDraftPin,
         label = { Text(s.pinLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        textStyle = TextStyle(fontSize = 22.sp, color = Ink),
+        textStyle = TextStyle(fontSize = 26.sp, color = Ink, letterSpacing = 2.sp),
         isError = draft.pin.length == 6 && found == null,
     )
     // Read back digit by digit: "7 5 1 0 0 2".
     if (spoken) MicAnswer(vm, s) { text -> SpokenDetails.pin(text)?.also { vm.setDraftPin(it) }?.toList()?.joinToString(" ") }
+    val settled = found != null && found.state == draft.state && draft.district in found.districts
     when {
-        draft.pin.isEmpty() -> Unit
-        found != null && draft.state.isNotEmpty() && found.state != draft.state -> Text(s.pinOtherState, fontSize = 15.sp, color = NoticeInk)
-        found != null && draft.district in found.districts -> Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Check, null, tint = Leaf, modifier = Modifier.size(22.dp))
-            Text(s.pinFound(draft.district, found.state), fontSize = 16.sp, color = Leaf, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
+        settled -> Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Default.Check, null, tint = Leaf, modifier = Modifier.size(24.dp))
+            Text("${draft.district}, ${draft.state}", fontSize = 18.sp, color = Leaf, fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(start = 8.dp).weight(1f))
+            if (!picking) TextButton(onClick = { picking = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.change, fontSize = 16.sp, color = Ink) }
         }
-        found != null -> Text(s.pinManyDistricts, fontSize = 15.sp, color = NoticeInk)
-        result == PinDirectory.Result.Unknown -> Text(s.pinNotFound, fontSize = 15.sp, color = Red)
-        draft.pin.length == 6 -> Text(s.pinBadFormat, fontSize = 15.sp, color = Red)
-        else -> Text(s.pinSixDigits, fontSize = 15.sp, color = InkSoft)
+        draft.pin.isEmpty() -> Unit
+        found != null && draft.state.isNotEmpty() && found.state != draft.state -> Text(s.pinOtherState, fontSize = 16.sp, color = NoticeInk)
+        found != null -> Text(s.pinManyDistricts, fontSize = 16.sp, color = NoticeInk)
+        result == PinDirectory.Result.Unknown -> Text(s.pinNotFound, fontSize = 16.sp, color = Red)
+        draft.pin.length == 6 -> Text(s.pinBadFormat, fontSize = 16.sp, color = Red)
+        else -> Text(s.pinSixDigits, fontSize = 16.sp, color = InkSoft)
     }
-    PickList(s.stateLabel, draft.state, vm.pins.states, s) { vm.setDraftState(it) }
-    if (draft.state.isNotEmpty()) {
-        val likely = found?.takeIf { it.state == draft.state && it.districts.size > 1 }?.districts.orEmpty()
-        PickList(s.districtLabel, draft.district, vm.pins.districts(draft.state), s, first = likely) { d -> vm.editDraft { it.copy(district = d) } }
+    val needLists = picking || (!settled && (draft.pin.length == 6 || draft.state.isNotEmpty()))
+    if (needLists) {
+        PickList(s.stateLabel, draft.state, vm.pins.states, s) { vm.setDraftState(it) }
+        if (draft.state.isNotEmpty()) {
+            val likely = found?.takeIf { it.state == draft.state && it.districts.size > 1 }?.districts.orEmpty()
+            PickList(s.districtLabel, draft.district, vm.pins.districts(draft.state), s, first = likely) { d -> vm.editDraft { it.copy(district = d) } }
+        }
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+        LocationButton(vm, s)
+        if (!needLists && !settled) TextButton(onClick = { picking = true }, modifier = Modifier.heightIn(min = 48.dp)) {
+            Text(s.noPin, fontSize = 16.sp, color = Ink)
+        }
     }
 }
 
@@ -494,22 +390,24 @@ private fun LocationButton(vm: AppViewModel, s: Strings) {
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) locate() else outcome = false
     }
-    OutlinedButton(
-        onClick = {
-            val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            if (granted) locate() else permission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-        },
-        enabled = !finding, modifier = Modifier.fillMaxWidth().height(52.dp), shape = RoundedCornerShape(10.dp),
-    ) {
-        if (finding) CircularProgressIndicator(color = Ink, strokeWidth = 2.dp, modifier = Modifier.size(20.dp))
-        else Icon(Icons.Default.LocationOn, null, tint = Ink, modifier = Modifier.size(22.dp))
-        Spacer(Modifier.width(8.dp))
-        Text(if (finding) s.findingPlace else s.useLocation, fontSize = 17.sp, color = Ink)
-    }
-    when (outcome) {
-        true -> Text(s.locationCheckPin, fontSize = 15.sp, color = NoticeInk)
-        false -> Text(s.locationNotFound, fontSize = 15.sp, color = NoticeInk)
-        null -> Text(s.locationNote, fontSize = 13.sp, color = InkSoft, lineHeight = 18.sp)
+    Column {
+        TextButton(
+            onClick = {
+                val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                if (granted) locate() else permission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+            },
+            enabled = !finding, modifier = Modifier.heightIn(min = 48.dp),
+        ) {
+            if (finding) CircularProgressIndicator(color = Ink, strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+            else Icon(Icons.Default.LocationOn, null, tint = Ink, modifier = Modifier.size(20.dp))
+            Spacer(Modifier.width(6.dp))
+            Text(if (finding) s.findingPlace else s.useLocation, fontSize = 16.sp, color = Ink)
+        }
+        when (outcome) {
+            true -> Text(s.locationCheckPin, fontSize = 15.sp, color = NoticeInk)
+            false -> Text(s.locationNotFound, fontSize = 15.sp, color = NoticeInk)
+            null -> Unit
+        }
     }
 }
 

@@ -98,6 +98,16 @@ class Strings(val lang: Lang) {
         "ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ ଲେଖନ୍ତୁ କିମ୍ବା ଲୋକେସନ୍‌ରୁ ଭରନ୍ତୁ: ରାଜ୍ୟ ଓ ଜିଲ୍ଲା ନିଜେ ଭରିଯିବ। କିମ୍ବା ତଳୁ ବାଛନ୍ତୁ।",
         "Type your PIN code, or use your location: the state and district fill in by themselves. Or choose them below.",
     )
+    val sayYesNo get() = t("बोलकर हाँ या नहीं कहें", "କହି ହଁ କିମ୍ବା ନା କୁହନ୍ତୁ", "Say yes or no")
+    val fillFromAadhaar get() = t("आधार कार्ड से भरें", "ଆଧାର କାର୍ଡରୁ ଭରନ୍ତୁ", "Fill from Aadhaar card")
+    val noPin get() = t("पिन नहीं पता?", "ପିନ୍ ଜଣା ନାହିଁ?", "No PIN?")
+    val shareCardTitle get() = t("ऐप को अपनी बोली सिखाएंगे?", "ଆପ୍‌କୁ ନିଜ କହିବା ଶୈଳୀ ଶିଖାଇବେ?", "Teach the app the way you speak?")
+    val shareCardLine get() = t(
+        "हाँ कहें तो आप ऐप से जो बोलते हैं, वह बिना नाम के टीम को भेजा जाएगा। सेटिंग में कभी भी बंद कर सकते हैं।",
+        "ହଁ କହିଲେ, ଆପଣ ଆପ୍‌କୁ ଯାହା କୁହନ୍ତି ତାହା ନାମ ବିନା ଟିମ୍‌କୁ ପଠାଯିବ। ସେଟିଂସ୍‌ରେ ଯେକୌଣସି ସମୟରେ ବନ୍ଦ କରିପାରିବେ।",
+        "If you say yes, what you say to the app is sent to the team without your name. You can stop it any time in Settings.",
+    )
+    val readAll get() = t("पूरी बात", "ସବୁ କଥା", "Read all")
     val useLocation get() = t("मेरी लोकेशन से भरें", "ମୋ ଲୋକେସନ୍‌ରୁ ଭରନ୍ତୁ", "Use my location")
     val findingPlace get() = t("आपकी जगह ढूँढ रहे हैं…", "ଆପଣଙ୍କ ଜାଗା ଖୋଜୁଛି…", "Finding your place…")
     val locationNote get() = t(
@@ -358,6 +368,8 @@ class Strings(val lang: Lang) {
     val language get() = t("भाषा", "ଭାଷା", "Language")
     val workState get() = t("काम का राज्य", "କାମର ରାଜ୍ୟ", "Work state")
     val reminders get() = t("रोज़ 3 बजे और 9 बजे याद दिलाएं", "ପ୍ରତିଦିନ 3ଟା ଓ 9ଟାରେ ମନେ ପକାନ୍ତୁ", "Remind me daily at 3 PM and 9 PM")
+    val moreSettings get() = t("और विकल्प", "ଆହୁରି ବିକଳ୍ପ", "More options")
+    val speechPackTitle get() = t("आपकी आवाज़ समझने के लिए", "ଆପଣଙ୍କ ସ୍ୱର ବୁଝିବା ପାଇଁ", "To understand your voice")
     val modelPacks get() = t("ऑफ़लाइन पैक", "ଅଫ୍‌ଲାଇନ୍ ପ୍ୟାକ୍", "Offline packs")
     val smartPack get() = t("समझदार मॉडल: अधूरी बात भी समझने के लिए", "ସ୍ମାର୍ଟ ମଡେଲ୍: ଅଧା କଥା ବି ବୁଝିବା ପାଇଁ", "Smart model: understands sentences the app is unsure about")
     val addFromPhone get() = t("फोन से मॉडल फ़ाइल जोड़ें", "ଫୋନ୍‌ରୁ ମଡେଲ୍ ଫାଇଲ୍ ଯୋଡ଼ନ୍ତୁ", "Add model file from phone")

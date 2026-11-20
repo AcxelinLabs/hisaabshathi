@@ -108,8 +108,9 @@ private fun TotalsCard(title: String, t: Totals, s: Strings, compact: Boolean = 
     Slip {
         Text(title, fontSize = 15.sp, color = InkSoft)
         LeaderRow(s.earned, s.rupees(t.earnedPaise), Leaf)
-        LeaderRow(s.advance, s.rupees(t.advancePaise))
-        LeaderRow(s.received, s.rupees(t.paidPaise))
+        // On Home, a line that is ₹0 says nothing: only what happened is shown.
+        if (!compact || t.advancePaise != 0L) LeaderRow(s.advance, s.rupees(t.advancePaise))
+        if (!compact || t.paidPaise != 0L) LeaderRow(s.received, s.rupees(t.paidPaise))
         DashedRule()
         LeaderRow(s.due, s.rupees(t.duePaise), if (t.duePaise > 0) Sindoor else Ink, big = true, top = 2.dp)
         if (!compact) {
@@ -118,6 +119,7 @@ private fun TotalsCard(title: String, t: Totals, s: Strings, compact: Boolean = 
                 Text("${s.spent} ${s.rupees(t.expensePaise)}", fontSize = 15.sp, color = InkSoft)
                 Text("${s.inHand} ${s.rupees(t.inHandPaise)}", fontSize = 15.sp, color = InkSoft)
             }
+            Text("${s.daysWorked}: ${t.daysWorked}", fontSize = 15.sp, color = InkSoft, modifier = Modifier.padding(top = 4.dp))
         }
     }
 }
@@ -150,26 +152,30 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
         TotalsCard("${s.today}, ${LocalDate.now().format(dayFormat)}", vm.totals(QueryPeriod.DAY, entries), s, compact = true)
 
         (capture as? Capture.Message)?.let {
+            // A short "saved" goes by itself; an answer stays until it is put away.
+            if (it.text == s.saved || it.text == s.photoKept) androidx.compose.runtime.LaunchedEffect(it) { kotlinx.coroutines.delay(3_000); vm.dismiss() }
             // The spoken answer, also in writing. Tap anywhere on it to put it away.
             Row(
                 Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Notice).clickable(onClickLabel = s.done, onClick = vm::dismiss).padding(14.dp),
                 verticalAlignment = Alignment.Top,
             ) {
                 Column(Modifier.weight(1f)) {
-                    it.asked?.let { q ->
-                        Text(s.youSaid, fontSize = 13.sp, color = NoticeInk.copy(alpha = 0.75f))
-                        Text("“$q”", fontSize = 16.sp, color = NoticeInk, modifier = Modifier.padding(bottom = 6.dp))
-                    }
+                    it.asked?.let { q -> Text("“$q”", fontSize = 16.sp, color = NoticeInk, modifier = Modifier.padding(bottom = 4.dp)) }
                     Text(it.text, fontSize = 18.sp, color = NoticeInk, fontWeight = FontWeight.SemiBold)
                 }
                 Icon(Icons.Default.Close, s.done, tint = NoticeInk, modifier = Modifier.padding(start = 8.dp).size(26.dp))
             }
         }
 
+        // "Help improve", asked once after a few days of use: never during setup.
+        val askShare by vm.askShareNow.collectAsStateWithLifecycle()
+        val showShare = askShare && capture == Capture.Idle
+        if (showShare) ShareCard(vm, s)
+
         val listening = capture == Capture.Listening
         val thinking = capture == Capture.Thinking
         val pulse by animateFloatAsState(if (listening) 1f + level * 0.35f else 1f, label = "mic")
-        val compact = capture is Capture.Message
+        val compact = capture is Capture.Message || showShare
         val mic = if (compact) minOf(96.dp, micBig) else micBig
         Box(contentAlignment = Alignment.Center, modifier = Modifier.size(mic)) {
             // The ring swells with the worker's voice while listening.
@@ -193,7 +199,8 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
             maxLines = 2, lineHeight = if (compact) 22.sp else 25.sp,
         )
         if (thinking) TextButton(onClick = vm::cancelThinking) { Text(s.cancel, fontSize = 17.sp) }
-        if (!listening && !thinking && !compact && !tight) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
+        // The example is for the first days: once there are lines, the worker knows how.
+        if (!listening && !thinking && !compact && !tight && entries.size < 3) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
 
         // While an answer is showing, the answer takes this space; the buttons return when it is closed.
         if (!compact) Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
@@ -209,6 +216,32 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
         }
     }
 }
+}
+
+/**
+ * "Help improve HisaabSaathi?", once, on Home: one line saying what is sent, the whole text a
+ * tap away (and read aloud with Listen), Yes and No equally easy, nothing chosen. ✕ is "later".
+ */
+@Composable
+private fun ShareCard(vm: AppViewModel, s: Strings) {
+    var more by rememberSaveable { mutableStateOf(false) }
+    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Paper).padding(start = 16.dp, end = 4.dp, top = 6.dp, bottom = 12.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(s.shareCardTitle, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f).padding(top = 6.dp))
+            IconButton(onClick = { vm.askShareLater() }) { Icon(Icons.Default.Close, s.later, tint = InkSoft) }
+        }
+        Text(if (more) s.shareBody else s.shareCardLine, fontSize = 15.sp, color = InkSoft, lineHeight = 21.sp, modifier = Modifier.padding(end = 12.dp))
+        Row(Modifier.padding(top = 8.dp, end = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = { vm.readAloud(s.shareCardTitle + " " + s.shareBody) }) { Icon(painterResource(R.drawable.ic_speaker), s.listen, tint = Ink) }
+            if (!more) TextButton(onClick = { more = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.readAll, color = Ink, fontSize = 15.sp) }
+            Spacer(Modifier.weight(1f))
+            OutlinedButton(onClick = { vm.setShare(false) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.no, color = Ink, fontSize = 16.sp) }
+            Button(
+                onClick = { vm.setShare(true) }, modifier = Modifier.heightIn(min = 48.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Ink, contentColor = Color.White),
+            ) { Text(s.yes, fontSize = 16.sp) }
+        }
+    }
 }
 
 /**
@@ -254,13 +287,11 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(s.isThisRight, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.weight(1f))
                 FilledTonalIconButton(onClick = vm::replay, modifier = Modifier.size(52.dp)) {
-                    Icon(Icons.Default.PlayArrow, s.playAgain, modifier = Modifier.size(28.dp))
+                    Icon(painterResource(R.drawable.ic_speaker), s.playAgain, modifier = Modifier.size(26.dp))
                 }
             }
-            Section(color = InkWash) {
-                Text(s.youSaid, fontSize = 13.sp, color = InkSoft)
-                Text("“${r.transcript}”", fontSize = 17.sp)
-            }
+            // What the app heard, in the worker's own words: quiet, so the lines below stand out.
+            Text("“${r.transcript}”", fontSize = 17.sp, color = InkSoft, lineHeight = 23.sp)
             if (r.lowConfidence) {
                 Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Notice).padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.Warning, null, tint = NoticeInk)
@@ -275,51 +306,51 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                 var open by remember(i, r.drafts.size) { mutableStateOf(mustFix) }
                 // Stays open once opened for a fix, so it never folds away while the worker types.
                 LaunchedEffect(mustFix) { if (mustFix) open = true }
-                Section {
-                    if (open || mustFix) {
-                        DraftEditor(vm, r, i, d, s)
-                        if (!mustFix) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                            TextButton(onClick = { open = false }) { Text(s.done, fontSize = 17.sp, fontWeight = FontWeight.Bold) }
+                if (open || mustFix) Section {
+                    DraftEditor(vm, r, i, d, s)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+                        // A line the app heard wrongly can be taken out, as long as one line is left.
+                        if (r.drafts.size > 1) TextButton(onClick = { vm.removeDraft(i) }, modifier = Modifier.heightIn(min = 48.dp)) {
+                            Icon(Icons.Default.Delete, null, tint = InkSoft, modifier = Modifier.size(20.dp))
+                            Spacer(Modifier.width(4.dp)); Text(s.delete, fontSize = 16.sp, color = InkSoft)
                         }
-                    } else {
-                        DraftSummary(d, s)
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
-                            // A line the app heard wrongly can be taken out, as long as one line is left.
-                            if (r.drafts.size > 1) TextButton(onClick = { vm.removeDraft(i) }) {
-                                Icon(Icons.Default.Delete, null, tint = InkSoft, modifier = Modifier.size(20.dp))
-                                Spacer(Modifier.width(4.dp)); Text(s.delete, fontSize = 16.sp, color = InkSoft)
-                            }
-                            OutlinedButton(onClick = { open = true }, modifier = Modifier.height(48.dp)) {
-                                Icon(Icons.Default.Edit, null, tint = Ink, modifier = Modifier.size(20.dp))
-                                Spacer(Modifier.width(6.dp)); Text(s.change, fontSize = 16.sp)
-                            }
-                        }
+                        if (!mustFix) TextButton(onClick = { open = false }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.done, fontSize = 17.sp, fontWeight = FontWeight.Bold) }
+                    }
+                } else {
+                    // The whole line is the button: tap to change it.
+                    Row(
+                        Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Paper)
+                            .clickable(onClickLabel = s.change) { open = true }.padding(start = 16.dp, top = 14.dp, bottom = 14.dp, end = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Box(Modifier.weight(1f)) { DraftSummary(d, s) }
+                        Icon(Icons.Default.Edit, null, tint = InkSoft, modifier = Modifier.padding(start = 8.dp).size(20.dp))
                     }
                 }
             }
             OutlinedButton(onClick = onSpeakAnswer, modifier = Modifier.height(48.dp)) {
                 Icon(painterResource(R.drawable.ic_mic), null, tint = Ink, modifier = Modifier.size(20.dp))
-                Spacer(Modifier.width(6.dp)); Text("${s.yes} / ${s.no}", fontSize = 16.sp)
+                Spacer(Modifier.width(6.dp)); Text(s.sayYesNo, fontSize = 16.sp)
             }
         }
         Row(Modifier.fillMaxWidth().padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Button(
-                onClick = vm::retry, modifier = Modifier.weight(1f).height(68.dp), shape = RoundedCornerShape(12.dp),
+                onClick = vm::retry, modifier = Modifier.weight(1f).heightIn(min = 64.dp), shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Red),
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.Close, null, modifier = Modifier.size(26.dp))
-                    Text(s.fixByVoice, fontSize = 13.sp, textAlign = TextAlign.Center)
-                }
+                Icon(Icons.Default.Close, null, modifier = Modifier.size(24.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(s.fixByVoice, fontSize = 16.sp, lineHeight = 19.sp, textAlign = TextAlign.Center, maxLines = 2)
             }
             Button(
-                onClick = { vm.confirmSave() }, enabled = r.canSave, modifier = Modifier.weight(1f).height(68.dp), shape = RoundedCornerShape(12.dp),
+                onClick = { vm.confirmSave() }, enabled = r.canSave, modifier = Modifier.weight(1f).heightIn(min = 64.dp), shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Green),
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.Check, null, modifier = Modifier.size(26.dp))
-                    Text(s.save, fontSize = 13.sp, textAlign = TextAlign.Center)
-                }
+                Icon(Icons.Default.Check, null, modifier = Modifier.size(24.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(s.save, fontSize = 16.sp, lineHeight = 19.sp, textAlign = TextAlign.Center, maxLines = 2)
             }
         }
     }
@@ -584,15 +615,6 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
         }
         TotalsCard(s.periodName(period), t, s)
 
-        Section {
-            val max = maxOf(t.earnedPaise, t.expensePaise, 1L).toFloat()
-            Bar(s.earned, t.earnedPaise / max, Green, s.rupees(t.earnedPaise))
-            Spacer(Modifier.height(8.dp))
-            Bar(s.spent, t.expensePaise / max, Amber, s.rupees(t.expensePaise))
-            Spacer(Modifier.height(8.dp))
-            Text("${s.daysWorked}: ${t.daysWorked}", color = InkSoft)
-        }
-
         (capture as? Capture.Message)?.let {
             Section(color = Notice) { Text(it.text, fontSize = 18.sp, color = NoticeInk) }
         }
@@ -605,12 +627,12 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
         }
 
         // Savings goal: based on this month's cash in hand, whatever period is shown above.
-        Section {
+        // Until one is set, it is a single quiet link, not a card.
+        val goal = settings.monthlyGoalPaise
+        if (goal <= 0) TextButton(onClick = { editingGoal = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.setGoal, fontSize = 16.sp, color = Ink) }
+        else Section {
             Text(s.savingsGoal, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
-            val goal = settings.monthlyGoalPaise
-            if (goal <= 0) {
-                TextButton(onClick = { editingGoal = true }) { Text(s.setGoal) }
-            } else {
+            run {
                 val saved = vm.totals(QueryPeriod.MONTH, entries).inHandPaise
                 LinearProgressIndicator(
                     progress = { (saved.toFloat() / goal).coerceIn(0f, 1f) },
@@ -645,16 +667,6 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
     }
 }
 
-@Composable
-private fun Bar(label: String, fraction: Float, color: Color, value: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(label, Modifier.width(72.dp))
-        Box(Modifier.weight(1f).height(22.dp).clip(RoundedCornerShape(3.dp)).background(Chalk)) {
-            Box(Modifier.fillMaxWidth(fraction.coerceIn(0f, 1f)).height(22.dp).background(color))
-        }
-        Text(value, Modifier.padding(start = 8.dp), fontWeight = FontWeight.Medium)
-    }
-}
 
 // ---------------------------------------------------------------- know my wages & dispute vault
 
@@ -667,43 +679,52 @@ fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
     val floor = Wages.floor(rates)
     val since = LocalDate.now().minusDays(30).toEpochDay()
     val recent = com.acxelin.hisaabsaathi.core.Ledger.totals(entries.filter { it.epochDay >= since })
+    var details by rememberSaveable { mutableStateOf(false) }
 
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp).widthIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Section {
             Text(s.minWageTitle, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
+            // The state was skipped at setup: ask it here, where it is needed.
+            if (settings.region.isEmpty()) {
+                Spacer(Modifier.height(8.dp))
+                PickList(s.workState, "", vm.pins.states, s) { vm.setWorkState(it) }
+                Spacer(Modifier.height(4.dp))
+            }
             val hasStateRates = rates.any { it.region.equals(settings.region, ignoreCase = true) }
-            Text(if (hasStateRates) settings.region else s.centralRates, color = InkSoft)
-            floor?.let { Text(s.sectorName(it.sector), color = InkSoft) }
+            val where = if (hasStateRates) settings.region else s.centralRates
+            Text(listOfNotNull(where, floor?.let { s.sectorName(it.sector) }).joinToString(" · "), color = InkSoft)
             if (rates.size < all.size) Text(s.outsideCities, fontSize = 14.sp, color = InkSoft)
             Spacer(Modifier.height(8.dp))
             rates.forEach { r -> LeaderRow(s.skillName(r.skill), s.rupees(Money.rupeesToPaise(r.dailyRupees))) }
             Text(s.perDay, fontSize = 13.sp, color = InkSoft, modifier = Modifier.align(Alignment.End))
             if (rates.size < all.size) floor?.let { f ->
                 Wages.topFor(all, f.skill)?.takeIf { it.dailyRupees > f.dailyRupees }?.let { top ->
-                    Text(s.cityRate(s.skillName(f.skill), Money.rupeesToPaise(top.dailyRupees)), fontSize = 14.sp)
+                    Text(s.cityRate(s.skillName(f.skill), Money.rupeesToPaise(top.dailyRupees)), fontSize = 15.sp)
                 }
             }
-            floor?.let {
-                Spacer(Modifier.height(8.dp))
-                Text("${s.effectiveFrom}: ${it.effectiveFrom}", fontSize = 13.sp, color = InkSoft)
-                if (it.validTo.isNotEmpty()) Text("${s.validUntil}: ${it.validTo}", fontSize = 13.sp, color = InkSoft)
-                Text("${s.source}: ${it.source}", fontSize = 13.sp, color = InkSoft)
-            }
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             val unchecked = rates.any { it.confidence == "low" }
-            Row(Modifier.clip(RoundedCornerShape(8.dp)).background(Notice).padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Warning, null, tint = NoticeInk, modifier = Modifier.size(20.dp))
-                Spacer(Modifier.width(8.dp))
-                Text(if (unchecked) s.wageNotChecked + " " + s.wageDataNote else s.wageDataNote, fontSize = 14.sp, color = NoticeInk)
+            Text(if (unchecked) s.wageNotChecked + " " + s.wageDataNote else s.wageDataNote, fontSize = 14.sp, color = if (unchecked) NoticeInk else InkSoft, lineHeight = 19.sp)
+            // Where the figures come from: one tap away, for a union or labour officer.
+            floor?.let {
+                TextButton(onClick = { details = !details }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) {
+                    Text(s.source, fontSize = 15.sp, color = Ink, fontWeight = FontWeight.SemiBold)
+                    Icon(if (details) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown, null, tint = Ink)
+                }
+                if (details) {
+                    Text("${s.effectiveFrom}: ${it.effectiveFrom}", fontSize = 13.sp, color = InkSoft)
+                    if (it.validTo.isNotEmpty()) Text("${s.validUntil}: ${it.validTo}", fontSize = 13.sp, color = InkSoft)
+                    Text(it.source, fontSize = 13.sp, color = InkSoft)
+                }
             }
         }
 
+        // The worker's own pay against it: one line and one verdict, no dashboard.
         Section {
-            Text(s.yourAverage, fontSize = 15.sp, color = InkSoft)
             if (recent.daysWorked == 0 || floor == null) {
                 Text(s.notEnoughData, fontSize = 17.sp)
             } else {
-                Text(s.rupees(recent.avgDailyEarnedPaise), fontSize = 36.sp, fontWeight = FontWeight.ExtraBold)
+                LeaderRow(s.yourAverage, s.rupees(recent.avgDailyEarnedPaise), big = true)
                 val gap = Wages.shortfallPaise(recent.avgDailyEarnedPaise, floor)
                 if (gap > 0) Text(s.shortfall(gap), fontSize = 17.sp, color = Red, fontWeight = FontWeight.Medium)
                 else Text(s.atOrAbove, fontSize = 17.sp, color = Green, fontWeight = FontWeight.Medium)

@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.acxelin.hisaabsaathi.R
 import com.acxelin.hisaabsaathi.core.Strings
 import java.io.File
 
@@ -85,10 +87,6 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
 
     if (settings.needsSetup) {
         Onboarding(vm, settings, s)
-        return
-    }
-    if (settings.share == null) {
-        ShareAskScreen(vm, s)
         return
     }
 
@@ -184,9 +182,12 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         },
         bottomBar = {
             NavigationBar(containerColor = Ink) {
+                // Pictures that say what is behind each tab: home, the ledger's lines, totals, the rupee.
+                val home = androidx.compose.ui.graphics.vector.rememberVectorPainter(Icons.Default.Home)
+                val list = androidx.compose.ui.graphics.vector.rememberVectorPainter(Icons.AutoMirrored.Filled.List)
                 val tabs = listOf(
-                    s.tabHome to Icons.Default.Home, s.tabLedger to Icons.AutoMirrored.Filled.List,
-                    s.tabSummary to Icons.Default.Star, s.tabWage to Icons.Default.Info,
+                    s.tabHome to home, s.tabLedger to list,
+                    s.tabSummary to painterResource(R.drawable.ic_summary), s.tabWage to painterResource(R.drawable.ic_wage),
                 )
                 tabs.forEachIndexed { i, (label, icon) ->
                     NavigationBarItem(

@@ -16,6 +16,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.PlayArrow
@@ -56,14 +60,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.acxelin.hisaabsaathi.models.PackState
 
 @Composable
-internal fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boolean = true, canDownload: Boolean = true) {
+internal fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Boolean = true, canDownload: Boolean = true, title: String = pack.title) {
     val states by vm.packStates.collectAsStateWithLifecycle()
     val state = states[pack.id] ?: PackState.Missing
+    // What it does, in the worker's words, and its size. Model names and licences are in Credits.
     Column(Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
-        Text(pack.title, fontSize = 16.sp, fontWeight = FontWeight.Medium)
-        Text("${pack.bytes / 1_000_000} MB · ${pack.licence}", fontSize = 12.sp, color = InkSoft)
+        Text(title, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+        Text("${pack.bytes / 1_000_000} MB", fontSize = 13.sp, color = InkSoft)
         when (state) {
-            PackState.Missing -> if (canDownload) Button(onClick = { vm.download(pack) }) { Text(s.download) }
+            PackState.Missing -> if (canDownload) OutlinedButton(onClick = { vm.download(pack) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.download, color = Ink) }
             is PackState.Downloading -> {
                 LinearProgressIndicator(progress = { state.fraction }, modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp), color = Green)
                 Text(if (state.waiting) "${s.waitingForInternet} ${(state.fraction * 100).toInt()}%" else "${s.downloading} ${(state.fraction * 100).toInt()}%")
@@ -75,7 +80,7 @@ internal fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Bool
             }
             is PackState.Failed -> {
                 Text(state.message.removePrefix("space:").toLongOrNull()?.takeIf { state.message.startsWith("space:") }?.let(s::notEnoughSpace) ?: s.downloadFailed, color = Red)
-                if (canDownload) Button(onClick = { vm.download(pack) }) { Text(s.download) }
+                if (canDownload) OutlinedButton(onClick = { vm.download(pack) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.download, color = Ink) }
             }
         }
     }
@@ -104,47 +109,8 @@ internal fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolea
 
 // ---------------------------------------------------------------- help improve the app
 
-/**
- * "Help improve HisaabSaathi?", asked once: at setup, or after the update that added it. Read
- * aloud for workers who do not read. Neither answer is chosen for them; nothing is kept before
- * they answer, and only "yes" sends anything.
- */
-@Composable
-internal fun ShareQuestion(vm: AppViewModel, s: Strings, choice: Boolean?, onChoice: (Boolean) -> Unit) {
-    val spoken = s.shareTitle + " " + s.shareBody
-    // Read aloud only when the worker presses Listen (not on its own).
-    Text(s.shareTitle, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-    Text(s.shareBody, fontSize = 16.sp, lineHeight = 23.sp)
-    OutlinedButton(onClick = { vm.readAloud(spoken) }, modifier = Modifier.height(48.dp)) {
-        Icon(Icons.Default.PlayArrow, null, tint = Ink)
-        Text(s.listen, fontSize = 16.sp, modifier = Modifier.padding(start = 6.dp))
-    }
-    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        for ((label, value) in listOf(s.shareYes to true, s.shareNo to false)) {
-            val selected = choice == value
-            Button(
-                onClick = { onChoice(value) }, modifier = Modifier.weight(1f).height(60.dp), shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = if (selected) Marigold else Paper, contentColor = Ink),
-            ) {
-                if (selected) Icon(Icons.Default.Check, null, tint = Ink)
-                Text(label, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Ink)
-            }
-        }
-    }
-}
 
 /** Workers who set up the app before the question existed answer it once, before anything else. */
-@Composable
-fun ShareAskScreen(vm: AppViewModel, s: Strings) {
-    Column(Modifier.fillMaxSize().background(Chalk).systemBarsPadding().padding(24.dp)) {
-        Text(s.appName, fontSize = 40.sp, fontWeight = FontWeight.ExtraBold, color = Ink)
-        Spacer(Modifier.height(24.dp))
-        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            ShareQuestion(vm, s, null) { vm.setShare(it) }
-        }
-    }
-}
-
 // First-time setup is in OnboardingScreens.kt.
 
 // ---------------------------------------------------------------- settings & privacy
@@ -176,41 +142,13 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             }
             HorizontalDivider()
 
-            Text(s.modelPacks, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            PackRow(vm, vm.sttPack(), s)
-            vm.voicePack()?.let { Text(s.voicePackReadAloud, fontSize = 15.sp, color = InkSoft); PackRow(vm, it, s) }
-            if (Catalog.slmSupported) {
-                Text(s.smartPack, fontSize = 15.sp, color = InkSoft)
-                PackRow(vm, vm.slmPack, s, canDownload = Catalog.canDownloadSlm)
-                val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::importModel) }
-                val states by vm.packStates.collectAsStateWithLifecycle()
-                if (states[vm.slmPack.id] !is PackState.Ready && states[vm.slmPack.id] !is PackState.Downloading) {
-                    OutlinedButton(onClick = { pick.launch(arrayOf("*/*")) }, modifier = Modifier.height(52.dp)) { Text(s.addFromPhone) }
-                }
-            }
-            HorizontalDivider()
-
-            val problem by vm.lastProblem.collectAsStateWithLifecycle()
-            if (problem.isNotEmpty()) {
-                Text(s.lastProblemLabel, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text(problem, fontSize = 13.sp, color = InkSoft)
-                HorizontalDivider()
-            }
-
-            Text(s.backupTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            Text(s.backupBody, fontSize = 15.sp)
-            val restore = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::restoreBackup) }
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                OutlinedButton(onClick = { vm.saveBackup() }, modifier = Modifier.height(52.dp)) { Text(s.saveBackup) }
-                OutlinedButton(onClick = { restore.launch(arrayOf("application/json", "application/octet-stream", "text/plain", "*/*")) }, modifier = Modifier.height(52.dp)) { Text(s.restoreBackup) }
-            }
-            HorizontalDivider()
-
-            Text(s.improveTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            Text(s.improveBody, fontSize = 15.sp)
+            // Help improve: one line and a switch; what is sent is in the line, the rest under More.
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(s.shareSwitch, Modifier.weight(1f), fontSize = 16.sp)
-                Switch(checked = settings.share == true, onCheckedChange = { vm.setShare(it) })
+                Column(Modifier.weight(1f)) {
+                    Text(s.improveTitle, fontSize = 16.sp)
+                    Text(s.shareCardLine, fontSize = 14.sp, color = InkSoft, lineHeight = 19.sp)
+                }
+                Switch(checked = settings.share == true, onCheckedChange = { vm.setShare(it) }, modifier = Modifier.padding(start = 12.dp))
             }
             val waiting by vm.waitingCount.collectAsStateWithLifecycle()
             val counts = listOfNotNull(s.shareWaiting(waiting).takeIf { waiting > 0 }, s.shareSent(settings.sharedCount).takeIf { settings.sharedCount > 0 })
@@ -225,13 +163,51 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             }
             HorizontalDivider()
 
-            Text(s.privacyTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            Text(s.privacyBody, fontSize = 15.sp)
-            HorizontalDivider()
-            Text(s.credits, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text(CREDITS, fontSize = 12.sp, color = InkSoft, lineHeight = 17.sp)
-            OutlinedButton(onClick = { vm.reopenSetup() }) { Text(s.showSetupAgain) }
-            OutlinedButton(onClick = { confirmErase = true }) { Text(s.eraseAll, color = Red) }
+            // Everything a worker rarely needs: one tap away, not on the first screen.
+            var more by rememberSaveable { mutableStateOf(false) }
+            TextButton(onClick = { more = !more }, modifier = Modifier.heightIn(min = 48.dp), contentPadding = PaddingValues(0.dp)) {
+                Text(s.moreSettings, fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Ink)
+                Icon(if (more) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown, null, tint = Ink)
+            }
+            if (more) {
+                Text(s.modelPacks, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                PackRow(vm, vm.sttPack(), s, title = s.speechPackTitle)
+                vm.voicePack()?.let { PackRow(vm, it, s, title = s.voicePackReadAloud) }
+                if (Catalog.slmSupported) {
+                    PackRow(vm, vm.slmPack, s, canDownload = Catalog.canDownloadSlm, title = s.smartPack)
+                    val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::importModel) }
+                    val states by vm.packStates.collectAsStateWithLifecycle()
+                    if (states[vm.slmPack.id] !is PackState.Ready && states[vm.slmPack.id] !is PackState.Downloading) {
+                        TextButton(onClick = { pick.launch(arrayOf("*/*")) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.addFromPhone, color = Ink) }
+                    }
+                }
+                HorizontalDivider()
+
+                Text(s.backupTitle, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                Text(s.backupBody, fontSize = 15.sp)
+                val restore = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::restoreBackup) }
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    OutlinedButton(onClick = { vm.saveBackup() }, modifier = Modifier.height(52.dp)) { Text(s.saveBackup) }
+                    OutlinedButton(onClick = { restore.launch(arrayOf("application/json", "application/octet-stream", "text/plain", "*/*")) }, modifier = Modifier.height(52.dp)) { Text(s.restoreBackup) }
+                }
+                HorizontalDivider()
+
+                Text(s.privacyTitle, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                Text(s.privacyBody, fontSize = 15.sp)
+                Text(s.improveBody, fontSize = 15.sp, color = InkSoft)
+                HorizontalDivider()
+
+                val problem by vm.lastProblem.collectAsStateWithLifecycle()
+                if (problem.isNotEmpty()) {
+                    Text(s.lastProblemLabel, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(problem, fontSize = 13.sp, color = InkSoft)
+                    HorizontalDivider()
+                }
+                Text(s.credits, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(CREDITS, fontSize = 12.sp, color = InkSoft, lineHeight = 17.sp)
+                OutlinedButton(onClick = { vm.reopenSetup() }) { Text(s.showSetupAgain) }
+                OutlinedButton(onClick = { confirmErase = true }) { Text(s.eraseAll, color = Red) }
+            }
             Spacer(Modifier.height(24.dp))
         }
     }

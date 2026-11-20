@@ -175,14 +175,15 @@ class PackManager(context: Context, private val scope: CoroutineScope) {
      * closed, shows its progress in the notification bar, waits for the internet and resumes
      * where it stopped. It does not start without room for it on the phone.
      */
-    fun download(pack: Pack) {
+    fun download(pack: Pack, wifiOnly: Boolean = false) {
         if (isReady(pack)) return
         (_states.value[pack.id] as? PackState.Downloading)?.let { if (!it.waiting) return }
         val need = pack.files.sumOf { it.bytes - have(it) } + SPACE_MARGIN
         val free = root.apply { mkdirs() }.usableSpace
         if (free in 1 until need) return set(pack, PackState.Failed("space:${(need - free) / 1_000_000 + 1}"))
         set(pack, PackState.Downloading(fraction(pack)))
-        if (runCatching { PackDownloadWorker.enqueue(appContext, pack.id) }.isSuccess) return
+        if (runCatching { PackDownloadWorker.enqueue(appContext, pack.id, wifiOnly) }.isSuccess) return
+        if (wifiOnly) return // never on mobile data without the worker asking
         // No background jobs available (should not happen on a phone): download while the app is open.
         jobs[pack.id] = scope.launch(Dispatchers.IO) {
             try { downloadNow(pack) } catch (e: Exception) { set(pack, PackState.Failed(e.message ?: e.javaClass.simpleName)) }
@@ -384,13 +385,17 @@ class PackDownloadWorker(context: Context, params: androidx.work.WorkerParameter
 
         fun name(packId: String) = "pack-$packId"
 
-        fun enqueue(context: Context, packId: String) {
+        /** [wifiOnly]: a download the app starts by itself waits for Wi-Fi; one the worker asks for may use mobile data. */
+        fun enqueue(context: Context, packId: String, wifiOnly: Boolean = false) {
+            val network = if (wifiOnly) androidx.work.NetworkType.UNMETERED else androidx.work.NetworkType.CONNECTED
             val request = androidx.work.OneTimeWorkRequestBuilder<PackDownloadWorker>()
                 .setInputData(androidx.work.workDataOf(KEY_PACK to packId))
-                .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(androidx.work.NetworkType.CONNECTED).build())
+                .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(network).build())
                 .setBackoffCriteria(androidx.work.BackoffPolicy.EXPONENTIAL, 30, java.util.concurrent.TimeUnit.SECONDS)
                 .build()
-            androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(name(packId), androidx.work.ExistingWorkPolicy.KEEP, request)
+            // A tap on Download replaces a job still waiting for Wi-Fi.
+            val policy = if (wifiOnly) androidx.work.ExistingWorkPolicy.KEEP else androidx.work.ExistingWorkPolicy.REPLACE
+            androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(name(packId), policy, request)
         }
     }
 }

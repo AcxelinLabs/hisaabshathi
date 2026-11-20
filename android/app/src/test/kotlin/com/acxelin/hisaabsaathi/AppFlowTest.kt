@@ -100,37 +100,20 @@ class AppFlowTest {
         waitFor("Choose your language")
         rule.onNodeWithText("अपनी भाषा चुनें").assertExists() // the same question in Hindi (and the others)
         click("हिन्दी")
-        waitFor("भाषा आप कभी भी सेटिंग में बदल सकते हैं।")
+        waitFor("आगे")
         shot("01-language")
         click("आगे")
-        waitFor("आपकी जानकारी")
-        shot("01b-details")
-        click("खुद भरूँगा")
+        // Setup is three screens: language, name, PIN. Nothing else is asked.
         waitFor("आपका नाम क्या है?")
         rule.onNode(hasSetTextAction()).performTextInput("Ramesh Behera")
-        shot("01c-name")
+        shot("01b-name")
         click("आगे")
-        waitFor("आपकी उम्र कितनी है?")
-        rule.onNode(hasSetTextAction()).performTextInput("35")
-        shot("01d-age")
-        click("आगे")
-        // Where you work: the PIN fills in state and district.
+        // Where you work: the PIN fills in state and district, in one line.
         waitFor("आपका पिन कोड क्या है?")
         rule.onAllNodes(hasSetTextAction()).onFirst().performTextInput("751002")
-        waitFor("मिल गया: Khordha (Khurda), Odisha")
+        waitFor("Khordha (Khurda), Odisha")
+        check(rule.onAllNodesWithText("ज़िला").fetchSemanticsNodes().isEmpty()) { "a settled PIN needs no district box" }
         shot("02-place")
-        click("आगे")
-        waitFor("अपनी फोटो लें")
-        shot("02b-photo")
-        click("छोड़ें") // no camera in tests
-        // Help improve the app: asked, read aloud, nothing chosen for the worker.
-        waitFor("हिसाब साथी को बेहतर बनाने में मदद करेंगे?")
-        check(rule.onAllNodes(hasText("आगे") and androidx.compose.ui.test.isEnabled()).fetchSemanticsNodes().isEmpty()) { "Next must wait for a yes or no" }
-        click("हाँ, भेजें")
-        shot("03b-help-improve")
-        click("आगे")
-        waitFor("समझदार मॉडल")
-        shot("03-smart-model")
         click("शुरू करें")
 
         // --- the profile page, from the photo button at the top of the home screen
@@ -185,14 +168,21 @@ class AppFlowTest {
         waitFor("क्या यह सही है?")
         rule.onNodeWithText("₹80").assertExists()
         shot("05b-confirm-expense")
-        click("बदलें")
+        rule.onNodeWithText("₹80").performClick() // the whole line opens it
         rule.onNode(hasSetTextAction() and hasText("80")).assertExists()
         shot("05c-confirm-change")
-        // The worker fixes the amount: kept to send, as they agreed (shown in Settings below).
         rule.onNode(hasSetTextAction() and hasText("80")).performTextReplacement("90")
         click("सही है, सेव करें")
         waitFor("सेव हो गया")
         rule.onNodeWithContentDescription("हो गया").performClick()
+
+        // --- "Help improve": never asked in setup; once on Home, after a few days of use.
+        check(rule.onAllNodesWithText("ऐप को अपनी बोली सिखाएंगे?").fetchSemanticsNodes().isEmpty()) { "not on the first day" }
+        kotlinx.coroutines.runBlocking { (rule.activity.application as HisaabApp).settings.setFirstUse(java.time.LocalDate.now().minusDays(5)) }
+        waitFor("ऐप को अपनी बोली सिखाएंगे?")
+        shot("06b-share-card")
+        click("हाँ")
+        rule.waitUntil(10_000) { pump(); rule.onAllNodesWithText("ऐप को अपनी बोली सिखाएंगे?").fetchSemanticsNodes().isEmpty() }
 
         // --- a question
         click("लिखकर डालें")
@@ -227,7 +217,7 @@ class AppFlowTest {
         click("वापस लाएं")
         waitFor("खाना")
         click("हिसाब")
-        waitFor("बचत का लक्ष्य")
+        waitFor("काम के दिन")
         shot("09-summary")
         click("मजदूरी व मदद")
         waitFor("सरकारी न्यूनतम मजदूरी")
@@ -236,10 +226,10 @@ class AppFlowTest {
 
         // --- settings, then the same home screen in Odia and English
         rule.onNodeWithContentDescription("सेटिंग").performClick()
-        waitFor("ऑफ़लाइन पैक")
+        waitFor("ऐप को बेहतर बनाने में मदद")
         shot("11-settings")
-        // Two entries (one fixed), a question, a name question and one not understood: 5 kept to send.
-        waitFor("5 भेजने बाकी")
+        // Kept only after the yes: a question, a name question and one not understood.
+        waitFor("3 भेजने बाकी")
         rule.onNodeWithText("भेजा हुआ मिटाएं").performScrollTo()
         shot("11b-settings-help-improve")
         rule.onRoot().performTouchInput { swipeDown() } // back to the top for the language buttons

@@ -263,6 +263,14 @@ internal object Ta {
         "Take a photo" to "போட்டோ எடுங்கள்",
         "Photos of bills, slips and passbooks show here." to "பில், சீட்டு, பாஸ்புக் போட்டோக்கள் இங்கே தெரியும்.",
         "Welcome to your HisaabSaathi" to "உங்கள் ஹிசாப் சாத்திக்கு வரவேற்கிறோம்",
+        "Fill from Aadhaar card" to "ஆதார் அட்டையிலிருந்து நிரப்பவும்",
+        "No PIN?" to "பின் தெரியாதா?",
+        "Teach the app the way you speak?" to "நீங்கள் பேசும் விதத்தை ஆப்புக்குக் கற்றுத் தருவீர்களா?",
+        "If you say yes, what you say to the app is sent to the team without your name. You can stop it any time in Settings." to "ஆம் என்றால், நீங்கள் ஆப்பிடம் சொல்வது உங்கள் பெயர் இல்லாமல் குழுவுக்கு அனுப்பப்படும். எப்போது வேண்டுமானாலும் அமைப்புகளில் நிறுத்தலாம்.",
+        "Read all" to "முழுவதும் படிக்க",
+        "More options" to "மேலும் விருப்பங்கள்",
+        "To understand your voice" to "உங்கள் குரலைப் புரிந்துகொள்ள",
+        "Say yes or no" to "ஆம் அல்லது இல்லை என்று சொல்லுங்கள்",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

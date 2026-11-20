@@ -29,6 +29,10 @@ data class Settings(
     val sharedCount: Int = 0,
     /** The version of setup last finished (see [SETUP_VERSION]). */
     val setupDone: Int = 0,
+    /** Epoch day the app was first set up (0: not known). */
+    val firstUseDay: Long = 0,
+    /** "Help improve" is not asked on Home before this epoch day ("Later" sets it a week on). */
+    val shareAskAfterDay: Long = 0,
 ) {
     /**
      * Setup shows on a new phone, and once more after an update that adds to it (0.9.3: your
@@ -57,6 +61,8 @@ class SettingsStore(private val context: Context) {
     private val installId = stringPreferencesKey("install_id")
     private val installToken = stringPreferencesKey("install_token")
     private val pendingDeletes = stringSetPreferencesKey("pending_deletes")
+    private val firstUse = longPreferencesKey("first_use_day")
+    private val shareAskAfter = longPreferencesKey("share_ask_after_day")
     private val usage = stringPreferencesKey("usage_counts")
     private val usageDay = longPreferencesKey("usage_last_day")
 
@@ -71,6 +77,8 @@ class SettingsStore(private val context: Context) {
             share = it[share]?.let { yes -> if (yes && (it[shareConsent] ?: 1) < Improve.CONSENT_VERSION) null else yes },
             sharedCount = it[sharedCount] ?: 0,
             setupDone = it[setupDone] ?: 0,
+            firstUseDay = it[firstUse] ?: 0,
+            shareAskAfterDay = it[shareAskAfter] ?: 0,
         )
     }
 
@@ -79,6 +87,10 @@ class SettingsStore(private val context: Context) {
     suspend fun setOnboarded(v: Boolean = true) = context.dataStore.edit { it[onboarded] = v }
     suspend fun setSetupDone(v: Int) = context.dataStore.edit { it[setupDone] = v }
     suspend fun setReminders(v: Boolean) = context.dataStore.edit { it[reminders] = v }
+    suspend fun setFirstUse(day: java.time.LocalDate, onlyIfUnset: Boolean = false) = context.dataStore.edit {
+        if (!onlyIfUnset || it[firstUse] == null) it[firstUse] = day.toEpochDay()
+    }
+    suspend fun setShareAskAfter(day: java.time.LocalDate) = context.dataStore.edit { it[shareAskAfter] = day.toEpochDay() }
     suspend fun setGoal(paise: Long) = context.dataStore.edit { it[goal] = paise }
     /** Saying no (or turning it off) also drops the weekly counts not yet sent. */
     suspend fun setShare(v: Boolean) = context.dataStore.edit {
