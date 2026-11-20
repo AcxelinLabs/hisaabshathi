@@ -40,6 +40,7 @@ class Strings(val lang: Lang) {
 
     // ---- general
     val appName get() = t("हिसाब साथी", "ହିସାବ ସାଥୀ", "HisaabSaathi")
+    val welcome get() = t("आपके हिसाब साथी में आपका स्वागत है", "ଆପଣଙ୍କ ହିସାବ ସାଥୀକୁ ସ୍ୱାଗତ", "Welcome to your HisaabSaathi")
     val next get() = t("आगे", "ଆଗକୁ", "Next")
     val done get() = t("हो गया", "ହୋଇଗଲା", "Done")
     val cancel get() = t("रद्द करें", "ବାତିଲ୍", "Cancel")

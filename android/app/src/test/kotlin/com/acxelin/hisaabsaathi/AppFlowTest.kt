@@ -38,6 +38,9 @@ class TestApp : HisaabApp() {
     /** No network in tests: setup must not start the voice downloads by itself. */
     override val autoDownloadVoice: Boolean = false
 
+    /** Tests start on the app itself; the welcome has its own test. */
+    override val showWelcome: Boolean = false
+
     /** Where "Use my location" finds the phone in tests (Robolectric's location service is not used). */
     override suspend fun oneLocation(): android.location.Location? = fakeLocation?.let { (la, lo) ->
         android.location.Location("test").apply { latitude = la; longitude = lo; time = System.currentTimeMillis() }

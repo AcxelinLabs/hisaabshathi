@@ -240,6 +240,7 @@ internal object Ta {
         "To reach your goal, put aside {0} on each working day." to
             "இலக்கை அடைய, வேலை செய்ற ஒவ்வொரு நாளும் {0} தனியா எடுத்து வையுங்க.",
         "Well done! This month's goal is reached." to "சபாஷ்! இந்த மாச இலக்கை அடைஞ்சுட்டீங்க.",
+        "Welcome to your HisaabSaathi" to "உங்கள் ஹிசாப் சாத்திக்கு வரவேற்கிறோம்",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

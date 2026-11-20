@@ -254,6 +254,7 @@ internal object Te {
         "{0} left this month, goal {1}" to "ఈ నెల మిగిలింది {0}, లక్ష్యం {1}",
         "To reach your goal, put aside {0} on each working day." to "లక్ష్యం చేరడానికి, పని చేసిన ప్రతి రోజు {0} పక్కన పెట్టండి.",
         "Well done! This month's goal is reached." to "శభాష్! ఈ నెల లక్ష్యం పూర్తయింది.",
+        "Welcome to your HisaabSaathi" to "మీ హిసాబ్ సాథీకి స్వాగతం",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

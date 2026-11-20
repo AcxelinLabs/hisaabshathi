@@ -252,6 +252,7 @@ internal object Kn {
         "{0} left this month, goal {1}" to "ಈ ತಿಂಗಳು {0} ಉಳಿದಿದೆ, ಗುರಿ {1}",
         "To reach your goal, put aside {0} on each working day." to "ಗುರಿ ಮುಟ್ಟಲು ಕೆಲಸ ಮಾಡಿದ ಪ್ರತಿ ದಿನ {0} ತೆಗೆದಿಡಿ.",
         "Well done! This month's goal is reached." to "ಶಭಾಷ್! ಈ ತಿಂಗಳ ಗುರಿ ಮುಟ್ಟಿದ್ದೀರಿ.",
+        "Welcome to your HisaabSaathi" to "ನಿಮ್ಮ ಹಿಸಾಬ್ ಸಾಥಿಗೆ ಸ್ವಾಗತ",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */
