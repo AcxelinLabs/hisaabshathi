@@ -1,0 +1,2 @@
+case_code,partner,state,district,month_opened,month_closed,work,issue,amount_claimed_rupees,amount_recovered_rupees,record_used,outcome,how_the_record_helped,worker_agreed_to_share
+E-001,Example Union,Odisha,Khordha,2026-11,2026-12,construction,advance wrongly deducted,4500,4500,evidence pack;photos,settled in full,"The dated entries showed two advances were counted twice",yes

@@ -15,7 +15,8 @@ A worker taps one button and says what happened, for example *"Today I worked 8 
 back, and saves it once they confirm. Later they ask *"How much did I earn this week?"* or *"How
 much does the contractor still owe me?"* and hear the answer. They don't need to read or type.
 
-It works entirely on the phone, with no internet after a one-time download.
+It works entirely on the phone, with no internet after a one-time download. Nothing leaves the
+phone unless the worker chooses: by sharing a report, or by saying yes to help improve the app.
 
 <p align="center">
   <img src="docs/screens/app-overview.png" alt="HisaabSaathi: home, confirm, spoken answer, ledger, summary, minimum wage" width="640">
@@ -36,12 +37,15 @@ It needs Android 10 or newer.
   mestri, "is week ka total"*.
 - **Ledger by day:** daily totals; tap to change a line; undo a delete.
 - **Summaries and a savings goal**, on screen and read aloud.
-- **Minimum-wage check** against the official rates of the worker's state.
+- **Minimum-wage check** against the official rates of the worker's state: ten states so far,
+  each figure with its government notice ([open dataset](data/minimum-wages/README.md)).
+- **Photos of papers:** bills, advance slips, loan papers and salary slips become a line to
+  confirm, with the amount read on the phone. Bank statements and other papers are kept as they
+  are. All of them are in one place in the ledger.
 - **Proof:**
   - a **PDF report** to share or print;
-  - an **evidence pack**: every record with a check showing nothing was changed afterwards,
-    for a contractor, labour office, union or NGO when wages are disputed.
-- **Bill or advance-slip photo** to amount, read on the phone.
+  - an **evidence pack**: every record and photo, with a check showing nothing was changed
+    afterwards, for a contractor, labour office, union or NGO when wages are disputed.
 - **Reminders** at 3 PM and 9 PM, and **backup and restore**.
 
 <p align="center">
@@ -53,16 +57,25 @@ It needs Android 10 or newer.
 - Records are **encrypted on the phone** (SQLCipher, key held by the Android Keystore) and
   never go to a server or a cloud backup.
 - Speech recognition, understanding and the reply voices all run **on the phone**.
-- There are no accounts and no tracking. Only the worker sees their records.
+- There are no accounts, no ads and no tracking. Only the worker sees their records.
+- **Nothing is uploaded unless the worker agrees.** The app sends nothing by itself except what
+  the worker said yes to below.
 - **Help improve HisaabSaathi** is asked once, at setup, and read aloud. Nothing is chosen for
-  the worker. Only if they say yes, each time they speak or type to the app, their voice clip,
-  what the app heard, and what it understood and answered are sent to the team over Wi-Fi.
-  Nothing carries their name or phone number, and anything containing a phone, Aadhaar or bank
-  number is never kept. Each upload is encrypted on the phone so that only the team's training
-  pipeline can open it. They can turn it off in Settings, which deletes what is still waiting,
-  or have everything already sent deleted. What they share stays in the team's Azure account
-  in India, from upload to training. The upload service and pipeline are in
-  [`server/`](server/README.md).
+  the worker. Only if they say yes, two things are sent to the team over Wi-Fi:
+  - each time they speak or type to the app, their voice clip, what the app heard, and what it
+    understood and answered;
+  - once a week, counts: how many entries were saved and how often the app got one wrong.
+    These are numbers only.
+- **What protects what they share:**
+  - nothing carries their name or phone number, and anything containing a phone, Aadhaar or bank
+    number is never kept;
+  - each upload is encrypted on the phone, so only the team's training pipeline can open it;
+  - it stays in the team's Azure account in India, from upload to training;
+  - they can turn it off in Settings, which deletes what is still waiting, or have everything
+    already sent deleted;
+  - if the question changes what is sent, they are asked again.
+
+  The upload service and pipeline are in [`server/`](server/README.md).
 
 ## How it understands
 
@@ -76,6 +89,16 @@ It needs Android 10 or newer.
    question. It never invents an amount: an answer that doesn't match the spoken numbers is
    discarded.
 4. **Replies are spoken** with Indic Tiny TTS voices, or the phone's own voice for English.
+
+## For partners and builders
+
+- **Unions, NGOs and labour offices:** a simple monthly log of wage disputes where HisaabSaathi
+  records were used, with no names: [`docs/partners/dispute-log.md`](docs/partners/dispute-log.md).
+- **Monthly updates:** what changed, how the app is used, and what we learned:
+  [`docs/updates/`](docs/updates/README.md).
+- **Designing for people who read little:** what building this taught us:
+  [`docs/design/low-literacy-guide.md`](docs/design/low-literacy-guide.md).
+- **Minimum wages:** [`data/minimum-wages/`](data/minimum-wages/README.md).
 
 ## Credits and licences
 
@@ -92,6 +115,9 @@ It needs Android 10 or newer.
 | ML Kit text recognition | Google | ML Kit terms |
 | Anek fonts | Ek Type | OFL |
 | PIN code directory | India Post (data.gov.in) | Government Open Data Licence – India |
+
+The app's code is released under the [Apache License 2.0](LICENSE). The models and data above
+keep their own licences. The minimum-wage dataset is CC-BY-4.0.
 
 The fine-tuned model and the English speech model are published at
 [huggingface.co/AcxelinLabs/hisaabsaathi-model](https://huggingface.co/AcxelinLabs/hisaabsaathi-model).
