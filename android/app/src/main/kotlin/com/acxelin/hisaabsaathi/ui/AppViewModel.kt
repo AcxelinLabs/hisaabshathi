@@ -86,7 +86,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     /** Exchanges waiting to be sent (only when the worker agreed to share). */
     val waitingCount: StateFlow<Int> = app.samples.count.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
     /** Whether this build can send at all (has an upload service). */
-    val canSend: Boolean get() = BuildConfig.SHARE_URL.isNotBlank()
+    val canSend: Boolean get() = app.canShare
     val wagePack get() = app.wagePack
 
     private val lang: Lang get() = settings.value?.lang ?: Lang.HI
@@ -269,6 +269,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private fun keep(said: Said?, understood: String, reply: String, outcome: String, kept: String? = null) {
         val s = settings.value ?: return
         if (said == null || s.share != true || !Improve.counts(said.source)) return
+        // A phone, Aadhaar or bank number, or a UPI id: never kept, voice included.
+        if (Improve.sensitive(said.text)) return
         val l = lang
         app.scope.launch {
             runCatching {
@@ -279,6 +281,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     appVersion = BuildConfig.VERSION_NAME, engine = said.engine,
                     audioSeconds = (pcm?.size ?: 0) / VoiceSamples.SAMPLE_RATE.toDouble(),
                     quality = pcm?.let { VoiceSamples.quality(it).name.lowercase() }.orEmpty(), hasAudio = pcm != null,
+                    consent = Improve.CONSENT_VERSION,
                 )
                 app.samples.add(sample, pcm?.let { VoiceSamples.wav(it) })
             }.onFailure { note("improve: ${it.javaClass.simpleName}: ${it.message}") }

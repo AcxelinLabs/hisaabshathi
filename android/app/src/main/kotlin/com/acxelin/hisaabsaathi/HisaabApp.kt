@@ -9,6 +9,7 @@ import com.acxelin.hisaabsaathi.data.CorrectionLog
 import com.acxelin.hisaabsaathi.data.LedgerDb
 import com.acxelin.hisaabsaathi.data.LedgerRepository
 import com.acxelin.hisaabsaathi.data.SampleQueue
+import com.acxelin.hisaabsaathi.core.Seal
 import com.acxelin.hisaabsaathi.core.ShareClient
 import com.acxelin.hisaabsaathi.core.ShareServer
 import com.acxelin.hisaabsaathi.work.Sharing
@@ -38,7 +39,13 @@ open class HisaabApp : Application() {
     protected open fun shareServer(): ShareServer? =
         BuildConfig.SHARE_URL.takeIf { it.isNotBlank() }?.let { runCatching { ShareClient(it) }.getOrNull() }
 
-    val uploader by lazy { Uploader(settings, samples, shareServer(), BuildConfig.VERSION_NAME) }
+    /** The team's public key: every batch is sealed to it. Without one, nothing is sent. */
+    protected open fun shareSeal(): Seal? = Seal.fromBase64(BuildConfig.SHARE_KEY)
+
+    val uploader by lazy { Uploader(settings, samples, shareServer(), shareSeal(), BuildConfig.VERSION_NAME) }
+
+    /** This build can send: it has both the service's address and the team's key. */
+    val canShare: Boolean get() = shareServer() != null && shareSeal() != null
 
     override fun onCreate() {
         super.onCreate()

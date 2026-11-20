@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.acxelin.hisaabsaathi.core.Improve
 import com.acxelin.hisaabsaathi.core.Lang
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -38,6 +39,7 @@ class SettingsStore(private val context: Context) {
     private val reminders = booleanPreferencesKey("reminders")
     private val goal = longPreferencesKey("monthly_goal_paise")
     private val share = booleanPreferencesKey("share_improve")
+    private val shareConsent = intPreferencesKey("share_consent_version")
     private val sharedCount = intPreferencesKey("shared_count")
     private val installId = stringPreferencesKey("install_id")
     private val installToken = stringPreferencesKey("install_token")
@@ -50,7 +52,8 @@ class SettingsStore(private val context: Context) {
             onboarded = it[onboarded] ?: false,
             reminders = it[reminders] ?: true,
             monthlyGoalPaise = it[goal] ?: 0,
-            share = it[share],
+            // A yes counts only for the question as it was then: a newer question is asked again.
+            share = it[share]?.let { yes -> if (yes && (it[shareConsent] ?: 1) < Improve.CONSENT_VERSION) null else yes },
             sharedCount = it[sharedCount] ?: 0,
         )
     }
@@ -60,7 +63,7 @@ class SettingsStore(private val context: Context) {
     suspend fun setOnboarded() = context.dataStore.edit { it[onboarded] = true }
     suspend fun setReminders(v: Boolean) = context.dataStore.edit { it[reminders] = v }
     suspend fun setGoal(paise: Long) = context.dataStore.edit { it[goal] = paise }
-    suspend fun setShare(v: Boolean) = context.dataStore.edit { it[share] = v }
+    suspend fun setShare(v: Boolean) = context.dataStore.edit { it[share] = v; if (v) it[shareConsent] = Improve.CONSENT_VERSION }
 
     // ---- this install's anonymous identity at the upload service (never shown, never in Settings)
 

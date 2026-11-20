@@ -18,7 +18,8 @@ import java.io.File
  * - "gate": true: the worker confirmed the app's understanding. A change that breaks one fails here.
  * - "gate": false: a target (the worker's fix, or an answered question): measured, not enforced.
  *
- * Writes build/real-cases-report.txt and build/real-cases-misses.tsv. Skipped without cases.
+ * Writes build/real-cases-report.txt, build/real-cases-misses.tsv, and build/real-cases-metrics.json
+ * (per-language rates for server/hisaab_improve/gates.py). Skipped without cases.
  */
 class RealCasesTest {
     @Test fun score() {
@@ -31,6 +32,7 @@ class RealCasesTest {
         val report = StringBuilder("Real cases (${cases.size}) through today's understanding\n\n")
         val misses = StringBuilder()
         val broken = mutableListOf<String>()
+        val rates = mapOf(true to sortedMapOf<String, Double>(), false to sortedMapOf<String, Double>())
         for ((lang, group) in cases.groupBy { it.lang }.toSortedMap()) {
             for ((gate, part) in group.groupBy { it.gate }) {
                 var right = 0
@@ -43,11 +45,14 @@ class RealCasesTest {
                     }
                 }
                 report.appendLine("$lang ${if (gate) "confirmed (must stay right)" else "targets"}: $right / ${part.size}")
+                rates.getValue(gate)[lang] = right.toDouble() / part.size
             }
         }
         File("build").mkdirs()
         File("build/real-cases-report.txt").writeText(report.toString())
         File("build/real-cases-misses.tsv").writeText(misses.toString())
+        fun obj(m: Map<String, Double>) = m.entries.joinToString(",", "{", "}") { "\"${it.key}\":${it.value}" }
+        File("build/real-cases-metrics.json").writeText("{\"gate_right_rate\":${obj(rates.getValue(true))},\"target_right_rate\":${obj(rates.getValue(false))}}\n")
         println(report)
         assertTrue("confirmed cases now misunderstood:\n" + broken.joinToString("\n"), broken.isEmpty())
     }

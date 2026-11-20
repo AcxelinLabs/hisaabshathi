@@ -13,6 +13,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.acxelin.hisaabsaathi.HisaabApp
 import com.acxelin.hisaabsaathi.core.Improve
+import com.acxelin.hisaabsaathi.core.Seal
 import com.acxelin.hisaabsaathi.core.ShareClient
 import com.acxelin.hisaabsaathi.core.ShareServer
 import com.acxelin.hisaabsaathi.data.SampleQueue
@@ -35,6 +36,8 @@ class Uploader(
     private val queue: SampleQueue,
     /** null when this build has no upload service: samples wait on the phone (at most [Improve.LIMIT]). */
     private val server: ShareServer?,
+    /** The team's key: batches leave the phone sealed, readable only by the training pipeline. */
+    private val seal: Seal?,
     private val appVersion: String,
 ) {
     private val lock = Mutex()
@@ -42,6 +45,7 @@ class Uploader(
     /** true when done for now; false to try again later (offline, or the service is down). */
     suspend fun run(maxBatches: Int = 8): Boolean = lock.withLock {
         val server = server ?: return true
+        val seal = seal ?: return true // never send in the clear
         withContext(Dispatchers.IO) {
             try {
                 for ((id, token) in settings.pendingDeletes()) {
@@ -59,9 +63,9 @@ class Uploader(
                     val (id, token) = settings.install() ?: server.register(appVersion).also { settings.setInstall(it.installId, it.token) }
                         .let { it.installId to it.token }
                     val clips = batch.filter { it.hasAudio }.associate { it.id to queue.audio(it.id) }
-                    val zip = Improve.batch(batch, { clips[it] }, appVersion, System.currentTimeMillis())
+                    val sealed = seal.seal(Improve.batch(batch, { clips[it] }, appVersion, System.currentTimeMillis()))
                     try {
-                        server.upload(token, zip, batch.size)
+                        server.upload(token, sealed, batch.size)
                     } catch (e: ShareClient.Refused) {
                         if (e.code == 401) settings.forgetInstall() // the service forgot this install: register again
                         throw e

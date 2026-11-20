@@ -260,33 +260,46 @@ the app trusts only the period and reads out the whole summary for it.
 ## Help improve HisaabSaathi (0.8.0)
 
 Real workers' speech is what the models need most, so the app can collect it, only from
-workers who agree.
+workers who agree. The service and pipeline are in `../server/`; how it all fits together is in
+`../docs/improve-loop.md`.
 
-- **Asked once**, as the last setup step (or once after updating), and read aloud. Neither
-  answer is preselected, and Start stays disabled until the worker chooses. Settings has the
-  same switch.
-- **What is kept**, per exchange (`core/.../Improve.kt`, `Sample`): what the speech model heard
-  or what was typed; what the app understood (`ASK WEEK EARNED`, `ENTRY WORK 600 h8`,
-  `TALK DATE`, `NONE`, `MODEL ASK …`); what it said back; how it ended (`answered`,
-  `not_understood`, `saved`, `corrected` with what was kept, `rejected`, `dismissed`, and
-  spoken yes/no as `confirm`); language, state, app version, speech engine; and the voice clip
-  as 16 kHz WAV with its quality (`good`, `quiet`, `loud`, `silent`, `short`). There is no
-  name, phone number, contact or location beyond the chosen state. Scanned bills are not kept.
+- **Asked once.** It's the last setup step, or comes once after updating, and it's read aloud.
+  Neither answer is preselected, and Start stays disabled until the worker chooses. Settings has
+  the same switch. The version of the question is stored with the answer
+  (`Improve.CONSENT_VERSION`); a newer question is asked again.
+- **What is kept,** per exchange (`core/.../Improve.kt`, `Sample`):
+  - what the speech model heard, or what was typed;
+  - what the app understood (`ASK WEEK EARNED`, `ENTRY WORK 600 h8`, `TALK DATE`, `NONE`,
+    `MODEL ASK …`);
+  - what it said back;
+  - how it ended: `answered`, `not_understood`, `saved`, `corrected` (with what was kept),
+    `rejected`, `dismissed`, or `confirm` for a spoken yes or no;
+  - language, state, app version and speech engine;
+  - the voice clip as 16 kHz WAV, with its quality (`good`, `quiet`, `loud`, `silent` or
+    `short`);
+  - the consent version.
+
+  There's no name, phone number or contact. **Never kept:** exchanges containing a phone,
+  Aadhaar, bank or card number (10+ digits, even spaced or in Indian scripts), a UPI id or an
+  email (`Improve.sensitive`), and scanned bills.
 - **Where it waits:** in the encrypted ledger database (table `samples`), at most 200, oldest
-  dropped first. Nothing is kept while the answer is "no" or not given yet.
-- **Sending** (`work/Sharing.kt`): WorkManager every 12 hours on Wi-Fi with the battery not low,
-  in zips of 25 (`batch.json`, `samples.jsonl`, `audio/<id>.wav`). "Send now" uses any
-  connection. Each phone is an anonymous install (random id and token from the service).
-- **Turning it off** deletes what is still waiting. **"Delete what I shared"** asks the service
-  to delete everything that install sent, retrying until it is online, and the next upload starts
-  a new, unrelated install. "Erase all records" also deletes what is waiting.
-- **The service** (`server/`) gives the phone short-lived HTTPS upload links to S3 or Azure Blob
-  storage and checks each zip's size and SHA-256. FTP is not used: it sends files and passwords
-  unencrypted. Build the app with the service's address:
-  `./gradlew :app:assembleRelease -Phisaab.shareUrl=https://<service>`. Without it, samples
-  wait on the phone.
-- The old local correction log is folded in: a worker who says yes has it sent as samples (no
-  clips); one who says no has it deleted.
+  dropped first. Nothing is kept while the answer is no or not given.
+- **Sending** (`work/Sharing.kt`):
+  - WorkManager runs every 12 hours on Wi-Fi with the battery not low; "Send now" uses any
+    connection.
+  - Zips of 25 are **sealed to the team's public key** (`core/.../Seal.kt`: RSA-OAEP-3072 and
+    AES-256-GCM), so only the training pipeline can open them.
+  - A build needs both `-Phisaab.shareUrl` and `-Phisaab.shareKey` to send; with either
+    missing, samples wait on the phone.
+- **Turning it off** deletes what is still waiting. **"Delete what I shared"** asks the
+  service to delete everything that install sent, and retries until online. The next upload
+  starts a new, unrelated install. "Erase all records" also deletes what is waiting.
+- **Tests:**
+  - `SealTest` and `ImproveTest`: sealing, the identifying-number rule, batches;
+  - `SharingTest`: what is kept, sealing before sending, deletion;
+  - `ShareClientLiveTest`: the real client against a running service;
+  - `RealCasesTest`: real cases from a private snapshot, writing per-language metrics for the
+    gates.
 
 ## Look
 

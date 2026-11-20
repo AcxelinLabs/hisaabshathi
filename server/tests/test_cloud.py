@@ -30,7 +30,7 @@ def test_s3_whole_flow(s3):
     out = io.BytesIO()
     with zipfile.ZipFile(out, "w") as z:
         z.writestr("samples.jsonl", "{}\n")
-    data = out.getvalue()
+    data = b"HSE1" + out.getvalue()  # the service checks the seal's marker, not its contents
     b = c.post("/v1/batches", headers=auth, json={"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(), "count": 1}).json()
     assert "X-Amz-Signature=" in b["upload_url"] and b["upload_url"].startswith("https://")
     assert requests.put(b["upload_url"], data=data, headers=b["headers"]).status_code == 200

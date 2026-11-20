@@ -18,10 +18,12 @@ class ShareClientLiveTest {
         val install = client.register("live-test")
         val wav = VoiceSamples.wav(ShortArray(16_000) { (it % 200 - 100).toShort() })
         val samples = listOf(
-            Sample(Improve.newId(), 1, "hi", "voice", "इस हफ्ते कितना कमाया", "ASK WEEK EARNED", "इस हफ्ते आपने 600 रुपये कमाए", Improve.Outcome.ANSWERED, hasAudio = true, audioSeconds = 1.0, quality = "good"),
-            Sample(Improve.newId(), 2, "hi", "typed", "300 एडवांस", "ENTRY ADVANCE 300", "", Improve.Outcome.SAVED, kept = "ADVANCE 300"),
+            Sample(Improve.newId(), 1, "hi", "voice", "इस हफ्ते कितना कमाया", "ASK WEEK EARNED", "इस हफ्ते आपने 600 रुपये कमाए", Improve.Outcome.ANSWERED, hasAudio = true, audioSeconds = 1.0, quality = "good", consent = 1),
+            Sample(Improve.newId(), 2, "hi", "typed", "300 एडवांस", "ENTRY ADVANCE 300", "", Improve.Outcome.SAVED, kept = "ADVANCE 300", consent = 1),
         )
-        val zip = Improve.batch(samples, { if (it == samples[0].id) wav else null }, "live-test", 3)
+        // Sealed with the shared TEST-ONLY key, as the app seals with the team key.
+        val seal = Seal.fromBase64(javaClass.getResource("/test_team_key.pub.b64")!!.readText())!!
+        val zip = seal.seal(Improve.batch(samples, { if (it == samples[0].id) wav else null }, "live-test", 3))
         client.upload(install.token, zip, samples.size)
         println("LIVE install=${install.installId} bytes=${zip.size}")
         if (System.getenv("HISAAB_LIVE_KEEP") == null) {

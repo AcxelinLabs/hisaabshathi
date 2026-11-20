@@ -23,13 +23,20 @@ def _unb64(s: str) -> bytes:
 
 
 class Signer:
-    def __init__(self, secret: str):
-        if len(secret) < 32:
-            raise ValueError("HISAAB_SECRET must be at least 32 characters")
-        self._key = secret.encode()
+    """Signs with [secret]. [previous] secrets still verify, so the secret can be changed
+    without signing every phone out: put the old one in HISAAB_SECRET_PREVIOUS for a while."""
 
-    def _sig(self, purpose: str, data: str) -> str:
-        return _b64(hmac.new(self._key, f"{purpose}:{data}".encode(), hashlib.sha256).digest()[:24])
+    def __init__(self, secret: str, previous: list[str] | None = None):
+        for s in [secret, *(previous or [])]:
+            if len(s) < 32:
+                raise ValueError("HISAAB_SECRET (and any previous one) must be at least 32 characters")
+        self._keys = [secret.encode()] + [p.encode() for p in previous or []]
+
+    def _sig(self, purpose: str, data: str, key: bytes | None = None) -> str:
+        return _b64(hmac.new(key or self._keys[0], f"{purpose}:{data}".encode(), hashlib.sha256).digest()[:24])
+
+    def _ok(self, purpose: str, data: str, sig: str) -> bool:
+        return any(hmac.compare_digest(sig, self._sig(purpose, data, k)) for k in self._keys)
 
     # ---- installs
 
@@ -42,7 +49,7 @@ class Signer:
         install_id, _, sig = token.partition(".")
         if not install_id.startswith("i") or not sig:
             return None
-        return install_id if hmac.compare_digest(sig, self._sig("install", install_id)) else None
+        return install_id if self._ok("install", install_id, sig) else None
 
     # ---- tickets (upload links and batch ids)
 
@@ -53,7 +60,7 @@ class Signer:
     def open_ticket(self, purpose: str, ticket: str) -> dict | None:
         """The fields of a ticket, or None if forged or expired."""
         body, _, sig = ticket.partition(".")
-        if not sig or not hmac.compare_digest(sig, self._sig(purpose, body)):
+        if not sig or not self._ok(purpose, body, sig):
             return None
         try:
             fields = json.loads(_unb64(body))

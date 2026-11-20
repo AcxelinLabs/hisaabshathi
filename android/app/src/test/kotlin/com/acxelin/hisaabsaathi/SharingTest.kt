@@ -4,6 +4,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.acxelin.hisaabsaathi.core.Improve
 import com.acxelin.hisaabsaathi.core.Sample
+import com.acxelin.hisaabsaathi.core.Seal
 import com.acxelin.hisaabsaathi.core.ShareClient
 import com.acxelin.hisaabsaathi.core.ShareServer
 import com.acxelin.hisaabsaathi.ui.AppViewModel
@@ -39,7 +40,27 @@ class SharingTest {
     }
 
     private val server = FakeServer()
-    private val uploader = Uploader(app.settings, app.samples, server, "test")
+    private val uploader = Uploader(app.settings, app.samples, server, Seal(keys.public.encoded), "test")
+
+    companion object {
+        /** A throwaway team key pair, made once for these tests. */
+        val keys: java.security.KeyPair by lazy { java.security.KeyPairGenerator.getInstance("RSA").apply { initialize(3072) }.generateKeyPair() }
+
+        /** What the pipeline does with a batch: open the seal (server/hisaab_improve/crypto.py). */
+        fun open(sealed: ByteArray): ByteArray {
+            val b = java.nio.ByteBuffer.wrap(sealed)
+            check(String(ByteArray(4).also(b::get)) == "HSE1") { "sent unsealed" }
+            b.position(12)
+            val wrapped = ByteArray(b.short.toInt() and 0xffff).also(b::get)
+            val nonce = ByteArray(12).also(b::get)
+            val header = sealed.copyOf(b.position())
+            val aes = javax.crypto.Cipher.getInstance("RSA/ECB/OAEPPadding").apply { init(javax.crypto.Cipher.DECRYPT_MODE, keys.private, Seal.OAEP) }.doFinal(wrapped)
+            val gcm = javax.crypto.Cipher.getInstance("AES/GCM/NoPadding").apply {
+                init(javax.crypto.Cipher.DECRYPT_MODE, javax.crypto.spec.SecretKeySpec(aes, "AES"), javax.crypto.spec.GCMParameterSpec(128, nonce)); updateAAD(header)
+            }
+            return gcm.doFinal(sealed, header.size, sealed.size - header.size)
+        }
+    }
 
     private fun sample(i: Int) = Sample(
         Improve.newId(), 1000L + i, "hi", "typed", "इस हफ्ते कितना कमाया $i", "ASK WEEK EARNED", "", Improve.Outcome.ANSWERED,
@@ -64,7 +85,7 @@ class SharingTest {
         val before = app.settings.flow.first().sharedCount
         assertTrue(uploader.run())
         assertEquals(1, server.batches.size)
-        assertEquals(3, Improve.readBatch(server.batches.single().second).first.size)
+        assertEquals(3, Improve.readBatch(open(server.batches.single().second)).first.size)
         assertTrue(queued().isEmpty())
         assertEquals(before + 3, app.settings.flow.first().sharedCount)
     }
@@ -73,7 +94,7 @@ class SharingTest {
         app.settings.setShare(true)
         repeat(30) { app.samples.add(sample(it), null) }
         assertTrue(uploader.run())
-        assertEquals(listOf(25, 5), server.batches.map { Improve.readBatch(it.second).first.size })
+        assertEquals(listOf(25, 5), server.batches.map { Improve.readBatch(open(it.second)).first.size })
         assertEquals(1, server.registered)
         assertEquals(setOf("tok1"), server.batches.map { it.first }.toSet())
     }
@@ -122,7 +143,11 @@ class SharingTest {
     @Test fun withoutAServiceSamplesWait() = runBlocking {
         app.settings.setShare(true)
         app.samples.add(sample(1), null)
-        assertTrue(Uploader(app.settings, app.samples, null, "test").run())
+        assertTrue(Uploader(app.settings, app.samples, null, Seal(keys.public.encoded), "test").run())
+        assertEquals(1, queued().size)
+        // A service but no team key: still nothing leaves the phone.
+        assertTrue(Uploader(app.settings, app.samples, server, null, "test").run())
+        assertTrue(server.batches.isEmpty() && server.registered == 0)
         assertEquals(1, queued().size)
     }
 
@@ -164,6 +189,7 @@ class SharingTest {
         assertEquals("typed", q.source)
         assertTrue(q.reply, q.reply.isNotEmpty())
         assertFalse(q.hasAudio)
+        assertEquals(Improve.CONSENT_VERSION, q.consent)
 
         vm.dismiss()
         vm.submitText("सब्जी पर अस्सी रुपये खर्च किए")
@@ -185,6 +211,14 @@ class SharingTest {
         Thread.sleep(300); idle()
         assertEquals(3, queued().size)
         assertEquals(Improve.Outcome.REJECTED, queued().last().outcome)
+    }
+
+    @Test fun numbersThatIdentifySomeoneAreNeverKept() {
+        val vm = viewModel(share = true)
+        vm.submitText("मेरा मोबाइल नंबर 98765 43210 है")
+        waitUntil("answer") { vm.capture.value is Capture.Message || vm.capture.value is Capture.Review }
+        Thread.sleep(300); idle()
+        assertTrue(queued().isEmpty())
     }
 
     @Test fun sayingNoLaterDeletesWhatWaits() {

@@ -12,9 +12,12 @@ kept in the storage. The service never stores IP addresses; run it without acces
 """
 from __future__ import annotations
 
+import hashlib
 import json
+import logging
 import os
 import re
+import tempfile
 import threading
 import time
 from collections import defaultdict, deque
@@ -26,13 +29,22 @@ from pydantic import BaseModel, Field
 
 from . import __version__
 from .signing import Signer
-from .storage import AzureStorage, LocalStorage, S3Storage, Storage, delete_prefix, sha256_of
+from .storage import AzureStorage, LocalStorage, S3Storage, Storage, delete_prefix
 
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 
+log = logging.getLogger("hisaab.audit")
+
+
+def audit(event: str, **fields) -> None:
+    """One JSON line per event. Never an IP address, token or worker data."""
+    log.info(json.dumps({"event": event, **fields}, separators=(",", ":")))
+
+
 class Config(BaseModel):
     secret: str
+    secret_previous: list[str] = []
     storage: str = "local"  # local | s3 | azure
     local_dir: str = "./data"
     public_url: str = "http://127.0.0.1:8080"
@@ -41,15 +53,24 @@ class Config(BaseModel):
     azure_container: str = ""
     azure_connection_string: str | None = None
     azure_account_url: str | None = None
-    max_batch_bytes: int = 50 * 1024 * 1024
+    # 25 exchanges with 20-second clips are under 17 MB.
+    max_batch_bytes: int = 24 * 1024 * 1024
+    # A phone sends at most 200 waiting exchanges, in batches of 25: 24 a day is generous.
+    max_batches_per_day: int = 24
     upload_ttl_s: int = 15 * 60
-    registrations_per_hour: int = 60
+    registrations_per_hour: int = 120
+    # Batches must arrive sealed to the team key (crypto.py); anything else is refused.
+    require_sealed: bool = True
+    # Proxies in front of the service that add to X-Forwarded-For (Azure Container Apps,
+    # a load balancer): 1. The client is the entry they added, not one it could have sent.
+    trusted_proxy_hops: int = 1
 
     @classmethod
     def from_env(cls) -> "Config":
         e = os.environ.get
         return cls(
             secret=e("HISAAB_SECRET", ""),
+            secret_previous=[x for x in e("HISAAB_SECRET_PREVIOUS", "").split(",") if x],
             storage=e("HISAAB_STORAGE", "local"),
             local_dir=e("HISAAB_LOCAL_DIR", "./data"),
             public_url=e("HISAAB_PUBLIC_URL", "http://127.0.0.1:8080"),
@@ -58,9 +79,12 @@ class Config(BaseModel):
             azure_container=e("HISAAB_AZURE_CONTAINER", ""),
             azure_connection_string=e("HISAAB_AZURE_CONNECTION_STRING"),
             azure_account_url=e("HISAAB_AZURE_ACCOUNT_URL"),
-            max_batch_bytes=int(e("HISAAB_MAX_BATCH_BYTES", str(50 * 1024 * 1024))),
+            max_batch_bytes=int(e("HISAAB_MAX_BATCH_BYTES", str(24 * 1024 * 1024))),
+            max_batches_per_day=int(e("HISAAB_MAX_BATCHES_PER_DAY", "24")),
             upload_ttl_s=int(e("HISAAB_UPLOAD_TTL_S", "900")),
-            registrations_per_hour=int(e("HISAAB_REGISTRATIONS_PER_HOUR", "60")),
+            registrations_per_hour=int(e("HISAAB_REGISTRATIONS_PER_HOUR", "120")),
+            require_sealed=e("HISAAB_REQUIRE_SEALED", "1") != "0",
+            trusted_proxy_hops=int(e("HISAAB_TRUSTED_PROXY_HOPS", "1")),
         )
 
 
@@ -96,7 +120,7 @@ class RateLimit:
 
 def create_app(config: Config | None = None, storage: Storage | None = None) -> FastAPI:
     config = config or Config.from_env()
-    signer = Signer(config.secret)
+    signer = Signer(config.secret, config.secret_previous)
     if storage is None:
         if config.storage == "s3":
             storage = S3Storage(config.s3_bucket, config.s3_region)
@@ -108,7 +132,26 @@ def create_app(config: Config | None = None, storage: Storage | None = None) -> 
                 lambda key, size, ttl: signer.ticket("put", {"key": key, "bytes": size}, ttl),
             )
     limit = RateLimit(config.registrations_per_hour)
-    app = FastAPI(title="HisaabSaathi improve", version=__version__, docs_url=None, redoc_url=None)
+    app = FastAPI(title="HisaabSaathi improve", version=__version__, docs_url=None, redoc_url=None, openapi_url=None)
+
+    @app.middleware("http")
+    async def small_requests_only(request: Request, call_next):
+        # Only the folder backend's upload route takes a large body; everything else is a few lines of JSON.
+        if request.method != "PUT":
+            n = request.headers.get("content-length")
+            if n is None and request.method == "POST":
+                return JSONResponse({"detail": "length required"}, status_code=411)
+            if n is not None and (not n.isdigit() or int(n) > 8192):
+                return JSONResponse({"detail": "request too large"}, status_code=413)
+        return await call_next(request)
+
+    def client_of(request: Request) -> str:
+        """The caller's address as our own proxy saw it: a client can add entries to the
+        left of X-Forwarded-For, but not to the right of what the proxy appended."""
+        hops = [h.strip() for h in request.headers.get("x-forwarded-for", "").split(",") if h.strip()]
+        if config.trusted_proxy_hops > 0 and len(hops) >= config.trusted_proxy_hops:
+            return hops[-config.trusted_proxy_hops]
+        return request.client.host if request.client else "?"
 
     def install_from(authorization: str = Header("")) -> str:
         token = authorization.removeprefix("Bearer ").strip()
@@ -123,10 +166,11 @@ def create_app(config: Config | None = None, storage: Storage | None = None) -> 
 
     @app.post("/v1/installs", status_code=201)
     def register(body: NewInstall, request: Request):
-        who = request.client.host if request.client else "?"
-        if not limit.allow(who):
+        if not limit.allow(client_of(request)):
+            audit("register_refused", reason="rate")
             raise HTTPException(429, "too many new installs")
         install_id, token = signer.new_install()
+        audit("registered", install=install_id, app_version=body.app_version)
         return {"install_id": install_id, "token": token}
 
     @app.post("/v1/batches")
@@ -135,7 +179,12 @@ def create_app(config: Config | None = None, storage: Storage | None = None) -> 
             raise HTTPException(413, "batch too big")
         if not SHA256.match(body.sha256):
             raise HTTPException(422, "sha256 must be 64 lower-case hex characters")
-        batch = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S") + "-" + os.urandom(4).hex()
+        now = datetime.now(timezone.utc)
+        today = sum(1 for k in storage.keys(f"incoming/{install}/{now:%Y%m%d}") if k.endswith(".zip"))
+        if today >= config.max_batches_per_day:
+            audit("batch_refused", install=install, reason="daily limit")
+            raise HTTPException(429, "daily limit reached; try tomorrow")
+        batch = now.strftime("%Y%m%dT%H%M%S") + "-" + os.urandom(4).hex()
         key = f"incoming/{install}/{batch}.zip"
         url, headers = storage.upload_link(key, body.bytes, config.upload_ttl_s)
         ticket = signer.ticket("batch", {"install": install, "batch": batch, "bytes": body.bytes, "sha256": body.sha256, "count": body.count},
@@ -150,12 +199,21 @@ def create_app(config: Config | None = None, storage: Storage | None = None) -> 
         t = signer.open_ticket("put", ticket)
         if t is None:
             raise HTTPException(403, "link expired or not valid")
-        data = bytearray()
-        async for chunk in request.stream():
-            data += chunk
-            if len(data) > t["bytes"]:
-                raise HTTPException(413, "more than promised")
-        storage.put(t["key"], bytes(data))
+        target = storage.path(t["key"])
+        target.parent.mkdir(parents=True, exist_ok=True)
+        fd, tmp = tempfile.mkstemp(dir=target.parent, suffix=".part")
+        n = 0
+        try:
+            with os.fdopen(fd, "wb") as f:
+                async for chunk in request.stream():  # to disk as it arrives, never all in memory
+                    n += len(chunk)
+                    if n > t["bytes"]:
+                        raise HTTPException(413, "more than promised")
+                    f.write(chunk)
+            os.replace(tmp, target)
+        finally:
+            if os.path.exists(tmp):
+                os.unlink(tmp)
         return JSONResponse({}, status_code=201)
 
     @app.post("/v1/batches/{ticket}/complete")
@@ -169,12 +227,23 @@ def create_app(config: Config | None = None, storage: Storage | None = None) -> 
         size = storage.size(key + ".zip")
         if size is None:
             raise HTTPException(409, "not uploaded")
-        if size != t["bytes"] or sha256_of(storage, key + ".zip") != t["sha256"]:
+        h, head = hashlib.sha256(), b""
+        if size == t["bytes"]:
+            for c in storage.chunks(key + ".zip"):  # one read: fingerprint and the seal's magic
+                head += c[:4 - len(head)]
+                h.update(c)
+        if size != t["bytes"] or h.hexdigest() != t["sha256"]:
             storage.delete(key + ".zip")
+            audit("batch_rejected", install=install, reason="damaged")
             raise HTTPException(422, "upload damaged; send it again")
+        if config.require_sealed and head != b"HSE1":
+            storage.delete(key + ".zip")
+            audit("batch_rejected", install=install, reason="not sealed")
+            raise HTTPException(422, "batches must be sealed to the team key")
         meta = {"install": install, "batch": t["batch"], "bytes": size, "sha256": t["sha256"], "count": t["count"],
                 "received_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
         storage.put(key + ".json", json.dumps(meta).encode())
+        audit("batch_received", install=install, batch=t["batch"], bytes=size, count=t["count"])
         return {"ok": True}
 
     @app.delete("/v1/installs/{install_id}", status_code=202)
@@ -184,7 +253,9 @@ def create_app(config: Config | None = None, storage: Storage | None = None) -> 
         # The tombstone first: from here on the token is refused, and the pipeline purges
         # anything it derived from this install.
         storage.put(f"deleted/{install}", datetime.now(timezone.utc).isoformat(timespec="seconds").encode())
-        return {"deleted": delete_prefix(storage, f"incoming/{install}/")}
+        n = delete_prefix(storage, f"incoming/{install}/")
+        audit("install_deleted", install=install, files=n)
+        return {"deleted": n}
 
     return app
 
@@ -192,7 +263,9 @@ def create_app(config: Config | None = None, storage: Storage | None = None) -> 
 def main():  # pragma: no cover
     import uvicorn
 
-    uvicorn.run(create_app(), host="0.0.0.0", port=int(os.environ.get("PORT", "8080")), access_log=False, proxy_headers=True)
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    # No access log (it would hold IP addresses); X-Forwarded-For is read by client_of() only.
+    uvicorn.run(create_app(), host="0.0.0.0", port=int(os.environ.get("PORT", "8080")), access_log=False, proxy_headers=False)
 
 
 if __name__ == "__main__":  # pragma: no cover

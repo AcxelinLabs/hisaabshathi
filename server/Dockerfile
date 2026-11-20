@@ -6,6 +6,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY hisaab_improve ./hisaab_improve
 # Not root. No access log, so no IP addresses are written anywhere.
 USER 10001
-ENV PORT=8080 PYTHONUNBUFFERED=1 FORWARDED_ALLOW_IPS=*
+ENV PORT=8080 PYTHONUNBUFFERED=1
 EXPOSE 8080
 CMD ["python", "-m", "hisaab_improve.app"]

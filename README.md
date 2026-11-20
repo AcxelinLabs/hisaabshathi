@@ -57,8 +57,10 @@ It needs Android 10 or newer.
 - **Help improve HisaabSaathi** is asked once, at setup, and read aloud. Nothing is chosen for
   the worker. Only if they say yes, each time they speak or type to the app, their voice clip,
   what the app heard, and what it understood and answered are sent to the team over Wi-Fi.
-  Nothing carries their name or phone number. They can turn it off in Settings, which deletes
-  what is still waiting, or have everything already sent deleted. The upload service is in
+  Nothing carries their name or phone number, and anything containing a phone, Aadhaar or bank
+  number is never kept. Each upload is encrypted on the phone so that only the team's training
+  pipeline can open it. They can turn it off in Settings, which deletes what is still waiting,
+  or have everything already sent deleted. The upload service and pipeline are in
   [`server/`](server/README.md).
 
 ## How it understands

@@ -7,23 +7,28 @@ from urllib.parse import urlsplit
 import pytest
 from fastapi.testclient import TestClient
 
+from pathlib import Path
+
 from hisaab_improve.app import Config, create_app
+from hisaab_improve.crypto import load_private_keys, seal
 from hisaab_improve.signing import Signer
 
 SECRET = "x" * 40
+TEAM_KEY = next(iter(load_private_keys([(Path(__file__).parent / "fixtures" / "TEST-ONLY-team-key.der.b64").read_text()]).values()))
 
 
-def batch_zip(n=2):
+def batch_zip(n=2, sealed=True):
     out = io.BytesIO()
     with zipfile.ZipFile(out, "w") as z:
         z.writestr("batch.json", json.dumps({"format": 1, "count": n}))
         z.writestr("samples.jsonl", "".join(json.dumps({"id": f"{i:016x}", "lang": "hi", "heard": "x"}) + "\n" for i in range(n)))
-    return out.getvalue()
+    return seal(out.getvalue(), TEAM_KEY.public_key()) if sealed else out.getvalue()
 
 
 @pytest.fixture
 def client(tmp_path):
-    cfg = Config(secret=SECRET, storage="local", local_dir=str(tmp_path), public_url="http://testserver", registrations_per_hour=5)
+    cfg = Config(secret=SECRET, storage="local", local_dir=str(tmp_path), public_url="http://testserver", registrations_per_hour=5,
+                 max_batches_per_day=3)
     return TestClient(create_app(cfg)), tmp_path
 
 
@@ -126,3 +131,57 @@ def test_delete_everything_an_install_sent(client):
 def test_short_secret_is_refused(tmp_path):
     with pytest.raises(ValueError):
         create_app(Config(secret="short", local_dir=str(tmp_path)))
+
+
+def test_only_sealed_batches_are_kept(client):
+    c, root = client
+    install, auth = register(c)
+    j, _ = send(c, auth, batch_zip(sealed=False))
+    r = c.post(f"/v1/batches/{j['batch_id']}/complete", headers=auth)
+    assert r.status_code == 422 and "sealed" in r.text
+    assert not list((root / "incoming" / install).glob("*"))
+
+
+def test_daily_limit_per_phone(client):
+    c, _ = client
+    _, auth = register(c)
+    for _ in range(3):
+        send(c, auth, batch_zip())
+    r = c.post("/v1/batches", headers=auth, json={"bytes": 10, "sha256": "a" * 64, "count": 1})
+    assert r.status_code == 429
+
+
+def test_secret_can_change_without_signing_phones_out(tmp_path):
+    old = TestClient(create_app(Config(secret="o" * 40, local_dir=str(tmp_path))))
+    token = old.post("/v1/installs", json={}).json()["token"]
+    new = TestClient(create_app(Config(secret="n" * 40, secret_previous=["o" * 40], local_dir=str(tmp_path))))
+    r = new.post("/v1/batches", headers={"Authorization": f"Bearer {token}"}, json={"bytes": 10, "sha256": "a" * 64, "count": 1})
+    assert r.status_code == 200
+    gone = TestClient(create_app(Config(secret="n" * 40, local_dir=str(tmp_path))))
+    assert gone.post("/v1/batches", headers={"Authorization": f"Bearer {token}"}, json={"bytes": 10, "sha256": "a" * 64, "count": 1}).status_code == 401
+
+
+def test_rate_limit_cannot_be_dodged_with_forwarded_for(client):
+    c, _ = client
+    # Our proxy appends the real address last; a client may put anything before it.
+    for i in range(5):
+        assert c.post("/v1/installs", json={}, headers={"X-Forwarded-For": f"10.0.0.{i}, 203.0.113.7"}).status_code == 201
+    assert c.post("/v1/installs", json={}, headers={"X-Forwarded-For": "10.9.9.9, 203.0.113.7"}).status_code == 429
+    assert c.post("/v1/installs", json={}, headers={"X-Forwarded-For": "203.0.113.8"}).status_code == 201
+
+
+def test_large_or_unsized_requests_are_refused(client):
+    c, _ = client
+    assert c.post("/v1/installs", content=b"{" + b" " * 9000 + b"}", headers={"Content-Type": "application/json"}).status_code == 413
+
+
+def test_audit_log_has_no_addresses_or_tokens(client, caplog):
+    import logging
+    c, _ = client
+    caplog.set_level(logging.INFO, logger="hisaab.audit")
+    install, auth = register(c)
+    j, _ = send(c, auth, batch_zip())
+    c.post(f"/v1/batches/{j['batch_id']}/complete", headers=auth)
+    text = caplog.text
+    assert '"event":"registered"' in text and '"event":"batch_received"' in text
+    assert "testclient" not in text and auth["Authorization"].split()[1] not in text

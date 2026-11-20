@@ -55,7 +55,7 @@ class LocalStorage:
 
     def path(self, key: str) -> Path:
         p = (self.root / key).resolve()
-        if self.root not in p.parents:
+        if p != self.root and self.root not in p.parents:
             raise ValueError("key outside storage")
         return p
 
@@ -85,10 +85,14 @@ class LocalStorage:
         self.path(key).unlink(missing_ok=True)
 
     def keys(self, prefix):
-        base = self.root
-        for p in sorted(base.rglob("*")):
+        # Walk only the prefix's folder, not the whole store.
+        folder = prefix.rsplit("/", 1)[0] if "/" in prefix else ""
+        start = self.path(folder) if folder else self.root
+        if not start.is_dir():
+            return
+        for p in sorted(start.rglob("*")):
             if p.is_file() and not p.name.endswith(".part"):
-                k = p.relative_to(base).as_posix()
+                k = p.relative_to(self.root).as_posix()
                 if k.startswith(prefix):
                     yield k
 

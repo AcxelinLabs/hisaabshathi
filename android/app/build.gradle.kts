@@ -24,6 +24,9 @@ android {
         // e.g. ./gradlew assembleRelease -Phisaab.shareUrl=https://improve.example.org
         // Empty: what workers agree to share waits on the phone until a build has one.
         buildConfigField("String", "SHARE_URL", "\"${providers.gradleProperty("hisaab.shareUrl").getOrElse("")}\"")
+        // The team's public key (base64, from `python -m hisaab_improve.crypto new-key`). Batches are
+        // sealed to it on the phone; only the training pipeline holds the private key. Both are needed to send.
+        buildConfigField("String", "SHARE_KEY", "\"${providers.gradleProperty("hisaab.shareKey").getOrElse("")}\"")
     }
 
     buildTypes {

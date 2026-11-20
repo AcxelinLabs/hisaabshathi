@@ -24,6 +24,17 @@ class ImproveTest {
         assertEquals("NONE", Improve.understood(Understood.Unknown("tell me a joke")))
     }
 
+    @Test fun phoneAadhaarBankAndUpiAreNeverKept() {
+        for (t in listOf(
+            "मेरा नंबर 98765 43210 है", "call 9876543210", "आधार 1234 5678 9012", "account 123-456-789-012",
+            "९८७६५४३२१०", "ପଇସା ramesh@okicici କୁ ପଠାନ୍ତୁ", "mail me at a.b@example.com",
+        )) assertTrue(t, Improve.sensitive(t))
+        for (t in listOf(
+            "आज 500 रुपये कमाए", "आज आठ घंटे काम किया 120 पीस 5 रुपये रेट 300 एडवांस लिया", "इस हफ्ते कितना कमाया",
+            "1,20,000 total this year", "20 11 2026 ko 600 mile", "ఈ వారం 2500 సంపాదించాను",
+        )) assertFalse(t, Improve.sensitive(t))
+    }
+
     @Test fun idsAreRandomHex() {
         val ids = List(200) { Improve.newId() }
         assertEquals(200, ids.toSet().size)

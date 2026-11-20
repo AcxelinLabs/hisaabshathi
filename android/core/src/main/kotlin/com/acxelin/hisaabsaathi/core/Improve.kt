@@ -43,9 +43,17 @@ data class Sample(
     /** [VoiceSamples.Quality] of the clip, lower case; empty without a clip. */
     val quality: String = "",
     val hasAudio: Boolean = false,
+    /** The [Improve.CONSENT_VERSION] the worker said yes to; the pipeline drops samples without one it knows. */
+    val consent: Int = 0,
 )
 
 object Improve {
+    /**
+     * The version of the "Help improve" question the worker answered. Raise it when the
+     * question's text changes what is collected or where it goes: everyone is asked again.
+     */
+    const val CONSENT_VERSION = 1
+
     /** At most this many wait on the phone; the oldest go first. */
     const val LIMIT = 200
 
@@ -68,6 +76,20 @@ object Improve {
         const val DISMISSED = "dismissed"
         /** A spoken yes or no to "is this right?". */
         const val CONFIRM = "confirm"
+    }
+
+    private val longNumber = Regex("""\d(?:[\s\-.]?\d){9,}""")
+    private val handle = Regex("""[\w.\-]{2,}@[\w.\-]{2,}""")
+
+    /**
+     * Something a worker should not have to share: a phone, Aadhaar, bank or card number
+     * (10 or more digits, even spaced or in Indian scripts, or said as words), or a UPI id or
+     * email. Such exchanges are never kept, voice clip included. Wage amounts are far shorter.
+     */
+    fun sensitive(text: String): Boolean {
+        val digits = buildString { text.forEach { c -> append(if (Character.isDigit(c)) Character.forDigit(Character.digit(c, 10), 10) else c) } }
+        if (longNumber.containsMatchIn(digits) || handle.containsMatchIn(text)) return true
+        return runCatching { NumberWords.numbersIn(text).any { it >= 1e9 } }.getOrDefault(false)
     }
 
     /** Sources worth learning from: speech and typing, not scanned bills. */
