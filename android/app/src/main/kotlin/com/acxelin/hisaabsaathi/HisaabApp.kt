@@ -78,6 +78,9 @@ open class HisaabApp : Application() {
     /** Start the voice downloads as soon as a language is chosen in setup (tests turn this off: no network). */
     open val autoDownloadVoice: Boolean = true
 
+    /** The welcome screen and its ting when the app opens (tests turn it off). */
+    open val showWelcome: Boolean = true
+
     /** Every PIN code with its state and district (India Post's directory), for filling in details on the phone. */
     val pins: com.acxelin.hisaabsaathi.core.PinDirectory by lazy {
         runCatching { com.acxelin.hisaabsaathi.core.PinDirectory.parse(assets.open("pin_in.txt").bufferedReader().use { it.readText() }) }

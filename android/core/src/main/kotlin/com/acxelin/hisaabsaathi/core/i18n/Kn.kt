@@ -274,6 +274,7 @@ internal object Kn {
         "Delete this photo?" to "ಈ ಫೋಟೋ ತೆಗೆಯಬೇಕೆ?",
         "Take a photo" to "ಫೋಟೋ ತೆಗೆಯಿರಿ",
         "Photos of bills, slips and passbooks show here." to "ಬಿಲ್, ಚೀಟಿ, ಪಾಸ್‌ಬುಕ್ ಫೋಟೋಗಳು ಇಲ್ಲಿ ಕಾಣುತ್ತವೆ.",
+        "Welcome to your HisaabSaathi" to "ನಿಮ್ಮ ಹಿಸಾಬ್ ಸಾಥಿಗೆ ಸ್ವಾಗತ",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

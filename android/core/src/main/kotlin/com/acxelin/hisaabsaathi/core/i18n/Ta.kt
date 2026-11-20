@@ -262,6 +262,7 @@ internal object Ta {
         "Delete this photo?" to "இந்த போட்டோவை நீக்கவா?",
         "Take a photo" to "போட்டோ எடுங்கள்",
         "Photos of bills, slips and passbooks show here." to "பில், சீட்டு, பாஸ்புக் போட்டோக்கள் இங்கே தெரியும்.",
+        "Welcome to your HisaabSaathi" to "உங்கள் ஹிசாப் சாத்திக்கு வரவேற்கிறோம்",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

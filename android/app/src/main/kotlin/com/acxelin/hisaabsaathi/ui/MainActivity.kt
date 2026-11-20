@@ -67,7 +67,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun Root(vm: AppViewModel) {
     val settings = vm.settings.collectAsStateWithLifecycle().value ?: return
-    HisaabTheme(settings.lang) { Screens(vm, settings) }
+    // The welcome, each time the app opens (not again when the phone is turned).
+    val app = LocalContext.current.applicationContext as com.acxelin.hisaabsaathi.HisaabApp
+    var welcomed by rememberSaveable { mutableStateOf(!app.showWelcome) }
+    HisaabTheme(settings.lang) {
+        if (!welcomed) WelcomeScreen(remember(settings.lang) { Strings(settings.lang) }) { welcomed = true }
+        else Screens(vm, settings)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

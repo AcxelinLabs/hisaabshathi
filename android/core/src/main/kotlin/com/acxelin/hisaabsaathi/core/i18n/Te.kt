@@ -276,6 +276,7 @@ internal object Te {
         "Delete this photo?" to "ఈ ఫోటో తీసేయాలా?",
         "Take a photo" to "ఫోటో తీయండి",
         "Photos of bills, slips and passbooks show here." to "బిల్లులు, చీటీలు, పాస్‌బుక్‌ల ఫోటోలు ఇక్కడ కనిపిస్తాయి.",
+        "Welcome to your HisaabSaathi" to "మీ హిసాబ్ సాథీకి స్వాగతం",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */
