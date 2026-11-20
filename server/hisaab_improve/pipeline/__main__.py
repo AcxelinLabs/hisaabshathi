@@ -7,12 +7,13 @@
                                     with an agent's proposed_labels.jsonl if given
     review-apply <in.csv> --reviewer NAME
     clear <install> --reviewer NAME release a held-back phone after checking it
-    publish-hf                      mirror the newest snapshot to the private Hugging Face dataset
 
 Stores come from the environment:
     raw  (what the service received): HISAAB_STORAGE = local | s3 | azure, as for the service
     work (the pipeline's own):        HISAAB_WORK_DIR (local), HISAAB_WORK_BUCKET (s3), HISAAB_WORK_CONTAINER (azure)
-Keys: HISAAB_PRIVATE_KEYS_B64 or HISAAB_PRIVATE_KEY_FILES. Hugging Face: HF_TOKEN and HISAAB_HF_DATASET.
+Keys: HISAAB_PRIVATE_KEYS_B64 (PEM text or base64, comma-separated) or HISAAB_PRIVATE_KEY_FILES.
+Azure ML data assets: HISAAB_AML_SUBSCRIPTION, HISAAB_AML_RESOURCE_GROUP, HISAAB_AML_WORKSPACE, HISAAB_AML_DATASTORE.
+Workers' data stays in these stores: it is never copied to Hugging Face or anywhere else.
 """
 from __future__ import annotations
 
@@ -39,7 +40,7 @@ def stores():
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="python -m hisaab_improve.pipeline", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("command", choices=["nightly", "ingest", "export", "fetch", "review-sheet", "review-apply", "clear", "publish-hf"])
+    p.add_argument("command", choices=["nightly", "ingest", "export", "fetch", "review-sheet", "review-apply", "clear"])
     p.add_argument("arg", nargs="?")
     p.add_argument("--agent", action="store_true")
     p.add_argument("--reviewer", default="")
@@ -92,10 +93,6 @@ def main(argv=None) -> int:
         from .review import clear
 
         clear(work, a.arg, a.reviewer)
-    elif a.command == "publish-hf":
-        from .hfsync import sync
-
-        print(sync(work, os.environ.get("HISAAB_HF_DATASET", "AcxelinLabs/hisaabsaathi-voices")))
     return 0
 
 

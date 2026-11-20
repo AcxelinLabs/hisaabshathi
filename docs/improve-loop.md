@@ -1,5 +1,8 @@
 # The improvement loop: from what workers share to a better app
 
+Workers' recordings and words stay in Azure, in India, from upload to training. Only public
+things go elsewhere: the trained model and the APK (Hugging Face model repo, GitHub).
+
 In one line: the app notes where it got things wrong (only for workers who agree), a nightly
 job cleans and sorts those notes, an agent suggests fixes, automatic checks test them, and a
 person approves before anything reaches phones.
@@ -11,16 +14,17 @@ person approves before anything reaches phones.
                           nightly job: deletions → open → screen → snapshot → report
                                    │              │                    │
                                    │              ▼                    ▼
-                                   │      people: labels,        Hugging Face (private)
-                                   │      held-back phones
+                                   │      people: labels,        Azure ML datasets
+                                   │      held-back phones       hisaab-train / hisaab-eval, one version a night
                                    ▼
                      agent (weekly): reads snapshot/agent only (train split, text, no ids)
                        ├─ proposes labels ──▶ review sheet ──▶ 👤 accept
                        └─ proposes rule fixes ──▶ tests + gates + leak check ──▶ pull request ──▶ 👤 merge
                                    │
                                    ▼
-                     training (when there's enough new data): fine-tune → evaluate on the eval split
-                       → gates ──▶ 👤 approve ──▶ model and APK released (Hugging Face, GitHub)
+                     training on Azure ML (when there's enough new data): fine-tune on a hisaab-train version
+                       → evaluate on the matching hisaab-eval → gates ──▶ 👤 approve
+                       ──▶ public model and APK released (Hugging Face model repo, GitHub)
 ```
 
 ## What runs on its own, and what needs a person
@@ -28,7 +32,7 @@ person approves before anything reaches phones.
 | Step | Who |
 |---|---|
 | Upload, check, delete on request | Automatic (upload service) |
-| Deletions, opening, screening, snapshot, report, Hugging Face mirror, tidying, team message | Automatic (nightly job) |
+| Deletions, opening, screening, snapshot, report, Azure ML dataset versions, tidying, team message | Automatic (nightly job) |
 | Proposing labels and rule fixes | Agent |
 | Tests, gates, leak check on every proposal | Automatic |
 | Accepting labels, releasing held-back phones | **Person** (`review-apply`, `clear`) |
@@ -53,8 +57,8 @@ the snapshot they used.
    tests, and opens a pull request. The task is in [`improve-agent.md`](improve-agent.md).
 2. **The language model** (Qwen3-0.6B, fine-tuned).
    - Saved and fixed entries, plus labels people accepted, give training examples.
-   - Train on the train split as a GPU job: Azure ML, or Hugging Face Jobs reading the private
-     dataset.
+   - Train on a `hisaab-train` version as an Azure ML GPU job. Azure ML records which dataset
+     version each model came from.
    - Evaluate on the eval split, convert to LiteRT-LM, then run the gates.
 3. **Speech models** (IndicConformer, Parakeet). What the app heard is only a draft
    transcript, so these need checked transcripts:

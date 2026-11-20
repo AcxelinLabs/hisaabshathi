@@ -2,7 +2,7 @@
 
 1. ingest: new batches in, deletions carried out (and snapshots that held them retired);
 2. export: phones screened, a new snapshot frozen, the failure report written;
-3. Hugging Face: the snapshot mirrored to the private dataset (if configured);
+3. Azure ML: the snapshot registered as versioned data assets; retired snapshots' versions archived;
 4. tidy: raw batches older than HISAAB_RAW_DAYS that were read are deleted;
 5. audit: a record of the run (counts only) in the work store;
 6. tell the team: a short summary to a webhook (counts only, never workers' words).
@@ -31,10 +31,10 @@ def summary_text(run: dict) -> str:
     for k in ("batches_damaged", "batches_unreadable", "batches_waiting_for_key"):
         if i.get(k):
             lines.append(f"Attention: {i[k]} {k.replace('_', ' ')}.")
-    if run.get("hf"):
-        lines.append(f"Hugging Face: {json.dumps(run['hf'])}")
-    if run.get("hf_error"):
-        lines.append(f"Hugging Face sync failed: {run['hf_error']}")
+    if run.get("aml"):
+        lines.append(f"Azure ML: registered {', '.join(run['aml']['registered'])}; archived {len(run['aml']['archived'])} retired snapshots.")
+    if run.get("aml_error"):
+        lines.append(f"Azure ML registration failed: {run['aml_error']}")
     return "\n".join(lines)
 
 
@@ -43,18 +43,20 @@ def notify(url: str, text: str) -> None:
     urllib.request.urlopen(req, timeout=30).close()
 
 
-def run(raw, work, keys: dict, hf_repo: str | None = None, hf_api=None, raw_days: int | None = None,
-        webhook: str | None = None) -> dict:
+def snapshot_ids(work) -> set[str]:
+    return {k.split("/")[1] for k in work.keys("snapshots/") if k.endswith("/manifest.json")}
+
+
+def run(raw, work, keys: dict, aml=None, raw_days: int | None = None, webhook: str | None = None) -> dict:
     started = now()
     result = {"run": stamp(started), "ingest": ingest(raw, work, keys)}
     result["export"] = export(work)
-    if hf_repo:
-        from .hfsync import sync
-
+    if aml is not None:
         try:
-            result["hf"] = sync(work, hf_repo, hf_api)
+            result["aml"] = {"registered": aml.register(work, result["export"]["snapshot"]),
+                             "archived": aml.archive_gone(work, snapshot_ids(work))}
         except Exception as e:  # the next run tries again; everything else still counts
-            result["hf_error"] = f"{type(e).__name__}: {e}"[:300]
+            result["aml_error"] = f"{type(e).__name__}: {e}"[:300]
     if raw_days:
         result["raw_expired"] = expire_raw(raw, work, raw_days, started.strftime("%Y%m%d"))
     result["seconds"] = round((now() - started).total_seconds(), 1)
@@ -68,9 +70,11 @@ def run(raw, work, keys: dict, hf_repo: str | None = None, hf_api=None, raw_days
 
 
 def from_env() -> dict:
+    from .azureml import AzureML
+
     e = os.environ.get
     return {
-        "hf_repo": e("HISAAB_HF_DATASET") if e("HF_TOKEN") else None,
+        "aml": AzureML.from_env(),
         "raw_days": int(e("HISAAB_RAW_DAYS", "0")) or None,
         "webhook": e("HISAAB_NOTIFY_WEBHOOK") or None,
     }

@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from hisaab_improve.crypto import load_private_keys, seal
-from hisaab_improve.pipeline import hfsync, review
+from hisaab_improve.pipeline import review
 from hisaab_improve.pipeline.common import read_bytes, read_json, read_jsonl, split_of
 from hisaab_improve.pipeline.export import export
 from hisaab_improve.pipeline.ingest import expire_raw, ingest
@@ -174,39 +174,44 @@ def test_people_review_labels(stores):
     assert case == {**case, "expect": "ASK DAY DUE", "gate": True}
 
 
-class FakeHf:
-    def __init__(self, private=True):
-        self.private, self.commits, self.squashed = private, [], 0
+class FakeAzureML:
+    def __init__(self):
+        self.calls = []
 
-    def dataset_info(self, repo):
-        return type("Info", (), {"private": self.private})()
-
-    def create_commit(self, **kw):
-        self.commits.append([(type(o).__name__, o.path_in_repo) for o in kw["operations"]])
-
-    def super_squash_history(self, **kw):
-        self.squashed += 1
+    def __call__(self, method, url, body):
+        self.calls.append((method, url.split("/data/")[1].split("?")[0], body["properties"]["isArchived"], body["properties"]["dataUri"]))
+        return 200
 
 
-def test_hugging_face_mirror_is_incremental_private_and_forgets(stores):
+def test_snapshots_become_azure_ml_versions_and_are_archived_when_retired(stores):
+    from hisaab_improve.pipeline.azureml import AzureML
     raw, work = stores
     basic(raw)
-    export_after(raw, work)
-    with pytest.raises(SystemExit):
-        hfsync.sync(work, "org/public", FakeHf(private=False))
-    hf = FakeHf()
-    first = hfsync.sync(work, "org/private", hf)
-    paths = {p for c in hf.commits for _, p in c}
-    assert f"audio/{A}/{1:016x}.wav" in paths and "data/train/cases.jsonl" in paths
-    assert not any(p.startswith("data/agent/") for p in paths) and first["history_squashed"] is False
-    hf2 = FakeHf()
-    assert hfsync.sync(work, "org/private", hf2)["added"] == 0  # nothing changed, nothing sent
+    fake = FakeAzureML()
+    aml = AzureML("sub1", "rg1", "ws1", "hisaab_processed", request=fake)
+    r = run(raw, work, KEYS, aml=aml)
+    sid = r["export"]["snapshot"]
+    assert r["aml"]["registered"] == [f"hisaab-train:{sid}", f"hisaab-eval:{sid}"]
+    assert ("PUT", f"hisaab-train/versions/{sid}", False,
+            f"azureml://subscriptions/sub1/resourcegroups/rg1/workspaces/ws1/datastores/hisaab_processed/paths/snapshots/{sid}/train/") in fake.calls
     raw.put(f"deleted/{A}", b"now")
-    run(raw, work, KEYS)
-    hf3 = FakeHf()
-    r = hfsync.sync(work, "org/private", hf3)
-    assert ("CommitOperationDelete", f"audio/{A}/{1:016x}.wav") in [o for c in hf3.commits for o in c]
-    assert r["history_squashed"] and hf3.squashed == 1
+    r2 = run(raw, work, KEYS, aml=aml)
+    assert r2["aml"]["archived"] == [sid]
+    assert ("PUT", f"hisaab-eval/versions/{sid}", True,
+            f"azureml://subscriptions/sub1/resourcegroups/rg1/workspaces/ws1/datastores/hisaab_processed/paths/snapshots/{sid}/eval/") in fake.calls
+    assert "Azure ML: registered" in summary_text(r2)
+
+
+def test_azure_ml_trouble_does_not_stop_the_night(stores):
+    from hisaab_improve.pipeline.azureml import AzureML
+    raw, work = stores
+    basic(raw)
+
+    def broken(*a):
+        raise OSError("workspace unreachable")
+    r = run(raw, work, KEYS, aml=AzureML("s", "r", "w", "d", request=broken))
+    assert "aml_error" in r and r["export"]["snapshot"]
+    assert "registration failed" in summary_text(r)
 
 
 def test_old_raw_batches_are_tidied(stores):

@@ -60,7 +60,8 @@ It needs Android 10 or newer.
   Nothing carries their name or phone number, and anything containing a phone, Aadhaar or bank
   number is never kept. Each upload is encrypted on the phone so that only the team's training
   pipeline can open it. They can turn it off in Settings, which deletes what is still waiting,
-  or have everything already sent deleted. The upload service and pipeline are in
+  or have everything already sent deleted. What they share stays in the team's Azure account
+  in India, from upload to training. The upload service and pipeline are in
   [`server/`](server/README.md).
 
 ## How it understands

@@ -8,11 +8,11 @@ everything after the phone:
 |---|---|---|
 | Upload service | `hisaab_improve/app.py` (+ `signing.py`, `storage.py`) | Always on (Azure Container App) |
 | Team key and sealing | `hisaab_improve/crypto.py` | Library and `new-key` command |
-| Nightly pipeline | `hisaab_improve/pipeline/` | Scheduled job, once a night |
+| Nightly pipeline | `hisaab_improve/pipeline/` (+ `azureml.py` for dataset versions) | Scheduled job, once a night |
 | Training gates | `hisaab_improve/gates.py` | Before any change to understanding or models ships |
 | Leak check | `hisaab_improve/leakcheck.py` | Before any agent change leaves the private environment |
 
-- **Setting it up on Azure:** [`deploy/azure.md`](deploy/azure.md).
+- **Setting it up on Azure, and every Azure service it uses:** [`deploy/azure.md`](deploy/azure.md).
 - **How it feeds an agent and training:** [`../docs/improve-loop.md`](../docs/improve-loop.md).
 
 ## The path of one exchange
@@ -26,8 +26,8 @@ phone ── sealed zip ──▶ upload service ──▶ improve/  (only ciphe
                                                  │
                        ┌─────────────────────────┼──────────────────────────┐
                        ▼                         ▼                          ▼
-              Hugging Face (private)    person: labels, held-back   agent: text-only view,
-              optional mirror           phones, approvals           gates + leak check → PR
+              Azure ML datasets         person: labels, held-back   agent: text-only view,
+              (versioned, by night)     phones, approvals           gates + leak check → PR
 ```
 
 1. **On the phone,** only with consent. An exchange is never kept if it contains a phone,
@@ -46,8 +46,8 @@ phone ── sealed zip ──▶ upload service ──▶ improve/  (only ciphe
    - screens phones, and holds back any that look like replays, floods or junk;
    - freezes a **snapshot**. About one phone in ten is held out for evaluation. No phone may
      supply more than 300 exchanges, and the agent gets its own text-only folder;
-   - writes the failure report, mirrors to Hugging Face, tidies old raw files, keeps an audit
-     record, and messages the team.
+   - registers the snapshot as versioned Azure ML datasets, writes the failure report, tidies
+     old raw files, keeps an audit record, and messages the team.
 5. **People decide.** They accept labels, release held-back phones, merge code, and approve
    releases. An agent can only propose.
 
@@ -62,7 +62,8 @@ phone ── sealed zip ──▶ upload service ──▶ improve/  (only ciphe
 | Fake or forged phones | Signed tokens; registrations rate-limited per address (cannot be dodged with X-Forwarded-For) |
 | Flooding or poisoning training | 24 batches a day per phone; screening for replays, recordings shared across phones, silent clips and wrong-script text; held-back phones need a person; at most 300 exchanges per phone per snapshot; gates per language |
 | Damaged or tampered uploads | Size and SHA-256 on arrival; the seal's authentication tag; unsafe zip contents ignored |
-| "Delete what I shared" | Tombstone first, files at once; the next run removes everything derived and retires snapshots; the Hugging Face history is squashed |
+| "Delete what I shared" | Tombstone first, files at once; the next run removes everything derived, retires snapshots and archives their Azure ML dataset versions |
+| Data leaving India or the team | Everything stays in one Azure subscription in Central India; keys in Key Vault; nothing copied to other services |
 | An agent leaking workers' words or changing collection | Text-only view, train split only; the leak check fails on any copied sentence or 5-word run, or on any change to collection code |
 | A bad model or rule change shipping | Gates: no language may get worse, confirmed cases must all stay right; release needs a person |
 | Old data piling up | Raw batches deleted after `HISAAB_RAW_DAYS`; the newest 7 snapshots kept |
@@ -73,7 +74,7 @@ phone ── sealed zip ──▶ upload service ──▶ improve/  (only ciphe
 ```bash
 cd server
 python -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/pytest                      # 32 tests: service, S3 (moto), Azure links, sealing, pipeline, gates, leak check
+.venv/bin/pytest                      # 33 tests: service, S3 (moto), Azure links, sealing, pipeline, gates, leak check
 HISAAB_SECRET=$(python -c "import secrets; print(secrets.token_urlsafe(48))") \
 HISAAB_LOCAL_DIR=./data HISAAB_PUBLIC_URL=http://127.0.0.1:8080 HISAAB_TRUSTED_PROXY_HOPS=0 \
   .venv/bin/python -m hisaab_improve.app
@@ -103,7 +104,6 @@ HISAAB_LOCAL_DIR=./data HISAAB_WORK_DIR=./work HISAAB_PRIVATE_KEY_FILES=<key> \
 | `review-sheet <out.csv>` | Sentences to label, for Excel |
 | `review-apply <in.csv> --reviewer NAME` | Accepted labels become confirmed test cases |
 | `clear <install> --reviewer NAME` | Release a held-back phone after checking it |
-| `publish-hf` | Mirror the newest snapshot to the private Hugging Face dataset |
 
 - **Stores:**
   - `HISAAB_STORAGE` = `local`, `s3` or `azure`, for what phones sent;
@@ -111,7 +111,8 @@ HISAAB_LOCAL_DIR=./data HISAAB_WORK_DIR=./work HISAAB_PRIVATE_KEY_FILES=<key> \
     own private store.
 - **Keys:** `HISAAB_PRIVATE_KEYS_B64` (comma-separated) or `HISAAB_PRIVATE_KEY_FILES`.
 - **Optional:**
-  - `HF_TOKEN` with `HISAAB_HF_DATASET`;
+  - `HISAAB_AML_SUBSCRIPTION`, `HISAAB_AML_RESOURCE_GROUP`, `HISAAB_AML_WORKSPACE`,
+    `HISAAB_AML_DATASTORE`: register each snapshot as Azure ML datasets;
   - `HISAAB_NOTIFY_WEBHOOK`;
   - `HISAAB_RAW_DAYS`.
 

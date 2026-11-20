@@ -11,7 +11,7 @@ Two stores, both private:
     state/quarantine.json            phones held back from training, and why
     state/cleared.json               phones a person checked and released
     state/labels.jsonl               labels a person accepted
-    state/hf_synced.json             what the Hugging Face dataset holds
+    state/aml.json                   snapshots registered as Azure ML data assets
     snapshots/<id>/...               frozen exports (see export.py); snapshots/latest names the newest
     reports/<id>.md, reports/latest.md
     audit/<time>.json                one record per run: counts only
