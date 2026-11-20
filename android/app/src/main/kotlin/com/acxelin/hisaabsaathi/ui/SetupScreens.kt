@@ -26,7 +26,6 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -68,7 +67,7 @@ internal fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Bool
         Text(title, fontSize = 16.sp, fontWeight = FontWeight.Medium)
         Text("${pack.bytes / 1_000_000} MB", fontSize = 13.sp, color = InkSoft)
         when (state) {
-            PackState.Missing -> if (canDownload) OutlinedButton(onClick = { vm.download(pack) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.download, color = Ink) }
+            PackState.Missing -> if (canDownload) OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { vm.download(pack) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.download, color = Ink) }
             is PackState.Downloading -> {
                 LinearProgressIndicator(progress = { state.fraction }, modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp), color = Green)
                 Text(if (state.waiting) "${s.waitingForInternet} ${(state.fraction * 100).toInt()}%" else "${s.downloading} ${(state.fraction * 100).toInt()}%")
@@ -80,7 +79,7 @@ internal fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Bool
             }
             is PackState.Failed -> {
                 Text(state.message.removePrefix("space:").toLongOrNull()?.takeIf { state.message.startsWith("space:") }?.let(s::notEnoughSpace) ?: s.downloadFailed, color = Red)
-                if (canDownload) OutlinedButton(onClick = { vm.download(pack) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.download, color = Ink) }
+                if (canDownload) OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { vm.download(pack) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.download, color = Ink) }
             }
         }
     }
@@ -156,9 +155,9 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             if (waiting > 0 || settings.sharedCount > 0) {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     if (vm.canSend && waiting > 0 && settings.share == true) {
-                        OutlinedButton(onClick = { vm.sendNow() }, modifier = Modifier.height(52.dp)) { Text(s.sendNow) }
+                        OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { vm.sendNow() }, modifier = Modifier.height(52.dp)) { Text(s.sendNow) }
                     }
-                    OutlinedButton(onClick = { confirmDeleteShared = true }, modifier = Modifier.height(52.dp)) { Text(s.deleteShared, color = Red) }
+                    OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { confirmDeleteShared = true }, modifier = Modifier.height(52.dp)) { Text(s.deleteShared, color = Red) }
                 }
             }
             HorizontalDivider()
@@ -187,8 +186,8 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
                 Text(s.backupBody, fontSize = 15.sp)
                 val restore = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::restoreBackup) }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    OutlinedButton(onClick = { vm.saveBackup() }, modifier = Modifier.height(52.dp)) { Text(s.saveBackup) }
-                    OutlinedButton(onClick = { restore.launch(arrayOf("application/json", "application/octet-stream", "text/plain", "*/*")) }, modifier = Modifier.height(52.dp)) { Text(s.restoreBackup) }
+                    OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { vm.saveBackup() }, modifier = Modifier.height(52.dp)) { Text(s.saveBackup) }
+                    OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { restore.launch(arrayOf("application/json", "application/octet-stream", "text/plain", "*/*")) }, modifier = Modifier.height(52.dp)) { Text(s.restoreBackup) }
                 }
                 HorizontalDivider()
 
@@ -205,8 +204,8 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
                 }
                 Text(s.credits, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Text(CREDITS, fontSize = 12.sp, color = InkSoft, lineHeight = 17.sp)
-                OutlinedButton(onClick = { vm.reopenSetup() }) { Text(s.showSetupAgain) }
-                OutlinedButton(onClick = { confirmErase = true }) { Text(s.eraseAll, color = Red) }
+                OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { vm.reopenSetup() }) { Text(s.showSetupAgain) }
+                OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { confirmErase = true }) { Text(s.eraseAll, color = Red) }
             }
             Spacer(Modifier.height(24.dp))
         }

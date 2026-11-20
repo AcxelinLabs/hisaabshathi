@@ -3,6 +3,7 @@ package com.acxelin.hisaabsaathi.ui
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -205,12 +205,12 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
         // While an answer is showing, the answer takes this space; the buttons return when it is closed.
         if (!compact) Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
             // At least 52 dp, taller when a language needs two lines.
-            OutlinedButton(onClick = onScan, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
+            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = onScan, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
                 Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(6.dp))
                 Text(s.scanBill, fontSize = 14.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
             }
-            OutlinedButton(onClick = onType, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
+            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = onType, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
                 Text(s.typeInstead, fontSize = 14.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
             }
         }
@@ -235,8 +235,8 @@ private fun ShareCard(vm: AppViewModel, s: Strings) {
             IconButton(onClick = { vm.readAloud(s.shareCardTitle + " " + s.shareBody) }) { Icon(painterResource(R.drawable.ic_speaker), s.listen, tint = Ink) }
             if (!more) TextButton(onClick = { more = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.readAll, color = Ink, fontSize = 15.sp) }
             Spacer(Modifier.weight(1f))
-            OutlinedButton(onClick = { vm.setShare(false) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.no, color = Ink, fontSize = 16.sp) }
-            Button(
+            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { vm.setShare(false) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.no, color = Ink, fontSize = 16.sp) }
+            Button(shape = RoundedCornerShape(10.dp), 
                 onClick = { vm.setShare(true) }, modifier = Modifier.heightIn(min = 48.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Ink, contentColor = Color.White),
             ) { Text(s.yes, fontSize = 16.sp) }
@@ -328,7 +328,7 @@ fun ReviewScreen(vm: AppViewModel, r: Capture.Review, s: Strings, onSpeakAnswer:
                     }
                 }
             }
-            OutlinedButton(onClick = onSpeakAnswer, modifier = Modifier.height(48.dp)) {
+            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = onSpeakAnswer, modifier = Modifier.height(48.dp)) {
                 Icon(painterResource(R.drawable.ic_mic), null, tint = Ink, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(6.dp)); Text(s.sayYesNo, fontSize = 16.sp)
             }
@@ -608,9 +608,18 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
     val t = vm.totals(period, entries)
 
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp).widthIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        // Today / week / month / year, like the index tabs of a ledger book: the chosen one underlined.
+        Row(Modifier.fillMaxWidth()) {
             QueryPeriod.tabs.forEach { p ->
-                FilterChip(selected = period == p, onClick = { period = p }, label = { Text(s.periodName(p), fontSize = 16.sp) }, modifier = Modifier.height(48.dp))
+                val on = period == p
+                Column(
+                    Modifier.weight(1f).selectable(selected = on, role = androidx.compose.ui.semantics.Role.Tab) { period = p },
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(s.periodName(p), fontSize = 17.sp, fontWeight = if (on) FontWeight.Bold else FontWeight.Medium,
+                        color = if (on) Ink else InkSoft, maxLines = 1, modifier = Modifier.padding(vertical = 12.dp))
+                    Box(Modifier.fillMaxWidth().height(if (on) 3.dp else 1.dp).background(if (on) Marigold else Rule))
+                }
             }
         }
         TotalsCard(s.periodName(period), t, s)
@@ -620,7 +629,7 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             BigButton(s.readAloud, Marigold, Modifier.weight(1f)) { vm.speakSummary(period) }
-            OutlinedButton(onClick = { vm.exportPdf(period) }, modifier = Modifier.weight(1f).height(52.dp), contentPadding = PaddingValues(horizontal = 10.dp)) {
+            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { vm.exportPdf(period) }, modifier = Modifier.weight(1f).height(52.dp), contentPadding = PaddingValues(horizontal = 10.dp)) {
                 Icon(Icons.Default.Share, null, modifier = Modifier.size(20.dp)); Spacer(Modifier.width(6.dp))
                 Text(s.exportPdf, fontSize = 14.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
             }

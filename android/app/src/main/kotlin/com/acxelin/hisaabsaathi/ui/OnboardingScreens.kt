@@ -209,7 +209,7 @@ private fun SetupButtons(
     onNext: () -> Unit = {},
 ) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-        if (onBack != null) OutlinedButton(onClick = onBack, modifier = Modifier.height(52.dp)) {
+        if (onBack != null) OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = onBack, modifier = Modifier.height(52.dp)) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, s.cancel, tint = onBackTint)
         }
         if (onSkip != null) TextButton(onClick = onSkip, modifier = Modifier.height(52.dp)) { Text(s.skip, fontSize = 17.sp, color = InkSoft) }
@@ -491,13 +491,13 @@ fun DetailsEditScreen(vm: AppViewModel, s: Strings, onDone: () -> Unit) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Avatar(photo, 96.dp)
                 Spacer(Modifier.width(16.dp))
-                OutlinedButton(onClick = takeSelfie, modifier = Modifier.height(52.dp)) {
+                OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = takeSelfie, modifier = Modifier.height(52.dp)) {
                     Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(22.dp))
                     Spacer(Modifier.width(8.dp))
                     Text(if (photo == null) s.openCamera else s.takeAgain, fontSize = 16.sp, color = Ink)
                 }
             }
-            OutlinedButton(onClick = scan.takePhoto, enabled = !reading, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = scan.takePhoto, enabled = !reading, modifier = Modifier.fillMaxWidth().height(56.dp)) {
                 Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(24.dp))
                 Spacer(Modifier.width(10.dp))
                 Text(s.scanAadhaar, fontSize = 17.sp, color = Ink)
