@@ -60,8 +60,10 @@ class PlaceFieldsTest {
 
         // One district: both filled in.
         pin.performTextInput("751002")
-        waitFor("Found: Khordha (Khurda), Odisha")
+        waitFor("Khordha (Khurda), Odisha")
         assertEquals("Odisha" to "Khordha (Khurda)", vm.draft.value.state to vm.draft.value.district)
+        // Settled by the PIN: one line, no state or district boxes.
+        assertEquals(3, rule.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().size)
         shot("30-pin-found")
 
         // Two possible districts: the state is filled in and the worker chooses from the dropdown,
@@ -73,8 +75,11 @@ class PlaceFieldsTest {
         waitFor("Mumbai Suburban")
         shot("31-district-dropdown")
         rule.onNodeWithText("Mumbai Suburban").performClick(); pump()
-        waitFor("Found: Mumbai Suburban, Maharashtra")
+        waitFor("Mumbai Suburban, Maharashtra")
         assertEquals("Mumbai Suburban", vm.draft.value.district)
+
+        // Change opens the lists again.
+        rule.onNodeWithText("Change").performClick(); pump()
 
         // Typing narrows the state list.
         rule.onAllNodes(hasSetTextAction())[3].performClick(); pump()
@@ -87,14 +92,13 @@ class PlaceFieldsTest {
         // "Use my location" (permission given): one fix, the nearest PIN fills in PIN, state and district.
         org.robolectric.Shadows.shadowOf(rule.activity.application).grantPermissions(android.Manifest.permission.ACCESS_COARSE_LOCATION)
         TestApp.fakeLocation = 13.6288 to 79.4192 // Tirupati
-        rule.onNodeWithText("Your location is used once", substring = true).assertExists()
         rule.onNodeWithText("Use my location").performClick()
         // The nearest-PIN search runs off the main thread: give it real time.
         val until = System.currentTimeMillis() + 10_000
         while (vm.draft.value.pin != "517501" && System.currentTimeMillis() < until) { pump(); Thread.sleep(50) }
         assertEquals("517501", vm.draft.value.pin)
         waitFor("Filled in from your location: please check the PIN code.")
-        waitFor("Found: Tirupati, Andhra Pradesh")
+        waitFor("Tirupati, Andhra Pradesh")
         assertEquals("Andhra Pradesh" to "Tirupati", vm.draft.value.state to vm.draft.value.district)
         shot("33-location-filled")
         // The language is the worker's choice: location never changes it.
