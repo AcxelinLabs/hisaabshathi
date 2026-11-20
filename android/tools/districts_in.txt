@@ -1,4 +1,4 @@
-# Districts of the app's work states, for the setup question "Which district?".
+# Districts of the app's work states (input to tools/make_pin_directory.py, which builds assets/pin_in.txt).
 # Written from public lists in Nov 2026; CHECK against the state government's current list
 # before release (new districts are created from time to time). States not listed here, and
 # "Other", let the worker type the district instead. Format: State|District;District;…

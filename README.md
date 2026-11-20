@@ -91,6 +91,7 @@ It needs Android 10 or newer.
 | LiteRT-LM | Google | Apache-2.0 |
 | ML Kit text recognition | Google | ML Kit terms |
 | Anek fonts | Ek Type | OFL |
+| PIN code directory | India Post (data.gov.in) | Government Open Data Licence – India |
 
 The fine-tuned model and the English speech model are published at
 [huggingface.co/AcxelinLabs/hisaabsaathi-model](https://huggingface.co/AcxelinLabs/hisaabsaathi-model).

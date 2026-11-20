@@ -301,32 +301,46 @@ workers who agree. The service and pipeline are in `../server/`; how it all fits
   - `RealCasesTest`: real cases from a private snapshot, writing per-language metrics for the
     gates.
 
-## First-time setup and profile (0.9.0)
+## Setup and profile (0.9.3)
 
-`ui/OnboardingScreens.kt`, logic in `core/Onboarding.kt` (tested in `OnboardingTest`):
+`ui/OnboardingScreens.kt`, logic in `core/Onboarding.kt` and `core/PinDirectory.kt` (tested in
+`OnboardingTest`, `PlaceFieldsTest`, `AppFlowTest`). Shown on a new phone, and once after updating
+to 0.9.3 (`Settings.SETUP_VERSION`), keeping what was already chosen. Every detail is optional.
 
-1. **Location (optional).** One approximate fix (`ACCESS_COARSE_LOCATION`) finds the state on the
-   phone, from simplified state borders bundled in the app (`assets/india_states.txt`, Natural
-   Earth admin-1, public domain, about 70 KB). The location is not stored and never sent. Refused
-   or not found: the worker picks language and state by hand.
-2. **Language**, pre-selected from the state (Odisha → Odia, Telangana/Andhra → Telugu,
-   Karnataka → Kannada, Tamil Nadu → Tamil, Hindi states → Hindi, others → English); one tap
-   changes it. **Next starts the voice downloads in the background**: speech pack first, then
-   the read-aloud voice. A small bar on every later screen shows progress.
-3. **Photo (optional):** a selfie (the camera is asked for the front lens), made into a small
-   square JPEG (about 480 × 480), shown on the profile page and the home screen.
-4. **Your details**, with the privacy note on top (read aloud):
-   - **Scan Aadhaar QR**: a photo of the card's QR (or a saved image) is read on the phone with
-     ML Kit; `AadhaarQr` takes only name, age, state, district and PIN from it (Secure QR and the
-     older XML QR). The photo is deleted at once; the Aadhaar digits, photo, gender, mobile and
-     address lines are never kept. The signature is not checked: this saves typing, it is not ID proof.
-   - **Fill it myself**: one question per screen (name → age → state → district → PIN), each
-     read aloud, answered by typing or by the mic once the speech pack is ready (on-device only;
-     never the phone's online recogniser, never kept for "Help improve"). District is tapped from
-     the state's list (`assets/districts_in.txt`); PIN is checked against the state. Name, age,
-     district and PIN can be skipped.
+1. **Language: the worker's own choice.** The first screen asks "Choose your language" in all six
+   languages at once, each in its own script, so it can be read before anything is chosen. A new
+   phone starts on the phone's language if the app has it; nothing else (no location, no state)
+   ever changes the language. It applies everywhere the app speaks or writes, and can be changed
+   in Settings. **Next starts the voice downloads in the background** (speech pack, then the
+   read-aloud voice); a small bar on later screens shows progress.
+2. **Your details**, with the privacy note on top (read aloud): *Fill it myself* or *Scan Aadhaar
+   QR*, two equal choices, the scan marked optional, or Skip.
+   - **Scan Aadhaar QR**: the card's QR (camera or a saved image) is read on the phone with ML Kit;
+     `AadhaarQr` takes only name, age, state, district and PIN (Secure QR and the older XML QR).
+     The picture is deleted at once; the Aadhaar digits, photo, gender, mobile and address lines
+     are never kept. The signature is not checked: this saves typing, it is not ID proof.
+   - **Fill it myself**: one question per screen (name → age → where you work), each read aloud,
+     answered by typing or by the mic once the speech pack is ready (on the phone only; never kept
+     for "Help improve").
+3. **Where you work:** typing the **PIN code fills in the state and the district**, from India
+   Post's All India Pincode Directory bundled in the app (`assets/pin_in.txt`, 19,297 PIN codes,
+   36 states and union territories, about 250 KB; Government Open Data Licence – India; built by
+   `tools/make_pin_directory.py`).
+   - District names are today's for the app's ten work states (`tools/districts_in.txt`) and India
+     Post's elsewhere. Where a postal district has since been split (Andhra Pradesh 2022,
+     Warangal, Vijayanagara, Vav-Tharad, Mumbai City/Suburban), the PIN offers the districts it
+     may be in first; the likely one is chosen when the PIN's post offices are named after its town.
+   - A PIN that no place has, or that cannot be a PIN (not 6 digits, or starting 0 or 9), is said
+     plainly and blocks nothing: state and district can always be chosen by hand.
+   - State and district are clean dropdowns: tap to open, type to narrow the list.
+   - The state saved here is also the minimum-wage work state ("Other": central rates).
+4. **Photo (optional):** a selfie (front lens asked for), made into a small square JPEG (about
+   480 × 480), shown on the profile page and the home screen.
 5. **Help improve HisaabSaathi?** (yes or no, nothing chosen for the worker), as in 0.8.0.
 6. **Smart model**: Download or Later, then Start.
+
+No location permission is asked: the PIN gives the state more reliably, and the language is the
+worker's choice.
 
 **Profile page:** the round photo button at the top of the home screen opens it: photo, name,
 age, state, district and PIN, with *Change my details* (retake the photo, edit, or fill from the
@@ -340,9 +354,9 @@ Spoken questions use recordings in `assets/onboarding_audio/<language>/` when pr
 (sentences and file names: `tools/onboarding_audio_script.md`; generate them with
 `python tools/tts/make_onboarding_audio.py`); otherwise the app's voice or the phone's.
 **To do before release:** generate or record those, native review of the new Odia/Telugu/
-Kannada/Tamil text, check the district lists against current state lists, legal review of
-reading Aadhaar QR, and declare location, photo and personal info (collected, not shared) in the
-Play Store data-safety form.
+Kannada/Tamil text, check the district lists against current state lists and refresh the PIN
+directory from data.gov.in, legal review of reading Aadhaar QR, and declare photo and personal
+info (collected, not shared) in the Play Store data-safety form.
 
 ## Look
 

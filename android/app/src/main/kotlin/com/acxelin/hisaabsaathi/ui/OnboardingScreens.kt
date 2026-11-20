@@ -1,5 +1,15 @@
 package com.acxelin.hisaabsaathi.ui
 
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuAnchorType
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
+import com.acxelin.hisaabsaathi.core.PinDirectory
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -29,7 +39,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
@@ -37,7 +46,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -50,7 +58,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -73,7 +80,6 @@ import com.acxelin.hisaabsaathi.core.Lang
 import com.acxelin.hisaabsaathi.core.Pin
 import com.acxelin.hisaabsaathi.core.Profile
 import com.acxelin.hisaabsaathi.core.SpokenDetails
-import com.acxelin.hisaabsaathi.core.StateInfo
 import com.acxelin.hisaabsaathi.core.Strings
 import com.acxelin.hisaabsaathi.data.Settings
 import com.acxelin.hisaabsaathi.models.Catalog
@@ -82,13 +88,14 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 /**
- * First-time setup:
- * location (optional) → language (picked from the state) → photo (selfie, optional) → your
- * details (Aadhaar QR, or one question per screen, read aloud, answered by typing or by voice)
- * → help improve the app (yes or no) → smart model (optional) → start.
- * The voice packs download in the background from the language screen on.
+ * Setup: on a new phone, and once after an update that adds to it. In the worker's own language
+ * from the first screen:
+ * language (the worker's choice, never guessed from location) → your details (one question per
+ * screen, typed or said, or from an Aadhaar QR; all optional) → where you work (the PIN fills in
+ * state and district) → photo (optional) → help improve the app (yes or no) → smart model
+ * (optional) → start. The voice packs download in the background from the language screen on.
  */
-private enum class Step { LOCATION, LANGUAGE, PHOTO, DETAILS, REVIEW, NAME, AGE, STATE, DISTRICT, PIN, SHARE, MODEL }
+private enum class Step { LANGUAGE, DETAILS, REVIEW, NAME, AGE, PLACE, PHOTO, SHARE, MODEL }
 
 /** Setup questions that are read aloud on arrival: (recording name, text). */
 private fun prompt(step: Step, s: Strings): Pair<String, String>? = when (step) {
@@ -97,16 +104,15 @@ private fun prompt(step: Step, s: Strings): Pair<String, String>? = when (step) 
     Step.REVIEW -> "check_details" to s.checkDetails
     Step.NAME -> "q_name" to s.qName
     Step.AGE -> "q_age" to s.qAge
-    Step.STATE -> "q_state" to s.chooseState
-    Step.DISTRICT -> "q_district" to s.qDistrict
-    Step.PIN -> "q_pin" to s.qPin
+    Step.PLACE -> "q_pin" to s.qPin
     else -> null
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     // The steps visited, so Back retraces the worker's own path (Aadhaar or questions).
-    var path by rememberSaveable { mutableStateOf(Step.LOCATION.name) }
+    var path by rememberSaveable { mutableStateOf(Step.LANGUAGE.name) }
     val steps = path.split(',').map { Step.valueOf(it) }
     val step = steps.last()
     fun go(to: Step) { vm.stopSpeaking(); path = "$path,${to.name}" }
@@ -117,10 +123,6 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     val modelDownloading = step == Step.MODEL && allPacks[vm.slmPack.id] is PackState.Downloading
     BackHandler(enabled = steps.size > 1) { if (!modelDownloading) back() }
 
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    var finding by remember { mutableStateOf(false) }
-    var locationFailed by rememberSaveable { mutableStateOf(false) }
     var reading by remember { mutableStateOf(false) }
     var qrFailed by rememberSaveable { mutableStateOf(false) }
     // "Help improve HisaabSaathi?": nothing chosen for the worker (kept if setup is shown again).
@@ -128,19 +130,11 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     val photo by vm.draftPhoto.collectAsStateWithLifecycle()
     val takeSelfie = rememberSelfie(vm, s)
 
+    // A new phone starts from its own language, if the app has it (the worker still chooses);
+    // setup shown again after an update starts from the details already saved.
+    LaunchedEffect(Unit) { vm.suggestPhoneLanguage(); if (settings.onboarded) vm.startDraft() }
     LaunchedEffect(step, settings.lang) { prompt(step, s)?.let { (key, text) -> vm.speakPrompt(key, text) } }
 
-    fun detectThenLanguage() {
-        finding = true
-        scope.launch {
-            locationFailed = !vm.detectState()
-            finding = false
-            go(Step.LANGUAGE)
-        }
-    }
-    val locationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) detectThenLanguage() else go(Step.LANGUAGE)
-    }
     val scan = rememberAadhaarScan(vm, s, onReading = { busy -> reading = busy; if (busy) { qrFailed = false } }) { ok ->
         if (ok) go(Step.REVIEW) else { qrFailed = true }
     }
@@ -151,42 +145,25 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     }
     fun finish() { vm.stopSpeaking(); vm.finishOnboarding(share == true) }
 
-    val dark = step == Step.LOCATION || step == Step.LANGUAGE
+    val dark = step == Step.LANGUAGE
     val onBg = if (dark) Color.White else Ink
-    // No language is chosen yet on the first screen: it speaks the app's starting language
-    // (Hindi), like every other screen, with English underneath for those who read it.
-    val en = remember { Strings(Lang.EN) }
-    val both = s.lang != Lang.EN
-    val head = s
     Column(Modifier.fillMaxSize().background(if (dark) Ink else Chalk).systemBarsPadding().imePadding().padding(horizontal = 24.dp, vertical = 16.dp)) {
-        Text(head.appName, fontSize = 34.sp, fontWeight = FontWeight.ExtraBold, color = onBg)
+        Text(s.appName, fontSize = 34.sp, fontWeight = FontWeight.ExtraBold, color = onBg)
         if (!dark) { Spacer(Modifier.height(8.dp)); VoiceProgress(vm, s) }
         Spacer(Modifier.height(16.dp))
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             when (step) {
-                Step.LOCATION -> {
-                    Icon(Icons.Default.LocationOn, null, tint = Marigold, modifier = Modifier.size(64.dp))
-                    Text(s.locationTitle, fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Color.White)
-                    Text(s.locationBody, fontSize = 18.sp, color = Color.White, lineHeight = 26.sp)
-                    if (both) {
-                        Text(en.locationTitle, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Color.White.copy(alpha = 0.75f))
-                        Text(en.locationBody, fontSize = 15.sp, color = Color.White.copy(alpha = 0.75f), lineHeight = 21.sp)
-                    }
-                    if (finding) Row(verticalAlignment = Alignment.CenterVertically) {
-                        CircularProgressIndicator(color = Marigold, modifier = Modifier.size(28.dp))
-                        Spacer(Modifier.width(12.dp))
-                        Text(s.findingState, color = Color.White, fontSize = 17.sp)
-                    }
-                }
                 Step.LANGUAGE -> {
-                    val detected by vm.detectedState.collectAsStateWithLifecycle()
-                    detected?.let {
-                        Text(s.yourState(it), fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Marigold)
-                        Text(s.languageForState, fontSize = 17.sp, color = Color.White)
+                    // The question in every language, each in its own script: readable before any choice.
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Lang.entries.forEach { l ->
+                            val on = l == settings.lang
+                            Text(Strings(l).chooseLanguage, fontFamily = fontFor(l), fontSize = if (on) 21.sp else 16.sp,
+                                fontWeight = if (on) FontWeight.SemiBold else FontWeight.Normal, color = if (on) Color.White else Color.White.copy(alpha = 0.7f))
+                        }
                     }
-                    if (detected == null && locationFailed) Text(s.locationFailed, fontSize = 16.sp, color = Marigold)
-                    Text(s.chooseLanguage, fontSize = 22.sp, color = Color.White)
                     LanguagePicker(vm, settings, onDark = true)
+                    Text(s.languageLater, fontSize = 15.sp, color = Color.White.copy(alpha = 0.8f), lineHeight = 21.sp)
                 }
                 Step.PHOTO -> {
                     Question(s.qPhoto) { vm.speakPrompt("q_photo", "${s.qPhoto}. ${s.photoHint}") }
@@ -255,19 +232,9 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                     MicAnswer(vm, s) { text -> SpokenDetails.age(text)?.also { a -> vm.editDraft { it.copy(age = a) } }?.toString() }
                     if (draft.age?.let { it < 18 } == true) Text(s.adultsOnly, fontSize = 17.sp, color = Red)
                 }
-                Step.STATE -> {
-                    Question(s.chooseState) { vm.speakPrompt("q_state", s.chooseState) }
-                    RegionChips(regions(vm), draft.state) { r -> vm.editDraft { it.copy(state = r, district = if (r == it.state) it.district else "") } }
-                }
-                Step.DISTRICT -> {
-                    Question(s.qDistrict) { vm.speakPrompt("q_district", s.qDistrict) }
-                    DistrictPicker(vm, draft, s)
-                }
-                Step.PIN -> {
+                Step.PLACE -> {
                     Question(s.qPin) { vm.speakPrompt("q_pin", s.qPin) }
-                    PinField(vm, draft, s)
-                    // Read back digit by digit: "7 5 1 0 0 2".
-                    MicAnswer(vm, s) { text -> SpokenDetails.pin(text)?.also { p -> vm.editDraft { it.copy(pin = p) } }?.toList()?.joinToString(" ") }
+                    PlaceFields(vm, draft, s, spoken = true)
                 }
                 Step.SHARE -> ShareQuestion(vm, s, share) { share = it }
                 Step.MODEL -> {
@@ -294,39 +261,21 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
             }
         }
         Spacer(Modifier.height(12.dp))
-        val onBack: (() -> Unit)? = if (steps.size > 1 && !finding && !reading) ({ back() }) else null
+        val onBack: (() -> Unit)? = if (steps.size > 1 && !reading) ({ back() }) else null
         when (step) {
-            Step.LOCATION -> Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Button(
-                    onClick = {
-                        val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                        if (granted) detectThenLanguage() else locationPermission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-                    },
-                    enabled = !finding, modifier = Modifier.fillMaxWidth().height(60.dp), shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Marigold, contentColor = Ink),
-                ) { Label2(s.allowLocation, en.allowLocation.takeIf { both }, Ink, 18) }
-                OutlinedButton(
-                    onClick = { go(Step.LANGUAGE) }, enabled = !finding,
-                    modifier = Modifier.fillMaxWidth().height(60.dp), shape = RoundedCornerShape(10.dp),
-                ) { Label2(s.chooseMyself, en.chooseMyself.takeIf { both }, Color.White, 17) }
-            }
-            Step.LANGUAGE -> SetupButtons(s, onBack, null, s.next, onBackTint = Color.White) { vm.startVoiceDownloads(); go(Step.PHOTO) }
-            Step.PHOTO -> SetupButtons(s, onBack, { go(Step.DETAILS) }, s.next, photo != null) { go(Step.DETAILS) }
-            Step.DETAILS -> SetupButtons(s, onBack, null, null)
-            Step.REVIEW -> SetupButtons(s, onBack, null, s.next) { go(if (draft.state.isEmpty()) Step.STATE else Step.SHARE) }
+            Step.LANGUAGE -> SetupButtons(s, null, null, s.next) { vm.startVoiceDownloads(); go(Step.DETAILS) }
+            // Every detail is optional: Skip goes straight on to the photo.
+            Step.DETAILS -> SetupButtons(s, onBack, { go(Step.PHOTO) }, null)
+            Step.REVIEW -> SetupButtons(s, onBack, null, s.next) { go(Step.PHOTO) }
             Step.NAME -> SetupButtons(s, onBack, { go(Step.AGE) }, s.next, draft.name.isNotBlank()) { go(Step.AGE) }
-            Step.AGE -> SetupButtons(s, onBack, { go(Step.STATE) }, s.next, draft.age != null) { go(Step.STATE) }
-            Step.STATE -> SetupButtons(s, onBack, null, s.next, draft.state.isNotEmpty()) { go(Step.DISTRICT) }
-            Step.DISTRICT -> SetupButtons(s, onBack, { go(Step.PIN) }, s.next, draft.district.isNotBlank()) { go(Step.PIN) }
-            Step.PIN -> SetupButtons(s, onBack, { go(Step.SHARE) }, s.next, Pin.valid(draft.pin)) { go(Step.SHARE) }
+            Step.AGE -> SetupButtons(s, onBack, { go(Step.PLACE) }, s.next, draft.age != null) { go(Step.PLACE) }
+            Step.PLACE -> SetupButtons(s, onBack, { go(Step.PHOTO) }, s.next, draft.state.isNotEmpty()) { go(Step.PHOTO) }
+            Step.PHOTO -> SetupButtons(s, onBack, { go(Step.SHARE) }, s.next, photo != null) { go(Step.SHARE) }
             Step.SHARE -> SetupButtons(s, onBack, null, s.next, share != null) { go(Step.MODEL) }
             Step.MODEL -> SetupButtons(s, if (modelDownloading) null else onBack, null, s.start, nextEnabled = !modelDownloading) { finish() }
         }
     }
 }
-
-private fun regions(vm: AppViewModel): List<String> =
-    vm.wagePack.regions.ifEmpty { StateInfo.appRegions + "Other" }
 
 @Composable
 private fun SetupButtons(
@@ -443,81 +392,105 @@ private fun MicAnswer(vm: AppViewModel, s: Strings, onText: (String) -> String?)
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+/**
+ * A clean dropdown: tap to open the list, type to narrow it, tap to choose. [first] (the few
+ * districts a PIN may be in) come at the top, in bold, above a line.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RegionChips(regions: List<String>, selected: String, onPick: (String) -> Unit) {
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        regions.forEach { r ->
-            FilterChip(selected = selected == r, onClick = { onPick(r) }, label = { Text(r, fontSize = 17.sp) }, modifier = Modifier.height(48.dp))
-        }
-    }
-}
-
-/** Tap a district from the state's list (with a search box), or type one for states without a list. */
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun DistrictPicker(vm: AppViewModel, draft: Profile, s: Strings) {
-    val list = vm.districts[draft.state]
-    if (list == null) {
+internal fun PickList(label: String, value: String, options: List<String>, s: Strings, first: List<String> = emptyList(), onPick: (String) -> Unit) {
+    var open by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
+    val focus = LocalFocusManager.current
+    fun close() { open = false; query = ""; focus.clearFocus() }
+    ExposedDropdownMenuBox(expanded = open, onExpandedChange = { open = it; if (!it) query = "" }) {
         OutlinedTextField(
-            value = draft.district, onValueChange = { v -> vm.editDraft { it.copy(district = v.take(60)) } },
-            label = { Text(s.districtLabel) }, placeholder = { Text(s.typeDistrict) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
+            value = if (open) query else value,
+            onValueChange = { query = it.take(40); open = true },
+            label = { Text(label) },
+            placeholder = { if (value.isNotEmpty()) Text(value, color = InkSoft) },
+            singleLine = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = open) },
+            textStyle = TextStyle(fontSize = 18.sp, color = Ink),
+            modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryEditable),
         )
-        return
-    }
-    var query by remember(draft.state) { mutableStateOf("") }
-    OutlinedTextField(
-        value = query, onValueChange = { query = it.take(40) },
-        label = { Text(s.districtLabel) }, placeholder = { Text(s.typeDistrict) }, singleLine = true,
-        leadingIcon = { Icon(Icons.Default.Search, null) }, modifier = Modifier.fillMaxWidth(),
-    )
-    val typed = query.trim()
-    val shown = if (typed.isEmpty()) list else list.filter { it.contains(typed, ignoreCase = true) }
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        shown.forEach { d ->
-            FilterChip(selected = draft.district == d, onClick = { vm.editDraft { it.copy(district = d) } }, label = { Text(d, fontSize = 16.sp) }, modifier = Modifier.height(44.dp))
-        }
-        // Not in the list (a new district, another spelling): keep what was typed.
-        if (shown.isEmpty() && typed.isNotEmpty()) {
-            FilterChip(selected = draft.district == typed, onClick = { vm.editDraft { it.copy(district = typed) } }, label = { Text(typed, fontSize = 16.sp) }, modifier = Modifier.height(44.dp))
+        val typed = query.trim()
+        fun matches(o: String) = typed.isEmpty() || o.contains(typed, ignoreCase = true)
+        val top = first.filter(::matches)
+        val rest = options.filter { it !in first && matches(it) }
+        ExposedDropdownMenu(expanded = open, onDismissRequest = { close() }) {
+            @Composable
+            fun item(o: String, bold: Boolean) = DropdownMenuItem(
+                text = { Text(o, fontSize = 17.sp, fontWeight = if (bold) FontWeight.SemiBold else FontWeight.Normal, color = Ink) },
+                onClick = { onPick(o); close() },
+                modifier = Modifier.heightIn(min = 48.dp),
+                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+            )
+            top.forEach { item(it, bold = true) }
+            if (top.isNotEmpty() && rest.isNotEmpty()) HorizontalDivider(color = Rule)
+            rest.forEach { item(it, bold = false) }
+            if (top.isEmpty() && rest.isEmpty()) {
+                DropdownMenuItem(text = { Text(s.noMatch, color = InkSoft) }, onClick = {}, enabled = false)
+            }
         }
     }
 }
 
+/**
+ * Where the worker works: the PIN fills in the state, and the district when the PIN has only
+ * one; otherwise the districts it may be in are offered first. State and district can always be
+ * chosen by hand (no PIN needed). An unknown or mistyped PIN says so and never blocks.
+ */
 @Composable
-private fun PinField(vm: AppViewModel, draft: Profile, s: Strings) {
+internal fun PlaceFields(vm: AppViewModel, draft: Profile, s: Strings, spoken: Boolean = false) {
+    val result = remember(draft.pin) { vm.pins.lookup(draft.pin) }
+    val found = result as? PinDirectory.Result.Found
+    Text(s.pinHelp, fontSize = 16.sp, color = InkSoft, lineHeight = 22.sp)
     OutlinedTextField(
-        value = draft.pin, onValueChange = { v -> vm.editDraft { it.copy(pin = v.filter(Char::isDigit).take(6)) } },
+        value = draft.pin, onValueChange = vm::setDraftPin,
         label = { Text(s.pinLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 22.sp),
+        textStyle = TextStyle(fontSize = 22.sp, color = Ink),
+        isError = draft.pin.length == 6 && found == null,
     )
+    // Read back digit by digit: "7 5 1 0 0 2".
+    if (spoken) MicAnswer(vm, s) { text -> SpokenDetails.pin(text)?.also { vm.setDraftPin(it) }?.toList()?.joinToString(" ") }
     when {
-        draft.pin.isNotEmpty() && !Pin.valid(draft.pin) -> Text(s.pinSixDigits, fontSize = 15.sp, color = InkSoft)
-        Pin.valid(draft.pin) && draft.state.isNotEmpty() && !Pin.fitsState(draft.pin, draft.state) -> Text(s.pinOtherState, fontSize = 15.sp, color = NoticeInk)
+        draft.pin.isEmpty() -> Unit
+        found != null && draft.state.isNotEmpty() && found.state != draft.state -> Text(s.pinOtherState, fontSize = 15.sp, color = NoticeInk)
+        found != null && draft.district in found.districts -> Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Default.Check, null, tint = Leaf, modifier = Modifier.size(22.dp))
+            Text(s.pinFound(draft.district, found.state), fontSize = 16.sp, color = Leaf, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(start = 6.dp))
+        }
+        found != null -> Text(s.pinManyDistricts, fontSize = 15.sp, color = NoticeInk)
+        result == PinDirectory.Result.Unknown -> Text(s.pinNotFound, fontSize = 15.sp, color = Red)
+        draft.pin.length == 6 -> Text(s.pinBadFormat, fontSize = 15.sp, color = Red)
+        else -> Text(s.pinSixDigits, fontSize = 15.sp, color = InkSoft)
+    }
+    PickList(s.stateLabel, draft.state, vm.pins.states, s) { vm.setDraftState(it) }
+    if (draft.state.isNotEmpty()) {
+        val likely = found?.takeIf { it.state == draft.state && it.districts.size > 1 }?.districts.orEmpty()
+        PickList(s.districtLabel, draft.district, vm.pins.districts(draft.state), s, first = likely) { d -> vm.editDraft { it.copy(district = d) } }
     }
 }
 
-/** All details on one screen: after an Aadhaar scan, and in Settings → My details. */
 @Composable
 internal fun DetailsForm(vm: AppViewModel, draft: Profile, s: Strings) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         OutlinedTextField(
             value = draft.name, onValueChange = { v -> vm.editDraft { it.copy(name = v.take(60)) } },
             label = { Text(s.nameLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
+            textStyle = TextStyle(fontSize = 18.sp, color = Ink),
         )
         OutlinedTextField(
             value = draft.age?.toString().orEmpty(),
             onValueChange = { v -> vm.editDraft { it.copy(age = v.filter(Char::isDigit).take(3).toIntOrNull()) } },
             label = { Text(s.ageLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            textStyle = TextStyle(fontSize = 18.sp, color = Ink),
         )
         if (draft.age?.let { it < 18 } == true) Text(s.adultsOnly, fontSize = 15.sp, color = Red)
-        Text(s.workState, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-        RegionChips(regions(vm), draft.state) { r -> vm.editDraft { it.copy(state = r, district = if (r == it.state) it.district else "") } }
-        if (draft.district.isNotBlank()) Text("${s.districtLabel}: ${draft.district}", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-        DistrictPicker(vm, draft, s)
-        PinField(vm, draft, s)
+        PlaceFields(vm, draft, s)
     }
 }
 
@@ -592,7 +565,9 @@ fun DetailsEditScreen(vm: AppViewModel, s: Strings, onDone: () -> Unit) {
                 Spacer(Modifier.width(10.dp))
                 Text(s.scanAadhaar, fontSize = 17.sp, color = Ink)
             }
-            TextButton(onClick = scan.pickPhoto, enabled = !reading) { Text(s.choosePhoto) }
+            OutlinedButton(onClick = scan.pickPhoto, enabled = !reading, modifier = Modifier.height(52.dp), shape = RoundedCornerShape(10.dp)) {
+                Text(s.choosePhoto, fontSize = 16.sp, color = Ink)
+            }
             if (reading) CircularProgressIndicator(color = Green)
             if (qrFailed) Text(s.aadhaarFailed, fontSize = 15.sp, color = Red)
             DetailsForm(vm, draft, s)
@@ -700,14 +675,5 @@ private fun ProfileLine(label: String, value: String) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Text(label, fontSize = 16.sp, color = InkSoft, modifier = Modifier.weight(1f))
         Text(value, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.End, modifier = Modifier.weight(1.4f))
-    }
-}
-
-/** A button label in the app's language, with the English underneath when the screen shows both. */
-@Composable
-private fun Label2(main: String, english: String?, color: Color, size: Int) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(main, fontSize = size.sp, fontWeight = FontWeight.SemiBold, color = color, textAlign = TextAlign.Center, lineHeight = (size + 2).sp)
-        english?.let { Text(it, fontSize = 13.sp, color = color.copy(alpha = 0.8f), textAlign = TextAlign.Center, lineHeight = 15.sp) }
     }
 }

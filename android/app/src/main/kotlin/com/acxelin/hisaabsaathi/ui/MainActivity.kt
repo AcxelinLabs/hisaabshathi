@@ -77,7 +77,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
     val capture by vm.capture.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    if (!settings.onboarded) {
+    if (settings.needsSetup) {
         Onboarding(vm, settings, s)
         return
     }

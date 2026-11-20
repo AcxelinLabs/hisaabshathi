@@ -58,6 +58,11 @@ val AppColors = lightColorScheme(
     secondary = Marigold, onSecondary = Ink, secondaryContainer = Marigold, onSecondaryContainer = Ink,
     error = Sindoor, background = Chalk, onBackground = Ink, surface = Paper, onSurface = Ink,
     surfaceVariant = Color(0xFFE2ECE4), onSurfaceVariant = InkSoft, outline = Rule,
+    // Menus, dialogs and sheets are paper, like the rest of the app (not Material's lavender).
+    surfaceContainerLowest = Paper, surfaceContainerLow = Paper, surfaceContainer = Paper,
+    surfaceContainerHigh = Paper, surfaceContainerHighest = Color(0xFFE2ECE4),
+    surfaceBright = Paper, surfaceDim = Chalk, surfaceTint = Color.Transparent,
+    inverseSurface = Ink, inverseOnSurface = Color.White, inversePrimary = Marigold,
 )
 
 /** Anek is one type family drawn for every script the app speaks, so all six languages look alike. */

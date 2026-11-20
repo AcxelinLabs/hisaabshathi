@@ -80,16 +80,13 @@ class AppFlowTest {
 
     @Test fun firstSession() {
         org.robolectric.shadows.ShadowLog.stream = System.out
-        // --- setup (Hindi is the default language)
-        waitFor("Find your state") // first screen: English, no language chosen yet
-        shot("00-location")
-        click("Choose myself") // location not allowed: language and state by hand
-        waitFor("अपनी भाषा चुनें")
+        // --- setup. The first screen asks in every language; the worker's own choice is final.
+        waitFor("Choose your language")
+        rule.onNodeWithText("अपनी भाषा चुनें").assertExists() // the same question in Hindi (and the others)
+        click("हिन्दी")
+        waitFor("भाषा आप कभी भी सेटिंग में बदल सकते हैं।")
         shot("01-language")
         click("आगे")
-        waitFor("अपनी फोटो लें")
-        shot("01a-photo")
-        click("छोड़ें") // no camera in tests
         waitFor("आपकी जानकारी")
         shot("01b-details")
         click("खुद भरूँगा")
@@ -101,18 +98,15 @@ class AppFlowTest {
         rule.onNode(hasSetTextAction()).performTextInput("35")
         shot("01d-age")
         click("आगे")
-        waitFor("Odisha")
-        click("Odisha")
-        shot("02-state")
-        click("आगे")
-        waitFor("आप किस ज़िले में काम करते हैं?")
-        click("Khordha")
-        shot("02b-district")
-        click("आगे")
+        // Where you work: the PIN fills in state and district.
         waitFor("आपका पिन कोड क्या है?")
-        rule.onNode(hasSetTextAction()).performTextInput("751002")
-        shot("02c-pin")
+        rule.onAllNodes(hasSetTextAction()).onFirst().performTextInput("751002")
+        waitFor("मिल गया: Khordha (Khurda), Odisha")
+        shot("02-place")
         click("आगे")
+        waitFor("अपनी फोटो लें")
+        shot("02b-photo")
+        click("छोड़ें") // no camera in tests
         // Help improve the app: asked, read aloud, nothing chosen for the worker.
         waitFor("हिसाब साथी को बेहतर बनाने में मदद करेंगे?")
         check(rule.onAllNodes(hasText("आगे") and androidx.compose.ui.test.isEnabled()).fetchSemanticsNodes().isEmpty()) { "Next must wait for a yes or no" }

@@ -81,16 +81,6 @@ internal fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Bool
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-internal fun RegionPicker(vm: AppViewModel, settings: Settings, onPicked: () -> Unit = {}) {
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        vm.wagePack.regions.forEach { r ->
-            FilterChip(selected = settings.region == r, onClick = { vm.setRegion(r); onPicked() }, label = { Text(r, fontSize = 17.sp) }, modifier = Modifier.height(48.dp))
-        }
-    }
-}
-
 @Composable
 internal fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean = false) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -174,16 +164,10 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             LanguagePicker(vm, settings)
             HorizontalDivider()
 
-            // Chosen once: shown as one line, the full list only when the worker wants to change it.
-            var pickState by rememberSaveable { mutableStateOf(false) }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) {
-                    Text(s.workState, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text(settings.region, fontSize = 17.sp, color = InkSoft)
-                }
-                if (!pickState) OutlinedButton(onClick = { pickState = true }, modifier = Modifier.height(48.dp)) { Text(s.change, fontSize = 16.sp) }
-            }
-            if (pickState) RegionPicker(vm, settings, onPicked = { pickState = false })
+            // The same state list as setup and My details; the minimum wage follows the state.
+            val profile by vm.profile.collectAsStateWithLifecycle()
+            Text(s.workState, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            PickList(s.stateLabel, profile.state.ifEmpty { settings.region.takeIf { it != "Other" }.orEmpty() }, vm.pins.states, s) { vm.setWorkState(it) }
             HorizontalDivider()
 
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -244,7 +228,7 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             Text(s.privacyTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(s.privacyBody, fontSize = 15.sp)
             HorizontalDivider()
-            Text("Credits", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(s.credits, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text(CREDITS, fontSize = 12.sp, color = InkSoft, lineHeight = 17.sp)
             OutlinedButton(onClick = { vm.reopenSetup() }) { Text(s.showSetupAgain) }
             OutlinedButton(onClick = { confirmErase = true }) { Text(s.eraseAll, color = Red) }
@@ -280,4 +264,5 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
 private const val CREDITS = """Speech recognition: AI4Bharat IndicConformer (MIT); English: NVIDIA Parakeet TDT-CTC 110M (CC-BY-4.0, ONNX export by k2-fsa); voice detection: Silero VAD (MIT); runtime: sherpa-onnx (Apache-2.0).
 Voices: Indic Tiny TTS by Sulabh Katiyar (CC-BY-4.0, huggingface.co/sulabhkatiyar), trained on AI4Bharat Rasa (CC-BY-4.0); vocoder: Vocos by charactr (MIT); runtime: ONNX Runtime (MIT).
 Understanding: Qwen3-0.6B by Alibaba Cloud (Apache-2.0), fine-tuned by Acxelin Labs; runtime: Google LiteRT-LM (Apache-2.0).
-Fonts: Anek by EkType (SIL Open Font Licence)."""
+Fonts: Anek by EkType (SIL Open Font Licence).
+PIN codes, states and districts: India Post, All India Pincode Directory (data.gov.in, Government Open Data Licence – India)."""

@@ -17,8 +17,6 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `details_privacy.mp3` | आपकी जानकारी इसी फोन में ताले में रहती है। कोई और इसे नहीं देख सकता। कुछ भी अपलोड नहीं होता। |
 | `q_name.mp3` | आपका नाम क्या है? |
 | `q_age.mp3` | आपकी उम्र कितनी है? |
-| `q_state.mp3` | आप किस राज्य में काम करते हैं? |
-| `q_district.mp3` | आप किस ज़िले में काम करते हैं? |
 | `q_pin.mp3` | आपका पिन कोड क्या है? इसमें 6 अंक होते हैं। |
 | `check_details.mp3` | अपनी जानकारी देखें। कुछ गलत हो तो बदलें। |
 
@@ -30,8 +28,6 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `details_privacy.mp3` | ଆପଣଙ୍କ ବିବରଣୀ ଏହି ଫୋନ୍‌ରେ ତାଲା ପଡ଼ି ରହେ। ଆଉ କେହି ଦେଖିପାରିବେ ନାହିଁ। କିଛି ଅପଲୋଡ୍ ହୁଏ ନାହିଁ। |
 | `q_name.mp3` | ଆପଣଙ୍କ ନାମ କଣ? |
 | `q_age.mp3` | ଆପଣଙ୍କ ବୟସ କେତେ? |
-| `q_state.mp3` | ଆପଣ କେଉଁ ରାଜ୍ୟରେ କାମ କରନ୍ତି? |
-| `q_district.mp3` | ଆପଣ କେଉଁ ଜିଲ୍ଲାରେ କାମ କରନ୍ତି? |
 | `q_pin.mp3` | ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ କଣ? ଏଥିରେ 6ଟି ଅଙ୍କ ଥାଏ। |
 | `check_details.mp3` | ଆପଣଙ୍କ ବିବରଣୀ ଦେଖନ୍ତୁ। କିଛି ଭୁଲ୍ ଥିଲେ ବଦଳାନ୍ତୁ। |
 
@@ -43,8 +39,6 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `details_privacy.mp3` | మీ వివరాలు ఈ ఫోన్‌లోనే తాళం వేసి ఉంటాయి. వేరెవరూ చూడలేరు. ఏదీ అప్‌లోడ్ కాదు. |
 | `q_name.mp3` | మీ పేరు ఏమిటి? |
 | `q_age.mp3` | మీ వయసు ఎంత? |
-| `q_state.mp3` | మీరు ఏ రాష్ట్రంలో పని చేస్తున్నారు? |
-| `q_district.mp3` | మీరు ఏ జిల్లాలో పని చేస్తారు? |
 | `q_pin.mp3` | మీ పిన్ కోడ్ ఏమిటి? అందులో 6 అంకెలు ఉంటాయి. |
 | `check_details.mp3` | మీ వివరాలు చూడండి. ఏదైనా తప్పుగా ఉంటే మార్చండి. |
 
@@ -56,8 +50,6 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `details_privacy.mp3` | ನಿಮ್ಮ ವಿವರಗಳು ಈ ಫೋನ್‌ನಲ್ಲೇ ಬೀಗ ಹಾಕಿ ಇರುತ್ತವೆ. ಬೇರೆ ಯಾರೂ ನೋಡಲಾರರು. ಏನೂ ಅಪ್‌ಲೋಡ್ ಆಗುವುದಿಲ್ಲ. |
 | `q_name.mp3` | ನಿಮ್ಮ ಹೆಸರೇನು? |
 | `q_age.mp3` | ನಿಮ್ಮ ವಯಸ್ಸು ಎಷ್ಟು? |
-| `q_state.mp3` | ನೀವು ಯಾವ ರಾಜ್ಯದಲ್ಲಿ ಕೆಲಸ ಮಾಡುತ್ತೀರಿ? |
-| `q_district.mp3` | ನೀವು ಯಾವ ಜಿಲ್ಲೆಯಲ್ಲಿ ಕೆಲಸ ಮಾಡುತ್ತೀರಿ? |
 | `q_pin.mp3` | ನಿಮ್ಮ ಪಿನ್ ಕೋಡ್ ಏನು? ಅದರಲ್ಲಿ 6 ಅಂಕೆಗಳಿವೆ. |
 | `check_details.mp3` | ನಿಮ್ಮ ವಿವರಗಳನ್ನು ನೋಡಿ. ಏನಾದರೂ ತಪ್ಪಿದ್ದರೆ ಬದಲಿಸಿ. |
 
@@ -69,8 +61,6 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `details_privacy.mp3` | உங்கள் விவரங்கள் இந்த போனிலேயே பூட்டப்பட்டு இருக்கும். வேறு யாரும் பார்க்க முடியாது. எதுவும் பதிவேற்றப்படாது. |
 | `q_name.mp3` | உங்கள் பெயர் என்ன? |
 | `q_age.mp3` | உங்கள் வயது என்ன? |
-| `q_state.mp3` | நீங்க எந்த மாநிலத்துல வேலை செய்றீங்க? |
-| `q_district.mp3` | நீங்கள் எந்த மாவட்டத்தில் வேலை செய்கிறீர்கள்? |
 | `q_pin.mp3` | உங்கள் பின் கோடு என்ன? அதில் 6 இலக்கங்கள் இருக்கும். |
 | `check_details.mp3` | உங்கள் விவரங்களைப் பாருங்கள். ஏதாவது தவறாக இருந்தால் மாற்றுங்கள். |
 
@@ -82,8 +72,6 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `details_privacy.mp3` | Your details stay on this phone, locked. Nobody else can see them. Nothing is uploaded. |
 | `q_name.mp3` | What is your name? |
 | `q_age.mp3` | How old are you? |
-| `q_state.mp3` | Which state do you work in? |
-| `q_district.mp3` | Which district do you work in? |
 | `q_pin.mp3` | What is your PIN code? It has 6 digits. |
 | `check_details.mp3` | Check your details. Change anything that is wrong. |
 

@@ -506,11 +506,16 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     /** Reads a text aloud in the worker's language (the setup question). */
     fun readAloud(text: String) = app.speaker.speak(text, lang)
 
+    /** The worker's own choice of language. Nothing else (location, state) ever changes it. */
     fun setLang(l: Lang) = viewModelScope.launch(guard) { app.settings.setLang(l) }
-    fun setRegion(r: String) = viewModelScope.launch(guard) {
-        app.settings.setRegion(r)
-        // Keep the saved details' state the same as the work state.
-        app.profile.flow.value.let { if (!it.isEmpty && it.state != r) app.profile.save(it.copy(state = r)) }
+
+    /**
+     * The state the worker works in (any state or union territory). The saved details keep it,
+     * and the minimum-wage work state follows from it ("Other" where the app has no state rates).
+     */
+    fun setWorkState(state: String) = viewModelScope.launch(guard) {
+        app.settings.setRegion(com.acxelin.hisaabsaathi.core.StateInfo.regionFor(state))
+        app.profile.flow.value.let { p -> if (p.state != state) app.profile.save(p.copy(state = state, district = "")) }
     }
     fun setGoal(paise: Long) = viewModelScope.launch(guard) { app.settings.setGoal(paise) }
 
@@ -522,14 +527,26 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun finishOnboarding(share: Boolean) = viewModelScope.launch(guard) {
         app.profile.save(cleanDraft())
         app.profile.savePhoto(draftPhoto.value)
-        draft.value.state.takeIf { it.isNotEmpty() }?.let { app.settings.setRegion(it) }
+        draft.value.state.takeIf { it.isNotEmpty() }?.let { app.settings.setRegion(com.acxelin.hisaabsaathi.core.StateInfo.regionFor(it)) }
         app.settings.setShare(share)
         if (share) Sharing.schedule(app)
         app.settings.setOnboarded()
+        app.settings.setSetupDone(com.acxelin.hisaabsaathi.data.Settings.SETUP_VERSION)
         Reminders.schedule(app)
     }
 
-    // ---- setup: location, details, downloads
+    /**
+     * On a new phone, start from the phone's own language if it is one of the app's (the worker
+     * still chooses). Someone who already chose keeps their choice.
+     */
+    fun suggestPhoneLanguage() = viewModelScope.launch(guard) {
+        val s = app.settings.flow.first()
+        if (s.onboarded) return@launch
+        val phone = java.util.Locale.getDefault().language
+        Lang.entries.firstOrNull { it.code == phone }?.let { app.settings.setLang(it) }
+    }
+
+    // ---- setup: details, downloads
 
     /** The worker's saved details (name, age, state, district, PIN), encrypted on the phone. */
     val profile: StateFlow<com.acxelin.hisaabsaathi.core.Profile> get() = app.profile.flow
@@ -541,9 +558,33 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     /** Starts editing from what is saved (Settings → My details, or setup shown again). */
     fun startDraft() {
-        draft.value = app.profile.flow.value.let { if (it.state.isEmpty()) it.copy(state = settings.value?.region.orEmpty()) else it }
+        val region = settings.value?.region.orEmpty().takeIf { it.isNotEmpty() && it != "Other" }.orEmpty()
+        draft.value = app.profile.flow.value.let { if (it.state.isEmpty()) it.copy(state = region) else it }
         draftPhoto.value = app.profile.photo.value
     }
+
+    /** All PIN codes, states and districts, from India Post's directory. */
+    val pins: com.acxelin.hisaabsaathi.core.PinDirectory get() = app.pins
+
+    /**
+     * The PIN being typed. A known PIN fills in the state, and the district when there is only
+     * one (or a confident first guess); otherwise the worker chooses among the few it may be.
+     */
+    fun setDraftPin(typed: String) {
+        val pin = typed.filter(Char::isDigit).take(6)
+        val found = app.pins.lookup(pin) as? com.acxelin.hisaabsaathi.core.PinDirectory.Result.Found
+        editDraft { d ->
+            when {
+                found == null -> d.copy(pin = pin)
+                found.sure -> d.copy(pin = pin, state = found.state, district = found.districts.first())
+                d.state == found.state && d.district in found.districts -> d.copy(pin = pin)
+                else -> d.copy(pin = pin, state = found.state, district = "")
+            }
+        }
+    }
+
+    /** A state chosen by hand: the district is chosen again unless the state stayed the same. */
+    fun setDraftState(state: String) = editDraft { it.copy(state = state, district = if (state == it.state) it.district else "") }
 
     /** The draft with only the name in the name field, however it was typed or said. */
     private fun cleanDraft() = draft.value.let { p ->
@@ -553,7 +594,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun saveDraft() = viewModelScope.launch(guard) {
         app.profile.save(cleanDraft())
         app.profile.savePhoto(draftPhoto.value)
-        draft.value.state.takeIf { it.isNotEmpty() }?.let { app.settings.setRegion(it) }
+        draft.value.state.takeIf { it.isNotEmpty() }?.let { app.settings.setRegion(com.acxelin.hisaabsaathi.core.StateInfo.regionFor(it)) }
     }
 
     /** The worker's saved photo (small JPEG), shown on the profile page and the home screen. */
@@ -566,26 +607,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun selfieTaken(path: String) = viewModelScope.launch(guard) {
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { com.acxelin.hisaabsaathi.data.ProfileStore.selfie(path) }
             ?.let { draftPhoto.value = it }
-    }
-
-    val districts: Map<String, List<String>> get() = app.districts
-
-    /** The Indian state the phone is in ("Bihar", "Odisha"…), when location was allowed and found. */
-    val detectedState = MutableStateFlow<String?>(null)
-
-    /**
-     * Finds the state from one approximate location fix, on the phone, and picks that state's
-     * language and work state. The location itself is not kept. Returns false if not found.
-     */
-    suspend fun detectState(): Boolean {
-        val loc = runCatching { com.acxelin.hisaabsaathi.data.OneLocation.get(app) }.getOrNull() ?: return false
-        val state = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { app.stateMap.stateAt(loc.latitude, loc.longitude) } ?: return false
-        detectedState.value = state
-        app.settings.setLang(com.acxelin.hisaabsaathi.core.StateInfo.languageFor(state))
-        val region = com.acxelin.hisaabsaathi.core.StateInfo.regionFor(state)
-        app.settings.setRegion(region)
-        editDraft { it.copy(state = region) }
-        return true
     }
 
     /**
@@ -700,16 +721,19 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val d = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
             codes.firstNotNullOfOrNull { com.acxelin.hisaabsaathi.core.AadhaarQr.read(it) }
         } ?: return false
-        val region = com.acxelin.hisaabsaathi.core.StateInfo.regionFor(d.state).ifEmpty { draft.value.state }
-        val district = app.districts[region]?.let { com.acxelin.hisaabsaathi.core.Districts.match(d.district, it) } ?: d.district
-        editDraft { it.copy(name = d.name, age = d.age ?: it.age, state = region, district = district, pin = d.pin.ifEmpty { it.pin }) }
+        // The card's state, if it is one we know; else the one its PIN belongs to.
+        val byPin = app.pins.lookup(d.pin) as? com.acxelin.hisaabsaathi.core.PinDirectory.Result.Found
+        val state = d.state.takeIf { it in app.pins.states } ?: byPin?.state ?: draft.value.state
+        val district = com.acxelin.hisaabsaathi.core.Districts.match(d.district, app.pins.districts(state))
+            ?: byPin?.takeIf { it.state == state && it.sure }?.districts?.first() ?: ""
+        editDraft { it.copy(name = d.name, age = d.age ?: it.age, state = state, district = district, pin = d.pin.ifEmpty { it.pin }) }
         return true
     }
 
     /** Settings → Show setup again: the downloaded packs and the ledger stay. */
     fun reopenSetup() = viewModelScope.launch(guard) {
         startDraft()
-        app.settings.setOnboarded(false)
+        app.settings.setSetupDone(0)
     }
 
     fun download(pack: Pack) = app.packs.download(pack)

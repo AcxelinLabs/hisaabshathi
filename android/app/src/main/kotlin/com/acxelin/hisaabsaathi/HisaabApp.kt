@@ -50,6 +50,7 @@ open class HisaabApp : Application() {
     override fun onCreate() {
         super.onCreate()
         // Sending is background work; pick it up again after an update or a restart.
+        scope.launch { pins } // read the PIN directory early, off the main thread
         scope.launch {
             runCatching {
                 if (settings.flow.first().share == true) Sharing.schedule(this@HisaabApp)
@@ -74,12 +75,10 @@ open class HisaabApp : Application() {
     /** Start the voice downloads as soon as a language is chosen in setup (tests turn this off: no network). */
     open val autoDownloadVoice: Boolean = true
 
-    /** State borders bundled with the app, to find the worker's state from an approximate location, on the phone. */
-    val stateMap: com.acxelin.hisaabsaathi.core.StateMap by lazy {
-        com.acxelin.hisaabsaathi.core.StateMap.parse(runCatching { assets.open("india_states.txt").bufferedReader().use { it.readText() } }.getOrDefault(""))
-    }
-    val districts: Map<String, List<String>> by lazy {
-        runCatching { com.acxelin.hisaabsaathi.core.Districts.parse(assets.open("districts_in.txt").bufferedReader().use { it.readText() }) }.getOrDefault(emptyMap())
+    /** Every PIN code with its state and district (India Post's directory), for filling in details on the phone. */
+    val pins: com.acxelin.hisaabsaathi.core.PinDirectory by lazy {
+        runCatching { com.acxelin.hisaabsaathi.core.PinDirectory.parse(assets.open("pin_in.txt").bufferedReader().use { it.readText() }) }
+            .getOrDefault(com.acxelin.hisaabsaathi.core.PinDirectory.EMPTY)
     }
     val exporter by lazy { Exporter(this) }
     /** Android is short of memory: drop the speech model (it reloads on the next listen). */

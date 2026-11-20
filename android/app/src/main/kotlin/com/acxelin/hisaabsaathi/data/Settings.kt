@@ -27,7 +27,19 @@ data class Settings(
     val share: Boolean? = null,
     /** How many exchanges this install has sent. */
     val sharedCount: Int = 0,
-)
+    /** The version of setup last finished (see [SETUP_VERSION]). */
+    val setupDone: Int = 0,
+) {
+    /**
+     * Setup shows on a new phone, and once more after an update that adds to it (0.9.3: your
+     * details and the language choice), keeping everything already chosen.
+     */
+    val needsSetup: Boolean get() = !onboarded || setupDone < SETUP_VERSION
+
+    companion object {
+        const val SETUP_VERSION = 2
+    }
+}
 
 private val Context.dataStore by preferencesDataStore("settings")
 
@@ -41,6 +53,7 @@ class SettingsStore(private val context: Context) {
     private val share = booleanPreferencesKey("share_improve")
     private val shareConsent = intPreferencesKey("share_consent_version")
     private val sharedCount = intPreferencesKey("shared_count")
+    private val setupDone = intPreferencesKey("setup_done")
     private val installId = stringPreferencesKey("install_id")
     private val installToken = stringPreferencesKey("install_token")
     private val pendingDeletes = stringSetPreferencesKey("pending_deletes")
@@ -55,12 +68,14 @@ class SettingsStore(private val context: Context) {
             // A yes counts only for the question as it was then: a newer question is asked again.
             share = it[share]?.let { yes -> if (yes && (it[shareConsent] ?: 1) < Improve.CONSENT_VERSION) null else yes },
             sharedCount = it[sharedCount] ?: 0,
+            setupDone = it[setupDone] ?: 0,
         )
     }
 
     suspend fun setLang(v: Lang) = context.dataStore.edit { it[lang] = v.code }
     suspend fun setRegion(v: String) = context.dataStore.edit { it[region] = v }
     suspend fun setOnboarded(v: Boolean = true) = context.dataStore.edit { it[onboarded] = v }
+    suspend fun setSetupDone(v: Int) = context.dataStore.edit { it[setupDone] = v }
     suspend fun setReminders(v: Boolean) = context.dataStore.edit { it[reminders] = v }
     suspend fun setGoal(paise: Long) = context.dataStore.edit { it[goal] = paise }
     suspend fun setShare(v: Boolean) = context.dataStore.edit { it[share] = v; if (v) it[shareConsent] = Improve.CONSENT_VERSION }

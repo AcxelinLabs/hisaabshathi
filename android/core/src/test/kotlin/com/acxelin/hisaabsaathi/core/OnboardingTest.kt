@@ -14,26 +14,43 @@ class OnboardingTest {
     private val assets = File("../app/src/main/assets")
     private val today = LocalDate.of(2026, 11, 20)
 
-    @Test fun stateAndLanguageFromLocation() {
-        val map = StateMap.parse(File(assets, "india_states.txt").readText())
-        val expected = listOf(
-            Triple(20.2961, 85.8245, "Odisha" to Lang.OR),          // Bhubaneswar
-            Triple(17.3850, 78.4867, "Telangana" to Lang.TE),       // Hyderabad
-            Triple(16.5062, 80.6480, "Andhra Pradesh" to Lang.TE),  // Vijayawada
-            Triple(12.9716, 77.5946, "Karnataka" to Lang.KN),       // Bengaluru
-            Triple(13.0827, 80.2707, "Tamil Nadu" to Lang.TA),      // Chennai
-            Triple(28.6139, 77.2090, "Delhi" to Lang.HI),
-            Triple(25.5941, 85.1376, "Bihar" to Lang.HI),           // Patna
-            Triple(19.0760, 72.8777, "Maharashtra" to Lang.EN),     // Mumbai
-        )
-        for ((lat, lon, want) in expected) {
-            val state = map.stateAt(lat, lon)
-            assertEquals(want.first, state)
-            assertEquals(want.second, StateInfo.languageFor(state!!))
-        }
-        assertNull(map.stateAt(37.422, -122.084)) // outside India
+    private val pins by lazy { PinDirectory.parse(File(assets, "pin_in.txt").readText()) }
+
+    @Test fun workStateForWages() {
         assertEquals("Other", StateInfo.regionFor("Bihar"))
         assertEquals("Odisha", StateInfo.regionFor("ORISSA"))
+        assertEquals("Dadra and Nagar Haveli and Daman and Diu", StateInfo.normalize("THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU"))
+        assertEquals("Jammu and Kashmir", StateInfo.normalize("Jammu And Kashmir"))
+    }
+
+    /** Typing a PIN fills in state and district; split districts ask, unknown PINs say so. */
+    @Test fun pinFindsStateAndDistrict() {
+        assertEquals(36, pins.states.size)
+        assertTrue(pins.lookup("751002") == PinDirectory.Result.Found("Odisha", listOf("Khordha (Khurda)"), sure = true))
+        assertTrue(pins.lookup("845401") == PinDirectory.Result.Found("Bihar", listOf("Purbi Champaran"), sure = true))
+        // Tirupati town: its post offices are named after it, so Tirupati first and sure; the old postal district also offers the others.
+        val tirupati = pins.lookup("517501") as PinDirectory.Result.Found
+        assertEquals("Andhra Pradesh", tirupati.state)
+        assertEquals("Tirupati", tirupati.districts.first())
+        assertTrue(tirupati.sure && "Chittoor" in tirupati.districts)
+        // Vijayawada is NTR district now (India Post still says Krishna).
+        assertEquals("NTR", (pins.lookup("520001") as PinDirectory.Result.Found).districts.first())
+        // South Mumbai: one postal district, two real ones, no clue which: the worker chooses.
+        val mumbai = pins.lookup("400001") as PinDirectory.Result.Found
+        assertEquals(listOf("Mumbai City", "Mumbai Suburban"), mumbai.districts)
+        assertFalse(mumbai.sure)
+        // Every district a PIN names is in its state's list (so the dropdown can show it).
+        for (pin in listOf("751002", "517501", "520001", "400001", "560001", "600001", "110001", "799001", "190001", "682001")) {
+            val f = pins.lookup(pin) as PinDirectory.Result.Found
+            assertTrue(pin, f.districts.all { it in pins.districts(f.state) })
+        }
+        assertEquals(PinDirectory.Result.Invalid, pins.lookup("012345"))
+        assertEquals(PinDirectory.Result.Invalid, pins.lookup("75100"))
+        assertEquals(PinDirectory.Result.Invalid, pins.lookup("7510a2"))
+        assertEquals(PinDirectory.Result.Invalid, pins.lookup("999999"))
+        assertEquals(PinDirectory.Result.Unknown, pins.lookup("111111"))
+        assertEquals(26, pins.districts("Andhra Pradesh").size)
+        assertTrue(pins.districts("Atlantis").isEmpty())
     }
 
     private fun secureQr(fields: List<String>): String {
@@ -66,15 +83,12 @@ class OnboardingTest {
         assertNull(AadhaarQr.read("1234", today))
     }
 
-    @Test fun districtsAndPin() {
-        val d = Districts.parse(File(assets, "districts_in.txt").readText())
-        assertEquals(30, d.getValue("Odisha").size)
-        assertEquals("Khordha (Khurda)", Districts.match("Khurda", d.getValue("Odisha")))
-        assertEquals("Khordha (Khurda)", Districts.match("KHORDHA", d.getValue("Odisha")))
-        assertEquals("Mysuru (Mysore)", Districts.match("Mysore", d.getValue("Karnataka")))
-        assertTrue(Pin.fitsState("751002", "Odisha"))
-        assertFalse(Pin.fitsState("500016", "Odisha"))
-        assertTrue(Pin.fitsState("845401", "Other"))
+    @Test fun districtsFromAadhaar() {
+        val odisha = pins.districts("Odisha")
+        assertEquals(30, odisha.size)
+        assertEquals("Khordha (Khurda)", Districts.match("Khurda", odisha))
+        assertEquals("Khordha (Khurda)", Districts.match("KHORDHA", odisha))
+        assertEquals("Mysuru (Mysore)", Districts.match("Mysore", pins.districts("Karnataka")))
         assertFalse(Pin.valid("012345"))
     }
 

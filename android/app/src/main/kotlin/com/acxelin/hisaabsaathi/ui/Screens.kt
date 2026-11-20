@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.ui.focus.focusRequester
@@ -145,10 +146,7 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(if (tight) 6.dp else 10.dp),
     ) {
-        // The day's bill prints out of the machine's slot when the screen opens and after each new entry.
-        PrintedReceipt(rememberPrintKey(entries)) {
-            TotalsCard("${s.today}, ${LocalDate.now().format(dayFormat)}", vm.totals(QueryPeriod.DAY, entries), s, compact = true)
-        }
+        TotalsCard("${s.today}, ${LocalDate.now().format(dayFormat)}", vm.totals(QueryPeriod.DAY, entries), s, compact = true)
 
         (capture as? Capture.Message)?.let {
             // The spoken answer, also in writing. Tap anywhere on it to put it away.
@@ -198,12 +196,13 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
 
         // While an answer is showing, the answer takes this space; the buttons return when it is closed.
         if (!compact) Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-            OutlinedButton(onClick = onScan, modifier = Modifier.weight(1f).height(52.dp), contentPadding = PaddingValues(horizontal = 10.dp)) {
+            // At least 52 dp, taller when a language needs two lines.
+            OutlinedButton(onClick = onScan, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
                 Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(6.dp))
                 Text(s.scanBill, fontSize = 14.sp, lineHeight = 16.sp, maxLines = 2, textAlign = TextAlign.Center)
             }
-            OutlinedButton(onClick = onType, modifier = Modifier.weight(1f).height(52.dp), contentPadding = PaddingValues(horizontal = 10.dp)) {
+            OutlinedButton(onClick = onType, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
                 Text(s.typeInstead, fontSize = 14.sp, lineHeight = 16.sp, maxLines = 2, textAlign = TextAlign.Center)
             }
         }
@@ -650,7 +649,7 @@ fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
             Text(s.perDay, fontSize = 13.sp, color = InkSoft, modifier = Modifier.align(Alignment.End))
             floor?.let {
                 Spacer(Modifier.height(8.dp))
-                Text(it.sector, fontSize = 13.sp, color = InkSoft)
+                Text(s.sectorName(it.sector), fontSize = 13.sp, color = InkSoft)
                 Text("${s.effectiveFrom}: ${it.effectiveFrom}", fontSize = 13.sp, color = InkSoft)
                 Text("${s.source}: ${it.source}", fontSize = 13.sp, color = InkSoft)
             }

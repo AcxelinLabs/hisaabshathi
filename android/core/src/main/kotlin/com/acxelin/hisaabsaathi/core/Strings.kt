@@ -50,7 +50,6 @@ class Strings(val lang: Lang) {
 
     // ---- onboarding
     val chooseLanguage get() = t("अपनी भाषा चुनें", "ନିଜ ଭାଷା ବାଛନ୍ତୁ", "Choose your language")
-    val chooseState get() = t("आप किस राज्य में काम करते हैं?", "ଆପଣ କେଉଁ ରାଜ୍ୟରେ କାମ କରନ୍ତି?", "Which state do you work in?")
     val voicePackTitle get() = t("आवाज़ पैक डाउनलोड करें", "ଭଏସ୍ ପ୍ୟାକ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ", "Download the voice pack")
     val voicePackBody get() = t(
         "एक बार डाउनलोड करने के बाद ऐप बिना इंटरनेट के आपकी आवाज़ समझेगा। आपका हिसाब फोन से बाहर नहीं जाता।",
@@ -66,22 +65,6 @@ class Strings(val lang: Lang) {
     val start get() = t("शुरू करें", "ଆରମ୍ଭ କରନ୍ତୁ", "Start")
 
     // ---- onboarding: location, details, smart model (Odia, Telugu, Kannada, Tamil need native review)
-    val locationTitle get() = t("आपका राज्य पता करें", "ଆପଣଙ୍କ ରାଜ୍ୟ ଜାଣନ୍ତୁ", "Find your state")
-    val locationBody get() = t(
-        "लोकेशन की अनुमति दें, ताकि ऐप आपका राज्य और भाषा चुन सके। आपकी लोकेशन सिर्फ़ इसी फोन में राज्य पता करने के लिए इस्तेमाल होती है। यह कहीं नहीं भेजी जाती।",
-        "ଲୋକେସନ୍ ଅନୁମତି ଦିଅନ୍ତୁ, ଯାହାଦ୍ୱାରା ଆପ୍ ଆପଣଙ୍କ ରାଜ୍ୟ ଓ ଭାଷା ବାଛିପାରିବ। ଆପଣଙ୍କ ଲୋକେସନ୍ କେବଳ ଏହି ଫୋନ୍‌ରେ ରାଜ୍ୟ ଜାଣିବା ପାଇଁ ବ୍ୟବହାର ହୁଏ। ଏହା କେଉଁଠିକୁ ପଠାଯାଏ ନାହିଁ।",
-        "Allow location so the app can pick your state and language. Your location is used only on this phone to find your state. It is never sent anywhere.",
-    )
-    val allowLocation get() = t("लोकेशन की अनुमति दें", "ଲୋକେସନ୍ ଅନୁମତି ଦିଅନ୍ତୁ", "Allow location")
-    val chooseMyself get() = t("खुद चुनूँगा", "ମୁଁ ନିଜେ ବାଛିବି", "Choose myself")
-    val findingState get() = t("आपका राज्य ढूँढ रहे हैं…", "ଆପଣଙ୍କ ରାଜ୍ୟ ଖୋଜୁଛି…", "Finding your state…")
-    val locationFailed get() = t("लोकेशन नहीं मिली। कृपया खुद चुनें।", "ଲୋକେସନ୍ ମିଳିଲା ନାହିଁ। ଦୟାକରି ନିଜେ ବାଛନ୍ତୁ।", "Could not find your location. Please choose yourself.")
-    fun yourState(state: String) = tp("आपका राज्य: $state", "ଆପଣଙ୍କ ରାଜ୍ୟ: $state", "Your state: $state", "Your state: {0}", state)
-    val languageForState get() = t(
-        "आपके राज्य की भाषा चुनी गई है। कोई और भाषा चाहिए तो उस पर दबाएं।",
-        "ଆପଣଙ୍କ ରାଜ୍ୟର ଭାଷା ବଛାଯାଇଛି। ଅନ୍ୟ ଭାଷା ଚାହିଁଲେ ସେଥିରେ ଦବାନ୍ତୁ।",
-        "We chose your state's language. Tap another language if you prefer.",
-    )
     fun gettingVoiceReady(pct: Int) = tp("आवाज़ तैयार हो रही है… $pct%", "ସ୍ୱର ପ୍ରସ୍ତୁତ ହେଉଛି… $pct%", "Getting voice ready… $pct%", "Getting voice ready… {0}%", pct)
     val voiceReady get() = t("आवाज़ तैयार", "ସ୍ୱର ପ୍ରସ୍ତୁତ", "Voice ready")
     val detailsTitle get() = t("आपकी जानकारी", "ଆପଣଙ୍କ ବିବରଣୀ", "Your details")
@@ -107,7 +90,35 @@ class Strings(val lang: Lang) {
     val tryAgain get() = t("फिर कोशिश करें", "ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ", "Try again")
     val qName get() = t("आपका नाम क्या है?", "ଆପଣଙ୍କ ନାମ କଣ?", "What is your name?")
     val qAge get() = t("आपकी उम्र कितनी है?", "ଆପଣଙ୍କ ବୟସ କେତେ?", "How old are you?")
-    val qDistrict get() = t("आप किस ज़िले में काम करते हैं?", "ଆପଣ କେଉଁ ଜିଲ୍ଲାରେ କାମ କରନ୍ତି?", "Which district do you work in?")
+    // ---- language and place (setup and My details)
+    val languageLater get() = t("भाषा आप कभी भी सेटिंग में बदल सकते हैं।", "ଭାଷା ଆପଣ ଯେକୌଣସି ସମୟରେ ସେଟିଂସ୍‌ରେ ବଦଳାଇ ପାରିବେ।", "You can change the language any time in Settings.")
+    val pinHelp get() = t(
+        "अपना पिन कोड लिखें: राज्य और ज़िला अपने आप भर जाएंगे। पता नहीं? नीचे से चुनें।",
+        "ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ ଲେଖନ୍ତୁ: ରାଜ୍ୟ ଓ ଜିଲ୍ଲା ନିଜେ ଭରିଯିବ। ଜାଣି ନାହାନ୍ତି? ତଳୁ ବାଛନ୍ତୁ।",
+        "Type your PIN code: the state and district fill in by themselves. Don't know it? Choose them below.",
+    )
+    val pinNotFound get() = t(
+        "यह पिन कोड किसी जगह का नहीं मिला। अंक जाँचें, या नीचे राज्य और ज़िला चुनें।",
+        "ଏହି ପିନ୍ କୋଡ୍ କୌଣସି ଜାଗାର ମିଳିଲା ନାହିଁ। ଅଙ୍କ ଯାଞ୍ଚ କରନ୍ତୁ, କିମ୍ବା ତଳେ ରାଜ୍ୟ ଓ ଜିଲ୍ଲା ବାଛନ୍ତୁ।",
+        "No place has this PIN code. Check the digits, or choose your state and district below.",
+    )
+    val pinBadFormat get() = t(
+        "पिन कोड में 6 अंक होते हैं और यह 1 से 8 के बीच किसी अंक से शुरू होता है।",
+        "ପିନ୍ କୋଡ୍‌ରେ 6ଟି ଅଙ୍କ ଥାଏ ଓ ଏହା 1ରୁ 8 ମଧ୍ୟରୁ ଏକ ଅଙ୍କରେ ଆରମ୍ଭ ହୁଏ।",
+        "A PIN code has 6 digits and starts with 1 to 8.",
+    )
+    val pinManyDistricts get() = t(
+        "यह पिन कोड एक से ज़्यादा ज़िलों में है। नीचे अपना ज़िला चुनें।",
+        "ଏହି ପିନ୍ କୋଡ୍ ଏକାଧିକ ଜିଲ୍ଲାରେ ଅଛି। ତଳେ ଆପଣଙ୍କ ଜିଲ୍ଲା ବାଛନ୍ତୁ।",
+        "This PIN code is in more than one district. Choose yours below.",
+    )
+    fun pinFound(district: String, state: String) = tp("मिल गया: $district, $state", "ମିଳିଲା: $district, $state", "Found: $district, $state", "Found: {0}, {1}", district, state)
+    val stateLabel get() = t("राज्य", "ରାଜ୍ୟ", "State")
+    val credits get() = t("आभार", "କୃତଜ୍ଞତା", "Credits")
+    /** The wage notification's sector, in the worker's language when it is the usual "all employments". */
+    fun sectorName(sector: String): String =
+        if (sector.equals("All scheduled employments", ignoreCase = true)) t("सभी अनुसूचित रोज़गार", "ସମସ୍ତ ଅନୁସୂଚିତ ନିଯୁକ୍ତି", "All scheduled employments") else sector
+    val noMatch get() = t("कुछ नहीं मिला", "କିଛି ମିଳିଲା ନାହିଁ", "Nothing matches")
     val qPin get() = t("आपका पिन कोड क्या है? इसमें 6 अंक होते हैं।", "ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ କଣ? ଏଥିରେ 6ଟି ଅଙ୍କ ଥାଏ।", "What is your PIN code? It has 6 digits.")
     val skip get() = t("छोड़ें", "ଛାଡ଼ନ୍ତୁ", "Skip")
     val speakAnswer get() = t("दबाएं और जवाब बोलें", "ଦବାଇ ଉତ୍ତର କୁହନ୍ତୁ", "Tap and say your answer")
@@ -115,7 +126,6 @@ class Strings(val lang: Lang) {
     val adultsOnly get() = t("यह ऐप 18 साल और उससे ज़्यादा उम्र के लोगों के लिए है।", "ଏହି ଆପ୍ 18 ବର୍ଷ ଓ ତାଠାରୁ ଅଧିକ ବୟସର ଲୋକଙ୍କ ପାଇଁ।", "This app is for adults, 18 years and above.")
     val pinOtherState get() = t("यह पिन कोड किसी दूसरे राज्य का लगता है। कृपया जाँच लें।", "ଏହି ପିନ୍ କୋଡ୍ ଅନ୍ୟ ରାଜ୍ୟର ପରି ଲାଗୁଛି। ଦୟାକରି ଯାଞ୍ଚ କରନ୍ତୁ।", "This PIN code looks like another state's. Please check it.")
     val pinSixDigits get() = t("6 अंक डालें", "6ଟି ଅଙ୍କ ଦିଅନ୍ତୁ", "Enter 6 digits")
-    val typeDistrict get() = t("अपना ज़िला लिखें", "ଆପଣଙ୍କ ଜିଲ୍ଲା ଲେଖନ୍ତୁ", "Type your district")
     val nameLabel get() = t("नाम", "ନାମ", "Name")
     val ageLabel get() = t("उम्र", "ବୟସ", "Age")
     val districtLabel get() = t("ज़िला", "ଜିଲ୍ଲା", "District")

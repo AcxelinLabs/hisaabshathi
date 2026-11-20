@@ -17,7 +17,7 @@ data class Profile(
     val name: String = "",
     /** Whole years; null when not given. */
     val age: Int? = null,
-    /** One of the app's work states (the wage pack's regions), or "" when not chosen. */
+    /** The state or union territory, as in [PinDirectory.states], or "" when not given. */
     val state: String = "",
     val district: String = "",
     /** Six digits, or "". */
@@ -30,77 +30,6 @@ data class Profile(
         .filter { it.isNotBlank() }.joinToString(" · ")
 }
 
-/**
- * Finds the state a location is in, on the phone, from a small border file bundled with the
- * app (assets/india_states.txt, Natural Earth admin-1, public domain, simplified to about
- * 2 km). The location itself is never stored or sent anywhere.
- */
-class StateMap private constructor(private val states: List<Pair<String, List<DoubleArray>>>) {
-
-    /** The state containing the point, or null if it is outside India (or right on a border gap). */
-    fun stateAt(lat: Double, lon: Double): String? {
-        for ((name, rings) in states) if (rings.any { inside(it, lon, lat) }) return name
-        // Simplified borders leave thin gaps along coasts and borders: take the nearest state if very close.
-        var best: String? = null
-        var bestDist = NEAR_DEGREES
-        for ((name, rings) in states) for (r in rings) {
-            val d = distanceToRing(r, lon, lat)
-            if (d < bestDist) { bestDist = d; best = name }
-        }
-        return best
-    }
-
-    companion object {
-        /** About 10 km. */
-        private const val NEAR_DEGREES = 0.1
-
-        /** Reads `name|lon,lat,lon,lat,…;next ring` lines; lines starting with # are comments. */
-        fun parse(text: String): StateMap = StateMap(
-            text.lineSequence().map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") }.mapNotNull { line ->
-                val name = line.substringBefore('|', "").trim()
-                if (name.isEmpty()) return@mapNotNull null
-                val rings = line.substringAfter('|').split(';').mapNotNull { ring ->
-                    val v = ring.split(',').mapNotNull { it.trim().toDoubleOrNull() }
-                    if (v.size >= 6 && v.size % 2 == 0) v.toDoubleArray() else null
-                }
-                if (rings.isEmpty()) null else name to rings
-            }.toList(),
-        )
-
-        /** Ray casting on a flat lon/lat ring (x0,y0,x1,y1,…). */
-        private fun inside(r: DoubleArray, x: Double, y: Double): Boolean {
-            var c = false
-            val n = r.size / 2
-            var j = n - 1
-            for (i in 0 until n) {
-                val xi = r[2 * i]; val yi = r[2 * i + 1]; val xj = r[2 * j]; val yj = r[2 * j + 1]
-                if ((yi > y) != (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c
-                j = i
-            }
-            return c
-        }
-
-        private fun distanceToRing(r: DoubleArray, x: Double, y: Double): Double {
-            var best = Double.MAX_VALUE
-            val n = r.size / 2
-            for (i in 0 until n) {
-                val j = (i + 1) % n
-                best = minOf(best, segment(x, y, r[2 * i], r[2 * i + 1], r[2 * j], r[2 * j + 1]))
-            }
-            return best
-        }
-
-        private fun segment(px: Double, py: Double, ax: Double, ay: Double, bx: Double, by: Double): Double {
-            val dx = bx - ax; val dy = by - ay
-            val len = dx * dx + dy * dy
-            val t = if (len == 0.0) 0.0 else (((px - ax) * dx + (py - ay) * dy) / len).coerceIn(0.0, 1.0)
-            val cx = ax + t * dx - px; val cy = ay + t * dy - py
-            return kotlin.math.sqrt(cx * cx + cy * cy)
-        }
-    }
-}
-
-/** Which of the app's work states and languages go with an Indian state's name. */
 object StateInfo {
     /** The app's own work states (as in assets/wage_pack_in.json), plus "Other". */
     val appRegions = listOf(
@@ -108,14 +37,9 @@ object StateInfo {
         "Maharashtra", "Gujarat", "Delhi", "West Bengal",
     )
 
-    private val hindiStates = setOf(
-        "Bihar", "Jharkhand", "Uttar Pradesh", "Uttarakhand", "Madhya Pradesh", "Chhattisgarh",
-        "Rajasthan", "Haryana", "Himachal Pradesh", "Delhi", "Chandigarh",
-    )
-
     /** Old and official spellings to the names used here ("Orissa" → "Odisha", "NCT of Delhi" → "Delhi"). */
     fun normalize(state: String): String {
-        val s = state.trim().replace(Regex("\\s+"), " ")
+        val s = state.trim().replace(Regex("\\s+"), " ").let { if (it.lowercase().startsWith("the ")) it.drop(4) else it }
         val k = s.lowercase()
         return when {
             k.isEmpty() -> ""
@@ -136,50 +60,16 @@ object StateInfo {
         val n = normalize(state)
         return appRegions.firstOrNull { it.equals(n, ignoreCase = true) } ?: if (n.isEmpty()) "" else "Other"
     }
-
-    /** The app language most people in [state] speak: the default after location is allowed. */
-    fun languageFor(state: String): Lang = when (normalize(state)) {
-        "Odisha" -> Lang.OR
-        "Telangana", "Andhra Pradesh" -> Lang.TE
-        "Karnataka" -> Lang.KN
-        "Tamil Nadu", "Puducherry" -> Lang.TA
-        in hindiStates -> Lang.HI
-        else -> Lang.EN
-    }
 }
 
 /** Indian postal codes (PIN). */
 object Pin {
-    /** The first two digits of PIN codes in each of the app's work states (India Post circles). */
-    private val prefixes: Map<String, Set<String>> = mapOf(
-        "Odisha" to setOf("75", "76", "77"),
-        "Telangana" to setOf("50"),
-        "Andhra Pradesh" to setOf("51", "52", "53"),
-        "Karnataka" to setOf("56", "57", "58", "59"),
-        "Tamil Nadu" to setOf("60", "61", "62", "63", "64"),
-        "Kerala" to setOf("67", "68", "69"),
-        "Maharashtra" to setOf("40", "41", "42", "43", "44"),
-        "Gujarat" to setOf("36", "37", "38", "39"),
-        "Delhi" to setOf("11"),
-        "West Bengal" to setOf("70", "71", "72", "73", "74"),
-    )
-
-    fun valid(pin: String): Boolean = pin.length == 6 && pin.all { it in '0'..'9' } && pin[0] != '0'
-
-    /** False only when the PIN clearly belongs to another state; a hint, never a block. */
-    fun fitsState(pin: String, state: String): Boolean {
-        if (!valid(pin)) return false
-        val p = prefixes[state] ?: return true
-        return pin.take(2) in p
-    }
+    /** Six digits, starting 1–8 (0 is not used; 9 is the Army Postal Service, not a place). */
+    fun valid(pin: String): Boolean = pin.length == 6 && pin.all { it in '0'..'9' } && pin[0] in '1'..'8'
 }
 
-/** District lists per work state (assets/districts_in.txt: `State|District;District;…`). */
+/** Matching a district name as written elsewhere (an Aadhaar card) to the app's list. */
 object Districts {
-    fun parse(text: String): Map<String, List<String>> =
-        text.lineSequence().map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") && '|' in it }
-            .associate { line -> line.substringBefore('|').trim() to line.substringAfter('|').split(';').map { it.trim() }.filter { it.isNotEmpty() } }
-
     /** The list entry that matches [name] (as printed on an Aadhaar card), if any. */
     fun match(name: String, list: List<String>): String? {
         val k = key(name)
