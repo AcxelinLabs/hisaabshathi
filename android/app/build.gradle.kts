@@ -13,8 +13,8 @@ android {
         applicationId = "com.acxelin.hisaabsaathi"
         minSdk = 29 // Android 10
         targetSdk = 35
-        versionCode = 25
-        versionName = "0.9.7"
+        versionCode = 26
+        versionName = "0.9.8"
         // Where phones download the fine-tuned model from (public, Apache-2.0).
         buildConfigField(
             "String", "HISAAB_MODEL_URL",
