@@ -92,7 +92,8 @@ district, offline.
    the rules are unsure. It labels the numbers that were said, or names the period of a
    question. It never invents an amount: an answer that doesn't match the spoken numbers is
    discarded.
-4. **Replies are spoken** with Indic Tiny TTS voices, or the phone's own voice for English.
+4. **Replies are spoken** with Indic Tiny TTS voices. English has an optional Indian English
+   voice (about 91 MB, one tap in Settings); without it, the phone's own voice is used.
 
 ## For partners and builders
 
@@ -112,6 +113,7 @@ district, offline.
 | Parakeet TDT-CTC 110M | NVIDIA | CC-BY-4.0 |
 | Qwen3-0.6B (base of the fine-tuned model) | Alibaba Cloud Qwen team | Apache-2.0 |
 | Indic Tiny TTS voices | Sulabh Katiyar, on AI4Bharat Rasa | CC-BY-4.0 |
+| Indic Tiny TTS Indian English voice | Sulabh Katiyar, on IISc's LIMMITS 2024 / SYSPIN corpus | CC-BY-4.0 |
 | Vocos vocoder | Charactr | MIT |
 | Silero VAD | Silero | MIT |
 | sherpa-onnx | k2-fsa | Apache-2.0 |

@@ -135,6 +135,14 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             PickList(s.stateLabel, profile.state.ifEmpty { settings.region.takeIf { it != "Other" }.orEmpty() }, vm.pins.states, s) { vm.setWorkState(it) }
             HorizontalDivider()
 
+            // A clearer voice for this language when it is not on the phone yet. English's is only
+            // downloaded when the worker asks: here, one tap.
+            val voiceStates by vm.packStates.collectAsStateWithLifecycle()
+            vm.voicePack()?.takeIf { voiceStates[it.id] !is PackState.Ready }?.let { p ->
+                PackRow(vm, p, s, title = s.voicePackReadAloud)
+                HorizontalDivider()
+            }
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(s.reminders, Modifier.weight(1f), fontSize = 16.sp)
                 Switch(checked = settings.reminders, onCheckedChange = { vm.setReminders(it) })
@@ -171,7 +179,7 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
             if (more) {
                 Text(s.modelPacks, fontWeight = FontWeight.Bold, fontSize = 17.sp)
                 PackRow(vm, vm.sttPack(), s, title = s.speechPackTitle)
-                vm.voicePack()?.let { PackRow(vm, it, s, title = s.voicePackReadAloud) }
+                vm.voicePack()?.takeIf { voiceStates[it.id] is PackState.Ready }?.let { PackRow(vm, it, s, title = s.voicePackReadAloud) }
                 if (Catalog.slmSupported) {
                     PackRow(vm, vm.slmPack, s, canDownload = Catalog.canDownloadSlm, title = s.smartPack)
                     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::importModel) }
@@ -237,7 +245,7 @@ fun SettingsScreen(vm: AppViewModel, settings: Settings, s: Strings, onBack: () 
 
 /** Attribution the open models and fonts ask for (CC-BY-4.0 requires credit). */
 private const val CREDITS = """Speech recognition: AI4Bharat IndicConformer (MIT); English: NVIDIA Parakeet TDT-CTC 110M (CC-BY-4.0, ONNX export by k2-fsa); voice detection: Silero VAD (MIT); runtime: sherpa-onnx (Apache-2.0).
-Voices: Indic Tiny TTS by Sulabh Katiyar (CC-BY-4.0, huggingface.co/sulabhkatiyar), trained on AI4Bharat Rasa (CC-BY-4.0); vocoder: Vocos by charactr (MIT); runtime: ONNX Runtime (MIT).
+Voices: Indic Tiny TTS by Sulabh Katiyar (CC-BY-4.0, huggingface.co/sulabhkatiyar), trained on AI4Bharat Rasa (CC-BY-4.0); the English voice on the LIMMITS 2024 / SYSPIN corpus, IISc Bangalore SPIRE Lab (CC-BY-4.0); vocoder: Vocos by charactr (MIT); runtime: ONNX Runtime (MIT).
 Understanding: Qwen3-0.6B by Alibaba Cloud (Apache-2.0), fine-tuned by Acxelin Labs; runtime: Google LiteRT-LM (Apache-2.0).
 Fonts: Anek by EkType (SIL Open Font Licence).
 PIN codes, states and districts: India Post, All India Pincode Directory (data.gov.in, Government Open Data Licence – India)."""

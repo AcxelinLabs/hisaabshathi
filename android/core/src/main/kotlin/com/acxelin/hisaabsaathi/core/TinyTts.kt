@@ -60,7 +60,9 @@ class TinyTts(dir: File, threads: Int = 2) : AutoCloseable {
 
     /** The exact characters the model reads: numbers spelled out, unknown symbols dropped. */
     fun normalize(text: String, lang: Lang): String {
-        val t = Normalizer.normalize(NumberSpeller.spellNumbers(text, lang), Normalizer.Form.NFC)
+        // The app's name, said as two words (as one, the English voice reads it as nonsense).
+        val named = text.replace("HisaabSaathi", "Hisaab Saathi")
+        val t = Normalizer.normalize(NumberSpeller.spellNumbers(named, lang), Normalizer.Form.NFC)
         val sb = StringBuilder()
         for (c in t) sb.append(
             when {

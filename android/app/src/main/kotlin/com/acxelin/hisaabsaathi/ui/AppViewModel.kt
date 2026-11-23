@@ -782,7 +782,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val l = lang
         val stt = Catalog.stt(l)
         app.packs.download(stt)
-        val voice = Catalog.voice(l) ?: return
+        val voice = Catalog.voice(l)?.takeIf { Catalog.voiceDownloadsByItself(l) } ?: return
         viewModelScope.launch(guard) {
             packStates.first { it[stt.id] is PackState.Ready || it[stt.id] is PackState.Failed }
             app.packs.download(voice)

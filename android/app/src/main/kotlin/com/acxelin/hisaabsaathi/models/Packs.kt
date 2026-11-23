@@ -109,6 +109,8 @@ object Catalog {
     val voiceTelugu = voicePack("te", "Telugu", "fb552545f06d76d7b5d6365827b69c0bda465767", 3216, 17_692_254)
     val voiceKannada = voicePack("kn", "Kannada", "73714eb01cdebc79367f7d1ddf2f4c73adff2be6", 3358, 17_696_862)
     val voiceTamil = voicePack("ta", "Tamil", "c3a32ece466031c8a18e72047ab37f5c143cd2b0", 3087, 17_687_134)
+    /** Indian English (trained on IISc's LIMMITS/SYSPIN voices): optional, the worker downloads it if they want it. */
+    val voiceEnglish = voicePack("en", "English", "eea5d4a578c0f18173825a037487cf9c47ed4247", 3039, 17_692_766)
 
     fun voice(lang: Lang): Pack? = when (lang) {
         Lang.HI -> voiceHindi
@@ -116,8 +118,11 @@ object Catalog {
         Lang.TE -> voiceTelugu
         Lang.KN -> voiceKannada
         Lang.TA -> voiceTamil
-        Lang.EN -> null
+        Lang.EN -> voiceEnglish
     }
+
+    /** Voices that download by themselves with the speech pack; the others only when the worker asks. */
+    fun voiceDownloadsByItself(lang: Lang) = lang != Lang.EN
 
     val canDownloadSlm: Boolean get() = BuildConfig.HISAAB_MODEL_URL.isNotBlank()
 
@@ -133,7 +138,7 @@ object Catalog {
         Lang.EN -> sttEnglish
     }
 
-    val all = listOf(sttHindi, sttOdia, sttTelugu, sttKannada, sttTamil, sttEnglish, slmHisaab, voiceHindi, voiceOdia, voiceTelugu, voiceKannada, voiceTamil)
+    val all = listOf(sttHindi, sttOdia, sttTelugu, sttKannada, sttTamil, sttEnglish, slmHisaab, voiceHindi, voiceOdia, voiceTelugu, voiceKannada, voiceTamil, voiceEnglish)
 }
 
 class PackManager(context: Context, private val scope: CoroutineScope) {
