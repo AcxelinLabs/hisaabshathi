@@ -55,6 +55,23 @@ We went through the screenshots of the redesigned app again, screen by screen:
 | 19 | P2 | Summary | The receipt was titled "Week" right under the "Week" tab | **Title removed:** the tab says it. |
 | 20 | P2 | Profile | The privacy sentence sat in a yellow warning box | **A plain line with a lock icon:** it reassures, it does not alarm. |
 
+## Third pass: voice first, everywhere
+
+Typing had crept in as an equal choice. A worker who reads little should never need it.
+
+- **Setup:** each question is asked aloud, then the app listens for the answer. The answer is
+  read back, and the big mic is the main control. The text box sits below it as a fallback.
+  Answers use the on-phone speech pack only, never an online recogniser.
+- **Confirm:** after reading back an entry (spoken or from a photo), the app says "If it is
+  right, say yes. If not, say no" and listens. "Yes" saves, "no" starts again. Any tap stops
+  the listening, and the tap wins. Typed entries are only read back: someone typing may be
+  somewhere they can't talk.
+- **Home:** the mic comes first, then the photo button. Typing is a quiet link.
+- **Home doesn't listen by itself when the app opens.** A phone that starts recording on its own
+  would surprise people, and could catch someone else talking. One tap on the big mic is the start.
+- **The minimum-wage page is gone.** Its tables of rates were too much to read. The worker asks
+  "what is the minimum wage?" and hears the answer. The evidence pack moved to Summary.
+
 ## Why it looked generic
 
 The things that made the app look like a template rather than a ledger built for one job:

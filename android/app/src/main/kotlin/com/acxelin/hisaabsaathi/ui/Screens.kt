@@ -203,15 +203,15 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
         if (!listening && !thinking && !compact && !tight && entries.size < 3) Text(s.typeHint, fontSize = 15.sp, color = InkSoft, textAlign = TextAlign.Center)
 
         // While an answer is showing, the answer takes this space; the buttons return when it is closed.
-        if (!compact) Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-            // At least 52 dp, taller when a language needs two lines.
-            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = onScan, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
+        if (!compact) {
+            // Speaking is the main way; a photo of a paper next; typing is the quiet fallback.
+            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = onScan, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
                 Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(20.dp))
-                Spacer(Modifier.width(6.dp))
-                Text(s.scanBill, fontSize = 14.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
+                Spacer(Modifier.width(8.dp))
+                Text(s.scanBill, fontSize = 16.sp, lineHeight = 19.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
             }
-            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = onType, modifier = Modifier.weight(1f).heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)) {
-                Text(s.typeInstead, fontSize = 14.sp, lineHeight = 18.sp, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
+            TextButton(onClick = onType, modifier = Modifier.heightIn(min = 48.dp)) {
+                Text(s.typeInstead, fontSize = 16.sp, color = InkSoft)
             }
         }
     }
@@ -635,6 +635,21 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
             }
         }
 
+        // Proof for a wage dispute: the whole record, checked for changes, with its photos.
+        Section {
+            Text(s.evidenceTitle, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
+            Text(s.evidenceBody, fontSize = 15.sp, color = InkSoft)
+            Spacer(Modifier.height(8.dp))
+            val intact = remember(entries) { vm.chainIntact() }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(if (intact) Icons.Default.Check else Icons.Default.Close, null, tint = if (intact) Leaf else Sindoor)
+                Spacer(Modifier.width(6.dp))
+                Text(if (intact) s.recordIntact else s.recordBroken, color = if (intact) Leaf else Sindoor, fontWeight = FontWeight.SemiBold)
+            }
+            Spacer(Modifier.height(8.dp))
+            BigButton(s.exportEvidence, Ink, Modifier.fillMaxWidth()) { vm.exportEvidence() }
+        }
+
         // Savings goal: based on this month's cash in hand, whatever period is shown above.
         // Until one is set, it is a single quiet link, not a card.
         val goal = settings.monthlyGoalPaise
@@ -676,85 +691,6 @@ fun SummaryScreen(vm: AppViewModel, settings: Settings, s: Strings) {
     }
 }
 
-
-// ---------------------------------------------------------------- know my wages & dispute vault
-
-@Composable
-fun WageScreen(vm: AppViewModel, settings: Settings, s: Strings) {
-    val entries by vm.entries.collectAsStateWithLifecycle()
-    val all = Wages.forRegion(vm.wagePack, settings.region)
-    // Where rates differ by zone: the zone paying least, so "below the minimum" is never wrong.
-    val rates = Wages.lowestZone(all)
-    val floor = Wages.floor(rates)
-    val since = LocalDate.now().minusDays(30).toEpochDay()
-    val recent = com.acxelin.hisaabsaathi.core.Ledger.totals(entries.filter { it.epochDay >= since })
-    var details by rememberSaveable { mutableStateOf(false) }
-
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp).widthIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Section {
-            Text(s.minWageTitle, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
-            // The state was skipped at setup: ask it here, where it is needed.
-            if (settings.region.isEmpty()) {
-                Spacer(Modifier.height(8.dp))
-                PickList(s.workState, "", vm.pins.states, s) { vm.setWorkState(it) }
-                Spacer(Modifier.height(4.dp))
-            }
-            val hasStateRates = rates.any { it.region.equals(settings.region, ignoreCase = true) }
-            val where = if (hasStateRates) settings.region else s.centralRates
-            Text(listOfNotNull(where, floor?.let { s.sectorName(it.sector) }).joinToString(" · "), color = InkSoft)
-            if (rates.size < all.size) Text(s.outsideCities, fontSize = 14.sp, color = InkSoft)
-            Spacer(Modifier.height(8.dp))
-            rates.forEach { r -> LeaderRow(s.skillName(r.skill), s.rupees(Money.rupeesToPaise(r.dailyRupees))) }
-            Text(s.perDay, fontSize = 13.sp, color = InkSoft, modifier = Modifier.align(Alignment.End))
-            if (rates.size < all.size) floor?.let { f ->
-                Wages.topFor(all, f.skill)?.takeIf { it.dailyRupees > f.dailyRupees }?.let { top ->
-                    Text(s.cityRate(s.skillName(f.skill), Money.rupeesToPaise(top.dailyRupees)), fontSize = 15.sp)
-                }
-            }
-            Spacer(Modifier.height(6.dp))
-            val unchecked = rates.any { it.confidence == "low" }
-            Text(if (unchecked) s.wageNotChecked + " " + s.wageDataNote else s.wageDataNote, fontSize = 14.sp, color = if (unchecked) NoticeInk else InkSoft, lineHeight = 19.sp)
-            // Where the figures come from: one tap away, for a union or labour officer.
-            floor?.let {
-                TextButton(onClick = { details = !details }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) {
-                    Text(s.source, fontSize = 15.sp, color = Ink, fontWeight = FontWeight.SemiBold)
-                    Icon(if (details) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown, null, tint = Ink)
-                }
-                if (details) {
-                    Text("${s.effectiveFrom}: ${it.effectiveFrom}", fontSize = 13.sp, color = InkSoft)
-                    if (it.validTo.isNotEmpty()) Text("${s.validUntil}: ${it.validTo}", fontSize = 13.sp, color = InkSoft)
-                    Text(it.source, fontSize = 13.sp, color = InkSoft)
-                }
-            }
-        }
-
-        // The worker's own pay against it: one line and one verdict, no dashboard.
-        Section {
-            if (recent.daysWorked == 0 || floor == null) {
-                Text(s.notEnoughData, fontSize = 17.sp)
-            } else {
-                LeaderRow(s.yourAverage, s.rupees(recent.avgDailyEarnedPaise), big = true)
-                val gap = Wages.shortfallPaise(recent.avgDailyEarnedPaise, floor)
-                if (gap > 0) Text(s.shortfall(gap), fontSize = 17.sp, color = Red, fontWeight = FontWeight.Medium)
-                else Text(s.atOrAbove, fontSize = 17.sp, color = Green, fontWeight = FontWeight.Medium)
-            }
-        }
-
-        Section {
-            Text(s.evidenceTitle, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
-            Text(s.evidenceBody, fontSize = 15.sp, color = InkSoft)
-            Spacer(Modifier.height(8.dp))
-            val intact = remember(entries) { vm.chainIntact() }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(if (intact) Icons.Default.Check else Icons.Default.Close, null, tint = if (intact) Leaf else Sindoor)
-                Spacer(Modifier.width(6.dp))
-                Text(if (intact) s.recordIntact else s.recordBroken, color = if (intact) Leaf else Sindoor, fontWeight = FontWeight.SemiBold)
-            }
-            Spacer(Modifier.height(8.dp))
-            BigButton(s.exportEvidence, Ink, Modifier.fillMaxWidth()) { vm.exportEvidence() }
-        }
-    }
-}
 
 /** Change a saved line: kind, amount, day and (for an expense) what it was for. */
 @Composable

@@ -180,22 +180,26 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /** Returns null (after showing a message that says what went wrong) when nothing usable was heard. */
-    private suspend fun listenOnce(): String? {
+    /** [onScreen]: listen without leaving the current screen (yes/no on the confirm screen). */
+    private suspend fun listenOnce(onScreen: Boolean = false): String? {
         val l = lang
         app.speaker.stop()
         val usePack = app.stt.available(l)
-        if (!usePack && !app.systemStt.available()) { voicePackMessage(); return null }
+        if (!usePack && !app.systemStt.available()) { if (!onScreen) voicePackMessage(); return null }
         app.slm.unload() // keep peak memory low on 3 GB phones
         lastAudio = null; lastEngine = if (usePack) "pack" else "phone"
-        capture.value = Capture.Listening
+        if (onScreen) confirmListening.value = true else capture.value = Capture.Listening
         val heard = try {
-            if (usePack) app.stt.listen(l, onLevel = { level.value = it }, onRecorded = { capture.value = Capture.Thinking })
-            else app.systemStt.listen(l, onRecorded = { capture.value = Capture.Thinking })
+            val recorded = { if (!onScreen) capture.value = Capture.Thinking }
+            if (usePack) app.stt.listen(l, onLevel = { level.value = it }, onRecorded = recorded)
+            else app.systemStt.listen(l, onRecorded = recorded)
         } catch (e: Exception) {
             Heard.Failed(Heard.Kind.ENGINE, e.message ?: e.javaClass.simpleName)
         } finally {
             level.value = 0f
+            confirmListening.value = false
         }
+        if (onScreen && heard !is Heard.Text) return null // the confirm screen stays; the buttons still work
         return when (heard) {
             is Heard.Text -> { lastAudio = heard.audio; heard.text }
             Heard.Silence -> { say(strings.heardNothing); null }
@@ -323,9 +327,33 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private fun todayText(): String =
         LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("d MMMM yyyy", com.acxelin.hisaabsaathi.speech.locale(lang)))
 
+    /**
+     * Shows what was understood and reads it back. For a spoken entry or a photo, the app then
+     * asks "right? say yes or no" and listens, so the worker never has to touch the screen;
+     * a typed entry is only read back (the worker is typing, perhaps where they cannot talk).
+     */
     private fun review(r: Capture.Review) {
         capture.value = r
-        app.speaker.speak(strings.readback(r.drafts), lang)
+        val listen = r.source != "typed" && r.canSave && voiceAvailable()
+        if (!listen) { app.speaker.speak(strings.readback(r.drafts), lang); return }
+        val caller = busy
+        viewModelScope.launch(guard) {
+            caller?.takeIf { it != coroutineContext[kotlinx.coroutines.Job] }?.join()
+            app.speaker.speakAndWait(strings.readback(r.drafts) + " " + strings.sayYesNoPrompt, lang)
+            if (capture.value === r && !isBusy) confirmByVoice()
+        }
+    }
+
+    /** Some way to hear the worker right now: the app's speech pack, or the phone's recogniser. */
+    private fun voiceAvailable() = app.stt.available(lang) || app.systemStt.available()
+
+    /** True while the confirm screen is listening for "yes" or "no". */
+    val confirmListening = MutableStateFlow(false)
+
+    /** The worker pressed something on the confirm screen: stop listening for yes or no. */
+    private fun stopConfirmListening() {
+        if (!confirmListening.value) return
+        app.stt.stop(); app.systemStt.stop()
     }
 
     fun replay() {
@@ -358,6 +386,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     // ---- review
 
     fun updateDraft(index: Int, draft: DraftEntry) {
+        stopConfirmListening()
         val r = capture.value as? Capture.Review ?: return
         if (index !in r.drafts.indices) return
         capture.value = r.copy(drafts = r.drafts.toMutableList().also { it[index] = draft })
@@ -365,6 +394,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     /** The worker typed in an amount box: an empty box is 0, a slip ("abc", "1e9") blocks saving. */
     fun updateAmount(index: Int, typed: String) {
+        stopConfirmListening()
         val r = capture.value as? Capture.Review ?: return
         if (index !in r.drafts.indices) return
         val paise = com.acxelin.hisaabsaathi.core.Money.parseTyped(typed)
@@ -387,6 +417,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * double tap cannot save the same lines twice.
      */
     fun confirmSave() {
+        stopConfirmListening()
         val r = capture.value as? Capture.Review ?: return
         if (!r.canSave) return
         capture.value = Capture.Thinking
@@ -415,22 +446,27 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun confirmByVoice() {
         val r = capture.value as? Capture.Review ?: return
+        if (confirmListening.value) { stopConfirmListening(); return } // a second tap stops listening
         if (isBusy) return
         busy = viewModelScope.launch(guard) {
-            val heard = try { listenOnce() } catch (e: Exception) { note("yes/no: ${e.javaClass.simpleName}"); null }
-            if (heard == null) { capture.value = r; return@launch }
+            val heard = try { listenOnce(onScreen = true) } catch (e: Exception) { note("yes/no: ${e.javaClass.simpleName}"); null }
+            // The worker pressed a button meanwhile: their tap wins.
+            if (capture.value !== r) return@launch
+            if (heard == null) return@launch
             val answer = Confirm.parse(heard)
             keep(Said(heard, "voice", lastAudio, lastEngine), "CONFIRM ${when (answer) { true -> "YES"; false -> "NO"; null -> "NONE" }}", "", Improve.Outcome.CONFIRM)
             lastAudio = null
             when (answer) {
                 true -> { capture.value = r; confirmSave() }
                 false -> { rejected(r); dropPhoto(r); capture.value = Capture.Idle; busy = null; listenForEntry() }
-                null -> review(r)
+                // Not a clear yes or no: ask once more, then the buttons are there.
+                null -> app.speaker.speak(strings.sayYesNoPrompt, lang)
             }
         }
     }
 
     fun retry() {
+        stopConfirmListening()
         val r = capture.value as? Capture.Review
         r?.let(::rejected)
         val wasVoice = r?.source == "voice"
@@ -440,6 +476,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun dismiss() {
+        stopConfirmListening()
         app.speaker.stop()
         (capture.value as? Capture.Review)?.let { reviewed(it, Improve.Outcome.DISMISSED); dropPhoto(it) }
         capture.value = Capture.Idle
@@ -825,7 +862,50 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         app.speaker.speak(text, lang)
     }
 
-    fun stopSpeaking() { stopPrompt(); app.speaker.stop() }
+    fun stopSpeaking() { askJob?.cancel(); askJob = null; stopPrompt(); app.speaker.stop(); if (answering.value) app.stt.stop() }
+
+    private var askJob: kotlinx.coroutines.Job? = null
+
+    /**
+     * Voice first: reads a setup question aloud and, once it has been said, listens for the
+     * answer (with the on-device speech pack; setup answers never go to an online recogniser).
+     * Without the pack yet, the question is only read; typing is always there too.
+     */
+    fun askAndListen(key: String, text: String, onText: (String) -> String?) {
+        askJob?.cancel()
+        if (!app.stt.available(lang) || isBusy) { speakPrompt(key, text); return }
+        askJob = viewModelScope.launch(guard) {
+            playPromptAndWait(key, text)
+            listenForAnswer(onText)
+        }
+    }
+
+    /** [speakPrompt], returning once the question has been said. */
+    private suspend fun playPromptAndWait(key: String, text: String) {
+        stopPrompt(); app.speaker.stop()
+        val dir = "onboarding_audio/${lang.code}"
+        val name = runCatching { app.assets.list(dir)?.firstOrNull { it.substringBeforeLast('.') == key } }.getOrNull()
+        if (name != null) {
+            val played = kotlinx.coroutines.withTimeoutOrNull(20_000) {
+                kotlinx.coroutines.suspendCancellableCoroutine<Boolean> { cont ->
+                    val mp = android.media.MediaPlayer()
+                    val ok = runCatching {
+                        mp.setAudioAttributes(
+                            android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT)
+                                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build(),
+                        )
+                        app.assets.openFd("$dir/$name").use { fd -> mp.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length) }
+                        mp.setOnCompletionListener { it.release(); if (promptPlayer === it) promptPlayer = null; if (cont.isActive) cont.resumeWith(Result.success(true)) }
+                        mp.prepare(); mp.start(); promptPlayer = mp
+                    }.isSuccess
+                    if (!ok) { runCatching { mp.release() }; if (cont.isActive) cont.resumeWith(Result.success(false)) }
+                    cont.invokeOnCancellation { stopPrompt() }
+                }
+            }
+            if (played == true) return
+        }
+        app.speaker.speakAndWait(text, lang)
+    }
 
     /**
      * Reads the Aadhaar QR in a photo, on the phone, and fills in the details. The photo file

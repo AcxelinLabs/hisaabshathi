@@ -98,6 +98,9 @@ class Strings(val lang: Lang) {
         "ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ ଲେଖନ୍ତୁ କିମ୍ବା ଲୋକେସନ୍‌ରୁ ଭରନ୍ତୁ: ରାଜ୍ୟ ଓ ଜିଲ୍ଲା ନିଜେ ଭରିଯିବ। କିମ୍ବା ତଳୁ ବାଛନ୍ତୁ।",
         "Type your PIN code, or use your location: the state and district fill in by themselves. Or choose them below.",
     )
+    val sayYesNoPrompt get() = t("सही है तो हाँ बोलिए, नहीं तो नहीं।", "ଠିକ୍ ଥିଲେ ହଁ କୁହନ୍ତୁ, ନଥିଲେ ନା।", "If it is right, say yes. If not, say no.")
+    val orType get() = t("या यहाँ लिखें", "କିମ୍ବା ଏଠାରେ ଲେଖନ୍ତୁ", "Or type here")
+    val speakNow get() = t("बोलिए", "କୁହନ୍ତୁ", "Speak now")
     val sayYesNo get() = t("बोलकर हाँ या नहीं कहें", "କହି ହଁ କିମ୍ବା ନା କୁହନ୍ତୁ", "Say yes or no")
     val fillFromAadhaar get() = t("आधार कार्ड से भरें", "ଆଧାର କାର୍ଡରୁ ଭରନ୍ତୁ", "Fill from Aadhaar card")
     val noPin get() = t("पिन नहीं पता?", "ପିନ୍ ଜଣା ନାହିଁ?", "No PIN?")

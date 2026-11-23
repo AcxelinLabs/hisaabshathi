@@ -295,7 +295,18 @@ fun locale(lang: Lang): Locale = Locale(lang.code, "IN")
 class Speaker(context: Context, private val packs: com.acxelin.hisaabsaathi.models.PackManager) {
     private val app = context.applicationContext
     private var ready = false
-    private val tts = TextToSpeech(app) { status -> ready = status == TextToSpeech.SUCCESS }
+    private val tts: TextToSpeech = TextToSpeech(app) { status ->
+        ready = status == TextToSpeech.SUCCESS
+        if (ready) tts.setOnUtteranceProgressListener(object : android.speech.tts.UtteranceProgressListener() {
+            override fun onStart(id: String?) {}
+            override fun onDone(id: String?) { spoken?.complete(Unit) }
+            @Deprecated("Deprecated in Java") override fun onError(id: String?) { spoken?.complete(Unit) }
+            override fun onStop(id: String?, interrupted: Boolean) { spoken?.complete(Unit) }
+        })
+    }
+
+    /** Completes when the phone's voice has finished the current text (for [speakAndWait]). */
+    @Volatile private var spoken: kotlinx.coroutines.CompletableDeferred<Unit>? = null
     private val voice = VoiceEngine(app)
     private val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + Dispatchers.Main)
     private var job: kotlinx.coroutines.Job? = null
@@ -322,22 +333,45 @@ class Speaker(context: Context, private val packs: com.acxelin.hisaabsaathi.mode
         stop()
         val dir = voiceDir(lang)
         if (dir != null) {
-            job = scope.launch {
-                val parts = sentences(text)
-                var next: kotlinx.coroutines.Deferred<java.io.File?>? = null
-                for ((i, part) in parts.withIndex()) {
-                    val wav = next?.await() ?: voice.synthesize(dir, part, lang, voiceName)
-                    if (wav == null) {
-                        if (i == 0) speakWithPhone(text, lang)
-                        break
-                    }
-                    next = parts.getOrNull(i + 1)?.let { p -> async { voice.synthesize(dir, p, lang, voiceName) } }
-                    playAndWait(wav)
-                }
-            }
+            job = scope.launch { speakOwn(dir, text, lang) }
             return true
         }
         return speakWithPhone(text, lang)
+    }
+
+    /**
+     * Speaks [text] and returns once it has been said (or could not be), so the app can listen
+     * for the answer straight after a question. Never waits more than [maxMs].
+     */
+    suspend fun speakAndWait(text: String, lang: Lang, maxMs: Long = 30_000) {
+        stop()
+        kotlinx.coroutines.withTimeoutOrNull(maxMs) {
+            val dir = voiceDir(lang)
+            if (dir != null) { speakOwn(dir, text, lang, waitForPhone = true); return@withTimeoutOrNull }
+            val done = kotlinx.coroutines.CompletableDeferred<Unit>()
+            spoken = done
+            if (speakWithPhone(text, lang)) done.await()
+        }
+    }
+
+    private suspend fun speakOwn(dir: java.io.File, text: String, lang: Lang, waitForPhone: Boolean = false) {
+        val parts = sentences(text)
+        var next: kotlinx.coroutines.Deferred<java.io.File?>? = null
+        kotlinx.coroutines.coroutineScope {
+            for ((i, part) in parts.withIndex()) {
+                val wav = next?.await() ?: voice.synthesize(dir, part, lang, voiceName)
+                if (wav == null) {
+                    if (i == 0) {
+                        val done = kotlinx.coroutines.CompletableDeferred<Unit>()
+                        if (waitForPhone) spoken = done
+                        if (speakWithPhone(text, lang) && waitForPhone) done.await()
+                    }
+                    break
+                }
+                next = parts.getOrNull(i + 1)?.let { p -> async { voice.synthesize(dir, p, lang, voiceName) } }
+                playAndWait(wav)
+            }
+        }
     }
 
     /** Sentences (split at . ? ! । |), long ones also at commas, so each is quick to make. */
@@ -389,6 +423,7 @@ class Speaker(context: Context, private val packs: com.acxelin.hisaabsaathi.mode
     }
 
     fun stop() {
+        spoken?.complete(Unit); spoken = null
         job?.cancel(); job = null
         player?.let { runCatching { it.stop(); it.release() } }; player = null
         if (ready) tts.stop()

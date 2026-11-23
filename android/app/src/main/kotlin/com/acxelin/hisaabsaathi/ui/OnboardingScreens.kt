@@ -19,6 +19,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
@@ -123,7 +124,29 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     // A new phone starts from its own language, if the app has it (the worker still chooses);
     // setup shown again after an update starts from the details already saved.
     LaunchedEffect(Unit) { vm.suggestPhoneLanguage(); if (settings.onboarded) vm.startDraft() }
-    LaunchedEffect(step, settings.lang) { prompt(step, s)?.let { (key, text) -> vm.speakPrompt(key, text) } }
+
+    // Voice first: each question is asked aloud and the app then listens for the answer.
+    // Typing is there too, below. Until the speech pack is in, the question is only read.
+    val context = LocalContext.current
+    val packStates by vm.packStates.collectAsStateWithLifecycle()
+    val sttReady = packStates[vm.sttPack().id] is PackState.Ready
+    fun answer(st: Step): (String) -> String? = when (st) {
+        // "mera naam Aditya hai" → "Aditya": only the name goes in the box.
+        Step.NAME -> { text -> SpokenDetails.name(text).take(60).also { n -> vm.editDraft { it.copy(name = n) } } }
+        // Read back digit by digit: "7 5 1 0 0 2".
+        else -> { text -> SpokenDetails.pin(text)?.also { vm.setDraftPin(it) }?.toList()?.joinToString(" ") }
+    }
+    fun ask() { prompt(step, s)?.let { (key, text) -> vm.askAndListen(key, text, answer(step)) } }
+    val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted -> if (granted) ask() }
+    LaunchedEffect(step, settings.lang, sttReady) {
+        val (key, text) = prompt(step, s) ?: return@LaunchedEffect
+        val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        when {
+            !sttReady -> vm.speakPrompt(key, text)
+            granted -> ask()
+            else -> { vm.speakPrompt(key, text); micPermission.launch(Manifest.permission.RECORD_AUDIO) }
+        }
+    }
 
     // An Aadhaar QR fills in name, age and place at once: straight on to the PIN, to check it.
     val scan = rememberAadhaarScan(vm, s, onReading = { busy -> reading = busy; if (busy) { qrFailed = false } }) { ok ->
@@ -165,14 +188,13 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                     LanguagePicker(vm, settings, onDark = true)
                 }
                 Step.NAME -> {
-                    Question(s.qName) { vm.speakPrompt("q_name", s.qName) }
+                    Question(s.qName) { ask() }
+                    MicAnswer(vm, s, answer(Step.NAME))
                     OutlinedTextField(
                         value = draft.name, onValueChange = { v -> vm.editDraft { it.copy(name = v.take(60)) } },
                         label = { Text(s.nameLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
                         textStyle = androidx.compose.ui.text.TextStyle(fontSize = 22.sp),
                     )
-                    // "mera naam Aditya hai" → "Aditya": only the name goes in the box.
-                    MicAnswer(vm, s) { text -> SpokenDetails.name(text).take(60).also { n -> vm.editDraft { it.copy(name = n) } } }
                     // For those who carry it: one scan fills in the rest too. Quiet, never pushed.
                     TextButton(onClick = scan.takePhoto, enabled = !reading, modifier = Modifier.heightIn(min = 48.dp)) {
                         Icon(painterResource(R.drawable.ic_camera), null, tint = Ink, modifier = Modifier.size(20.dp))
@@ -183,8 +205,9 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                     if (qrFailed) Text(s.aadhaarFailed, fontSize = 16.sp, color = Red)
                 }
                 Step.PLACE -> {
-                    Question(s.qPin) { vm.speakPrompt("q_pin", s.qPin) }
-                    PlaceFields(vm, draft, s, spoken = true)
+                    Question(s.qPin) { ask() }
+                    MicAnswer(vm, s, answer(Step.PLACE))
+                    PlaceFields(vm, draft, s)
                 }
             }
         }
@@ -246,36 +269,40 @@ private fun PrivacyNote(s: Strings, onHear: () -> Unit) {
 }
 
 
-/** Big mic button for a spoken answer; works once the speech pack is downloaded. */
+/**
+ * The main way to answer a setup question: a big round mic, like the one on Home. It listens by
+ * itself after the question; a tap listens again (or stops). While the speech pack is still
+ * downloading, a quiet line says so; typing works meanwhile.
+ */
 @Composable
 private fun MicAnswer(vm: AppViewModel, s: Strings, onText: (String) -> String?) {
     val context = LocalContext.current
     val listening by vm.answering.collectAsStateWithLifecycle()
     val states by vm.packStates.collectAsStateWithLifecycle()
     val stt = states[vm.sttPack().id]
-    val ready = stt is PackState.Ready
-    // Until speech works there is nothing to press: no grey button that looks broken.
-    if (!ready) return
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) vm.listenForAnswer(onText)
     }
-    Button(
-        onClick = {
-            val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
-            if (granted) vm.listenForAnswer(onText) else permission.launch(Manifest.permission.RECORD_AUDIO)
-        },
-        enabled = ready, modifier = Modifier.fillMaxWidth().height(64.dp), shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = if (listening) Red else Green, contentColor = Color.White),
-    ) {
-        Icon(painterResource(R.drawable.ic_mic), null, tint = Color.White, modifier = Modifier.size(28.dp))
-        Spacer(Modifier.width(10.dp))
-        val label = when {
-            listening -> s.listening
-            ready -> s.speakAnswer
-            stt is PackState.Downloading -> s.gettingVoiceReady((stt.fraction * 100).toInt())
-            else -> s.speakAnswer
+    when (stt) {
+        is PackState.Ready -> Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(
+                Modifier.size(104.dp).clip(CircleShape).background(if (listening) Red else Marigold)
+                    .clickable(onClickLabel = s.speakNow) {
+                        val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+                        if (granted) vm.listenForAnswer(onText) else permission.launch(Manifest.permission.RECORD_AUDIO)
+                    },
+                contentAlignment = Alignment.Center,
+            ) { Icon(painterResource(R.drawable.ic_mic), null, tint = if (listening) Color.White else Ink, modifier = Modifier.size(44.dp)) }
+            Text(if (listening) s.listening else s.speakNow, fontSize = 18.sp, fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(top = 8.dp))
+            Text(s.orType, fontSize = 14.sp, color = InkSoft, modifier = Modifier.padding(top = 12.dp))
         }
-        Text(label, fontSize = 18.sp, color = Color.White)
+        is PackState.Downloading -> Row(verticalAlignment = Alignment.CenterVertically) {
+            CircularProgressIndicator(progress = { stt.fraction }, color = Ink, strokeWidth = 3.dp, modifier = Modifier.size(22.dp))
+            Spacer(Modifier.width(10.dp))
+            Text(s.gettingVoiceReady((stt.fraction * 100).toInt()), fontSize = 15.sp, color = InkSoft)
+        }
+        else -> Unit
     }
 }
 
@@ -340,8 +367,6 @@ internal fun PlaceFields(vm: AppViewModel, draft: Profile, s: Strings, spoken: B
         textStyle = TextStyle(fontSize = 26.sp, color = Ink, letterSpacing = 2.sp),
         isError = draft.pin.length == 6 && found == null,
     )
-    // Read back digit by digit: "7 5 1 0 0 2".
-    if (spoken) MicAnswer(vm, s) { text -> SpokenDetails.pin(text)?.also { vm.setDraftPin(it) }?.toList()?.joinToString(" ") }
     val settled = found != null && found.state == draft.state && draft.district in found.districts
     when {
         settled -> Row(verticalAlignment = Alignment.CenterVertically) {

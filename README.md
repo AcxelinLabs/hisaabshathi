@@ -19,11 +19,12 @@ It works entirely on the phone, with no internet after a one-time download. Noth
 phone unless the worker chooses: by sharing a report, or by saying yes to help improve the app.
 
 <p align="center">
-  <img src="docs/screens/app-overview.png" alt="HisaabSaathi: home, confirm, spoken answer, ledger, summary, minimum wage" width="640">
+  <img src="docs/screens/app-overview.png" alt="HisaabSaathi: home, confirm, spoken answer, ledger, summary, photos and papers" width="640">
 </p>
 
-It needs Android 10 or newer. Setup is three screens: language, name and PIN code. The PIN
-fills in the state and district, offline.
+It needs Android 10 or newer. Setup is three screens: language, name and PIN code. Each
+question is asked aloud and answered by voice, or typed. The PIN fills in the state and
+district, offline.
 
 ## What it does
 
@@ -31,15 +32,17 @@ fills in the state and district, offline.
   - work: hours, pieces and rate;
   - advances, wages received, and spending by category (food, travel, rent, phone, health,
     sent home);
-  - a confirmation card read aloud, saved only when the worker says it's right.
+  - a confirmation card read aloud; the app then listens for "yes" or "no", so the worker never
+    has to touch the screen. Nothing is saved before a yes.
 - **Ask by voice:** what was earned, taken as advance, spent, or is still owed, for today,
   yesterday, this or last week, this or last month, or this year. Also the government minimum
   wage for their state. Local words and mixed English work: *dihadi, peshgi, hajira, dadan,
   mestri, "is week ka total"*.
 - **Ledger by day:** daily totals; tap to change a line; undo a delete.
 - **Summaries and a savings goal**, on screen and read aloud.
-- **Minimum-wage check** against the official rates of the worker's state: ten states so far,
-  each figure with its government notice ([open dataset](data/minimum-wages/README.md)).
+- **Minimum wage, by voice:** ask *"What is the minimum wage?"* and hear your state's official
+  daily rate. Ten states so far, each figure with its government notice
+  ([open dataset](data/minimum-wages/README.md)).
 - **Photos of papers:** bills, advance slips, loan papers and salary slips become a line to
   confirm, with the amount read on the phone. Bank statements and other papers are kept as they
   are. All of them are in one place in the ledger.

@@ -219,10 +219,10 @@ class AppFlowTest {
         click("हिसाब")
         waitFor("काम के दिन")
         shot("09-summary")
-        click("मजदूरी व मदद")
-        waitFor("सरकारी न्यूनतम मजदूरी")
-        rule.onNodeWithText("रिकॉर्ड से छेड़छाड़ नहीं हुई", substring = true).assertExists()
-        shot("10-wage")
+        // The evidence pack is on Summary now (there is no wage tab).
+        check(rule.onAllNodesWithText("मजदूरी व मदद").fetchSemanticsNodes().isEmpty()) { "three tabs only" }
+        rule.onNodeWithText("रिकॉर्ड से छेड़छाड़ नहीं हुई", substring = true).performScrollTo().assertExists()
+        shot("10-evidence")
 
         // --- settings, then the same home screen in Odia and English
         rule.onNodeWithContentDescription("सेटिंग").performClick()

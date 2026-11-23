@@ -271,6 +271,9 @@ internal object Ta {
         "More options" to "மேலும் விருப்பங்கள்",
         "To understand your voice" to "உங்கள் குரலைப் புரிந்துகொள்ள",
         "Say yes or no" to "ஆம் அல்லது இல்லை என்று சொல்லுங்கள்",
+        "If it is right, say yes. If not, say no." to "சரி என்றால் ஆம் என்று சொல்லுங்கள், இல்லையென்றால் இல்லை என்று சொல்லுங்கள்.",
+        "Or type here" to "அல்லது இங்கே தட்டச்சு செய்யுங்கள்",
+        "Speak now" to "பேசுங்கள்",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

@@ -182,12 +182,12 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         },
         bottomBar = {
             NavigationBar(containerColor = Ink) {
-                // Pictures that say what is behind each tab: home, the ledger's lines, totals, the rupee.
+                // Pictures that say what is behind each tab: home, the ledger's lines, totals.
                 val home = androidx.compose.ui.graphics.vector.rememberVectorPainter(Icons.Default.Home)
                 val list = androidx.compose.ui.graphics.vector.rememberVectorPainter(Icons.AutoMirrored.Filled.List)
                 val tabs = listOf(
                     s.tabHome to home, s.tabLedger to list,
-                    s.tabSummary to painterResource(R.drawable.ic_summary), s.tabWage to painterResource(R.drawable.ic_wage),
+                    s.tabSummary to painterResource(R.drawable.ic_summary),
                 )
                 tabs.forEachIndexed { i, (label, icon) ->
                     NavigationBarItem(
@@ -205,8 +205,7 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
             when (tab) {
                 0 -> HomeScreen(vm, settings, s, capture, onMic, onScan, onType = { typing = true })
                 1 -> LedgerScreen(vm, s, onScan)
-                2 -> SummaryScreen(vm, settings, s)
-                else -> WageScreen(vm, settings, s)
+                else -> SummaryScreen(vm, settings, s)
             }
         }
     }

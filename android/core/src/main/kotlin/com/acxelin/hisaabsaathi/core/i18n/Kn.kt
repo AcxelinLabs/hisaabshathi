@@ -283,6 +283,9 @@ internal object Kn {
         "More options" to "ಇನ್ನಷ್ಟು ಆಯ್ಕೆಗಳು",
         "To understand your voice" to "ನಿಮ್ಮ ಧ್ವನಿಯನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು",
         "Say yes or no" to "ಹೌದು ಅಥವಾ ಇಲ್ಲ ಎಂದು ಹೇಳಿ",
+        "If it is right, say yes. If not, say no." to "ಸರಿಯಾಗಿದ್ದರೆ ಹೌದು ಎನ್ನಿ, ಇಲ್ಲದಿದ್ದರೆ ಇಲ್ಲ ಎನ್ನಿ.",
+        "Or type here" to "ಅಥವಾ ಇಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ",
+        "Speak now" to "ಮಾತನಾಡಿ",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

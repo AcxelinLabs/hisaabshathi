@@ -285,6 +285,9 @@ internal object Te {
         "More options" to "మరిన్ని ఎంపికలు",
         "To understand your voice" to "మీ గొంతు అర్థం చేసుకోవడానికి",
         "Say yes or no" to "అవును లేదా కాదు అని చెప్పండి",
+        "If it is right, say yes. If not, say no." to "సరిగ్గా ఉంటే అవును అనండి, లేకపోతే కాదు అనండి.",
+        "Or type here" to "లేదా ఇక్కడ టైప్ చేయండి",
+        "Speak now" to "మాట్లాడండి",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */
