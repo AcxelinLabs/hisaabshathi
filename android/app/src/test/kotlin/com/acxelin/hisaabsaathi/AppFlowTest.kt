@@ -41,6 +41,10 @@ class TestApp : HisaabApp() {
     /** Tests start on the app itself; the welcome has its own test. */
     override val showWelcome: Boolean = false
 
+    /** What the worker "says", one answer per listen, while [heard] has any (else no speech engine, as before). */
+    override val testListener: (suspend () -> com.acxelin.hisaabsaathi.speech.Heard)?
+        get() = if (heard.isEmpty()) null else ({ heard.removeFirstOrNull()?.let { com.acxelin.hisaabsaathi.speech.Heard.Text(it) } ?: com.acxelin.hisaabsaathi.speech.Heard.Silence })
+
     /** What the text reader "sees" on a photo in tests. */
     override suspend fun readPhoto(photo: android.net.Uri): String = fakePhotoText
 
@@ -52,6 +56,7 @@ class TestApp : HisaabApp() {
     companion object {
         var fakeLocation: Pair<Double, Double>? = null
         var fakePhotoText: String = ""
+        val heard = ArrayDeque<String>()
     }
 }
 
@@ -133,7 +138,11 @@ class AppFlowTest {
         org.robolectric.Shadows.shadowOf(rule.activity.application).grantPermissions(android.Manifest.permission.RECORD_AUDIO)
         rule.onNodeWithContentDescription("दबाएं और काम या खर्च बोलें").performClick()
         // The phone's own recogniser has no offline Hindi model: it fails at once with "language unavailable".
-        rule.waitUntil(10_000) { pump(); org.robolectric.shadows.ShadowSpeechRecognizer.getLatestSpeechRecognizer() != null }
+        // (after the short "listening" sound: let the clock move on)
+        rule.waitUntil(10_000) {
+            org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idleFor(java.time.Duration.ofMillis(50))
+            org.robolectric.shadows.ShadowSpeechRecognizer.getLatestSpeechRecognizer() != null
+        }
         org.robolectric.Shadows.shadowOf(org.robolectric.shadows.ShadowSpeechRecognizer.getLatestSpeechRecognizer()).triggerOnError(13)
         waitFor("आवाज़ पैक नहीं है")
         check(rule.onAllNodesWithText("समझ नहीं आया", substring = true).fetchSemanticsNodes().isEmpty())

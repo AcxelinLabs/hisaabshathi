@@ -64,7 +64,8 @@ object Reminders {
         nm.createNotificationChannel(NotificationChannel(CHANNEL, strings.reminderTitle, NotificationManager.IMPORTANCE_DEFAULT))
         val open = PendingIntent.getActivity(
             context, 0,
-            Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+            // Opens the app already listening: from the lock screen to a saved entry without a search for the mic.
+            Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP).putExtra(MainActivity.EXTRA_LISTEN, true),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
         nm.notify(

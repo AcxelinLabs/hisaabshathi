@@ -274,6 +274,9 @@ internal object Ta {
         "If it is right, say yes. If not, say no." to "சரி என்றால் ஆம் என்று சொல்லுங்கள், இல்லையென்றால் இல்லை என்று சொல்லுங்கள்.",
         "Or type here" to "அல்லது இங்கே தட்டச்சு செய்யுங்கள்",
         "Speak now" to "பேசுங்கள்",
+        "What was the rate for one piece?" to "ஒரு பீஸுக்கு ரேட் எவ்வளவு?",
+        "{0}: how many rupees?" to "{0}: எத்தனை ரூபாய்?",
+        "I didn't get the amount. Type it below, or say it again." to "தொகை புரியவில்லை. கீழே தட்டச்சு செய்யுங்கள், அல்லது மீண்டும் சொல்லுங்கள்.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

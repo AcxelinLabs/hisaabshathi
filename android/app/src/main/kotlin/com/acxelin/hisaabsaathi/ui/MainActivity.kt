@@ -61,7 +61,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Draw behind the system bars; each screen pads for them and for the keyboard itself.
         enableEdgeToEdge(statusBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT))
+        if (intent?.getBooleanExtra(EXTRA_LISTEN, false) == true) vm.requestListen()
         setContent { Root(vm) }
+    }
+
+    /** Tapped the reminder while the app was open: listen now. */
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        if (intent.getBooleanExtra(EXTRA_LISTEN, false)) vm.requestListen()
+    }
+
+    companion object {
+        /** Set by the reminder: open the app listening for today's work. */
+        const val EXTRA_LISTEN = "listen"
     }
 }
 
@@ -102,6 +114,14 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
     val onMic = {
         val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
         if (granted) vm.micTapped() else micPermission.launch(Manifest.permission.RECORD_AUDIO)
+    }
+    // Opened from the reminder: Home, and listening straight away.
+    val listenAsked by vm.listenRequested.collectAsStateWithLifecycle()
+    androidx.compose.runtime.LaunchedEffect(listenAsked) {
+        if (!listenAsked) return@LaunchedEffect
+        tab = 0
+        val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        if (granted) vm.listenFromReminder() else { vm.listenRequested.value = false; micPermission.launch(Manifest.permission.RECORD_AUDIO) }
     }
     // The spoken yes/no on the confirm screen needs the microphone too (the entry may have been typed).
     val answerPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->

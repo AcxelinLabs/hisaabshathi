@@ -76,6 +76,12 @@ open class HisaabApp : Application() {
     val slm by lazy { SlmEngine(this, packs) }
     val scanner by lazy { Scanner(this) }
 
+    /** Tests give what the worker "said"; on a phone this is null and the speech engines listen. */
+    open val testListener: (suspend () -> com.acxelin.hisaabsaathi.speech.Heard)? = null
+
+    /** The "listening" and "got it" sounds. */
+    val earcons by lazy { com.acxelin.hisaabsaathi.speech.Earcons(this) }
+
     /** The text on a photo, read on the phone (tests give their own). */
     open suspend fun readPhoto(photo: android.net.Uri): String = scanner.text(photo)
     val qr by lazy { com.acxelin.hisaabsaathi.ai.QrReader(this) }

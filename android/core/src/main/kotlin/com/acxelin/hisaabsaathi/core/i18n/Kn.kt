@@ -286,6 +286,9 @@ internal object Kn {
         "If it is right, say yes. If not, say no." to "ಸರಿಯಾಗಿದ್ದರೆ ಹೌದು ಎನ್ನಿ, ಇಲ್ಲದಿದ್ದರೆ ಇಲ್ಲ ಎನ್ನಿ.",
         "Or type here" to "ಅಥವಾ ಇಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ",
         "Speak now" to "ಮಾತನಾಡಿ",
+        "What was the rate for one piece?" to "ಒಂದು ಪೀಸ್‌ಗೆ ರೇಟ್ ಎಷ್ಟು?",
+        "{0}: how many rupees?" to "{0}: ಎಷ್ಟು ರೂಪಾಯಿ?",
+        "I didn't get the amount. Type it below, or say it again." to "ಮೊತ್ತ ಅರ್ಥ ಆಗಲಿಲ್ಲ. ಕೆಳಗೆ ಟೈಪ್ ಮಾಡಿ, ಅಥವಾ ಮತ್ತೆ ಹೇಳಿ.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

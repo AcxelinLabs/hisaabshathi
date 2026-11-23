@@ -32,8 +32,10 @@ district, offline.
   - work: hours, pieces and rate;
   - advances, wages received, and spending by category (food, travel, rent, phone, health,
     sent home);
+  - if something is missing (the rate per piece, the amount), the app asks for it and listens;
   - a confirmation card read aloud; the app then listens for "yes" or "no", so the worker never
-    has to touch the screen. Nothing is saved before a yes.
+    has to touch the screen. Nothing is saved before a yes;
+  - a short sound when the app starts listening, and another when it has heard.
 - **Ask by voice:** what was earned, taken as advance, spent, or is still owed, for today,
   yesterday, this or last week, this or last month, or this year. Also the government minimum
   wage for their state. Local words and mixed English work: *dihadi, peshgi, hajira, dadan,
@@ -50,7 +52,8 @@ district, offline.
   - a **PDF report** to share or print;
   - an **evidence pack**: every record and photo, with a check showing nothing was changed
     afterwards, for a contractor, labour office, union or NGO when wages are disputed.
-- **Reminders** at 3 PM and 9 PM, and **backup and restore**.
+- **Reminders** at 3 PM and 9 PM: tapping one opens the app already listening. Also **backup
+  and restore**.
 
 <p align="center">
   <img src="docs/screens/six-languages.png" alt="Home screen in Odia, Telugu, Kannada, Tamil and English" width="880">

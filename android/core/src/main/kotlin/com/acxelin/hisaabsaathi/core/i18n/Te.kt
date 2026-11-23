@@ -288,6 +288,9 @@ internal object Te {
         "If it is right, say yes. If not, say no." to "సరిగ్గా ఉంటే అవును అనండి, లేకపోతే కాదు అనండి.",
         "Or type here" to "లేదా ఇక్కడ టైప్ చేయండి",
         "Speak now" to "మాట్లాడండి",
+        "What was the rate for one piece?" to "ఒక్క పీస్‌కి రేటు ఎంత?",
+        "{0}: how many rupees?" to "{0}: ఎన్ని రూపాయలు?",
+        "I didn't get the amount. Type it below, or say it again." to "మొత్తం అర్థం కాలేదు. కింద టైప్ చేయండి, లేదా మళ్ళీ చెప్పండి.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

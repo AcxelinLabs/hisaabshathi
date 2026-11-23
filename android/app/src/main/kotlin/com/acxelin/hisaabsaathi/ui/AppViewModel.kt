@@ -30,6 +30,7 @@ import com.acxelin.hisaabsaathi.core.Understand
 import com.acxelin.hisaabsaathi.core.Understood
 import com.acxelin.hisaabsaathi.core.Slm
 import com.acxelin.hisaabsaathi.core.Strings
+import com.acxelin.hisaabsaathi.core.NumberWords
 import com.acxelin.hisaabsaathi.core.Usage
 import com.acxelin.hisaabsaathi.core.Wages
 import com.acxelin.hisaabsaathi.data.Settings
@@ -184,14 +185,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private suspend fun listenOnce(onScreen: Boolean = false): String? {
         val l = lang
         app.speaker.stop()
-        val usePack = app.stt.available(l)
+        val fake = app.testListener
+        val usePack = fake != null || app.stt.available(l)
         if (!usePack && !app.systemStt.available()) { if (!onScreen) voicePackMessage(); return null }
         app.slm.unload() // keep peak memory low on 3 GB phones
         lastAudio = null; lastEngine = if (usePack) "pack" else "phone"
         if (onScreen) confirmListening.value = true else capture.value = Capture.Listening
+        // "Speak now", then the mic (after the sound, so it is not recorded); "got it" when they stop.
+        app.earcons.listening(); kotlinx.coroutines.delay(com.acxelin.hisaabsaathi.speech.Earcons.START_MS)
         val heard = try {
-            val recorded = { if (!onScreen) capture.value = Capture.Thinking }
-            if (usePack) app.stt.listen(l, onLevel = { level.value = it }, onRecorded = recorded)
+            val recorded = { app.earcons.heard(); if (!onScreen) capture.value = Capture.Thinking }
+            if (fake != null) fake().also { recorded() }
+            else if (usePack) app.stt.listen(l, onLevel = { level.value = it }, onRecorded = recorded)
             else app.systemStt.listen(l, onRecorded = recorded)
         } catch (e: Exception) {
             Heard.Failed(Heard.Kind.ENGINE, e.message ?: e.javaClass.simpleName)
@@ -334,18 +339,64 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      */
     private fun review(r: Capture.Review) {
         capture.value = r
-        val listen = r.source != "typed" && r.canSave && voiceAvailable()
+        val listen = r.source != "typed" && voiceAvailable()
         if (!listen) { app.speaker.speak(strings.readback(r.drafts), lang); return }
         val caller = busy
         viewModelScope.launch(guard) {
             caller?.takeIf { it != coroutineContext[kotlinx.coroutines.Job] }?.join()
-            app.speaker.speakAndWait(strings.readback(r.drafts) + " " + strings.sayYesNoPrompt, lang)
-            if (capture.value === r && !isBusy) confirmByVoice()
+            // First what is missing (a rate, an amount): asked by voice, one line at a time.
+            val filled = askForMissing(r) ?: return@launch
+            if (!filled.canSave) { app.speaker.speak(strings.amountStillMissing, lang); return@launch }
+            app.speaker.speakAndWait(strings.readback(filled.drafts) + " " + strings.sayYesNoPrompt, lang)
+            if (capture.value === filled && !isBusy) confirmByVoice()
         }
     }
 
+    /** What a line still needs before it can be saved, as a spoken question (null: nothing). */
+    private fun missingQuestion(d: DraftEntry): String? = when {
+        d.amountPaise > 0 -> null
+        d.type == EntryType.WORK && d.pieces != null && d.ratePaise == null -> strings.askRate
+        else -> strings.askAmount(strings.typeName(d.type))
+    }
+
+    /**
+     * Asks for each missing rate or amount and listens for the number. Returns the review as it
+     * now stands, or null if the worker pressed something meanwhile (their tap wins).
+     */
+    private suspend fun askForMissing(start: Capture.Review): Capture.Review? {
+        var r = start
+        for (i in r.drafts.indices) {
+            val d = r.drafts[i]
+            val question = missingQuestion(d) ?: continue
+            app.speaker.speakAndWait(question, lang)
+            if (capture.value !== r) return null
+            val heard = listenOnce(onScreen = true)
+            if (capture.value !== r) return null
+            val n = heard?.let { NumberWords.numbersIn(it).firstOrNull() }?.takeIf { it > 0 } ?: break
+            val pieces = d.pieces
+            val fixed = if (d.type == EntryType.WORK && pieces != null && d.ratePaise == null)
+                d.copy(ratePaise = Money.rupeesToPaise(n), amountPaise = Money.rupeesToPaise(n * pieces))
+            else d.copy(amountPaise = Money.rupeesToPaise(n))
+            if (fixed.amountPaise !in 1..Money.MAX_PAISE) break
+            // What the worker told the app is part of what it understood (not a correction).
+            val drafts = r.drafts.toMutableList().also { it[i] = fixed }
+            r = r.copy(drafts = drafts, understood = drafts)
+            capture.value = r
+        }
+        return r
+    }
+
+    /** Opened from the reminder: start listening as soon as Home is on screen. */
+    val listenRequested = MutableStateFlow(false)
+    fun requestListen() { listenRequested.value = true }
+    fun listenFromReminder() {
+        if (!listenRequested.value) return
+        listenRequested.value = false
+        if (capture.value == Capture.Idle && !isBusy) listenForEntry()
+    }
+
     /** Some way to hear the worker right now: the app's speech pack, or the phone's recogniser. */
-    private fun voiceAvailable() = app.stt.available(lang) || app.systemStt.available()
+    private fun voiceAvailable() = app.testListener != null || app.stt.available(lang) || app.systemStt.available()
 
     /** True while the confirm screen is listening for "yes" or "no". */
     val confirmListening = MutableStateFlow(false)
@@ -805,8 +856,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         busy = viewModelScope.launch(guard) {
             stopPrompt(); app.speaker.stop()
             answering.value = true
+            app.earcons.listening(); kotlinx.coroutines.delay(com.acxelin.hisaabsaathi.speech.Earcons.START_MS)
             val heard = try {
-                app.stt.listen(lang, maxSeconds = 10, onLevel = { level.value = it })
+                app.stt.listen(lang, maxSeconds = 10, onLevel = { level.value = it }, onRecorded = { app.earcons.heard() })
             } catch (e: Exception) {
                 Heard.Failed(Heard.Kind.ENGINE, e.message ?: e.javaClass.simpleName)
             } finally {
