@@ -316,6 +316,8 @@ internal object Kn {
         "{0} taken {1}. " to "{0} ತೆಗೆದುಕೊಂಡಿರಿ {1}. ",
         "{0} repayment" to "{0} ಕಂತು",
         "House" to "ಮನೆ",
+        "Do you know your PIN code?" to "ಪಿನ್ ಕೋಡ್ ಗೊತ್ತಾ?",
+        "If not, that's fine." to "ಗೊತ್ತಿಲ್ಲದಿದ್ದರೆ ಪರವಾಗಿಲ್ಲ.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

@@ -112,7 +112,7 @@ class AppFlowTest {
      */
     @Test fun addressByVoice() {
         org.robolectric.Shadows.shadowOf(rule.activity.application).grantPermissions(android.Manifest.permission.RECORD_AUDIO)
-        waitFor("Choose your language")
+        waitFor("Language")
         TestApp.heard.clear()
         TestApp.heard.addAll(listOf("मेरा नाम रमेश है", "हाँ", "नहीं", "मैं ओडिशा में रहता हूँ", "खोरधा", "मेरा गाँव बलियंता है", "पता नहीं"))
         try {
@@ -132,8 +132,8 @@ class AppFlowTest {
         org.robolectric.shadows.ShadowLog.stream = System.out
         // --- setup. The first screen asks in every language, and each language has a number:
         // "हिंदी के लिए एक दबाइए … For English, press six". Pressing one goes straight on.
-        waitFor("Choose your language")
-        rule.onNodeWithText("अपनी भाषा चुनें").assertExists() // the same question in Hindi (and the others)
+        waitFor("Language")
+        rule.onNodeWithText("भाषा").assertExists() // "language" in every script; the question itself is said aloud
         rule.onNodeWithText("6").assertExists()
         shot("01-language")
         click("हिन्दी")
@@ -164,7 +164,7 @@ class AppFlowTest {
         rule.onNode(hasSetTextAction()).performTextInput("Balianta")
         click("आगे बढ़ें")
         // The PIN only if they know it; the place so far is shown to check.
-        waitFor("पिन कोड पता हो तो बताइए")
+        waitFor("पिन कोड पता है?")
         waitFor("Balianta, Khordha, Odisha")
         rule.onNode(hasSetTextAction()).performTextInput("751002")
         shot("02-place")

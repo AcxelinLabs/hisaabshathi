@@ -182,6 +182,8 @@ class Strings(val lang: Lang) {
         "ପିନ୍ କୋଡ୍ ଜାଣିଥିଲେ କୁହନ୍ତୁ। ନ ଜାଣିଲେ କିଛି ଅସୁବିଧା ନାହିଁ।",
         "If you know your PIN code, say it. If not, that's fine.",
     )
+    val qPinShort get() = t("पिन कोड पता है?", "ପିନ୍ କୋଡ୍ ଜାଣିଛନ୍ତି କି?", "Do you know your PIN code?")
+    val pinNotNeeded get() = t("नहीं पता, तो कोई बात नहीं।", "ନ ଜାଣିଲେ କିଛି ଅସୁବିଧା ନାହିଁ।", "If not, that's fine.")
     val dontKnow get() = t("पता नहीं", "ଜାଣିନି", "I don't know")
     fun foundPlace(place: String): String = tp("मिल गया: $place", "ମିଳିଗଲା: $place", "Found it: $place", "Found it: {0}", place)
     val placeNotFoundAsk get() = t(

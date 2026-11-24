@@ -304,6 +304,8 @@ internal object Ta {
         "{0} taken {1}. " to "{0} வாங்கினீர்கள் {1}. ",
         "{0} repayment" to "{0} தவணை",
         "House" to "வீட்டுக்",
+        "Do you know your PIN code?" to "பின் கோடு தெரியுமா?",
+        "If not, that's fine." to "தெரியாவிட்டால் பரவாயில்லை.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

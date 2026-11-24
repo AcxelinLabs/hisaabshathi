@@ -281,12 +281,13 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                 Step.LANGUAGE -> {
                     // The question in every language, each in its own script: readable before any
                     // choice. The voice says it too: "हिंदी के लिए एक दबाइए … For English, press six".
+                    // One word, "language", in each script: short enough to read at a glance. The
+                    // whole question is said aloud.
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             Lang.entries.forEach { l ->
-                                val on = l == settings.lang
-                                Text(Strings(l).chooseLanguage, fontFamily = fontFor(l), fontSize = if (on) 21.sp else 16.sp,
-                                    fontWeight = if (on) FontWeight.SemiBold else FontWeight.Normal, color = if (on) Color.White else Color.White.copy(alpha = 0.7f))
+                                Text(languageWord(l), fontFamily = fontFor(l), fontSize = 22.sp, fontWeight = FontWeight.SemiBold,
+                                    color = if (l == settings.lang) Color.White else Color.White.copy(alpha = 0.75f))
                             }
                         }
                         IconButton(onClick = { vm.playLanguageMenu() }, modifier = Modifier.size(56.dp)) {
@@ -314,8 +315,13 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                     if (qrFailed) Text(s.aadhaarFailed, fontSize = 16.sp, color = Red)
                 }
                 Step.PLACE -> {
-                    Question(prompt(step, where, s)!!.second) { ask() }
-                    if (where == Where.ASK) Text(s.addressWhy, fontSize = 17.sp, color = InkSoft, lineHeight = 23.sp)
+                    // On screen, the question in a few words; the voice says it in full.
+                    Question(if (where == Where.PIN) s.qPinShort else prompt(step, where, s)!!.second) { ask() }
+                    when (where) {
+                        Where.ASK -> Text(s.addressWhy, fontSize = 17.sp, color = InkSoft, lineHeight = 23.sp)
+                        Where.PIN -> Text(s.pinNotNeeded, fontSize = 17.sp, color = InkSoft, lineHeight = 23.sp)
+                        else -> Unit
+                    }
                     MicAnswer(vm, s, canHear, answer(step, where), then, typeHint = where !in setOf(Where.ASK, Where.LOCATION))
                     when (where) {
                         Where.ASK -> YesNo(s.yes, s.no, onYes = { goWhere(Where.LOCATION) }, onNo = { finish() })
@@ -397,6 +403,16 @@ private fun SetupButtons(
             Spacer(Modifier.weight(1f))
         }
     }
+}
+
+/** "Language" in each language's own script, for the first screen. */
+private fun languageWord(l: Lang): String = when (l) {
+    Lang.HI -> "भाषा"
+    Lang.OR -> "ଭାଷା"
+    Lang.TE -> "భాష"
+    Lang.KN -> "ಭಾಷೆ"
+    Lang.TA -> "மொழி"
+    Lang.EN -> "Language"
 }
 
 /** Two equal answers to a yes-or-no question, the yes in marigold. */

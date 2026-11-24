@@ -318,6 +318,8 @@ internal object Te {
         "{0} taken {1}. " to "{0} తీసుకున్నారు {1}. ",
         "{0} repayment" to "{0} కిస్తీ",
         "House" to "ఇంటి",
+        "Do you know your PIN code?" to "పిన్ కోడ్ తెలుసా?",
+        "If not, that's fine." to "తెలియకపోతే పర్వాలేదు.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */
