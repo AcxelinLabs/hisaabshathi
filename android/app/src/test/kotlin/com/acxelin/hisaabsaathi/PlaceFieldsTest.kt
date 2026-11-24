@@ -56,14 +56,14 @@ class PlaceFieldsTest {
                 }
             }
         }
-        val pin = rule.onAllNodes(hasSetTextAction())[2] // name, age, PIN, state, district
+        val pin = rule.onAllNodes(hasSetTextAction())[3] // name, age, village, PIN, state, district
 
         // One district: both filled in.
         pin.performTextInput("751002")
         waitFor("Khordha (Khurda), Odisha")
         assertEquals("Odisha" to "Khordha (Khurda)", vm.draft.value.state to vm.draft.value.district)
         // Settled by the PIN: one line, no state or district boxes.
-        assertEquals(3, rule.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().size)
+        assertEquals(4, rule.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().size)
         shot("30-pin-found")
 
         // Two possible districts: the state is filled in and the worker chooses from the dropdown,
@@ -71,7 +71,7 @@ class PlaceFieldsTest {
         pin.performTextReplacement("400001")
         waitFor("This PIN code is in more than one district")
         assertEquals("Maharashtra" to "", vm.draft.value.state to vm.draft.value.district)
-        rule.onAllNodes(hasSetTextAction())[4].performClick(); pump()
+        rule.onAllNodes(hasSetTextAction())[5].performClick(); pump()
         waitFor("Mumbai Suburban")
         shot("31-district-dropdown")
         rule.onNodeWithText("Mumbai Suburban").performClick(); pump()
@@ -82,8 +82,8 @@ class PlaceFieldsTest {
         rule.onNodeWithText("Change").performClick(); pump()
 
         // Typing narrows the state list.
-        rule.onAllNodes(hasSetTextAction())[3].performClick(); pump()
-        rule.onAllNodes(hasSetTextAction())[3].performTextInput("bih"); pump()
+        rule.onAllNodes(hasSetTextAction())[4].performClick(); pump()
+        rule.onAllNodes(hasSetTextAction())[4].performTextInput("bih"); pump()
         waitFor("Bihar")
         rule.onNodeWithText("Bihar").performClick(); pump()
         rule.waitUntil(5_000) { pump(); vm.draft.value.state == "Bihar" }

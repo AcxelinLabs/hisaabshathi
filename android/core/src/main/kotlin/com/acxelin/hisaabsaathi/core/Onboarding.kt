@@ -22,11 +22,13 @@ data class Profile(
     val district: String = "",
     /** Six digits, or "". */
     val pin: String = "",
+    /** The village or town, as the worker said or typed it, or "". */
+    val village: String = "",
 ) {
-    val isEmpty: Boolean get() = name.isBlank() && age == null && district.isBlank() && pin.isBlank()
+    val isEmpty: Boolean get() = name.isBlank() && age == null && district.isBlank() && pin.isBlank() && village.isBlank()
 
-    /** One line for the top of a PDF report: "Ramesh Behera · Khordha, Odisha · 751002". */
-    fun line(): String = listOf(name.trim(), listOf(district.trim(), state.trim()).filter { it.isNotEmpty() }.joinToString(", "), pin)
+    /** One line for the top of a PDF report: "Ramesh Behera · Balianta, Khordha, Odisha · 751002". */
+    fun line(): String = listOf(name.trim(), listOf(village.trim(), district.trim(), state.trim()).filter { it.isNotEmpty() }.joinToString(", "), pin)
         .filter { it.isNotBlank() }.joinToString(" · ")
 }
 
@@ -131,6 +133,34 @@ object SpokenDetails {
             if (w.firstOrNull()?.let { it in 'a'..'z' } == true) w.replaceFirstChar { it.uppercase() } else w
         }
     }
+
+    /**
+     * "मेरा गाँव बलियंता है", "I live in Balianta town" → "Balianta". The village or town, without
+     * the words around it. If nothing is left, what was said.
+     */
+    fun place(text: String): String {
+        val clean = java.text.Normalizer.normalize(text, java.text.Normalizer.Form.NFC).replace(Regex("[\u200B-\u200D\uFEFF]"), "")
+        val words = clean.trim().split(Regex("[\\s,.!?।|:;\"“”]+")).filter { it.isNotBlank() }
+        val kept = words.filter { it.lowercase() !in placeFillers }
+        return (kept.ifEmpty { words }).take(5).joinToString(" ") { w ->
+            if (w.firstOrNull()?.let { it in 'a'..'z' } == true) w.replaceFirstChar { it.uppercase() } else w
+        }.take(60)
+    }
+
+    private val placeFillers = setOf(
+        // Hindi
+        "मेरा", "मेरे", "मेरी", "गाँव", "गांव", "गाव", "शहर", "कस्बा", "का", "के", "की", "नाम", "है", "हैं", "में", "मैं", "रहता", "रहती", "रहते", "हूँ", "हूं", "जी",
+        // Odia
+        "ମୋର", "ମୋ", "ଗାଁ", "ଗାଁର", "ସହର", "ସହରର", "ନାମ", "ଅଟେ", "ମୁଁ", "ରେ", "ରହେ", "ରହୁଛି",
+        // Telugu
+        "మా", "నా", "ఊరు", "ఊరి", "గ్రామం", "పట్టణం", "పేరు", "నేను", "లో", "ఉంటాను",
+        // Kannada
+        "ನನ್ನ", "ನಮ್ಮ", "ಊರು", "ಊರಿನ", "ಹಳ್ಳಿ", "ಗ್ರಾಮ", "ಪಟ್ಟಣ", "ಹೆಸರು", "ನಾನು", "ಇರುತ್ತೇನೆ",
+        // Tamil
+        "என்", "எங்கள்", "ஊர்", "ஊரின்", "கிராமம்", "நகரம்", "பெயர்", "நான்", "இருக்கிறேன்",
+        // English
+        "my", "village", "town", "city", "is", "name", "i", "live", "in", "the", "of", "it's", "its", "called",
+    )
 
     private val zero = setOf("zero", "shunya", "sunya", "shoonya", "शून्य", "जीरो", "ଶୂନ", "ଶୂନ୍ୟ", "సున్నా", "ಸೊನ್ನೆ", "பூஜ்ஜியம்")
 

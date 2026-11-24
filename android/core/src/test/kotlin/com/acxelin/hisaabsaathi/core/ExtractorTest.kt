@@ -103,7 +103,7 @@ class RuleBasedExtractorTest {
 
     @Test fun expenseWithCategory() {
         val e = ex("सब्जी पर अस्सी रुपये खर्च किए")
-        assertEquals(listOf(DraftEntry(EntryType.EXPENSE, rs(80), category = ExpenseCategory.FOOD)), e.entries)
+        assertEquals(listOf(DraftEntry(EntryType.EXPENSE, rs(80), category = ExpenseCategory.FOOD, detail = "food=SABZI")), e.entries)
     }
 
     @Test fun advanceFromContractor() {
@@ -120,7 +120,7 @@ class RuleBasedExtractorTest {
         assertEquals(
             listOf(
                 DraftEntry(EntryType.ADVANCE, rs(300)),
-                DraftEntry(EntryType.EXPENSE, rs(80), category = ExpenseCategory.FOOD),
+                DraftEntry(EntryType.EXPENSE, rs(80), category = ExpenseCategory.FOOD, detail = "food=SABZI"),
             ),
             e.entries,
         )
@@ -159,7 +159,7 @@ class RuleBasedExtractorTest {
 
     @Test fun odiaExpense() {
         val e = ex("ପରିବା ପାଇଁ ଅଶୀ ଟଙ୍କା ଖର୍ଚ୍ଚ କଲି")
-        assertEquals(listOf(DraftEntry(EntryType.EXPENSE, rs(80), category = ExpenseCategory.FOOD)), e.entries)
+        assertEquals(listOf(DraftEntry(EntryType.EXPENSE, rs(80), category = ExpenseCategory.FOOD, detail = "food=SABZI")), e.entries)
     }
 
     @Test fun queries() {

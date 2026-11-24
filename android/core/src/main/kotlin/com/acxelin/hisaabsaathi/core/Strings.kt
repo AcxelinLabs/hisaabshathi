@@ -41,7 +41,7 @@ class Strings(val lang: Lang) {
     // ---- general
     val appName get() = t("हिसाब साथी", "ହିସାବ ସାଥୀ", "HisaabSaathi")
     val welcome get() = t("आपके हिसाब साथी में आपका स्वागत है", "ଆପଣଙ୍କ ହିସାବ ସାଥୀକୁ ସ୍ୱାଗତ", "Welcome to your HisaabSaathi")
-    val next get() = t("आगे", "ଆଗକୁ", "Next")
+    val next get() = t("आगे बढ़ें", "ଆଗକୁ ଯିବା", "Next step")
     val done get() = t("हो गया", "ହୋଇଗଲା", "Done")
     val cancel get() = t("रद्द करें", "ବାତିଲ୍", "Cancel")
     val delete get() = t("हटाएं", "ହଟାନ୍ତୁ", "Delete")
@@ -63,7 +63,7 @@ class Strings(val lang: Lang) {
     val installed get() = t("तैयार", "ପ୍ରସ୍ତୁତ", "Ready")
     val skipForNow get() = t("अभी नहीं", "ଏବେ ନୁହେଁ", "Not now")
     val downloadFailed get() = t("डाउनलोड नहीं हुआ। इंटरनेट देखें और फिर कोशिश करें।", "ଡାଉନଲୋଡ୍ ହେଲା ନାହିଁ। ଇଣ୍ଟରନେଟ୍ ଦେଖି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।", "Download failed. Check the internet and try again.")
-    val start get() = t("शुरू करें", "ଆରମ୍ଭ କରନ୍ତୁ", "Start")
+    val start get() = t("चलिए, शुरू करें", "ଚାଲନ୍ତୁ, ଆରମ୍ଭ କରିବା", "Let's begin")
 
     // ---- onboarding: location, details, smart model (Odia, Telugu, Kannada, Tamil need native review)
     fun gettingVoiceReady(pct: Int) = tp("आवाज़ तैयार हो रही है… $pct%", "ସ୍ୱର ପ୍ରସ୍ତୁତ ହେଉଛି… $pct%", "Getting voice ready… $pct%", "Getting voice ready… {0}%", pct)
@@ -163,8 +163,34 @@ class Strings(val lang: Lang) {
         }
     }
     val noMatch get() = t("कुछ नहीं मिला", "କିଛି ମିଳିଲା ନାହିଁ", "Nothing matches")
+    // Address: asked, never required. Yes → the phone's location, or a few short questions.
+    val qAddress get() = t("क्या आप अपना पता बताना चाहेंगे?", "ଆପଣ ନିଜ ଠିକଣା କହିବାକୁ ଚାହିଁବେ କି?", "Would you like to tell us your address?")
+    val addressWhy get() = t(
+        "इससे हम आपके राज्य की सही मज़दूरी बता पाएंगे।",
+        "ଏହା ଦ୍ୱାରା ଆମେ ଆପଣଙ୍କ ରାଜ୍ୟର ଠିକ୍ ମଜୁରି କହିପାରିବୁ।",
+        "Then we can tell you the right wage for your state.",
+    )
+    val qLocation get() = t("क्या फ़ोन की लोकेशन से पता भर दें?", "ଫୋନ୍‌ର ଲୋକେସନ୍‌ରୁ ଠିକଣା ଭରିଦେବୁ କି?", "Shall we fill it in from your phone's location?")
+    val yesUseLocation get() = t("हाँ, लोकेशन से भरें", "ହଁ, ଲୋକେସନ୍‌ରୁ ଭରନ୍ତୁ", "Yes, use my location")
+    val noTellMyself get() = t("नहीं, मैं खुद बताऊँ", "ନା, ମୁଁ ନିଜେ କହିବି", "No, I'll tell you")
+    val qState get() = t("आप किस राज्य में रहते हैं?", "ଆପଣ କେଉଁ ରାଜ୍ୟରେ ରହନ୍ତି?", "Which state do you live in?")
+    val qDistrict get() = t("आपका ज़िला कौन सा है?", "ଆପଣଙ୍କ ଜିଲ୍ଲା କେଉଁଟି?", "Which district are you in?")
+    val qVillage get() = t("आपके गाँव या शहर का नाम क्या है?", "ଆପଣଙ୍କ ଗାଁ ବା ସହରର ନାମ କଣ?", "What is the name of your village or town?")
+    val villageLabel get() = t("गाँव या शहर", "ଗାଁ ବା ସହର", "Village or town")
+    val qPinIfKnown get() = t(
+        "पिन कोड पता हो तो बताइए। नहीं पता, तो कोई बात नहीं।",
+        "ପିନ୍ କୋଡ୍ ଜାଣିଥିଲେ କୁହନ୍ତୁ। ନ ଜାଣିଲେ କିଛି ଅସୁବିଧା ନାହିଁ।",
+        "If you know your PIN code, say it. If not, that's fine.",
+    )
+    val dontKnow get() = t("पता नहीं", "ଜାଣିନି", "I don't know")
+    fun foundPlace(place: String): String = tp("मिल गया: $place", "ମିଳିଗଲା: $place", "Found it: $place", "Found it: {0}", place)
+    val placeNotFoundAsk get() = t(
+        "जगह नहीं मिली। कोई बात नहीं, चलिए आपसे पूछ लेते हैं।",
+        "ଜାଗା ମିଳିଲା ନାହିଁ। କିଛି ଅସୁବିଧା ନାହିଁ, ଆପଣଙ୍କୁ ପଚାରି ନେଉଛୁ।",
+        "Couldn't find your place. That's fine, let's ask you instead.",
+    )
     val qPin get() = t("आपका पिन कोड क्या है? इसमें 6 अंक होते हैं।", "ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ କଣ? ଏଥିରେ 6ଟି ଅଙ୍କ ଥାଏ।", "What is your PIN code? It has 6 digits.")
-    val skip get() = t("छोड़ें", "ଛାଡ଼ନ୍ତୁ", "Skip")
+    val skip get() = t("अभी छोड़ें", "ଏବେ ଛାଡ଼ନ୍ତୁ", "Skip for now")
     val speakAnswer get() = t("दबाएं और जवाब बोलें", "ଦବାଇ ଉତ୍ତର କୁହନ୍ତୁ", "Tap and say your answer")
     val hearAgain get() = t("फिर से सुनें", "ପୁଣି ଶୁଣନ୍ତୁ", "Hear again")
     val adultsOnly get() = t("यह ऐप 18 साल और उससे ज़्यादा उम्र के लोगों के लिए है।", "ଏହି ଆପ୍ 18 ବର୍ଷ ଓ ତାଠାରୁ ଅଧିକ ବୟସର ଲୋକଙ୍କ ପାଇଁ।", "This app is for adults, 18 years and above.")
@@ -219,7 +245,7 @@ class Strings(val lang: Lang) {
     val received get() = t("मिला", "ମିଳିଲା", "Received")
     val spent get() = t("खर्च", "ଖର୍ଚ୍ଚ", "Spent")
     val due get() = t("बाकी", "ବାକି", "Due")
-    val tapAndSpeak get() = t("दबाएं और काम या खर्च बोलें", "ଦବାଇ କାମ କିମ୍ବା ଖର୍ଚ୍ଚ କୁହନ୍ତୁ", "Tap and speak your work or expense")
+    val tapAndSpeak get() = t("माइक दबाइए और आज का काम या खर्च बताइए", "ମାଇକ୍ ଦବାନ୍ତୁ ଓ ଆଜିର କାମ ବା ଖର୍ଚ୍ଚ କୁହନ୍ତୁ", "Tap the mic and tell me today's work or spending")
     val listening get() = t("सुन रहा हूँ… बोलिए", "ଶୁଣୁଛି… କୁହନ୍ତୁ", "Listening… speak now")
     val thinking get() = t("समझ रहा हूँ…", "ବୁଝୁଛି…", "Understanding…")
     val tapToStop get() = t("रोकने के लिए दबाएं", "ବନ୍ଦ କରିବାକୁ ଦବାନ୍ତୁ", "Tap to stop")
@@ -231,7 +257,7 @@ class Strings(val lang: Lang) {
     val tabSummary get() = t("हिसाब", "ହିସାବ", "Summary")
     val tabWage get() = t("मजदूरी व मदद", "ମଜୁରୀ ଓ ସାହାଯ୍ୟ", "Wage & Help")
     val micPermission get() = t("बोलकर हिसाब लिखने के लिए माइक की अनुमति दें।", "କହି ହିସାବ ଲେଖିବାକୁ ମାଇକ୍ ଅନୁମତି ଦିଅନ୍ତୁ।", "Allow the microphone to log entries by voice.")
-    val notUnderstood get() = t("समझ नहीं आया। फिर से बोलिए।", "ବୁଝି ହେଲା ନାହିଁ। ପୁଣି କୁହନ୍ତୁ।", "I did not understand. Please say it again.")
+    val notUnderstood get() = t("माफ़ कीजिए, समझ नहीं आया। एक बार फिर बोलिए।", "କ୍ଷମା କରିବେ, ବୁଝିପାରିଲି ନାହିଁ। ଆଉ ଥରେ କୁହନ୍ତୁ।", "Sorry, I didn't catch that. Please say it once more.")
     val noSpeechEngine get() = t("आवाज़ पैक नहीं है। सेटिंग में डाउनलोड करें या लिखकर डालें।", "ଭଏସ୍ ପ୍ୟାକ୍ ନାହିଁ। ସେଟିଂରେ ଡାଉନଲୋଡ୍ କରନ୍ତୁ କିମ୍ବା ଲେଖି ଦିଅନ୍ତୁ।", "No voice pack yet. Download it in Settings, or type the entry.")
 
     val heardNothing get() = t("कुछ सुनाई नहीं दिया। माइक दबाकर फोन के पास बोलिए।", "କିଛି ଶୁଣାଗଲା ନାହିଁ। ମାଇକ୍ ଦବାଇ ଫୋନ୍ ପାଖରେ କୁହନ୍ତୁ।", "I didn't hear anything. Tap the mic and speak close to the phone.")
@@ -298,13 +324,13 @@ class Strings(val lang: Lang) {
     val pleaseCheck get() = t("कृपया ध्यान से देखें", "ଦୟାକରି ଭଲଭାବେ ଦେଖନ୍ତୁ", "Please check carefully")
     val save get() = t("सही है, सेव करें", "ଠିକ୍ ଅଛି, ସେଭ୍ କରନ୍ତୁ", "Correct, save")
     val fixByVoice get() = t("गलत है, फिर बोलें", "ଭୁଲ୍ ଅଛି, ପୁଣି କୁହନ୍ତୁ", "Wrong, say it again")
-    val saved get() = t("सेव हो गया", "ସେଭ୍ ହୋଇଗଲା", "Saved")
+    val saved get() = t("हिसाब में लिख लिया", "ହିସାବରେ ଲେଖିଦେଲୁ", "Written in your ledger")
     val playAgain get() = t("फिर सुनें", "ପୁଣି ଶୁଣନ୍ତୁ", "Play again")
     val amountLabel get() = t("रकम (₹)", "ରାଶି (₹)", "Amount (₹)")
 
     // ---- ledger / reports
-    val noEntries get() = t("अभी कोई एंट्री नहीं है", "ଏବେ କୌଣସି ଏଣ୍ଟ୍ରି ନାହିଁ", "No entries yet")
-    val deleteEntryQ get() = t("यह एंट्री हटाएं?", "ଏହି ଏଣ୍ଟ୍ରି ହଟାଇବେ?", "Delete this entry?")
+    val noEntries get() = t("अभी कुछ नहीं लिखा है", "ଏବେ କିଛି ଲେଖାଯାଇନି", "Nothing written down yet")
+    val deleteEntryQ get() = t("यह लाइन हटा दें?", "ଏହି ଧାଡ଼ି ହଟାଇଦେବେ?", "Remove this line?")
     val readAloud get() = t("हिसाब सुनाएं", "ହିସାବ ଶୁଣାନ୍ତୁ", "Read aloud")
     val exportPdf get() = t("PDF बनाएं / भेजें", "PDF ତିଆରି / ପଠାନ୍ତୁ", "Export PDF / share")
     val savingsGoal get() = t("बचत का लक्ष्य", "ସଞ୍ଚୟ ଲକ୍ଷ୍ୟ", "Savings goal")
@@ -443,7 +469,39 @@ class Strings(val lang: Lang) {
         ExpenseCategory.PHONE -> t("मोबाइल", "ମୋବାଇଲ୍", "Phone")
         ExpenseCategory.HEALTH -> t("दवा", "ଔଷଧ", "Health")
         ExpenseCategory.HOME -> t("घर भेजा", "ଘରକୁ ପଠାଇଲି", "Sent home")
+        ExpenseCategory.LOAN -> t("लोन की किस्त", "ଋଣ କିସ୍ତି", "Loan repayment")
         ExpenseCategory.OTHER -> t("अन्य", "ଅନ୍ୟ", "Other")
+    }
+
+    fun mealName(m: Meal): String = when (m) {
+        Meal.BREAKFAST -> t("नाश्ता", "ଜଳଖିଆ", "Breakfast")
+        Meal.LUNCH -> t("दोपहर का खाना", "ମଧ୍ୟାହ୍ନ ଭୋଜନ", "Lunch")
+        Meal.DINNER -> t("रात का खाना", "ରାତି ଖାଇବା", "Dinner")
+    }
+
+    private fun loanKindName(k: LoanKind): String = when (k) {
+        LoanKind.CAR -> t("कार", "କାର", "Car")
+        LoanKind.BIKE -> t("बाइक", "ବାଇକ୍", "Bike")
+        LoanKind.PHONE -> t("फोन", "ଫୋନ୍", "Phone")
+        LoanKind.HOUSE -> t("घर", "ଘର", "House")
+        LoanKind.GOLD -> t("गोल्ड", "ସୁନା", "Gold")
+        LoanKind.TRACTOR -> t("ट्रैक्टर", "ଟ୍ରାକ୍ଟର", "Tractor")
+        LoanKind.GROUP -> t("समूह", "ଗୋଷ୍ଠୀ", "Group")
+    }
+
+    /** "बाइक लोन", "Gold loan"; "लोन" when it was not said what for. */
+    fun loanName(k: LoanKind?): String =
+        if (k == null) t("लोन", "ଋଣ", "Loan")
+        else loanKindName(k).let { n -> tp("$n लोन", "$n ଋଣ", "$n loan", "{0} loan", n) }
+
+    /** The short line under an entry: "समोसा, चाय · नाश्ता", "बाइक लोन"; "" when nothing was said. */
+    fun describe(detailCode: String): String {
+        val d = Detail.decode(detailCode)
+        val parts = ArrayList<String>()
+        if (d.foods.isNotEmpty()) parts += d.foods.joinToString(", ") { Items.foodName(it, lang) }
+        d.meal?.let { parts += mealName(it) }
+        if (d.loan) parts += loanName(d.loanKind)
+        return parts.joinToString(" · ")
     }
 
     fun skillName(skill: String): String = when (skill.lowercase()) {
@@ -480,13 +538,22 @@ class Strings(val lang: Lang) {
                     }
                 }
                 EntryType.ADVANCE -> spokenRupees(e.amountPaise).let { a ->
-                    sb.append(tp("एडवांस लिया $a। ", "ଆଡଭାନ୍ସ ନେଲେ $a। ", "Advance taken $a. ", "Advance taken {0}. ", a))
+                    val loan = Detail.decode(e.detail).takeIf { it.loan }
+                    if (loan != null) loanName(loan.loanKind).let { n -> sb.append(tp("$n लिया $a। ", "$n ନେଲେ $a। ", "$n taken $a. ", "{0} taken {1}. ", n, a)) }
+                    else sb.append(tp("एडवांस लिया $a। ", "ଆଡଭାନ୍ସ ନେଲେ $a। ", "Advance taken $a. ", "Advance taken {0}. ", a))
                 }
                 EntryType.PAYMENT -> spokenRupees(e.amountPaise).let { a ->
                     sb.append(tp("मजदूरी मिली $a। ", "ମଜୁରୀ ମିଳିଲା $a। ", "Wages received $a. ", "Wages received {0}. ", a))
                 }
                 EntryType.EXPENSE -> {
-                    val c = categoryName(e.category ?: ExpenseCategory.OTHER)
+                    // What was said is clearer than the group: "समोसा, चाय पर खर्च", "बाइक लोन की किस्त".
+                    val d = Detail.decode(e.detail)
+                    val c = when {
+                        d.loan -> loanName(d.loanKind).let { n -> tp("$n की किस्त", "$n କିସ୍ତି", "$n repayment", "{0} repayment", n) }
+                        d.foods.isNotEmpty() -> describe(e.detail)
+                        d.meal != null -> mealName(d.meal)
+                        else -> categoryName(e.category ?: ExpenseCategory.OTHER)
+                    }
                     val a = spokenRupees(e.amountPaise)
                     sb.append(tp("$c पर खर्च $a। ", "$c ପାଇଁ ଖର୍ଚ୍ଚ $a। ", "Spent $a on $c. ", "Spent {0} on {1}. ", a, c))
                 }

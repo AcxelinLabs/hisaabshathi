@@ -19,6 +19,12 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `q_age.mp3` | आपकी उम्र कितनी है? |
 | `q_pin.mp3` | आपका पिन कोड क्या है? इसमें 6 अंक होते हैं। |
 | `check_details.mp3` | अपनी जानकारी देखें। कुछ गलत हो तो बदलें। |
+| `q_address.mp3` | क्या आप अपना पता बताना चाहेंगे? |
+| `q_location.mp3` | क्या फ़ोन की लोकेशन से पता भर दें? |
+| `q_state.mp3` | आप किस राज्य में रहते हैं? |
+| `q_district.mp3` | आपका ज़िला कौन सा है? |
+| `q_village.mp3` | आपके गाँव या शहर का नाम क्या है? |
+| `q_pin_known.mp3` | पिन कोड पता हो तो बताइए। नहीं पता, तो कोई बात नहीं। |
 
 ## Odia (ଓଡ଼ିଆ) — folder `onboarding_audio/or/`
 
@@ -30,6 +36,12 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `q_age.mp3` | ଆପଣଙ୍କ ବୟସ କେତେ? |
 | `q_pin.mp3` | ଆପଣଙ୍କ ପିନ୍ କୋଡ୍ କଣ? ଏଥିରେ 6ଟି ଅଙ୍କ ଥାଏ। |
 | `check_details.mp3` | ଆପଣଙ୍କ ବିବରଣୀ ଦେଖନ୍ତୁ। କିଛି ଭୁଲ୍ ଥିଲେ ବଦଳାନ୍ତୁ। |
+| `q_address.mp3` | ଆପଣ ନିଜ ଠିକଣା କହିବାକୁ ଚାହିଁବେ କି? |
+| `q_location.mp3` | ଫୋନ୍‌ର ଲୋକେସନ୍‌ରୁ ଠିକଣା ଭରିଦେବୁ କି? |
+| `q_state.mp3` | ଆପଣ କେଉଁ ରାଜ୍ୟରେ ରହନ୍ତି? |
+| `q_district.mp3` | ଆପଣଙ୍କ ଜିଲ୍ଲା କେଉଁଟି? |
+| `q_village.mp3` | ଆପଣଙ୍କ ଗାଁ ବା ସହରର ନାମ କଣ? |
+| `q_pin_known.mp3` | ପିନ୍ କୋଡ୍ ଜାଣିଥିଲେ କୁହନ୍ତୁ। ନ ଜାଣିଲେ କିଛି ଅସୁବିଧା ନାହିଁ। |
 
 ## Telugu (తెలుగు) — folder `onboarding_audio/te/`
 
@@ -41,6 +53,12 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `q_age.mp3` | మీ వయసు ఎంత? |
 | `q_pin.mp3` | మీ పిన్ కోడ్ ఏమిటి? అందులో 6 అంకెలు ఉంటాయి. |
 | `check_details.mp3` | మీ వివరాలు చూడండి. ఏదైనా తప్పుగా ఉంటే మార్చండి. |
+| `q_address.mp3` | మీ చిరునామా చెబుతారా? |
+| `q_location.mp3` | ఫోన్ లొకేషన్‌తో చిరునామా నింపమంటారా? |
+| `q_state.mp3` | మీరు ఏ రాష్ట్రంలో ఉంటారు? |
+| `q_district.mp3` | మీ జిల్లా ఏది? |
+| `q_village.mp3` | మీ ఊరు లేదా పట్టణం పేరు ఏమిటి? |
+| `q_pin_known.mp3` | పిన్ కోడ్ తెలిస్తే చెప్పండి. తెలియకపోతే పర్వాలేదు. |
 
 ## Kannada (ಕನ್ನಡ) — folder `onboarding_audio/kn/`
 
@@ -52,6 +70,12 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `q_age.mp3` | ನಿಮ್ಮ ವಯಸ್ಸು ಎಷ್ಟು? |
 | `q_pin.mp3` | ನಿಮ್ಮ ಪಿನ್ ಕೋಡ್ ಏನು? ಅದರಲ್ಲಿ 6 ಅಂಕೆಗಳಿವೆ. |
 | `check_details.mp3` | ನಿಮ್ಮ ವಿವರಗಳನ್ನು ನೋಡಿ. ಏನಾದರೂ ತಪ್ಪಿದ್ದರೆ ಬದಲಿಸಿ. |
+| `q_address.mp3` | ನಿಮ್ಮ ವಿಳಾಸ ಹೇಳುತ್ತೀರಾ? |
+| `q_location.mp3` | ಫೋನ್ ಲೊಕೇಶನ್‌ನಿಂದ ವಿಳಾಸ ತುಂಬಿಸೋಣವೇ? |
+| `q_state.mp3` | ನೀವು ಯಾವ ರಾಜ್ಯದಲ್ಲಿ ಇರುತ್ತೀರಿ? |
+| `q_district.mp3` | ನಿಮ್ಮ ಜಿಲ್ಲೆ ಯಾವುದು? |
+| `q_village.mp3` | ನಿಮ್ಮ ಊರು ಅಥವಾ ಪಟ್ಟಣದ ಹೆಸರೇನು? |
+| `q_pin_known.mp3` | ಪಿನ್ ಕೋಡ್ ಗೊತ್ತಿದ್ದರೆ ಹೇಳಿ. ಗೊತ್ತಿಲ್ಲದಿದ್ದರೆ ಪರವಾಗಿಲ್ಲ. |
 
 ## Tamil (தமிழ்) — folder `onboarding_audio/ta/`
 
@@ -63,6 +87,12 @@ If you change a sentence here, change it in `core/Strings.kt` too (and the Telug
 | `q_age.mp3` | உங்கள் வயது என்ன? |
 | `q_pin.mp3` | உங்கள் பின் கோடு என்ன? அதில் 6 இலக்கங்கள் இருக்கும். |
 | `check_details.mp3` | உங்கள் விவரங்களைப் பாருங்கள். ஏதாவது தவறாக இருந்தால் மாற்றுங்கள். |
+| `q_address.mp3` | உங்கள் முகவரியைச் சொல்கிறீர்களா? |
+| `q_location.mp3` | போனின் இருப்பிடத்தை வைத்து முகவரியை நிரப்பட்டுமா? |
+| `q_state.mp3` | நீங்கள் எந்த மாநிலத்தில் இருக்கிறீர்கள்? |
+| `q_district.mp3` | உங்கள் மாவட்டம் எது? |
+| `q_village.mp3` | உங்கள் ஊர் அல்லது நகரத்தின் பெயர் என்ன? |
+| `q_pin_known.mp3` | பின் கோடு தெரிந்தால் சொல்லுங்கள். தெரியாவிட்டால் பரவாயில்லை. |
 
 ## English (English) — folder `onboarding_audio/en/`
 

@@ -75,6 +75,27 @@ Typing had crept in as an equal choice. A worker who reads little should never n
 - **The minimum-wage page is gone.** Its tables of rates were too much to read. The worker asks
   "what is the minimum wage?" and hears the answer. The evidence pack moved to Summary.
 
+## Fourth pass: talk like a person
+
+- **Language by number.** The first screen says each line in its own language and voice:
+  "हिंदी के लिए एक दबाइए … For English, press six". Each language button carries its number in a
+  circle. Pressing one chooses it and goes straight on. The recording is
+  `onboarding_audio/pick_language.wav`, made by `android/tools/tts/make_language_prompt.py`.
+- **Forward has an arrow, and buttons say what happens.** "आगे बढ़ें →" (Next step), "चलिए, शुरू
+  करें →" (Let's begin), "अभी छोड़ें" (Skip for now). Messages read like speech: "माइक दबाइए और आज
+  का काम या खर्च बताइए", "हिसाब में लिख लिया", "माफ़ कीजिए, समझ नहीं आया".
+- **The address is asked, not demanded, and never starts with the PIN.** Many workers don't know
+  their PIN. "Would you like to tell us your address?" No goes Home. Yes asks "From your
+  phone's location?" Yes fills it in and asks only the village. No asks state, district, and
+  village or town, one at a time. It then asks for the PIN only "if you know it", and "I don't
+  know" is fine. Each answer can be said in any language ("मैं ओडिशा में रहता हूँ", "ଖୋର୍ଦ୍ଧା"):
+  the app matches it to the right state or district by sound (`core/Places.kt`), reads back what
+  it understood and asks the next question.
+- **What was eaten, and what a loan was for.** "नाश्ते में समोसा और चाय 30" is noted as "समोसा,
+  चाय · नाश्ता". "बाइक की किस्त 2000" is a loan repayment, "Bike loan". "गोल्ड लोन लिया" is money
+  borrowed. About 30 everyday foods and three meals are covered in all six languages
+  (`core/Items.kt`).
+
 ## Why it looked generic
 
 The things that made the app look like a template rather than a ledger built for one job:

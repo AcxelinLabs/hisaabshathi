@@ -72,6 +72,13 @@ class TestApp : HisaabApp() {
 class AppFlowTest {
     @get:Rule val rule = createAndroidComposeRule<MainActivity>()
 
+    /** Each test starts from a new install: settings outlive one test in the same process. */
+    @org.junit.Before fun newInstall() {
+        val app = rule.activity.application as HisaabApp
+        kotlinx.coroutines.runBlocking { app.settings.clear(); app.profile.clear() }
+        pump()
+    }
+
     private fun shot(name: String) = rule.onRoot().captureRoboImage("build/screens/$name.png")
 
     /** Background work (settings, database) posts back to the main thread; let it run. */
@@ -99,27 +106,69 @@ class AppFlowTest {
         pump()
     }
 
+    /**
+     * The whole address by voice: each question is said, the app listens, reads back what it
+     * understood and asks the next one. Nothing is tapped after the name.
+     */
+    @Test fun addressByVoice() {
+        org.robolectric.Shadows.shadowOf(rule.activity.application).grantPermissions(android.Manifest.permission.RECORD_AUDIO)
+        waitFor("Choose your language")
+        TestApp.heard.clear()
+        TestApp.heard.addAll(listOf("मेरा नाम रमेश है", "हाँ", "नहीं", "मैं ओडिशा में रहता हूँ", "खोरधा", "मेरा गाँव बलियंता है", "पता नहीं"))
+        try {
+            click("हिन्दी")
+            waitFor("आपका नाम क्या है?")
+            rule.waitUntil(20_000) { pump(); rule.onAllNodesWithText("रमेश").fetchSemanticsNodes().isNotEmpty() }
+            click("आगे बढ़ें")
+            // From here on, only the voice.
+            rule.waitUntil(60_000) { pump(); Thread.sleep(20); rule.onAllNodesWithContentDescription("मेरी प्रोफ़ाइल").fetchSemanticsNodes().isNotEmpty() }
+            val vm = androidx.lifecycle.ViewModelProvider(rule.activity)[com.acxelin.hisaabsaathi.ui.AppViewModel::class.java]
+            val p = vm.profile.value
+            org.junit.Assert.assertEquals(listOf("रमेश", "Odisha", "Khordha (Khurda)", "बलियंता", ""), listOf(p.name, p.state, p.district, p.village, p.pin))
+        } finally { TestApp.heard.clear() }
+    }
+
     @Test fun firstSession() {
         org.robolectric.shadows.ShadowLog.stream = System.out
-        // --- setup. The first screen asks in every language; the worker's own choice is final.
+        // --- setup. The first screen asks in every language, and each language has a number:
+        // "हिंदी के लिए एक दबाइए … For English, press six". Pressing one goes straight on.
         waitFor("Choose your language")
         rule.onNodeWithText("अपनी भाषा चुनें").assertExists() // the same question in Hindi (and the others)
-        click("हिन्दी")
-        waitFor("आगे")
+        rule.onNodeWithText("6").assertExists()
         shot("01-language")
-        click("आगे")
-        // Setup is three screens: language, name, PIN. Nothing else is asked.
+        click("हिन्दी")
+        // Setup: language, name, then the address, asked and never required.
         waitFor("आपका नाम क्या है?")
         rule.onNode(hasSetTextAction()).performTextInput("Ramesh Behera")
         shot("01b-name")
-        click("आगे")
-        // Where you work: the PIN fills in state and district, in one line.
-        waitFor("आपका पिन कोड क्या है?")
-        rule.onAllNodes(hasSetTextAction()).onFirst().performTextInput("751002")
-        waitFor("Khordha (Khurda), Odisha")
-        check(rule.onAllNodesWithText("ज़िला").fetchSemanticsNodes().isEmpty()) { "a settled PIN needs no district box" }
+        click("आगे बढ़ें")
+        // "Would you like to tell us your address?" Yes → "from your phone's location?" No → the questions.
+        waitFor("क्या आप अपना पता बताना चाहेंगे?")
+        shot("02-address")
+        click("हाँ")
+        waitFor("क्या फ़ोन की लोकेशन से पता भर दें?")
+        click("नहीं, मैं खुद बताऊँ")
+        waitFor("आप किस राज्य में रहते हैं?")
+        rule.onNode(hasSetTextAction()).performClick(); pump()
+        rule.onNode(hasSetTextAction()).performTextInput("odi"); pump()
+        waitFor("Odisha")
+        rule.onAllNodes(hasText("Odisha") and androidx.compose.ui.test.hasClickAction() and !hasSetTextAction()).onFirst().performClick(); pump()
+        click("आगे बढ़ें")
+        waitFor("आपका ज़िला कौन सा है?")
+        rule.onNode(hasSetTextAction()).performClick(); pump()
+        rule.onNode(hasSetTextAction()).performTextInput("khor"); pump()
+        waitFor("Khordha (Khurda)")
+        rule.onAllNodes(hasText("Khordha (Khurda)") and androidx.compose.ui.test.hasClickAction() and !hasSetTextAction()).onFirst().performClick(); pump()
+        click("आगे बढ़ें")
+        waitFor("आपके गाँव या शहर का नाम क्या है?")
+        rule.onNode(hasSetTextAction()).performTextInput("Balianta")
+        click("आगे बढ़ें")
+        // The PIN only if they know it; the place so far is shown to check.
+        waitFor("पिन कोड पता हो तो बताइए")
+        waitFor("Balianta, Khordha, Odisha")
+        rule.onNode(hasSetTextAction()).performTextInput("751002")
         shot("02-place")
-        click("शुरू करें")
+        click("चलिए, शुरू करें")
 
         // --- the profile page, from the photo button at the top of the home screen
         // Setup saves in the background: wait for the home screen before tapping.
@@ -127,16 +176,17 @@ class AppFlowTest {
         rule.onNodeWithContentDescription("मेरी प्रोफ़ाइल").performClick()
         waitFor("Ramesh Behera")
         rule.onNodeWithText("751002").assertExists()
+        rule.onNodeWithText("Balianta").assertExists()
         shot("03c-profile")
         rule.onNodeWithContentDescription("हो गया").performClick()
 
         // --- home
-        waitFor("दबाएं और काम या खर्च बोलें")
+        waitFor("माइक दबाइए और आज का काम या खर्च बताइए")
         shot("04-home-empty")
 
         // --- mic before the voice pack is downloaded: say so, never "not understood"
         org.robolectric.Shadows.shadowOf(rule.activity.application).grantPermissions(android.Manifest.permission.RECORD_AUDIO)
-        rule.onNodeWithContentDescription("दबाएं और काम या खर्च बोलें").performClick()
+        rule.onNodeWithContentDescription("माइक दबाइए और आज का काम या खर्च बताइए").performClick()
         // The phone's own recogniser has no offline Hindi model: it fails at once with "language unavailable".
         // (after the short "listening" sound: let the clock move on)
         rule.waitUntil(10_000) {
@@ -153,7 +203,7 @@ class AppFlowTest {
         click("लिखकर डालें")
         rule.onNode(hasSetTextAction())
             .performTextInput("आज आठ घंटे काम किया एक सौ बीस पीस पांच रुपये रेट तीन सौ एडवांस लिया")
-        click("आगे")
+        click("आगे बढ़ें")
         waitFor("क्या यह सही है?")
         // Each line is a short summary with a big amount; nothing to edit unless asked.
         rule.onNodeWithText("₹600").assertIsDisplayed()
@@ -164,7 +214,7 @@ class AppFlowTest {
         click("सही है, सेव करें")
 
         // --- saved: today's card shows earned 600, advance 300, due 300
-        waitFor("सेव हो गया")
+        waitFor("हिसाब में लिख लिया")
         rule.waitUntil(15_000) { pump(); rule.onAllNodesWithText("₹600").fetchSemanticsNodes().isNotEmpty() }
         rule.onAllNodesWithText("₹300").fetchSemanticsNodes().let { check(it.size >= 2) { "advance and due should both be ₹300" } }
         shot("06-home-after-save")
@@ -173,7 +223,7 @@ class AppFlowTest {
         // --- an expense, to prove more than one kind of entry
         click("लिखकर डालें")
         rule.onNode(hasSetTextAction()).performTextInput("सब्जी पर अस्सी रुपये खर्च किए")
-        click("आगे")
+        click("आगे बढ़ें")
         waitFor("क्या यह सही है?")
         rule.onNodeWithText("₹80").assertExists()
         shot("05b-confirm-expense")
@@ -182,7 +232,7 @@ class AppFlowTest {
         shot("05c-confirm-change")
         rule.onNode(hasSetTextAction() and hasText("80")).performTextReplacement("90")
         click("सही है, सेव करें")
-        waitFor("सेव हो गया")
+        waitFor("हिसाब में लिख लिया")
         rule.onNodeWithContentDescription("हो गया").performClick()
 
         // --- "Help improve": never asked in setup; once on Home, after a few days of use.
@@ -196,7 +246,7 @@ class AppFlowTest {
         // --- a question
         click("लिखकर डालें")
         rule.onNode(hasSetTextAction()).performTextInput("इस हफ्ते कितना कमाया")
-        click("आगे")
+        click("आगे बढ़ें")
         waitFor("इस हफ्ते आपने 600 रुपये कमाए")
         shot("07-question-answer")
         rule.onNodeWithContentDescription("हो गया").performClick()
@@ -204,13 +254,13 @@ class AppFlowTest {
         // --- simple questions always get an answer
         click("लिखकर डालें")
         rule.onNode(hasSetTextAction()).performTextInput("आपका नाम क्या है")
-        click("आगे")
+        click("आगे बढ़ें")
         waitFor("मैं हिसाब साथी हूँ")
         shot("07b-name-answer")
         rule.onNodeWithContentDescription("हो गया").performClick()
         click("लिखकर डालें")
         rule.onNode(hasSetTextAction()).performTextInput("एक चुटकुला सुनाओ")
-        click("आगे")
+        click("आगे बढ़ें")
         waitFor("यह मैं नहीं समझा")
         rule.onNodeWithContentDescription("हो गया").performClick()
 

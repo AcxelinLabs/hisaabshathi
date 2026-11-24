@@ -22,7 +22,7 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 /**
- * The worker's details from setup (name, age, state, district, PIN) and their photo. Kept only
+ * The worker's details from setup (name, age, state, district, village, PIN) and their photo. Kept only
  * on this phone, in two small files encrypted with an AES key that lives in the Android Keystore
  * (its own key, separate from the ledger's). Never uploaded, never part of "Help improve
  * HisaabSaathi", never backed up to the cloud.
@@ -73,13 +73,14 @@ class ProfileStore(context: Context) {
             state = o.optString("state"),
             district = o.optString("district"),
             pin = o.optString("pin"),
+            village = o.optString("village"),
         )
     }
 
     private fun write(p: Profile) {
         val json = JSONObject()
             .put("name", p.name).put("age", p.age ?: JSONObject.NULL)
-            .put("state", p.state).put("district", p.district).put("pin", p.pin)
+            .put("state", p.state).put("district", p.district).put("pin", p.pin).put("village", p.village)
             .toString().toByteArray(Charsets.UTF_8)
         encrypt(file, json)
     }

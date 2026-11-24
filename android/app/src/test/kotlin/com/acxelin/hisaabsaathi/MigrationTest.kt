@@ -29,7 +29,7 @@ class MigrationTest {
             db.version = 1
         }
         val db = Room.databaseBuilder(context, LedgerDb::class.java, file.path)
-            .addMigrations(LedgerDb.ADD_CORRECTIONS, LedgerDb.ADD_SAMPLES).allowMainThreadQueries().build()
+            .addMigrations(LedgerDb.ADD_CORRECTIONS, LedgerDb.ADD_SAMPLES, LedgerDb.ADD_DETAIL).allowMainThreadQueries().build()
         assertEquals(60000L, db.entries().allOldestFirst().single().amountPaise)
         db.corrections().add(Correction(1, "hi", "voice", "heard", "WORK 6", "WORK 600"))
         assertEquals("WORK 600", db.corrections().all().single().kept)
@@ -57,7 +57,7 @@ class MigrationTest {
             db.version = 2
         }
         val db = Room.databaseBuilder(context, LedgerDb::class.java, file.path)
-            .addMigrations(LedgerDb.ADD_CORRECTIONS, LedgerDb.ADD_SAMPLES).allowMainThreadQueries().build()
+            .addMigrations(LedgerDb.ADD_CORRECTIONS, LedgerDb.ADD_SAMPLES, LedgerDb.ADD_DETAIL).allowMainThreadQueries().build()
         assertEquals(60000L, db.entries().allOldestFirst().single().amountPaise)
         assertEquals("WORK 600", db.corrections().all().single().kept)
         val queue = com.acxelin.hisaabsaathi.data.SampleQueue(db.samples())

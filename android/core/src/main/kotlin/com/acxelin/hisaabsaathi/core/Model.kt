@@ -15,7 +15,7 @@ enum class Lang(val code: String, val nativeName: String, val englishName: Strin
 
 enum class EntryType { WORK, ADVANCE, PAYMENT, EXPENSE }
 
-enum class ExpenseCategory { FOOD, TRAVEL, RENT, PHONE, HEALTH, HOME, OTHER }
+enum class ExpenseCategory { FOOD, TRAVEL, RENT, PHONE, HEALTH, HOME, LOAN, OTHER }
 
 /**
  * What a photo the worker takes is of. The first four become a ledger line (the amount is
@@ -49,6 +49,8 @@ data class DraftEntry(
     val category: ExpenseCategory? = null,
     /** 0 = today, -1 = yesterday. */
     val dayOffset: Int = 0,
+    /** Food, meal or loan said with it, as a [Detail] code ("food=SAMOSA,TEA;meal=BREAKFAST"); "" if none. */
+    val detail: String = "",
 )
 
 enum class QueryPeriod {

@@ -47,16 +47,17 @@ data class EntryRow(
     val attachment: String?,
     val prevHash: String,
     val hash: String,
+    @androidx.room.ColumnInfo(defaultValue = "") val detail: String = "",
 ) {
     fun toEntry() = Entry(
         id, epochDay, createdAtMs, EntryType.valueOf(type), amountPaise, hours, pieces, ratePaise,
-        category?.let(ExpenseCategory::valueOf), note, source, attachment, prevHash, hash,
+        category?.let { c -> ExpenseCategory.entries.firstOrNull { it.name == c } ?: ExpenseCategory.OTHER }, note, source, attachment, prevHash, hash, detail,
     )
 
     companion object {
         fun from(e: Entry) = EntryRow(
             e.id, e.epochDay, e.createdAtMs, e.type.name, e.amountPaise, e.hours, e.pieces, e.ratePaise,
-            e.category?.name, e.note, e.source, e.attachment, e.prevHash, e.hash,
+            e.category?.name, e.note, e.source, e.attachment, e.prevHash, e.hash, e.detail,
         )
     }
 }
@@ -213,7 +214,7 @@ abstract class SampleDao {
     }
 }
 
-@Database(entities = [EntryRow::class, CorrectionRow::class, SampleRow::class], version = 3, exportSchema = false)
+@Database(entities = [EntryRow::class, CorrectionRow::class, SampleRow::class], version = 4, exportSchema = false)
 abstract class LedgerDb : RoomDatabase() {
     abstract fun entries(): EntryDao
     abstract fun corrections(): CorrectionDao
@@ -224,7 +225,7 @@ abstract class LedgerDb : RoomDatabase() {
             System.loadLibrary("sqlcipher")
             return Room.databaseBuilder(context, LedgerDb::class.java, "ledger.db")
                 .openHelperFactory(SupportOpenHelperFactory(runCatching { DbKey.get(context) }.getOrElse { DbKey.startOver(context, it) }))
-                .addMigrations(ADD_CORRECTIONS, ADD_SAMPLES)
+                .addMigrations(ADD_CORRECTIONS, ADD_SAMPLES, ADD_DETAIL)
                 .build()
         }
 
@@ -236,6 +237,13 @@ abstract class LedgerDb : RoomDatabase() {
                         "`createdAtMs` INTEGER NOT NULL, `lang` TEXT NOT NULL, `source` TEXT NOT NULL, `heard` TEXT NOT NULL, " +
                         "`understood` TEXT NOT NULL, `kept` TEXT)",
                 )
+            }
+        }
+
+        /** Database version 4 adds what was eaten or what a loan was for; existing records are untouched. */
+        val ADD_DETAIL = object : androidx.room.migration.Migration(3, 4) {
+            override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `entries` ADD COLUMN `detail` TEXT NOT NULL DEFAULT ''")
             }
         }
 

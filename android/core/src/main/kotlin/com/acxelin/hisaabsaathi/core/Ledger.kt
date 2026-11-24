@@ -22,6 +22,8 @@ data class Entry(
     val attachment: String? = null,
     val prevHash: String = "",
     val hash: String = "",
+    /** Food, meal or loan, as a [Detail] code; "" if none. */
+    val detail: String = "",
 )
 
 data class Totals(
@@ -90,6 +92,7 @@ object Ledger {
             note = note,
             source = source,
             attachment = attachment,
+            detail = d.detail,
         )
 }
 
@@ -104,7 +107,7 @@ object HashChain {
     fun canonical(e: Entry): String = listOf(
         e.epochDay, e.createdAtMs, e.type.name, e.amountPaise, e.hours ?: "", e.pieces ?: "",
         e.ratePaise ?: "", e.category?.name ?: "", e.source, e.note.replace('|', ' '),
-    ).joinToString("|")
+    ).joinToString("|") + if (e.detail.isEmpty()) "" else "|" + e.detail.replace('|', ' ') // lines made before details hash as before
 
     fun hash(prevHash: String, e: Entry): String {
         val bytes = MessageDigest.getInstance("SHA-256").digest("$prevHash|${canonical(e)}".toByteArray(Charsets.UTF_8))

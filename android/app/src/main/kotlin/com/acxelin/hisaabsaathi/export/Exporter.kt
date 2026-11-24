@@ -61,7 +61,7 @@ class Exporter(private val context: Context) {
         for (e in entriesNewestFirst.sortedBy { it.epochDay }) {
             val date = LocalDate.ofEpochDay(e.epochDay).format(dateFmt)
             val label = when (e.type) {
-                EntryType.EXPENSE -> "${s.typeName(e.type)} (${s.categoryName(e.category ?: ExpenseCategory.OTHER)})"
+                EntryType.EXPENSE -> "${s.typeName(e.type)} (${s.categoryName(e.category ?: ExpenseCategory.OTHER)})" + s.describe(e.detail).let { if (it.isEmpty()) "" else ": $it" }
                 else -> s.typeName(e.type)
             }
             val detail = if (e.type == EntryType.WORK) s.workDetail(e.hours, e.pieces, e.ratePaise) else ""
@@ -81,7 +81,7 @@ class Exporter(private val context: Context) {
         val root = JSONObject()
             .put("app", "HisaabSaathi")
             .put("generatedAt", LocalDateTime.now().toString())
-            .put("hashAlgorithm", "SHA-256; hash = sha256(prevHash + '|' + canonical); canonical = epochDay|createdAtMs|type|amountPaise|hours|pieces|ratePaise|category|source|note")
+            .put("hashAlgorithm", "SHA-256; hash = sha256(prevHash + '|' + canonical); canonical = epochDay|createdAtMs|type|amountPaise|hours|pieces|ratePaise|category|source|note, then |detail when a line has one")
             .put("genesis", HashChain.GENESIS)
             .put("chainIntact", broken < 0)
             .put("entries", JSONArray().apply {
@@ -93,7 +93,7 @@ class Exporter(private val context: Context) {
                         .put("hours", e.hours ?: JSONObject.NULL).put("pieces", e.pieces ?: JSONObject.NULL)
                         .put("ratePaise", e.ratePaise ?: JSONObject.NULL)
                         .put("category", e.category?.name ?: JSONObject.NULL)
-                        .put("source", e.source).put("note", e.note)
+                        .put("source", e.source).put("note", e.note).put("detail", e.detail)
                         .put("prevHash", e.prevHash).put("hash", e.hash)
                         // The photo sent with this file, and its fingerprint so a changed photo shows.
                         .put("photo", e.attachment?.let(::File)?.takeIf { it.exists() }?.let { photoInfo(it) } ?: JSONObject.NULL),
@@ -129,7 +129,7 @@ class Exporter(private val context: Context) {
                     hours = if (o.isNull("hours")) null else o.getDouble("hours"),
                     pieces = optLong("pieces")?.toInt(), ratePaise = optLong("ratePaise"),
                     category = if (o.isNull("category")) null else ExpenseCategory.valueOf(o.getString("category")),
-                    note = o.optString("note"), source = o.optString("source", "backup"),
+                    note = o.optString("note"), source = o.optString("source", "backup"), detail = o.optString("detail"),
                 )
             }
         }.getOrNull()

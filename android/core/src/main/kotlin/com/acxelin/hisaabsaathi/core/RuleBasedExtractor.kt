@@ -86,14 +86,25 @@ object RuleBasedExtractor {
 
     private enum class Kind { ADVANCE, EXPENSE, WAGE, RECEIVED }
 
-    private fun kindOf(word: String): Kind? = when (word) {
+    private fun kindOf(word: String): Kind? = when {
+        // "bike loan liya" is money borrowed, like an advance; "loan ki kisht" (paying it back) is spending.
+        Items.isRepay(word) -> Kind.EXPENSE
+        Items.isLoan(word) -> Kind.ADVANCE
+        Items.food(word) != null -> Kind.EXPENSE
+        else -> kindOfWord(word)
+    }
+
+    private fun kindOfWord(word: String): Kind? = when (word) {
         in advance -> Kind.ADVANCE
         in expense -> Kind.EXPENSE
         else -> if (categoryOf(word) != null) Kind.EXPENSE else kindOfRest(word)
     }
 
-    private fun categoryOf(word: String): ExpenseCategory? =
-        categoryWords[word] ?: categories.firstOrNull { (_, ws) -> word in ws }?.first
+    private fun categoryOf(word: String): ExpenseCategory? = when {
+        Items.isRepay(word) || Items.isLoan(word) -> ExpenseCategory.LOAN
+        Items.food(word) != null -> ExpenseCategory.FOOD
+        else -> categoryWords[word] ?: categories.firstOrNull { (_, ws) -> word in ws }?.first
+    }
 
     private fun kindOfRest(word: String): Kind? = when (word) {
         in wage -> Kind.WAGE
@@ -167,17 +178,18 @@ object RuleBasedExtractor {
             if (rateValue > 2000 || (earned ?: 0.0) > 20000) lowConfidence = true
         }
 
+        val lineAt = LinkedHashMap<Int, Int>() // amount's token index → its place in entries
         for (i in amounts) {
             val value = (toks[i] as Num).value
             val kinds = kindsNear(toks, i)
             when {
-                Kind.ADVANCE in kinds -> entries += DraftEntry(
+                Kind.ADVANCE in kinds -> { lineAt[i] = entries.size; entries += DraftEntry(
                     EntryType.ADVANCE, Money.rupeesToPaise(value), dayOffset = dayOffset,
-                )
-                Kind.EXPENSE in kinds -> entries += DraftEntry(
+                ) }
+                Kind.EXPENSE in kinds -> { lineAt[i] = entries.size; entries += DraftEntry(
                     EntryType.EXPENSE, Money.rupeesToPaise(value),
                     category = categoryNear(toks, i) ?: ExpenseCategory.OTHER, dayOffset = dayOffset,
-                )
+                ) }
                 Kind.WAGE in kinds -> {
                     if (earned == null) earned = value
                     if (Kind.RECEIVED in kinds) paid += value
@@ -193,6 +205,11 @@ object RuleBasedExtractor {
                     lowConfidence = true
                 }
             }
+        }
+
+        for ((i, code) in details(toks, lineAt.mapValues { entries[it.value] })) {
+            val at = lineAt.getValue(i)
+            entries[at] = entries[at].copy(detail = code)
         }
 
         if (earned != null || hoursValue != null || piecesValue != null) {
@@ -244,6 +261,8 @@ object RuleBasedExtractor {
         val primary = hits.filter { it.second == nearest }.map { it.first }.toMutableSet()
         // "मजदूरी मिली": wage and received belong together even when not equally near.
         val all = hits.map { it.first }.toSet()
+        // "bike loan ki kisht": paying a loan back is spending, though "loan" alone is borrowing.
+        if (window(toks, i).any { (w, _) -> Items.isRepay(w) }) return setOf(Kind.EXPENSE)
         if (Kind.ADVANCE in all) return setOf(Kind.ADVANCE)
         if (primary.any { it == Kind.WAGE || it == Kind.RECEIVED }) {
             if (Kind.WAGE in all) primary += Kind.WAGE
@@ -253,8 +272,41 @@ object RuleBasedExtractor {
         return primary
     }
 
-    private fun categoryNear(toks: List<Tok>, i: Int): ExpenseCategory? =
-        window(toks, i).mapNotNull { (w, d) -> categoryOf(w)?.let { it to d } }.minByOrNull { it.second }?.first
+    private fun categoryNear(toks: List<Tok>, i: Int): ExpenseCategory? {
+        val near = window(toks, i)
+        // A loan word anywhere beside the amount decides: "bike ki kisht" is a loan, not travel.
+        if (near.any { (w, _) -> Items.isRepay(w) || Items.isLoan(w) }) return ExpenseCategory.LOAN
+        return near.mapNotNull { (w, d) -> categoryOf(w)?.let { it to d } }.minByOrNull { it.second }?.first
+    }
+
+    /**
+     * The foods, meal and loan said with each amount ([lines]: token index of the amount → its
+     * line). Each food or meal word goes to the nearest of those amounts (a word just before an
+     * amount wins a tie: "chai 10, samosa 20"); a loan's kind to the loan line beside it.
+     */
+    private fun details(toks: List<Tok>, lines: Map<Int, DraftEntry>): Map<Int, String> {
+        if (lines.isEmpty()) return emptyMap()
+        val foods = HashMap<Int, LinkedHashSet<String>>()
+        val meals = HashMap<Int, Meal>()
+        fun nearest(p: Int, among: Collection<Int>): Int? = among.minWithOrNull(compareBy<Int>({ kotlin.math.abs(it - p) }, { if (it > p) 0 else 1 }))
+        val foodLines = lines.filterValues { it.type == EntryType.EXPENSE && it.category == ExpenseCategory.FOOD }.keys
+        for ((p, t) in toks.withIndex()) {
+            val w = (t as? Word)?.text ?: continue
+            val next = (toks.getOrNull(p + 1) as? Word)?.text
+            val food = Items.food(w) ?: next?.let { Items.foodPair(w, it) }
+            if (food != null) nearest(p, foodLines)?.let { foods.getOrPut(it) { LinkedHashSet() } += food }
+            Items.meal(w)?.let { m -> nearest(p, foodLines)?.let { meals.putIfAbsent(it, m) } }
+        }
+        return lines.mapValues { (i, d) ->
+            val isLoan = d.category == ExpenseCategory.LOAN || (d.type == EntryType.ADVANCE && window(toks, i).any { (w, _) -> Items.isLoan(w) })
+            Detail(
+                foods = foods[i]?.toList().orEmpty(),
+                meal = meals[i],
+                loan = isLoan,
+                loanKind = if (isLoan) window(toks, i).sortedBy { it.second }.firstNotNullOfOrNull { (w, _) -> Items.loanKind(w) } else null,
+            ).encode()
+        }.filterValues { it.isNotEmpty() }
+    }
 
     private val lastWeek = QueryPeriod.LAST_WEEK
     private val periodSets: List<Pair<QueryPeriod, Keywords>> = listOf(

@@ -1,6 +1,11 @@
 package com.acxelin.hisaabsaathi.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -86,20 +91,31 @@ internal fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Bool
 }
 
 @Composable
-internal fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean = false) {
+internal fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean = false, numbered: Boolean = false, onPicked: (Lang) -> Unit = {}) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Lang.entries.chunked(2).forEach { pair ->
+        Lang.entries.chunked(if (numbered) 1 else 2).forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                pair.forEach { l ->
+                row.forEach { l ->
                     val selected = settings.lang == l
+                    val ink = if (selected || !onDark) Ink else Color.White
                     Button(
-                        onClick = { vm.setLang(l) }, modifier = Modifier.weight(1f).height(60.dp), shape = RoundedCornerShape(10.dp),
+                        onClick = { vm.setLang(l); onPicked(l) }, modifier = Modifier.weight(1f).height(60.dp), shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (selected) Marigold else if (onDark) InkRaised else Paper,
-                            contentColor = if (selected || !onDark) Ink else Color.White,
+                            contentColor = ink,
                         ),
+                    ) {
+                        // Setup says "press 1 for Hindi…": the number the voice says, in a circle.
+                        if (numbered) {
+                            Box(Modifier.size(36.dp).border(2.dp, ink, CircleShape), contentAlignment = Alignment.Center) {
+                                Text("${l.ordinal + 1}", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = ink)
+                            }
+                            Spacer(Modifier.width(16.dp))
+                        }
                         // Each name is drawn in its own script's font, whatever the app language is.
-                    ) { Text(l.nativeName, fontSize = 21.sp, fontWeight = FontWeight.SemiBold, fontFamily = fontFor(l), color = if (selected || !onDark) Ink else Color.White) }
+                        Text(l.nativeName, fontSize = 21.sp, fontWeight = FontWeight.SemiBold, fontFamily = fontFor(l), color = ink,
+                            modifier = if (numbered) Modifier.weight(1f) else Modifier)
+                    }
                 }
             }
         }

@@ -82,6 +82,9 @@ class SettingsStore(private val context: Context) {
         )
     }
 
+    /** Every setting back to its default, as on a new install (tests start from here). */
+    suspend fun clear() = context.dataStore.edit { it.clear() }
+
     suspend fun setLang(v: Lang) = context.dataStore.edit { it[lang] = v.code }
     suspend fun setRegion(v: String) = context.dataStore.edit { it[region] = v }
     suspend fun setOnboarded(v: Boolean = true) = context.dataStore.edit { it[onboarded] = v }

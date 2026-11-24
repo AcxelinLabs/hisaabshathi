@@ -33,6 +33,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
@@ -125,11 +126,15 @@ private fun TotalsCard(title: String, t: Totals, s: Strings, compact: Boolean = 
 }
 
 @Composable
-private fun BigButton(text: String, color: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
+private fun BigButton(text: String, color: Color, modifier: Modifier = Modifier, forward: Boolean = false, onClick: () -> Unit) {
     Button(
         onClick = onClick, modifier = modifier.height(52.dp), shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(containerColor = color, contentColor = if (color == Marigold) Ink else Color.White),
-    ) { Text(text, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center) }
+    ) {
+        Text(text, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
+        // Going on to the next step: an arrow, as everywhere.
+        if (forward) { Spacer(Modifier.width(8.dp)); Icon(Icons.AutoMirrored.Filled.ArrowForward, null, modifier = Modifier.size(20.dp)) }
+    }
 }
 
 // ---------------------------------------------------------------- home
@@ -273,7 +278,7 @@ fun TypeScreen(s: Strings, onBack: () -> Unit, onSubmit: (String) -> Unit) {
         )
         Text(s.typeHint, fontSize = 16.sp, color = InkSoft)
         Spacer(Modifier.weight(1f))
-        BigButton(s.next, Marigold, Modifier.fillMaxWidth()) { if (text.isNotBlank()) onSubmit(text) }
+        BigButton(s.next, Marigold, Modifier.fillMaxWidth(), forward = true) { if (text.isNotBlank()) onSubmit(text) }
     }
 }
 
@@ -373,7 +378,8 @@ private fun DraftSummary(d: DraftEntry, s: Strings) {
                 -2 -> s.dayBefore
                 else -> LocalDate.now().plusDays(d.dayOffset.toLong()).format(dayFormat)
             }
-            val detail = if (d.type == EntryType.WORK) s.workDetail(d.hours, d.pieces, d.ratePaise) else ""
+            // What was said with it: "समोसा, चाय · नाश्ता", "बाइक लोन".
+            val detail = if (d.type == EntryType.WORK) s.workDetail(d.hours, d.pieces, d.ratePaise) else s.describe(d.detail)
             Text(listOf(day, detail).filter { it.isNotEmpty() }.joinToString(" · "), fontSize = 15.sp, color = InkSoft)
         }
         Spacer(Modifier.width(8.dp))
@@ -552,8 +558,8 @@ fun LedgerScreen(vm: AppViewModel, s: Strings, onTakePhoto: () -> Unit = {}) {
                                 else s.typeName(e.type),
                                 fontSize = 17.sp, fontWeight = FontWeight.Medium,
                             )
-                            val detail = s.workDetail(e.hours, e.pieces, e.ratePaise)
-                            if (e.type == EntryType.WORK && detail.isNotEmpty()) Text(detail, color = InkSoft)
+                            val detail = if (e.type == EntryType.WORK) s.workDetail(e.hours, e.pieces, e.ratePaise) else s.describe(e.detail)
+                            if (detail.isNotEmpty()) Text(detail, color = InkSoft)
                             // From a photo: what it was of (a loan paper is an advance with its paper).
                             com.acxelin.hisaabsaathi.core.PhotoKind.fromSource(e.source)?.let { Text(s.photoKindName(it), color = InkSoft, fontSize = 14.sp) }
                         }

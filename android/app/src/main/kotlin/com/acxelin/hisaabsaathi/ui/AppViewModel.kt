@@ -828,9 +828,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * Downloads what the app needs to hear and speak the chosen language, in the background:
      * the speech pack first (so the mic works sooner), then the read-aloud voice.
      */
-    fun startVoiceDownloads() {
+    fun startVoiceDownloads(l: Lang = lang) {
         if (!app.autoDownloadVoice) return
-        val l = lang
         val stt = Catalog.stt(l)
         app.packs.download(stt)
         val voice = Catalog.voice(l)?.takeIf { Catalog.voiceDownloadsByItself(l) } ?: return
@@ -850,7 +849,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * answers never go to the phone's online recogniser. [onText] takes what was heard and
      * returns what was understood (just the name, the age…), which is read back; null if nothing.
      */
-    fun listenForAnswer(onText: (String) -> String?) {
+    fun listenForAnswer(onText: (String) -> String?, then: (() -> Unit)? = null) {
         if (answering.value) { app.stt.stop(); app.systemStt.stop(); return }
         if (!canHearSetupAnswer() || isBusy) return
         busy = viewModelScope.launch(guard) {
@@ -873,7 +872,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                 answering.value = false; level.value = 0f
             }
             when (heard) {
-                is Heard.Text -> app.speaker.speak(onText(heard.text) ?: strings.notUnderstood, lang)
+                is Heard.Text -> {
+                    val back = onText(heard.text)
+                    if (then == null || back == null) app.speaker.speak(back ?: strings.notUnderstood, lang)
+                    else {
+                        // A conversation (the address questions): read back what was understood,
+                        // and only then go on to the next question.
+                        if (back.isNotBlank()) app.speaker.speakAndWait(back, lang)
+                        busy = null
+                        then()
+                    }
+                }
                 Heard.Silence -> app.speaker.speak(strings.heardNothing, lang)
                 is Heard.Failed -> {
                     note("setup answer (${if (usePack || fake != null) "pack" else "phone"}): ${heard.detail}")
@@ -917,32 +926,42 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun speakPrompt(key: String, text: String) {
         stopPrompt(); app.speaker.stop()
-        val dir = "onboarding_audio/${lang.code}"
-        val name = runCatching { app.assets.list(dir)?.firstOrNull { it.substringBeforeLast('.') == key } }.getOrNull()
-        if (name != null) {
-            fun play(source: android.media.MediaPlayer.() -> Unit): Boolean {
-                val mp = android.media.MediaPlayer()
-                return runCatching {
-                    mp.setAudioAttributes(
-                        android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT)
-                            .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build(),
-                    )
-                    mp.source()
-                    mp.setOnCompletionListener { it.release(); if (promptPlayer === it) promptPlayer = null }
-                    mp.prepare(); mp.start()
-                    promptPlayer = mp
-                }.onFailure { runCatching { mp.release() } }.isSuccess
-            }
-            // Played straight from the app package; if the build compressed the file, from a copy.
-            val ok = play { app.assets.openFd("$dir/$name").use { fd -> setDataSource(fd.fileDescriptor, fd.startOffset, fd.length) } } ||
-                play {
-                    val copy = java.io.File(app.cacheDir, "prompt-${lang.code}-$name")
-                    if (!copy.exists()) app.assets.open("$dir/$name").use { input -> copy.outputStream().use { input.copyTo(it) } }
-                    setDataSource(copy.path)
-                }
-            if (ok) return
-        }
+        if (playAsset("onboarding_audio/${lang.code}", key)) return
         app.speaker.speak(text, lang)
+    }
+
+    /**
+     * The first setup screen: "हिंदी के लिए एक दबाइए … For English, press six", each line in
+     * its own language (one recording, made by tools/tts/make_language_prompt.py).
+     */
+    fun playLanguageMenu() {
+        stopPrompt(); app.speaker.stop()
+        playAsset("onboarding_audio", "pick_language")
+    }
+
+    /** Plays the recording [key] (any audio extension) from the app's [dir]; false if there is none. */
+    private fun playAsset(dir: String, key: String): Boolean {
+        val name = runCatching { app.assets.list(dir)?.firstOrNull { it.substringBeforeLast('.') == key } }.getOrNull() ?: return false
+        fun play(source: android.media.MediaPlayer.() -> Unit): Boolean {
+            val mp = android.media.MediaPlayer()
+            return runCatching {
+                mp.setAudioAttributes(
+                    android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT)
+                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build(),
+                )
+                mp.source()
+                mp.setOnCompletionListener { it.release(); if (promptPlayer === it) promptPlayer = null }
+                mp.prepare(); mp.start()
+                promptPlayer = mp
+            }.onFailure { runCatching { mp.release() } }.isSuccess
+        }
+        // Played straight from the app package; if the build compressed the file, from a copy.
+        return play { app.assets.openFd("$dir/$name").use { fd -> setDataSource(fd.fileDescriptor, fd.startOffset, fd.length) } } ||
+            play {
+                val copy = java.io.File(app.cacheDir, "prompt-${dir.replace('/', '-')}-$name")
+                if (!copy.exists()) app.assets.open("$dir/$name").use { input -> copy.outputStream().use { input.copyTo(it) } }
+                setDataSource(copy.path)
+            }
     }
 
     fun stopSpeaking() { askJob?.cancel(); askJob = null; stopPrompt(); app.speaker.stop(); if (answering.value) { app.stt.stop(); app.systemStt.stop() } }
@@ -955,15 +974,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * Setup answers never go to an online recogniser. If nothing on the phone can listen yet,
      * the question is only read; typing is always there too.
      */
-    fun askAndListen(key: String, text: String, onText: (String) -> String?) {
+    fun askAndListen(key: String, text: String, onText: (String) -> String?, then: (() -> Unit)? = null) {
         askJob?.cancel()
         if (answering.value) return // already listening for this answer
         if (!canHearSetupAnswer() || isBusy) { speakPrompt(key, text); return }
         askJob = viewModelScope.launch(guard) {
             playPromptAndWait(key, text)
-            listenForAnswer(onText)
+            listenForAnswer(onText, then)
         }
     }
+
+    /** Says [text] and returns once it has been said (setup, between two questions). */
+    suspend fun sayAndWait(text: String) { stopPrompt(); app.speaker.speakAndWait(text, lang) }
 
     /** [speakPrompt], returning once the question has been said. */
     private suspend fun playPromptAndWait(key: String, text: String) {
