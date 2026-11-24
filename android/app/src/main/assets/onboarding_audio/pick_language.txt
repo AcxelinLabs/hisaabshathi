@@ -1,0 +1,7 @@
+# language start_ms end_ms, in pick_language.wav
+hi 0 1824
+or 2274 4439
+te 4889 6596
+kn 7046 9553
+ta 10003 11741
+en 12191 14325

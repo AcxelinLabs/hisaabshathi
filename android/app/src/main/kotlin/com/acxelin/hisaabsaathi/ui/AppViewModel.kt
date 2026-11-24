@@ -936,12 +936,45 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun playLanguageMenu() {
         stopPrompt(); app.speaker.stop()
-        playAsset("onboarding_audio", "pick_language")
+        menuJob?.cancel(); menuSpeaking.value = null
+        if (!playAsset("onboarding_audio", "pick_language")) return
+        val player = promptPlayer ?: return
+        // Follow the recording: the screen shows the line being said and lights up its button.
+        menuJob = viewModelScope.launch(guard) {
+            try {
+                while (promptPlayer === player) {
+                    val at = runCatching { player.currentPosition.toLong() }.getOrNull() ?: break
+                    menuSpeaking.value = menuSpans.firstOrNull { at in it.second }?.first
+                    kotlinx.coroutines.delay(60)
+                }
+            } finally { menuSpeaking.value = null }
+        }
     }
+
+    /** The language whose line of the spoken menu is being said now; null when quiet. */
+    val menuSpeaking = MutableStateFlow<Lang?>(null)
+    private var menuJob: kotlinx.coroutines.Job? = null
+
+    /** When each language is said in the menu recording (made with it, pick_language.txt). */
+    private val menuSpans: List<Pair<Lang, LongRange>> by lazy {
+        runCatching {
+            app.assets.open("onboarding_audio/pick_language.txt").bufferedReader().readLines()
+                .filter { it.isNotBlank() && !it.startsWith("#") }
+                .mapNotNull { line ->
+                    val (code, a, b) = line.trim().split(Regex("\\s+")).takeIf { it.size == 3 } ?: return@mapNotNull null
+                    // Light up a little before the line starts and keep it lit through the pause after.
+                    Lang.entries.firstOrNull { it.code == code }?.let { it to (a.toLong() - 150)..(b.toLong() + 400) }
+                }
+        }.getOrDefault(emptyList())
+    }
+
+    private val audioTypes = setOf("wav", "mp3", "m4a", "ogg")
 
     /** Plays the recording [key] (any audio extension) from the app's [dir]; false if there is none. */
     private fun playAsset(dir: String, key: String): Boolean {
-        val name = runCatching { app.assets.list(dir)?.firstOrNull { it.substringBeforeLast('.') == key } }.getOrNull() ?: return false
+        val name = runCatching {
+            app.assets.list(dir)?.firstOrNull { it.substringBeforeLast('.') == key && it.substringAfterLast('.').lowercase() in audioTypes }
+        }.getOrNull() ?: return false
         fun play(source: android.media.MediaPlayer.() -> Unit): Boolean {
             val mp = android.media.MediaPlayer()
             return runCatching {

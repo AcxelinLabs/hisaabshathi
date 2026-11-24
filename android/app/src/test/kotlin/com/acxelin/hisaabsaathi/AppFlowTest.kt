@@ -112,7 +112,7 @@ class AppFlowTest {
      */
     @Test fun addressByVoice() {
         org.robolectric.Shadows.shadowOf(rule.activity.application).grantPermissions(android.Manifest.permission.RECORD_AUDIO)
-        waitFor("Language")
+        waitFor("Choose your language")
         TestApp.heard.clear()
         TestApp.heard.addAll(listOf("मेरा नाम रमेश है", "हाँ", "नहीं", "मैं ओडिशा में रहता हूँ", "खोरधा", "मेरा गाँव बलियंता है", "पता नहीं"))
         try {
@@ -132,10 +132,16 @@ class AppFlowTest {
         org.robolectric.shadows.ShadowLog.stream = System.out
         // --- setup. The first screen asks in every language, and each language has a number:
         // "हिंदी के लिए एक दबाइए … For English, press six". Pressing one goes straight on.
-        waitFor("Language")
-        rule.onNodeWithText("भाषा").assertExists() // "language" in every script; the question itself is said aloud
+        waitFor("Choose your language")
         rule.onNodeWithText("6").assertExists()
         shot("01-language")
+        // While the menu is said, the line being said shows in its own script and its button lights up.
+        val vm = androidx.lifecycle.ViewModelProvider(rule.activity)[com.acxelin.hisaabsaathi.ui.AppViewModel::class.java]
+        vm.stopSpeaking(); repeat(5) { pump(); Thread.sleep(70) }
+        vm.menuSpeaking.value = Lang.TE
+        waitFor("తెలుగు కోసం 3 నొక్కండి")
+        shot("01a-language-telugu")
+        vm.menuSpeaking.value = null
         click("हिन्दी")
         // Setup: language, name, then the address, asked and never required.
         waitFor("आपका नाम क्या है?")

@@ -281,21 +281,21 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                 Step.LANGUAGE -> {
                     // The question in every language, each in its own script: readable before any
                     // choice. The voice says it too: "हिंदी के लिए एक दबाइए … For English, press six".
-                    // One word, "language", in each script: short enough to read at a glance. The
-                    // whole question is said aloud.
+                    // The line being said, in its own script, and its button lit: "हिंदी के लिए 1
+                    // दबाइए", then Odia, Telugu… When quiet, the question in the chosen language.
+                    val speaking by vm.menuSpeaking.collectAsStateWithLifecycle()
+                    val shown = speaking ?: settings.lang
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Lang.entries.forEach { l ->
-                                Text(languageWord(l), fontFamily = fontFor(l), fontSize = 22.sp, fontWeight = FontWeight.SemiBold,
-                                    color = if (l == settings.lang) Color.White else Color.White.copy(alpha = 0.75f))
-                            }
+                        androidx.compose.animation.Crossfade(targetState = shown to (speaking != null), label = "menu line", modifier = Modifier.weight(1f)) { (l, saying) ->
+                            Text(if (saying) menuLine(l) else Strings(l).chooseLanguage, fontFamily = fontFor(l), fontSize = 26.sp,
+                                fontWeight = FontWeight.Bold, lineHeight = 34.sp, color = Color.White, minLines = 2)
                         }
                         IconButton(onClick = { vm.playLanguageMenu() }, modifier = Modifier.size(56.dp)) {
-                            Icon(painterResource(R.drawable.ic_speaker), s.hearAgain, tint = Color.White, modifier = Modifier.size(30.dp))
+                            Icon(painterResource(R.drawable.ic_speaker), s.hearAgain, tint = if (speaking != null) Marigold else Color.White, modifier = Modifier.size(30.dp))
                         }
                     }
                     // Pressing a number chooses that language and goes straight on.
-                    LanguagePicker(vm, settings, onDark = true, numbered = true) { l -> chosen = l }
+                    LanguagePicker(vm, settings, onDark = true, numbered = true, lit = speaking) { l -> chosen = l }
                 }
                 Step.NAME -> {
                     Question(s.qName) { ask() }
@@ -405,14 +405,14 @@ private fun SetupButtons(
     }
 }
 
-/** "Language" in each language's own script, for the first screen. */
-private fun languageWord(l: Lang): String = when (l) {
-    Lang.HI -> "भाषा"
-    Lang.OR -> "ଭାଷା"
-    Lang.TE -> "భాష"
-    Lang.KN -> "ಭಾಷೆ"
-    Lang.TA -> "மொழி"
-    Lang.EN -> "Language"
+/** What the spoken menu says for each language, as written: the same words, with its number. */
+private fun menuLine(l: Lang): String = when (l) {
+    Lang.HI -> "हिंदी के लिए 1 दबाइए"
+    Lang.OR -> "ଓଡ଼ିଆ ପାଇଁ 2 ଦବାନ୍ତୁ"
+    Lang.TE -> "తెలుగు కోసం 3 నొక్కండి"
+    Lang.KN -> "ಕನ್ನಡಕ್ಕಾಗಿ 4 ಒತ್ತಿ"
+    Lang.TA -> "தமிழுக்கு 5 அழுத்துங்கள்"
+    Lang.EN -> "For English, press 6"
 }
 
 /** Two equal answers to a yes-or-no question, the yes in marigold. */

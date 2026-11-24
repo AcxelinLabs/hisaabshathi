@@ -91,7 +91,7 @@ internal fun PackRow(vm: AppViewModel, pack: Pack, s: Strings, allowDelete: Bool
 }
 
 @Composable
-internal fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean = false, numbered: Boolean = false, onPicked: (Lang) -> Unit = {}) {
+internal fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolean = false, numbered: Boolean = false, lit: Lang? = null, onPicked: (Lang) -> Unit = {}) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Lang.entries.chunked(if (numbered) 1 else 2).forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -99,9 +99,12 @@ internal fun LanguagePicker(vm: AppViewModel, settings: Settings, onDark: Boolea
                     val selected = settings.lang == l
                     val ink = if (selected || !onDark) Ink else Color.White
                     Button(
-                        onClick = { vm.setLang(l); onPicked(l) }, modifier = Modifier.weight(1f).height(60.dp), shape = RoundedCornerShape(10.dp),
+                        onClick = { vm.setLang(l); onPicked(l) }, shape = RoundedCornerShape(10.dp),
+                        // The language the voice is saying now: a marigold ring, a little larger.
+                        modifier = Modifier.weight(1f).height(60.dp)
+                            .then(if (l == lit) Modifier.border(3.dp, Marigold, RoundedCornerShape(10.dp)) else Modifier),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (selected) Marigold else if (onDark) InkRaised else Paper,
+                            containerColor = if (selected) Marigold else if (l == lit) Marigold.copy(alpha = 0.28f) else if (onDark) InkRaised else Paper,
                             contentColor = ink,
                         ),
                     ) {
