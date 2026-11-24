@@ -61,7 +61,10 @@ Typing had crept in as an equal choice. A worker who reads little should never n
 
 - **Setup:** each question is asked aloud, then the app listens for the answer. The answer is
   read back, and the big mic is the main control. The text box sits below it as a fallback.
-  Answers use the on-phone speech pack only, never an online recogniser.
+  Answers are heard on the phone only, never by an online recogniser: by the speech pack, or,
+  on a fresh install before the pack has downloaded, by Android's own on-device recogniser
+  (Android 12+). If the phone has neither for the language, the question is read, and asked
+  again and listened for as soon as the pack is in.
 - **Confirm:** after reading back an entry (spoken or from a photo), the app says "If it is
   right, say yes. If not, say no" and listens. "Yes" saves, "no" starts again. Any tap stops
   the listening, and the tap wins. Typed entries are only read back: someone typing may be

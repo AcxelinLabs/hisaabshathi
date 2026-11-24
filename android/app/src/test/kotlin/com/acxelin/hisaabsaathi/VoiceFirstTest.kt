@@ -76,4 +76,14 @@ class VoiceFirstTest {
         assertEquals(EntryType.ADVANCE, vm.entries.value.single().type)
         assertEquals(30_000L, vm.entries.value.single().amountPaise)
     }
+
+    @Test fun setupReadsTheQuestionThenListensForTheAnswer() {
+        // A fresh install: no speech pack yet. The question is said, then the app listens.
+        TestApp.heard.add("मेरा नाम रमेश है")
+        var name: String? = null
+        vm.askAndListen("q_name", "आपका नाम क्या है?") { text -> com.acxelin.hisaabsaathi.core.SpokenDetails.name(text).also { name = it } }
+        waitUntil("heard the name") { name != null }
+        assertEquals("रमेश", name)
+        assertTrue(TestApp.heard.isEmpty())
+    }
 }

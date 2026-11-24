@@ -851,14 +851,22 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * returns what was understood (just the name, the age…), which is read back; null if nothing.
      */
     fun listenForAnswer(onText: (String) -> String?) {
-        if (answering.value) { app.stt.stop(); return }
-        if (!app.stt.available(lang) || isBusy) return
+        if (answering.value) { app.stt.stop(); app.systemStt.stop(); return }
+        if (!canHearSetupAnswer() || isBusy) return
         busy = viewModelScope.launch(guard) {
             stopPrompt(); app.speaker.stop()
+            val l = lang
+            val fake = app.testListener
+            val usePack = fake == null && app.stt.available(l)
             answering.value = true
             app.earcons.listening(); kotlinx.coroutines.delay(com.acxelin.hisaabsaathi.speech.Earcons.START_MS)
             val heard = try {
-                app.stt.listen(lang, maxSeconds = 10, onLevel = { level.value = it }, onRecorded = { app.earcons.heard() })
+                when {
+                    fake != null -> fake().also { app.earcons.heard() }
+                    usePack -> app.stt.listen(l, maxSeconds = 10, onLevel = { level.value = it }, onRecorded = { app.earcons.heard() })
+                    // Before the speech pack is in: Android's own recogniser, on-device only.
+                    else -> app.systemStt.listen(l, onRecorded = { app.earcons.heard() })
+                }
             } catch (e: Exception) {
                 Heard.Failed(Heard.Kind.ENGINE, e.message ?: e.javaClass.simpleName)
             } finally {
@@ -867,10 +875,33 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             when (heard) {
                 is Heard.Text -> app.speaker.speak(onText(heard.text) ?: strings.notUnderstood, lang)
                 Heard.Silence -> app.speaker.speak(strings.heardNothing, lang)
-                is Heard.Failed -> { note("setup answer: ${heard.detail}"); app.speaker.speak(if (heard.kind == Heard.Kind.MIC) strings.micFailed else strings.voiceFailed, lang) }
+                is Heard.Failed -> {
+                    note("setup answer (${if (usePack || fake != null) "pack" else "phone"}): ${heard.detail}")
+                    when {
+                        heard.kind == Heard.Kind.MIC -> app.speaker.speak(strings.micFailed, lang)
+                        // The phone has no offline model for this language: stop offering it, and
+                        // wait for the speech pack (the question is asked again once it is in).
+                        !usePack && fake == null -> {
+                            phoneCantHear.value = phoneCantHear.value + l
+                            val st = app.packs.states.value[Catalog.stt(l).id]
+                            app.speaker.speak(if (st is PackState.Downloading) strings.voicePackDownloading((st.fraction * 100).toInt()) else strings.voiceFailed, lang)
+                        }
+                        else -> app.speaker.speak(strings.voiceFailed, lang)
+                    }
+                }
             }
         }
     }
+
+    /** Languages the phone's own recogniser turned out not to know offline (this run of the app). */
+    val phoneCantHear = MutableStateFlow<Set<Lang>>(emptySet())
+
+    /**
+     * Something on the phone can hear a setup answer right now: the speech pack, or Android's own
+     * on-device recogniser (Android 12+). Never an online recogniser.
+     */
+    fun canHearSetupAnswer(l: Lang = lang): Boolean =
+        app.testListener != null || app.stt.available(l) || (l !in phoneCantHear.value && app.systemStt.available())
 
     private var promptPlayer: android.media.MediaPlayer? = null
 
@@ -914,18 +945,20 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         app.speaker.speak(text, lang)
     }
 
-    fun stopSpeaking() { askJob?.cancel(); askJob = null; stopPrompt(); app.speaker.stop(); if (answering.value) app.stt.stop() }
+    fun stopSpeaking() { askJob?.cancel(); askJob = null; stopPrompt(); app.speaker.stop(); if (answering.value) { app.stt.stop(); app.systemStt.stop() } }
 
     private var askJob: kotlinx.coroutines.Job? = null
 
     /**
      * Voice first: reads a setup question aloud and, once it has been said, listens for the
-     * answer (with the on-device speech pack; setup answers never go to an online recogniser).
-     * Without the pack yet, the question is only read; typing is always there too.
+     * answer: with the speech pack, or before it is in, Android's own on-device recogniser.
+     * Setup answers never go to an online recogniser. If nothing on the phone can listen yet,
+     * the question is only read; typing is always there too.
      */
     fun askAndListen(key: String, text: String, onText: (String) -> String?) {
         askJob?.cancel()
-        if (!app.stt.available(lang) || isBusy) { speakPrompt(key, text); return }
+        if (answering.value) return // already listening for this answer
+        if (!canHearSetupAnswer() || isBusy) { speakPrompt(key, text); return }
         askJob = viewModelScope.launch(guard) {
             playPromptAndWait(key, text)
             listenForAnswer(onText)

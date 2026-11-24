@@ -125,11 +125,15 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     // setup shown again after an update starts from the details already saved.
     LaunchedEffect(Unit) { vm.suggestPhoneLanguage(); if (settings.onboarded) vm.startDraft() }
 
-    // Voice first: each question is asked aloud and the app then listens for the answer.
-    // Typing is there too, below. Until the speech pack is in, the question is only read.
+    // Voice first: each question is asked aloud and the app then listens for the answer, with the
+    // speech pack or, before it is in, the phone's own on-device recogniser. Typing is there too,
+    // below. Only if nothing on the phone can listen yet is the question just read; it is asked
+    // again, and listened for, once the pack is in.
     val context = LocalContext.current
     val packStates by vm.packStates.collectAsStateWithLifecycle()
+    val phoneCantHear by vm.phoneCantHear.collectAsStateWithLifecycle()
     val sttReady = packStates[vm.sttPack().id] is PackState.Ready
+    val canHear = remember(settings.lang, sttReady, phoneCantHear) { vm.canHearSetupAnswer() }
     fun answer(st: Step): (String) -> String? = when (st) {
         // "mera naam Aditya hai" → "Aditya": only the name goes in the box.
         Step.NAME -> { text -> SpokenDetails.name(text).take(60).also { n -> vm.editDraft { it.copy(name = n) } } }
@@ -142,7 +146,7 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
         val (key, text) = prompt(step, s) ?: return@LaunchedEffect
         val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
         when {
-            !sttReady -> vm.speakPrompt(key, text)
+            !vm.canHearSetupAnswer() -> vm.speakPrompt(key, text)
             granted -> ask()
             else -> { vm.speakPrompt(key, text); micPermission.launch(Manifest.permission.RECORD_AUDIO) }
         }
@@ -189,7 +193,7 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                 }
                 Step.NAME -> {
                     Question(s.qName) { ask() }
-                    MicAnswer(vm, s, answer(Step.NAME))
+                    MicAnswer(vm, s, canHear, answer(Step.NAME))
                     OutlinedTextField(
                         value = draft.name, onValueChange = { v -> vm.editDraft { it.copy(name = v.take(60)) } },
                         label = { Text(s.nameLabel) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
@@ -206,7 +210,7 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
                 }
                 Step.PLACE -> {
                     Question(s.qPin) { ask() }
-                    MicAnswer(vm, s, answer(Step.PLACE))
+                    MicAnswer(vm, s, canHear, answer(Step.PLACE))
                     PlaceFields(vm, draft, s)
                 }
             }
@@ -271,11 +275,12 @@ private fun PrivacyNote(s: Strings, onHear: () -> Unit) {
 
 /**
  * The main way to answer a setup question: a big round mic, like the one on Home. It listens by
- * itself after the question; a tap listens again (or stops). While the speech pack is still
- * downloading, a quiet line says so; typing works meanwhile.
+ * itself after the question; a tap listens again (or stops). It shows whenever something on the
+ * phone can hear ([canHear]): the speech pack, or the phone's own on-device recogniser. Otherwise,
+ * while the pack is still downloading, a quiet line says so; typing works meanwhile.
  */
 @Composable
-private fun MicAnswer(vm: AppViewModel, s: Strings, onText: (String) -> String?) {
+private fun MicAnswer(vm: AppViewModel, s: Strings, canHear: Boolean, onText: (String) -> String?) {
     val context = LocalContext.current
     val listening by vm.answering.collectAsStateWithLifecycle()
     val states by vm.packStates.collectAsStateWithLifecycle()
@@ -283,8 +288,8 @@ private fun MicAnswer(vm: AppViewModel, s: Strings, onText: (String) -> String?)
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) vm.listenForAnswer(onText)
     }
-    when (stt) {
-        is PackState.Ready -> Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    when {
+        canHear -> Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Box(
                 Modifier.size(104.dp).clip(CircleShape).background(if (listening) Red else Marigold)
                     .clickable(onClickLabel = s.speakNow) {
@@ -297,7 +302,7 @@ private fun MicAnswer(vm: AppViewModel, s: Strings, onText: (String) -> String?)
                 modifier = Modifier.padding(top = 8.dp))
             Text(s.orType, fontSize = 14.sp, color = InkSoft, modifier = Modifier.padding(top = 12.dp))
         }
-        is PackState.Downloading -> Row(verticalAlignment = Alignment.CenterVertically) {
+        stt is PackState.Downloading -> Row(verticalAlignment = Alignment.CenterVertically) {
             CircularProgressIndicator(progress = { stt.fraction }, color = Ink, strokeWidth = 3.dp, modifier = Modifier.size(22.dp))
             Spacer(Modifier.width(10.dp))
             Text(s.gettingVoiceReady((stt.fraction * 100).toInt()), fontSize = 15.sp, color = InkSoft)
