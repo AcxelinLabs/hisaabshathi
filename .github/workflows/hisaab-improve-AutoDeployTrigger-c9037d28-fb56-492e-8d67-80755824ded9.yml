@@ -6,8 +6,9 @@ on:
   push:
     branches: 
       [ main ]
+    # Only when the server changes (README or app-only pushes no longer redeploy and cold-start it).
     paths:
-    - '**'
+    - 'server/**'
     - '.github/workflows/hisaab-improve-AutoDeployTrigger-c9037d28-fb56-492e-8d67-80755824ded9.yml'
 
   # Allow manual trigger 
@@ -38,8 +39,13 @@ jobs:
           containerAppName: hisaab-improve
           resourceGroup: HisaabShathi
           imageToBuild: hisaabimproveacr.azurecr.io/hisaab-improve:${{ github.sha }}
-          
-            
 
-     
-
+      # The nightly pipeline job runs the same code as the upload service. Without this it stays on
+      # whatever image it was created with (it once lagged behind and would have dropped consent-3 samples).
+      - name: Point the nightly job at the same image
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az extension add --name containerapp --upgrade --yes
+            az containerapp job update -n hisaab-nightly -g HisaabShathi --image hisaabimproveacr.azurecr.io/hisaab-improve:${{ github.sha }}
+            az containerapp job show -n hisaab-nightly -g HisaabShathi --query "properties.template.containers[0].image" -o tsv
