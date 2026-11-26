@@ -127,10 +127,14 @@ private fun prompt(step: Step, where: Where, s: Strings): Pair<String, String>? 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
-    var stepName by rememberSaveable { mutableStateOf(Step.LANGUAGE.name) }
+    // Back at the step the worker was on when the app was last put away.
+    val saved = settings.setupStep.split(':')
+    var stepName by rememberSaveable { mutableStateOf(saved[0].takeIf { s0 -> Step.entries.any { it.name == s0 } } ?: Step.LANGUAGE.name) }
     val step = Step.valueOf(stepName)
-    var whereName by rememberSaveable { mutableStateOf(Where.ASK.name) }
+    var whereName by rememberSaveable { mutableStateOf(saved.getOrNull(1)?.takeIf { w -> Where.entries.any { it.name == w } } ?: Where.ASK.name) }
     val where = Where.valueOf(whereName)
+    LaunchedEffect(step, where) { vm.rememberSetupStep("${step.name}:${where.name}") }
+    val comebacks by vm.comebacks.collectAsStateWithLifecycle()
     fun go(to: Step) { vm.stopSpeaking(); stepName = to.name }
     fun goWhere(to: Where) { vm.stopSpeaking(); whereName = to.name }
     fun back() {
@@ -150,7 +154,8 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
 
     // A new phone starts from its own language, if the app has it (the worker still chooses);
     // setup shown again after an update starts from the details already saved.
-    LaunchedEffect(Unit) { vm.suggestPhoneLanguage(); if (settings.onboarded) vm.startDraft() }
+    // Answers given before the app was put away come back too.
+    LaunchedEffect(Unit) { vm.suggestPhoneLanguage(); if (settings.onboarded || settings.setupStep.isNotEmpty()) vm.startDraft() }
 
     // Voice first: each question is asked aloud and the app then listens for the answer, with the
     // speech pack or, before it is in, the phone's own on-device recogniser. Typing is there too,
@@ -195,7 +200,8 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     /** What to do with a spoken answer: keep what was understood and say it back (null: not understood). */
     fun answer(st: Step, w: Where): (String) -> String? = when {
         // "mera naam Aditya hai" → "Aditya": only the name goes in the box.
-        st == Step.NAME -> { text -> SpokenDetails.name(text).take(60).also { n -> vm.editDraft { it.copy(name = n) } } }
+        // Then how to go on: "… To go on, press the yellow button at the bottom."
+        st == Step.NAME -> { text -> SpokenDetails.name(text).take(60).also { n -> vm.editDraft { it.copy(name = n) } }.let { "$it. ${s.guideNext}" } }
         w == Where.ASK -> { text ->
             when (Confirm.parse(text)) {
                 true -> { after = { goWhere(Where.LOCATION) }; "" }
@@ -231,7 +237,8 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
     val then: () -> Unit = { after?.let { a -> after = null; a() } }
     fun ask() { prompt(step, where, s)?.let { (key, text) -> after = null; vm.askAndListen(key, text, answer(step, where), then.takeIf { step == Step.PLACE }) } }
     val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted -> if (granted) ask() }
-    LaunchedEffect(step, where, settings.lang, sttReady) {
+    // Asked again each time the app comes back to the front.
+    LaunchedEffect(step, where, settings.lang, sttReady, comebacks) {
         val (key, text) = prompt(step, where, s) ?: return@LaunchedEffect
         val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
         when {
@@ -251,8 +258,8 @@ fun Onboarding(vm: AppViewModel, settings: Settings, s: Strings) {
         QrScannerScreen(s, accept = { com.acxelin.hisaabsaathi.core.AadhaarQr.read(it) != null }, onCode = scan.onCode, onPickPhoto = { scan.close(); scan.pickPhoto() }, onClose = scan.close)
         return
     }
-    // The language menu is said when the first screen opens.
-    LaunchedEffect(step) { if (step == Step.LANGUAGE) vm.playLanguageMenu() }
+    // The language menu is said when the first screen opens, and when the app comes back to it.
+    LaunchedEffect(step, comebacks) { if (step == Step.LANGUAGE) vm.playLanguageMenu() }
     // A language was pressed: on to the name once the choice is saved, so the next question is
     // asked in the language just chosen.
     var chosen by remember { mutableStateOf<Lang?>(null) }

@@ -113,6 +113,45 @@ class Strings(val lang: Lang) {
         "ହଁ କହିଲେ, ଆପଣ ଆପ୍‌କୁ ଯାହା କୁହନ୍ତି ତାହା ନାମ ବିନା ଟିମ୍‌କୁ ପଠାଯିବ। ସେଟିଂସ୍‌ରେ ଯେକୌଣସି ସମୟରେ ବନ୍ଦ କରିପାରିବେ।",
         "If you say yes, what you say to the app is sent to the team without your name. You can stop it any time in Settings.",
     )
+    // ---- spoken guides: on each screen the app says what is there and which button does what,
+    // by colour and place (many workers cannot read the labels).
+    val guideHome get() = t(
+        "बड़ा पीला बटन दबाकर आज का काम या खर्च बोलिए। बिल या पर्ची की फोटो के लिए उसके नीचे सफ़ेद बटन दबाइए। सबसे नीचे दूसरा बटन आपका खाता दिखाता है, और तीसरा कुल हिसाब।",
+        "ବଡ଼ ହଳଦିଆ ବଟନ୍ ଦବାଇ ଆଜିର କାମ ବା ଖର୍ଚ୍ଚ କୁହନ୍ତୁ। ବିଲ୍ ବା ସ୍ଲିପ୍‌ର ଫଟୋ ପାଇଁ ତା ତଳେ ଧଳା ବଟନ୍ ଦବାନ୍ତୁ। ସବୁଠୁ ତଳେ ଦ୍ୱିତୀୟ ବଟନ୍ ଆପଣଙ୍କ ଖାତା ଦେଖାଏ, ଆଉ ତୃତୀୟଟି ମୋଟ ହିସାବ।",
+        "Press the big yellow button and tell me today's work or spending. For a photo of a bill or slip, press the white button below it. At the very bottom, the second button shows your ledger, and the third your totals.",
+    )
+    val guideLedger get() = t(
+        "यह आपका खाता है, दिन के हिसाब से। किसी दिन को दबाकर उसकी लाइनें देखिए, और किसी लाइन को बदलने के लिए उसे दबाइए। वापस जाने के लिए सबसे नीचे पहला बटन दबाइए।",
+        "ଏହା ଆପଣଙ୍କ ଖାତା, ଦିନ ଅନୁସାରେ। କୌଣସି ଦିନକୁ ଦବାଇ ତାର ଧାଡ଼ି ଦେଖନ୍ତୁ, ଏବଂ କୌଣସି ଧାଡ଼ି ବଦଳାଇବାକୁ ତାକୁ ଦବାନ୍ତୁ। ଫେରିବାକୁ ସବୁଠୁ ତଳେ ପ୍ରଥମ ବଟନ୍ ଦବାନ୍ତୁ।",
+        "This is your ledger, day by day. Press a day to see its lines, and press a line to change it. To go back, press the first button at the very bottom.",
+    )
+    val guideSummary get() = t(
+        "यह आपका कुल हिसाब है। ऊपर आज, हफ्ता, महीना या साल चुनिए। सुनने के लिए पीला बटन दबाइए। वापस जाने के लिए सबसे नीचे पहला बटन दबाइए।",
+        "ଏହା ଆପଣଙ୍କ ମୋଟ ହିସାବ। ଉପରେ ଆଜି, ସପ୍ତାହ, ମାସ ବା ବର୍ଷ ବାଛନ୍ତୁ। ଶୁଣିବାକୁ ହଳଦିଆ ବଟନ୍ ଦବାନ୍ତୁ। ଫେରିବାକୁ ସବୁଠୁ ତଳେ ପ୍ରଥମ ବଟନ୍ ଦବାନ୍ତୁ।",
+        "These are your totals. At the top, choose today, week, month or year. To hear them, press the yellow button. To go back, press the first button at the very bottom.",
+    )
+    val guideType get() = t(
+        "बॉक्स में लिखिए, जैसे 120 पीस, 5 रुपये रेट। फिर नीचे पीला बटन दबाइए।",
+        "ବାକ୍ସରେ ଲେଖନ୍ତୁ, ଯେପରି 120 ପିସ୍, 5 ଟଙ୍କା ଦର। ତା ପରେ ତଳେ ହଳଦିଆ ବଟନ୍ ଦବାନ୍ତୁ।",
+        "Write in the box, like 120 pieces, rate 5 rupees. Then press the yellow button below.",
+    )
+    val guideReview get() = t(
+        "ये लाइनें देखिए। सही है तो हाँ बोलिए, या नीचे हरा बटन दबाइए। गलत है तो लाल बटन दबाइए।",
+        "ଏହି ଧାଡ଼ିଗୁଡ଼ିକ ଦେଖନ୍ତୁ। ଠିକ୍ ଥିଲେ ହଁ କୁହନ୍ତୁ, କିମ୍ବା ତଳେ ସବୁଜ ବଟନ୍ ଦବାନ୍ତୁ। ଭୁଲ୍ ଥିଲେ ନାଲି ବଟନ୍ ଦବାନ୍ତୁ।",
+        "Check these lines. If they are right, say yes, or press the green button at the bottom. If they are wrong, press the red button.",
+    )
+    val guideSettings get() = t(
+        "यह सेटिंग है। सबसे ऊपर भाषा बदल सकते हैं। आवाज़ भेजना बंद करने का बटन नीचे है। वापस जाने के लिए ऊपर बाईं ओर तीर दबाइए।",
+        "ଏହା ସେଟିଂସ୍। ସବୁଠୁ ଉପରେ ଭାଷା ବଦଳାଇ ପାରିବେ। ସ୍ୱର ପଠାଇବା ବନ୍ଦ କରିବା ବଟନ୍ ତଳେ ଅଛି। ଫେରିବାକୁ ଉପରେ ବାମ ପଟେ ତୀର ଦବାନ୍ତୁ।",
+        "These are the settings. At the top you can change the language. The switch to stop sending your voice is further down. To go back, press the arrow at the top left.",
+    )
+    val guideProfile get() = t(
+        "यह आपकी जानकारी है। बदलने के लिए नीचे पीला बटन दबाइए। वापस जाने के लिए ऊपर बाईं ओर तीर दबाइए।",
+        "ଏହା ଆପଣଙ୍କ ବିବରଣୀ। ବଦଳାଇବାକୁ ତଳେ ହଳଦିଆ ବଟନ୍ ଦବାନ୍ତୁ। ଫେରିବାକୁ ଉପରେ ବାମ ପଟେ ତୀର ଦବାନ୍ତୁ।",
+        "These are your details. To change them, press the yellow button at the bottom. To go back, press the arrow at the top left.",
+    )
+    val guideNext get() = t("आगे बढ़ने के लिए नीचे पीला बटन दबाइए।", "ଆଗକୁ ଯିବାକୁ ତଳେ ହଳଦିଆ ବଟନ୍ ଦବାନ୍ତୁ।", "To go on, press the yellow button at the bottom.")
+
     // "Help improve" is on by default: the worker is told once, on Home, aloud.
     val noticeTitle get() = t("आपकी आवाज़ से ऐप बेहतर बनता है", "ଆପଣଙ୍କ ସ୍ୱରରୁ ଆପ୍ ଉନ୍ନତ ହୁଏ", "Your voice helps improve the app")
     val noticeLine get() = t(

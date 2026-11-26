@@ -12,6 +12,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -63,7 +67,28 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge(statusBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT))
         if (intent?.getBooleanExtra(EXTRA_LISTEN, false) == true) vm.requestListen()
         setContent { Root(vm) }
+        // Nothing happening for a few seconds (the app silent, not listening, nobody touching):
+        // keep what is in progress and put the app away. It comes back where it was.
+        val idleMs = (application as com.acxelin.hisaabsaathi.HisaabApp).idleSeconds * 1000L
+        if (idleMs > 0) lifecycleScope.launch {
+            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.RESUMED) {
+                while (true) {
+                    kotlinx.coroutines.delay(250)
+                    if (vm.idleFor(System.currentTimeMillis(), idleMs)) { vm.wentAway(); moveTaskToBack(true) }
+                }
+            }
+        }
     }
+
+    /** Any touch or key is the worker doing something. */
+    override fun dispatchTouchEvent(ev: android.view.MotionEvent?): Boolean { vm.touched(); return super.dispatchTouchEvent(ev) }
+    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean { vm.touched(); return super.dispatchKeyEvent(event) }
+
+    /** Back in front: each screen says its guide again. */
+    override fun onStart() { super.onStart(); vm.cameBack() }
+
+    /** Leaving the front (put away, the worker left, or the camera opened): stop talking and listening, keep progress. */
+    override fun onStop() { super.onStop(); if (!isChangingConfigurations) vm.wentAway() }
 
     /** Tapped the reminder while the app was open: listen now. */
     override fun onNewIntent(intent: android.content.Intent) {
@@ -84,6 +109,10 @@ private fun Root(vm: AppViewModel) {
     // The welcome, each time the app opens (not again when the phone is turned).
     val app = LocalContext.current.applicationContext as com.acxelin.hisaabsaathi.HisaabApp
     var welcomed by rememberSaveable { mutableStateOf(!app.showWelcome) }
+    // While the keyboard is open the worker is typing: never put the app away then.
+    @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+    val keyboard = androidx.compose.foundation.layout.WindowInsets.isImeVisible
+    androidx.compose.runtime.LaunchedEffect(keyboard) { vm.keyboardOpen = keyboard }
     HisaabTheme(settings.lang) {
         if (!welcomed) WelcomeScreen(remember(settings.lang) { Strings(settings.lang) }) { welcomed = true }
         else Screens(vm, settings)
@@ -102,10 +131,12 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         return
     }
 
-    var tab by rememberSaveable { mutableIntStateOf(0) }
-    var showSettings by rememberSaveable { mutableStateOf(false) }
-    var showProfile by rememberSaveable { mutableStateOf(false) }
-    var typing by rememberSaveable { mutableStateOf(false) }
+    // Back where the worker was when the app was last put away.
+    val last = settings.lastScreen
+    var tab by rememberSaveable { mutableIntStateOf(when (last) { "ledger" -> 1; "summary" -> 2; else -> 0 }) }
+    var showSettings by rememberSaveable { mutableStateOf(last == "settings") }
+    var showProfile by rememberSaveable { mutableStateOf(last == "profile") }
+    var typing by rememberSaveable { mutableStateOf(last == "type") }
 
     // Microphone permission, asked the first time the mic is tapped.
     val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -155,13 +186,49 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         Unit
     }
     val onScan = { choosingPhoto = true }
+    // The photo choices are said too: "What is this a photo of? Bill, advance slip, …"
+    androidx.compose.runtime.LaunchedEffect(choosingPhoto) {
+        if (choosingPhoto) vm.speakGuide(s.photoWhat + " " + com.acxelin.hisaabsaathi.core.PhotoKind.entries.joinToString(", ") { s.photoKindName(it) } + ".")
+    }
     if (choosingPhoto) PhotoKindDialog(s, onDismiss = { choosingPhoto = false }) { k ->
         choosingPhoto = false
         pendingKind = k.name
         takePhoto()
     }
 
+    // Each screen says what is on it and which button does what: on arrival, and each time the
+    // app comes back to the front. Not when Home is reached from the confirm or typing screen
+    // (they have just said their own piece), nor over something already being said or heard.
     val review = capture as? Capture.Review
+    val screen = when {
+        review != null -> "review"
+        typing -> "type"
+        showProfile -> "profile"
+        showSettings -> "settings"
+        else -> listOf("home", "ledger", "summary")[tab]
+    }
+    androidx.compose.runtime.LaunchedEffect(screen) { if (screen != "review") vm.rememberScreen(screen) }
+    val comebacks by vm.comebacks.collectAsStateWithLifecycle()
+    val guided = remember { arrayOf("", "-1") } // screen and comeback last guided
+    androidx.compose.runtime.LaunchedEffect(screen, comebacks) {
+        val (lastScreen, lastBack) = guided
+        guided[0] = screen; guided[1] = comebacks.toString()
+        val returned = lastBack != comebacks.toString()
+        if (!returned && screen == "home" && lastScreen in setOf("review", "type")) return@LaunchedEffect
+        if (!returned && screen == "review") return@LaunchedEffect // the read-back says it
+        kotlinx.coroutines.delay(700)
+        if (!vm.isQuiet()) return@LaunchedEffect
+        if (screen != "review" && vm.capture.value != Capture.Idle) return@LaunchedEffect
+        vm.speakGuide(when (screen) {
+            "review" -> s.guideReview
+            "type" -> s.guideType
+            "profile" -> s.guideProfile
+            "settings" -> s.guideSettings
+            "ledger" -> s.guideLedger
+            "summary" -> s.guideSummary
+            else -> s.guideHome
+        })
+    }
     if (review != null) {
         BackHandler { vm.dismiss() }
         ReviewScreen(vm, review, s, onSpeakAnswer = onAnswer)
@@ -169,7 +236,8 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
     }
     if (typing) {
         BackHandler { typing = false }
-        TypeScreen(s, onBack = { typing = false }, onSubmit = { typing = false; vm.submitText(it) })
+        TypeScreen(s, onBack = { typing = false; vm.typedText = "" }, initial = vm.typedText, onChange = { vm.typedText = it },
+            onSubmit = { typing = false; vm.typedText = ""; vm.submitText(it) })
         return
     }
     if (showProfile) {

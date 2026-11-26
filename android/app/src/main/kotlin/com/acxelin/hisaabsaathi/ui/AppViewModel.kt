@@ -97,6 +97,87 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private val lang: Lang get() = settings.value?.lang ?: Lang.HI
 
     init { app.profile } // start reading the saved details now, so reports have them
+
+    // ---- the app talks, and puts itself away when nothing is happening
+
+    /** Bumped each time the app comes back to the front: each screen says its guide again. */
+    val comebacks = MutableStateFlow(0)
+    @Volatile private var lastTouchMs = System.currentTimeMillis()
+    @Volatile private var quietSinceMs = System.currentTimeMillis()
+    /** The keyboard is open: the worker is typing (keys typed there never reach the app's window). */
+    @Volatile var keyboardOpen = false
+    /** The text on the Type screen, kept if the app is put away. */
+    var typedText: String = ""
+
+    fun touched() { lastTouchMs = System.currentTimeMillis() }
+
+    /** Nothing is being said, played, heard or worked out. */
+    fun isQuiet(): Boolean =
+        !app.speaker.isSpeaking() && promptPlayer == null && !answering.value && !confirmListening.value &&
+            askJob?.isActive != true && !isBusy && !keyboardOpen &&
+            capture.value != Capture.Listening && capture.value != Capture.Thinking
+
+    /** Checked every quarter second while the app is in front: true when it should be put away now. */
+    fun idleFor(nowMs: Long, idleMs: Long): Boolean {
+        if (!isQuiet()) { quietSinceMs = nowMs; return false }
+        return nowMs - maxOf(lastTouchMs, quietSinceMs) >= idleMs
+    }
+
+    /** Says what is on this screen and which button does what. */
+    fun speakGuide(text: String) {
+        if (text.isBlank()) return
+        stopPrompt()
+        app.speaker.speak(text, lang)
+    }
+
+    /**
+     * The app is going to the background (put away when idle, or the worker left): stop speaking
+     * and listening, and keep what is in progress (lines waiting for a yes, typed text, setup
+     * answers) to show again. Nothing unconfirmed is written into the ledger.
+     */
+    fun wentAway() {
+        askJob?.cancel(); askJob = null
+        stopPrompt(); app.speaker.stop()
+        app.stt.stop(); app.systemStt.stop()
+        val review = capture.value as? Capture.Review
+        val pending = review?.let { com.acxelin.hisaabsaathi.core.PendingReview(it.transcript, it.drafts, it.source, it.attachment, it.lowConfidence).encode() }.orEmpty()
+        val typed = typedText
+        val setupDraft = draft.value.takeIf { settings.value?.needsSetup == true }
+        app.scope.launch {
+            runCatching {
+                app.settings.setProgress(typed, pending)
+                if (setupDraft != null) app.profile.save(setupDraft)
+            }
+        }
+    }
+
+    /** The app is in front again. What was kept for it is live again here, so the stored copy goes. */
+    fun cameBack() {
+        touched(); quietSinceMs = System.currentTimeMillis(); comebacks.value++
+        if (restored) app.scope.launch { runCatching { app.settings.setProgress("", "") } }
+    }
+
+    /** What was kept when the app was last put away has been read back (see init). */
+    @Volatile private var restored = false
+
+    fun rememberScreen(name: String) = app.scope.launch { runCatching { app.settings.setLastScreen(name) } }
+    fun rememberSetupStep(step: String) = app.scope.launch { runCatching { app.settings.setSetupStep(step) } }
+
+    init {
+        // What was in progress when the app was last put away comes back: the lines waiting for
+        // a yes (still unsaved), and what was being typed.
+        viewModelScope.launch {
+            val st = runCatching { app.settings.flow.first() }.getOrNull() ?: return@launch
+            typedText = st.typedText
+            com.acxelin.hisaabsaathi.core.PendingReview.decode(st.pendingReview)?.let { p ->
+                if (capture.value == Capture.Idle && p.drafts.isNotEmpty())
+                    capture.value = Capture.Review(p.transcript, p.drafts, p.lowConfidence, p.source, p.attachment)
+            }
+            // Written off the main thread (DataStore writes from it can stall the app's tests).
+            if (st.pendingReview.isNotEmpty() || st.typedText.isNotEmpty()) app.scope.launch { runCatching { app.settings.setProgress("", "") } }
+            restored = true
+        }
+    }
     private val strings: Strings get() = Strings(lang)
 
     val slmPack: Pack get() = Catalog.slmHisaab

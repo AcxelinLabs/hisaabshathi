@@ -40,6 +40,7 @@ enum class PhotoKind(val entryType: EntryType?) {
 }
 
 /** One line the worker is about to confirm. Money is in paise. */
+@kotlinx.serialization.Serializable
 data class DraftEntry(
     val type: EntryType,
     val amountPaise: Long,
@@ -143,5 +144,25 @@ object Money {
         if (whole.length <= 3) return plain
         val head = whole.dropLast(3).reversed().chunked(2).joinToString(",").reversed()
         return (if (neg) "-" else "") + head + "," + whole.takeLast(3) + frac
+    }
+}
+
+/**
+ * Lines waiting for the worker's yes when the app was put away (5 s with nothing happening, or the
+ * worker left): kept on the phone and shown again, unsaved, when the app is opened.
+ */
+@kotlinx.serialization.Serializable
+data class PendingReview(
+    val transcript: String,
+    val drafts: List<DraftEntry>,
+    val source: String,
+    val attachment: String? = null,
+    val lowConfidence: Boolean = false,
+) {
+    fun encode(): String = json.encodeToString(serializer(), this)
+
+    companion object {
+        private val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true; encodeDefaults = true }
+        fun decode(text: String): PendingReview? = runCatching { json.decodeFromString(serializer(), text) }.getOrNull()
     }
 }

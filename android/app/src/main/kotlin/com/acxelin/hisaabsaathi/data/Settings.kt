@@ -27,6 +27,14 @@ data class Settings(
     val share: Boolean? = true,
     /** The worker has been told, once, that their voice clips are sent and how to stop it. */
     val shareNoticed: Boolean = false,
+    /** Where the worker was when the app was last put away: "home", "ledger", "summary", "settings", "profile", "type". */
+    val lastScreen: String = "home",
+    /** Setup's step when it was put away: "LANGUAGE", "NAME", "PLACE:STATE"… */
+    val setupStep: String = "",
+    /** What was being typed (Type screen) when the app was put away. */
+    val typedText: String = "",
+    /** Lines waiting for a yes when the app was put away ([com.acxelin.hisaabsaathi.core.PendingReview]), or "". */
+    val pendingReview: String = "",
     /** How many exchanges this install has sent. */
     val sharedCount: Int = 0,
     /** The version of setup last finished (see [SETUP_VERSION]). */
@@ -66,6 +74,10 @@ class SettingsStore(private val context: Context) {
     private val firstUse = longPreferencesKey("first_use_day")
     private val shareAskAfter = longPreferencesKey("share_ask_after_day")
     private val shareNoticed = booleanPreferencesKey("share_noticed")
+    private val lastScreen = stringPreferencesKey("last_screen")
+    private val setupStep = stringPreferencesKey("setup_step")
+    private val typedText = stringPreferencesKey("typed_text")
+    private val pendingReview = stringPreferencesKey("pending_review")
     private val usage = stringPreferencesKey("usage_counts")
     private val usageDay = longPreferencesKey("usage_last_day")
 
@@ -79,6 +91,10 @@ class SettingsStore(private val context: Context) {
             // On by default; off only when the worker turned it off.
             share = it[share] != false,
             shareNoticed = it[shareNoticed] ?: false,
+            lastScreen = it[lastScreen] ?: "home",
+            setupStep = it[setupStep] ?: "",
+            typedText = it[typedText] ?: "",
+            pendingReview = it[pendingReview] ?: "",
             sharedCount = it[sharedCount] ?: 0,
             setupDone = it[setupDone] ?: 0,
             firstUseDay = it[firstUse] ?: 0,
@@ -105,6 +121,11 @@ class SettingsStore(private val context: Context) {
         it[shareNoticed] = true
         if (v) it[shareConsent] = Improve.CONSENT_VERSION else { it.remove(usage); it.remove(usageDay) }
     }
+
+    suspend fun setLastScreen(v: String) = context.dataStore.edit { it[lastScreen] = v }
+    suspend fun setSetupStep(v: String) = context.dataStore.edit { it[setupStep] = v }
+    /** What was in progress when the app was put away; "" clears it. */
+    suspend fun setProgress(typed: String, review: String) = context.dataStore.edit { it[typedText] = typed; it[pendingReview] = review }
 
     /** The worker heard and saw the notice, and left it on. */
     suspend fun setShareNoticed() = context.dataStore.edit { it[shareNoticed] = true }

@@ -332,6 +332,12 @@ class Speaker(context: Context, private val packs: com.acxelin.hisaabsaathi.mode
 
     fun canSpeak(lang: Lang): Boolean = voiceDir(lang) != null || systemCanSpeak(lang)
 
+    /** Something is being said right now (the app's voice or the phone's). */
+    fun isSpeaking(): Boolean =
+        job?.isActive == true || spoken?.isCompleted == false ||
+            runCatching { player?.isPlaying == true }.getOrDefault(false) ||
+            (ready && runCatching { tts.isSpeaking }.getOrDefault(false))
+
     /**
      * Speaks [text] with the app's own voice when it is installed, else the phone's. Long text is
      * spoken sentence by sentence: the first sentence starts within a second or two and the

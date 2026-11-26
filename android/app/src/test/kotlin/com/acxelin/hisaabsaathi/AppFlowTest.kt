@@ -42,6 +42,9 @@ class TestApp : HisaabApp() {
     /** Tests start on the app itself; the welcome has its own test. */
     override val showWelcome: Boolean = false
 
+    /** Tests drive the screens slowly: never put the app away by itself (IdleTest checks that logic). */
+    override val idleSeconds: Int = 0
+
     /** What the worker "says", one answer per listen, while [heard] has any (else no speech engine, as before). */
     override val testListener: (suspend () -> com.acxelin.hisaabsaathi.speech.Heard)?
         get() = if (heard.isEmpty()) null else ({ heard.removeFirstOrNull()?.let { com.acxelin.hisaabsaathi.speech.Heard.Text(it) } ?: com.acxelin.hisaabsaathi.speech.Heard.Silence })
@@ -71,14 +74,18 @@ class TestApp : HisaabApp() {
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = TestApp::class, qualifiers = "w360dp-h780dp-xxhdpi")
 class AppFlowTest {
-    @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+    val rule = createAndroidComposeRule<MainActivity>()
 
-    /** Each test starts from a new install: settings outlive one test in the same process. */
-    @org.junit.Before fun newInstall() {
-        val app = rule.activity.application as HisaabApp
-        kotlinx.coroutines.runBlocking { app.settings.clear(); app.profile.clear() }
-        pump()
-    }
+    /**
+     * Each test starts from a new install, before the app opens: settings (and the screen and
+     * setup step the app remembers) outlive one test in the same process.
+     */
+    @get:Rule val newInstall: org.junit.rules.RuleChain = org.junit.rules.RuleChain.outerRule(object : org.junit.rules.ExternalResource() {
+        override fun before() {
+            val app = androidx.test.core.app.ApplicationProvider.getApplicationContext<TestApp>()
+            kotlinx.coroutines.runBlocking { app.settings.clear(); app.profile.clear() }
+        }
+    }).around(rule)
 
     private fun shot(name: String) = rule.onRoot().captureRoboImage("build/screens/$name.png")
 

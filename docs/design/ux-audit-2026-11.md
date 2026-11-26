@@ -96,6 +96,21 @@ Typing had crept in as an equal choice. A worker who reads little should never n
   borrowed. About 30 everyday foods and three meals are covered in all six languages
   (`core/Items.kt`).
 
+## Fifth pass: the app talks the worker through every screen
+
+- **Every screen says what is on it and which button does what,** by colour and place, because
+  many workers can't read the labels. Home: "Press the big yellow button and tell me today's
+  work… the second button at the very bottom shows your ledger." The confirm screen says to say
+  yes or press the green button, or press the red one. The photo choices are read out too. The
+  guide plays on arrival and again whenever the app comes back to the front. It doesn't play
+  over something already being said, or when Home is reached from the confirm screen.
+- **Five seconds with nothing happening puts the app away.** "Nothing happening" means the app
+  is silent, not listening or thinking, nobody is touching the screen and the keyboard is
+  closed. Recording and speech stop, and what is in progress is kept: lines waiting for a yes
+  (never saved unconfirmed), typed text, the setup step and its answers.
+- **It comes back where it was.** Same screen, same unconfirmed lines, same setup question,
+  asked again aloud.
+
 ## Why it looked generic
 
 The things that made the app look like a template rather than a ledger built for one job:

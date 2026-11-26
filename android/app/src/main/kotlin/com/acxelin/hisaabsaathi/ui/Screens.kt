@@ -250,8 +250,9 @@ private fun ShareCard(vm: AppViewModel, s: Strings) {
  * it, the letters are large, and the button stays just above the keyboard.
  */
 @Composable
-fun TypeScreen(s: Strings, onBack: () -> Unit, onSubmit: (String) -> Unit) {
-    var text by rememberSaveable { mutableStateOf("") }
+fun TypeScreen(s: Strings, onBack: () -> Unit, initial: String = "", onChange: (String) -> Unit = {}, onSubmit: (String) -> Unit) {
+    var text by rememberSaveable { mutableStateOf(initial) }
+    androidx.compose.runtime.LaunchedEffect(text) { onChange(text) }
     val focus = remember { androidx.compose.ui.focus.FocusRequester() }
     androidx.compose.runtime.LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
     Column(
