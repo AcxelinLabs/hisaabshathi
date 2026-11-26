@@ -37,21 +37,51 @@ class IdleTest {
 
     @Before fun fresh() { runBlocking { app.settings.clear() } }
 
-    @Test fun quietForFiveSecondsMeansPutAway() {
+    @Test fun quietMeansWarnedThenPutAway() {
         val vm = AppViewModel(app)
         val now = System.currentTimeMillis()
         vm.touched()
-        assertFalse("just touched", vm.idleFor(now + 1_000, 5_000))
-        assertTrue("five quiet seconds", vm.idleFor(now + 6_000, 5_000))
-        // Listening is not idle, however long it takes; the five seconds start again after it.
+        assertEquals(AppViewModel.IdleStep.NOTHING, vm.idleTick(now + 1_000, 5_000, 30_000))
+        // Five quiet seconds: first it says it is closing (and shows it), then, untouched, it goes.
+        assertEquals(AppViewModel.IdleStep.WARN, vm.idleTick(now + 6_000, 5_000, 30_000))
+        assertTrue(vm.closingSoon.value)
+        assertEquals(AppViewModel.IdleStep.NOTHING, vm.idleTick(now + 6_500, 5_000, 30_000))
+        assertEquals(AppViewModel.IdleStep.PUT_AWAY, vm.idleTick(now + 10_000, 5_000, 30_000))
+        assertFalse(vm.closingSoon.value)
+    }
+
+    @Test fun aTouchKeepsItOpen() {
+        val vm = AppViewModel(app)
+        val now = System.currentTimeMillis()
+        assertEquals(AppViewModel.IdleStep.WARN, vm.idleTick(now + 6_000, 5_000, 30_000))
+        vm.touched()
+        assertFalse(vm.closingSoon.value)
+        // The five seconds start again from the touch.
+        val touched = System.currentTimeMillis()
+        assertEquals(AppViewModel.IdleStep.NOTHING, vm.idleTick(touched + 500, 5_000, 30_000))
+        assertEquals(AppViewModel.IdleStep.NOTHING, vm.idleTick(touched + 4_000, 5_000, 30_000))
+        assertEquals(AppViewModel.IdleStep.WARN, vm.idleTick(touched + 5_500, 5_000, 30_000))
+    }
+
+    @Test fun readingScreensAndPopUpsWaitLonger() {
+        val vm = AppViewModel(app)
+        val now = System.currentTimeMillis()
+        vm.touched()
+        vm.readingScreen = true
+        assertEquals(AppViewModel.IdleStep.NOTHING, vm.idleTick(now + 20_000, 5_000, 30_000))
+        assertEquals(AppViewModel.IdleStep.WARN, vm.idleTick(now + 31_000, 5_000, 30_000))
+        vm.touched(); vm.readingScreen = false; vm.dialogOpen = true
+        assertEquals(AppViewModel.IdleStep.NOTHING, vm.idleTick(System.currentTimeMillis() + 20_000, 5_000, 30_000))
+    }
+
+    @Test fun listeningOrTypingIsNeverIdle() {
+        val vm = AppViewModel(app)
+        val now = System.currentTimeMillis()
         vm.capture.value = Capture.Listening
-        assertFalse(vm.idleFor(now + 20_000, 5_000))
+        assertEquals(AppViewModel.IdleStep.NOTHING, vm.idleTick(now + 60_000, 5_000, 30_000))
         vm.capture.value = Capture.Idle
-        assertFalse(vm.idleFor(now + 21_000, 5_000))
-        assertTrue(vm.idleFor(now + 26_500, 5_000))
-        // Typing (keyboard open) is not idle either.
         vm.keyboardOpen = true
-        assertFalse(vm.idleFor(now + 60_000, 5_000))
+        assertEquals(AppViewModel.IdleStep.NOTHING, vm.idleTick(now + 120_000, 5_000, 30_000))
     }
 
     @Test fun linesWaitingForAYesComeBackUnsaved() {

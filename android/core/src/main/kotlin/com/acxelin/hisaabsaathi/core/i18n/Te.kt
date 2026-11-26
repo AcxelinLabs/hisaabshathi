@@ -334,6 +334,8 @@ internal object Te {
         "These are the settings. At the top you can change the language. The switch to stop sending your voice is further down. To go back, press the arrow at the top left." to "ఇవి సెట్టింగ్స్. పైన భాష మార్చవచ్చు. మీ గొంతు పంపడం ఆపే స్విచ్ కింద ఉంది. వెనక్కి వెళ్ళడానికి పైన ఎడమవైపు బాణం నొక్కండి.",
         "These are your details. To change them, press the yellow button at the bottom. To go back, press the arrow at the top left." to "ఇవి మీ వివరాలు. మార్చడానికి కింద పసుపు బటన్ నొక్కండి. వెనక్కి వెళ్ళడానికి పైన ఎడమవైపు బాణం నొక్కండి.",
         "To go on, press the yellow button at the bottom." to "ముందుకు వెళ్ళడానికి కింద పసుపు బటన్ నొక్కండి.",
+        "I'll close now. Open me again to carry on from here." to "నేను ఇప్పుడు మూసుకుంటున్నాను. మళ్ళీ తెరిస్తే ఇక్కడి నుంచే మొదలవుతుంది.",
+        "Touch the screen to stay." to "ఉండాలంటే స్క్రీన్ తాకండి.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

@@ -320,6 +320,8 @@ internal object Ta {
         "These are the settings. At the top you can change the language. The switch to stop sending your voice is further down. To go back, press the arrow at the top left." to "இவை செட்டிங்ஸ். மேலே மொழியை மாற்றலாம். உங்கள் குரலை அனுப்புவதை நிறுத்தும் சுவிட்ச் கீழே உள்ளது. திரும்பிச் செல்ல மேலே இடதுபுற அம்புக்குறியை அழுத்துங்கள்.",
         "These are your details. To change them, press the yellow button at the bottom. To go back, press the arrow at the top left." to "இவை உங்கள் விவரங்கள். மாற்ற கீழே மஞ்சள் பட்டனை அழுத்துங்கள். திரும்பிச் செல்ல மேலே இடதுபுற அம்புக்குறியை அழுத்துங்கள்.",
         "To go on, press the yellow button at the bottom." to "தொடர கீழே மஞ்சள் பட்டனை அழுத்துங்கள்.",
+        "I'll close now. Open me again to carry on from here." to "நான் இப்போது மூடுகிறேன். மீண்டும் திறந்தால் இங்கிருந்தே தொடரும்.",
+        "Touch the screen to stay." to "தொடர திரையைத் தொடுங்கள்.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

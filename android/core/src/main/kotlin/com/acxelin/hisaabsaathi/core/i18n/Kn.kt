@@ -332,6 +332,8 @@ internal object Kn {
         "These are the settings. At the top you can change the language. The switch to stop sending your voice is further down. To go back, press the arrow at the top left." to "ಇವು ಸೆಟ್ಟಿಂಗ್ಸ್. ಮೇಲೆ ಭಾಷೆ ಬದಲಿಸಬಹುದು. ನಿಮ್ಮ ಧ್ವನಿ ಕಳುಹಿಸುವುದನ್ನು ನಿಲ್ಲಿಸುವ ಸ್ವಿಚ್ ಕೆಳಗೆ ಇದೆ. ಹಿಂದಕ್ಕೆ ಹೋಗಲು ಮೇಲೆ ಎಡಭಾಗದ ಬಾಣ ಒತ್ತಿ.",
         "These are your details. To change them, press the yellow button at the bottom. To go back, press the arrow at the top left." to "ಇವು ನಿಮ್ಮ ವಿವರಗಳು. ಬದಲಿಸಲು ಕೆಳಗಿನ ಹಳದಿ ಬಟನ್ ಒತ್ತಿ. ಹಿಂದಕ್ಕೆ ಹೋಗಲು ಮೇಲೆ ಎಡಭಾಗದ ಬಾಣ ಒತ್ತಿ.",
         "To go on, press the yellow button at the bottom." to "ಮುಂದೆ ಹೋಗಲು ಕೆಳಗಿನ ಹಳದಿ ಬಟನ್ ಒತ್ತಿ.",
+        "I'll close now. Open me again to carry on from here." to "ನಾನು ಈಗ ಮುಚ್ಚಿಕೊಳ್ಳುತ್ತಿದ್ದೇನೆ. ಮತ್ತೆ ತೆರೆದರೆ ಇಲ್ಲಿಂದಲೇ ಶುರುವಾಗುತ್ತದೆ.",
+        "Touch the screen to stay." to "ಇರಬೇಕಾದರೆ ಪರದೆ ಮುಟ್ಟಿ.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

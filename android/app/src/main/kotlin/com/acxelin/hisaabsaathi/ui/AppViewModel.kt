@@ -109,7 +109,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     /** The text on the Type screen, kept if the app is put away. */
     var typedText: String = ""
 
-    fun touched() { lastTouchMs = System.currentTimeMillis() }
+    fun touched() { lastTouchMs = System.currentTimeMillis(); if (closingSoon.value) cancelClosing() }
 
     /** Nothing is being said, played, heard or worked out. */
     fun isQuiet(): Boolean =
@@ -117,10 +117,46 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             askJob?.isActive != true && !isBusy && !keyboardOpen &&
             capture.value != Capture.Listening && capture.value != Capture.Thinking
 
-    /** Checked every quarter second while the app is in front: true when it should be put away now. */
-    fun idleFor(nowMs: Long, idleMs: Long): Boolean {
-        if (!isQuiet()) { quietSinceMs = nowMs; return false }
-        return nowMs - maxOf(lastTouchMs, quietSinceMs) >= idleMs
+    /** The screen is one made for reading (ledger, summary, settings, profile): the longer wait. */
+    @Volatile var readingScreen = false
+    /** A pop-up is open (taps inside it never reach the app's window): the longer wait. */
+    @Volatile var dialogOpen = false
+
+    /** "I'll close now… touch the screen to stay" is showing (and being said). */
+    val closingSoon = MutableStateFlow(false)
+    @Volatile private var warnedAtMs = 0L
+    @Volatile private var warnSaidAtMs = 0L
+
+    enum class IdleStep { NOTHING, WARN, PUT_AWAY }
+
+    /**
+     * Checked every quarter second while the app is in front. Quiet for [shortMs] (or [longMs] on a
+     * reading screen or with a pop-up open): say "I'll close now… touch the screen to stay" (WARN).
+     * Untouched for 3 s after it has been said: put the app away (PUT_AWAY). Any touch cancels.
+     */
+    fun idleTick(nowMs: Long, shortMs: Long, longMs: Long): IdleStep {
+        if (warnedAtMs > 0) {
+            if (lastTouchMs > warnedAtMs) { cancelClosing(); quietSinceMs = nowMs; return IdleStep.NOTHING }
+            if (app.speaker.isSpeaking()) { warnSaidAtMs = 0; return IdleStep.NOTHING }
+            if (warnSaidAtMs == 0L) warnSaidAtMs = nowMs
+            if (nowMs - warnSaidAtMs < CLOSE_AFTER_WARNING_MS) return IdleStep.NOTHING
+            warnedAtMs = 0; closingSoon.value = false
+            return IdleStep.PUT_AWAY
+        }
+        if (!isQuiet()) { quietSinceMs = nowMs; return IdleStep.NOTHING }
+        val limit = if (readingScreen || dialogOpen) longMs else shortMs
+        if (nowMs - maxOf(lastTouchMs, quietSinceMs) < limit) return IdleStep.NOTHING
+        warnedAtMs = nowMs; warnSaidAtMs = 0
+        closingSoon.value = true
+        stopPrompt()
+        app.speaker.speak(strings.closingSoon + " " + strings.touchToStay, lang)
+        return IdleStep.WARN
+    }
+
+    private fun cancelClosing() {
+        if (warnedAtMs == 0L && !closingSoon.value) return
+        warnedAtMs = 0; warnSaidAtMs = 0; closingSoon.value = false
+        app.speaker.stop()
     }
 
     /** Says what is on this screen and which button does what. */
@@ -153,6 +189,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     /** The app is in front again. What was kept for it is live again here, so the stored copy goes. */
     fun cameBack() {
+        warnedAtMs = 0; closingSoon.value = false
         touched(); quietSinceMs = System.currentTimeMillis(); comebacks.value++
         if (restored) app.scope.launch { runCatching { app.settings.setProgress("", "") } }
     }
@@ -1220,6 +1257,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private companion object {
+        /** After "I'll close now" has been said, this long for a touch before the app goes. */
+        const val CLOSE_AFTER_WARNING_MS = 3_000L
         const val MAX_BACKUP_BYTES = 20 * 1024 * 1024
         const val SHARE_ASK_AFTER_DAYS = 3
         const val SHARE_ASK_AFTER_LINES = 3

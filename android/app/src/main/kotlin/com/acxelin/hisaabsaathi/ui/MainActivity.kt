@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.isImeVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -69,12 +70,17 @@ class MainActivity : ComponentActivity() {
         setContent { Root(vm) }
         // Nothing happening for a few seconds (the app silent, not listening, nobody touching):
         // keep what is in progress and put the app away. It comes back where it was.
-        val idleMs = (application as com.acxelin.hisaabsaathi.HisaabApp).idleSeconds * 1000L
+        // Before it goes, it says so ("I'll close now… touch the screen to stay") and waits a moment.
+        val app = application as com.acxelin.hisaabsaathi.HisaabApp
+        val idleMs = app.idleSeconds * 1000L
+        val readingMs = app.readingIdleSeconds * 1000L
         if (idleMs > 0) lifecycleScope.launch {
             repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.RESUMED) {
                 while (true) {
                     kotlinx.coroutines.delay(250)
-                    if (vm.idleFor(System.currentTimeMillis(), idleMs)) { vm.wentAway(); moveTaskToBack(true) }
+                    if (vm.idleTick(System.currentTimeMillis(), idleMs, readingMs) == AppViewModel.IdleStep.PUT_AWAY) {
+                        vm.wentAway(); moveTaskToBack(true)
+                    }
                 }
             }
         }
@@ -115,7 +121,12 @@ private fun Root(vm: AppViewModel) {
     androidx.compose.runtime.LaunchedEffect(keyboard) { vm.keyboardOpen = keyboard }
     HisaabTheme(settings.lang) {
         if (!welcomed) WelcomeScreen(remember(settings.lang) { Strings(settings.lang) }) { welcomed = true }
-        else Screens(vm, settings)
+        else Box(Modifier.fillMaxSize()) {
+            Screens(vm, settings)
+            // "I'll close now… touch the screen to stay", on screen too (some phones have no voice for the language).
+            val closing by vm.closingSoon.collectAsStateWithLifecycle()
+            if (closing) ClosingBanner(remember(settings.lang) { Strings(settings.lang) }, Modifier.align(androidx.compose.ui.Alignment.Center))
+        }
     }
 }
 
@@ -207,7 +218,11 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         showSettings -> "settings"
         else -> listOf("home", "ledger", "summary")[tab]
     }
-    androidx.compose.runtime.LaunchedEffect(screen) { if (screen != "review") vm.rememberScreen(screen) }
+    androidx.compose.runtime.LaunchedEffect(screen) {
+        if (screen != "review") vm.rememberScreen(screen)
+        vm.readingScreen = screen in setOf("ledger", "summary", "settings", "profile")
+    }
+    androidx.compose.runtime.LaunchedEffect(choosingPhoto) { vm.dialogOpen = choosingPhoto }
     val comebacks by vm.comebacks.collectAsStateWithLifecycle()
     val guided = remember { arrayOf("", "-1") } // screen and comeback last guided
     androidx.compose.runtime.LaunchedEffect(screen, comebacks) {
@@ -310,3 +325,20 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         }
     }
 }
+
+/** Shown while the app says it is about to close: a touch anywhere keeps it open. */
+@Composable
+private fun ClosingBanner(s: Strings, modifier: Modifier = Modifier) {
+    androidx.compose.foundation.layout.Column(
+        modifier.padding(24.dp).androidx_background(),
+        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+    ) {
+        Text(s.closingSoon, color = Color.White, fontSize = 20.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center, lineHeight = 26.sp)
+        Text(s.touchToStay, color = Marigold, fontSize = 18.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.padding(top = 8.dp))
+    }
+}
+
+private fun Modifier.androidx_background(): Modifier =
+    this.background(Ink, androidx.compose.foundation.shape.RoundedCornerShape(14.dp)).padding(horizontal = 22.dp, vertical = 18.dp)

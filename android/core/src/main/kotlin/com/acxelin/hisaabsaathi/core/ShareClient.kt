@@ -32,7 +32,11 @@ interface ShareServer {
  *
  * Plain FTP is not used: it sends files and passwords unencrypted.
  */
-class ShareClient(baseUrl: String, private val timeoutMs: Int = 30_000) : ShareServer {
+/**
+ * [timeoutMs] is long on purpose: the service sleeps when idle and waking it takes about 45 s
+ * (Azure starting the container), so a 30 s limit failed the first upload after each quiet spell.
+ */
+class ShareClient(baseUrl: String, private val timeoutMs: Int = 90_000) : ShareServer {
     data class Install(val installId: String, val token: String)
 
     /** The service refused (4xx): retrying the same request will not help. 401 means the token is unknown. */
