@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi.apk"><img src="docs/brand/download-app.png" alt="Download HisaabSaathi: v0.9.10, Android 10+" height="72"></a>
+  <a href="https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi.apk"><img src="docs/brand/download-app.png" alt="Download HisaabSaathi: v0.9.11, Android 10+" height="72"></a>
 </p>
 
 <p align="center">
