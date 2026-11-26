@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi.apk"><img src="docs/brand/new-button.png" alt="Download HisaabSaathi: v0.9.11, Android 10+" height="72"></a>
+  <a href="https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/HisaabSaathi.apk"><img src="docs/brand/new-button.png" alt="Download HisaabSaathi: v0.9.12, Android 10+" height="72"></a>
 </p>
 
 <p align="center">
@@ -65,17 +65,18 @@ district, offline.
   never go to a server or a cloud backup.
 - Speech recognition, understanding and the reply voices all run **on the phone**.
 - There are no accounts, no ads and no tracking. Only the worker sees their records.
-- **Nothing is uploaded unless the worker agrees.** The app sends nothing by itself except what
-  the worker said yes to below.
-- **Help improve HisaabSaathi** is asked once, on Home, after the worker has used the app for a
-  few days, never during setup. It can be read aloud, and nothing is chosen for the worker. Only if they say yes, two things are sent to the team over Wi-Fi:
-  - each time they speak or type to the app, their voice clip, what the app heard, and what it
+- **Help improve HisaabSaathi is on by default.** The first time Home opens, the app says so aloud
+  and on a card: what is sent, what never is, and how to turn it off ("Turn off" sits beside "OK",
+  and the switch is in Settings). While it is on, two things are sent to the team over Wi-Fi:
+  - each time they speak or type to the app, their voice clip (recording stops after 3 seconds
+    of silence, and silences are cut out before sending), what the app heard, and what it
     understood and answered;
   - once a week, counts: how many entries were saved and how often the app got one wrong.
     These are numbers only.
 - **What protects what they share:**
-  - nothing carries their name or phone number, and anything containing a phone, Aadhaar or bank
-    number is never kept;
+  - nothing carries their name or phone number: anything that contains their name, a phone,
+    Aadhaar or bank number, a UPI id or an email is never kept, voice clip included, and setup
+    answers are never recorded;
   - each upload is encrypted on the phone, so only the team's training pipeline can open it;
   - it stays in the team's Azure account in India, from upload to training;
   - they can turn it off in Settings, which deletes what is still waiting, or have everything

@@ -21,10 +21,12 @@ data class Settings(
     val reminders: Boolean = true,
     val monthlyGoalPaise: Long = 0,
     /**
-     * The worker's answer to "help improve HisaabSaathi?": null until asked (at setup, or once
-     * after updating), then their choice. Only true sends anything.
+     * "Help improve HisaabSaathi": on unless the worker turned it off (Settings, or the card
+     * that tells them about it). Only true records and sends anything.
      */
-    val share: Boolean? = null,
+    val share: Boolean? = true,
+    /** The worker has been told, once, that their voice clips are sent and how to stop it. */
+    val shareNoticed: Boolean = false,
     /** How many exchanges this install has sent. */
     val sharedCount: Int = 0,
     /** The version of setup last finished (see [SETUP_VERSION]). */
@@ -63,6 +65,7 @@ class SettingsStore(private val context: Context) {
     private val pendingDeletes = stringSetPreferencesKey("pending_deletes")
     private val firstUse = longPreferencesKey("first_use_day")
     private val shareAskAfter = longPreferencesKey("share_ask_after_day")
+    private val shareNoticed = booleanPreferencesKey("share_noticed")
     private val usage = stringPreferencesKey("usage_counts")
     private val usageDay = longPreferencesKey("usage_last_day")
 
@@ -73,8 +76,9 @@ class SettingsStore(private val context: Context) {
             onboarded = it[onboarded] ?: false,
             reminders = it[reminders] ?: true,
             monthlyGoalPaise = it[goal] ?: 0,
-            // A yes counts only for the question as it was then: a newer question is asked again.
-            share = it[share]?.let { yes -> if (yes && (it[shareConsent] ?: 1) < Improve.CONSENT_VERSION) null else yes },
+            // On by default; off only when the worker turned it off.
+            share = it[share] != false,
+            shareNoticed = it[shareNoticed] ?: false,
             sharedCount = it[sharedCount] ?: 0,
             setupDone = it[setupDone] ?: 0,
             firstUseDay = it[firstUse] ?: 0,
@@ -98,14 +102,18 @@ class SettingsStore(private val context: Context) {
     /** Saying no (or turning it off) also drops the weekly counts not yet sent. */
     suspend fun setShare(v: Boolean) = context.dataStore.edit {
         it[share] = v
+        it[shareNoticed] = true
         if (v) it[shareConsent] = Improve.CONSENT_VERSION else { it.remove(usage); it.remove(usageDay) }
     }
+
+    /** The worker heard and saw the notice, and left it on. */
+    suspend fun setShareNoticed() = context.dataStore.edit { it[shareNoticed] = true }
 
     // ---- weekly counts (core/Usage.kt), only while the worker's yes covers them
 
     /** Counts [events] for this week, and the day as a day the app was used. Nothing without consent. */
     suspend fun countUsage(today: java.time.LocalDate, vararg events: String) = context.dataStore.edit {
-        if (it[share] != true || (it[shareConsent] ?: 1) < Improve.COUNTS_FROM_CONSENT) return@edit
+        if (it[share] == false) return@edit
         val week = com.acxelin.hisaabsaathi.core.Usage.week(today)
         var store = com.acxelin.hisaabsaathi.core.Usage.read(it[usage])
         for (e in events) store = com.acxelin.hisaabsaathi.core.Usage.add(store, week, e)
@@ -119,8 +127,8 @@ class SettingsStore(private val context: Context) {
     /** Finished weeks waiting to be sent. */
     suspend fun usageToSend(today: java.time.LocalDate, appVersion: String): List<com.acxelin.hisaabsaathi.core.WeekCounts> =
         context.dataStore.data.first().let { p ->
-            if (p[share] != true) emptyList()
-            else com.acxelin.hisaabsaathi.core.Usage.finished(com.acxelin.hisaabsaathi.core.Usage.read(p[usage]), today, p[shareConsent] ?: 1, appVersion)
+            if (p[share] == false) emptyList()
+            else com.acxelin.hisaabsaathi.core.Usage.finished(com.acxelin.hisaabsaathi.core.Usage.read(p[usage]), today, Improve.CONSENT_VERSION, appVersion)
         }
 
     /** These weeks reached the team: they leave the phone. */

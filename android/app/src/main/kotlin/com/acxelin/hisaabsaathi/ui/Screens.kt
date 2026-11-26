@@ -172,9 +172,9 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
             }
         }
 
-        // "Help improve", asked once after a few days of use: never during setup.
-        val askShare by vm.askShareNow.collectAsStateWithLifecycle()
-        val showShare = askShare && capture == Capture.Idle
+        // "Help improve" is on: said once, on the first Home, with an easy way to turn it off.
+        val notice by vm.showShareNotice.collectAsStateWithLifecycle()
+        val showShare = notice && capture == Capture.Idle
         if (showShare) ShareCard(vm, s)
 
         val listening = capture == Capture.Listening
@@ -224,27 +224,23 @@ fun HomeScreen(vm: AppViewModel, settings: Settings, s: Strings, capture: Captur
 }
 
 /**
- * "Help improve HisaabSaathi?", once, on Home: one line saying what is sent, the whole text a
- * tap away (and read aloud with Listen), Yes and No equally easy, nothing chosen. ✕ is "later".
+ * "Your voice helps improve the app": once, on the first Home, read aloud. What is sent, what
+ * never is, and how to stop. "Turn off" and "OK" are equally easy.
  */
 @Composable
 private fun ShareCard(vm: AppViewModel, s: Strings) {
-    var more by rememberSaveable { mutableStateOf(false) }
+    androidx.compose.runtime.LaunchedEffect(Unit) { vm.readAloud(s.noticeTitle + ". " + s.noticeLine) }
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Paper).padding(start = 16.dp, end = 4.dp, top = 6.dp, bottom = 12.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(s.shareCardTitle, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f).padding(top = 6.dp))
-            IconButton(onClick = { vm.askShareLater() }) { Icon(Icons.Default.Close, s.later, tint = InkSoft) }
-        }
-        Text(if (more) s.shareBody else s.shareCardLine, fontSize = 15.sp, color = InkSoft, lineHeight = 21.sp, modifier = Modifier.padding(end = 12.dp))
+        Text(s.noticeTitle, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 6.dp, end = 12.dp))
+        Text(s.noticeLine, fontSize = 15.sp, color = InkSoft, lineHeight = 21.sp, modifier = Modifier.padding(top = 4.dp, end = 12.dp))
         Row(Modifier.padding(top = 8.dp, end = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { vm.readAloud(s.shareCardTitle + " " + s.shareBody) }) { Icon(painterResource(R.drawable.ic_speaker), s.listen, tint = Ink) }
-            if (!more) TextButton(onClick = { more = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.readAll, color = Ink, fontSize = 15.sp) }
+            IconButton(onClick = { vm.readAloud(s.noticeTitle + ". " + s.noticeLine) }) { Icon(painterResource(R.drawable.ic_speaker), s.listen, tint = Ink) }
             Spacer(Modifier.weight(1f))
-            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { vm.setShare(false) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.no, color = Ink, fontSize = 16.sp) }
-            Button(shape = RoundedCornerShape(10.dp), 
-                onClick = { vm.setShare(true) }, modifier = Modifier.heightIn(min = 48.dp),
+            OutlinedButton(shape = RoundedCornerShape(10.dp), onClick = { vm.setShare(false) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(s.noticeOff, color = Ink, fontSize = 16.sp) }
+            Button(shape = RoundedCornerShape(10.dp),
+                onClick = { vm.shareNoticeOk() }, modifier = Modifier.heightIn(min = 48.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Ink, contentColor = Color.White),
-            ) { Text(s.yes, fontSize = 16.sp) }
+            ) { Text(s.noticeOk, fontSize = 16.sp) }
         }
     }
 }

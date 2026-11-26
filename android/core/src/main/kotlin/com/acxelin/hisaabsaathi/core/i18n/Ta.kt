@@ -306,6 +306,12 @@ internal object Ta {
         "House" to "வீட்டுக்",
         "Do you know your PIN code?" to "பின் கோடு தெரியுமா?",
         "If not, that's fine." to "தெரியாவிட்டால் பரவாயில்லை.",
+        "Your voice helps improve the app" to "உங்கள் குரலால் ஆப் மேம்படுகிறது",
+        "Recordings of what you say to the app go to the HisaabSaathi team over Wi-Fi, so the app understands you better. Your name, phone number or Aadhaar are never sent. You can turn this off any time in Settings." to "நீங்கள் ஆப்பிடம் சொல்வதன் பதிவு Wi-Fi மூலம் ஹிசாப் சாத்தி குழுவுக்குச் செல்கிறது, ஆப் உங்களை நன்றாகப் புரிந்துகொள்ள. உங்கள் பெயர், போன் நம்பர் அல்லது ஆதார் ஒருபோதும் அனுப்பப்படாது. செட்டிங்ஸில் எப்போது வேண்டுமானாலும் நிறுத்தலாம்.",
+        "OK" to "சரி",
+        "Turn off" to "நிறுத்துங்கள்",
+        "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone. To improve the app, recordings of what you say to it go to the team over Wi-Fi; never your name, phone number or Aadhaar. You can turn this off in Settings.\n• No contractor or company can see your records.\n• You can erase everything whenever you want." to "• உங்கள் கணக்கு இந்த போனில் மட்டும் பூட்டி (என்க்ரிப்ட்) வைக்கப்படுகிறது.\n• உங்கள் குரல் போனிலேயே புரிந்துகொள்ளப்படுகிறது. ஆப்பை மேம்படுத்த, நீங்கள் ஆப்பிடம் சொல்வதன் பதிவு Wi-Fi மூலம் குழுவுக்குச் செல்கிறது; உங்கள் பெயர், போன் நம்பர் அல்லது ஆதார் ஒருபோதும் இல்லை. செட்டிங்ஸில் இதை நிறுத்தலாம்.\n• ஒப்பந்தக்காரர் அல்லது நிறுவனம் உங்கள் கணக்கைப் பார்க்க முடியாது.\n• நீங்கள் விரும்பும்போது எல்லாவற்றையும் அழிக்கலாம்.",
+        "Your records stay locked on this phone only. No contractor or company can see them. To improve the app, recordings of what you say to it go to the HisaabSaathi team, without your name or phone number. You can turn this off in Settings." to "உங்கள் கணக்கு இந்த போனில் மட்டும் பூட்டி வைக்கப்படுகிறது. ஒப்பந்தக்காரர் அல்லது நிறுவனம் பார்க்க முடியாது. ஆப்பை மேம்படுத்த நீங்கள் சொல்வதன் பதிவு ஹிசாப் சாத்தி குழுவுக்குச் செல்கிறது, உங்கள் பெயர் அல்லது போன் நம்பர் இல்லாமல். செட்டிங்ஸில் இதை நிறுத்தலாம்.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

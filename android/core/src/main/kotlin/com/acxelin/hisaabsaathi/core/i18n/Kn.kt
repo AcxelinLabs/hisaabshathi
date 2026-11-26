@@ -318,6 +318,12 @@ internal object Kn {
         "House" to "ಮನೆ",
         "Do you know your PIN code?" to "ಪಿನ್ ಕೋಡ್ ಗೊತ್ತಾ?",
         "If not, that's fine." to "ಗೊತ್ತಿಲ್ಲದಿದ್ದರೆ ಪರವಾಗಿಲ್ಲ.",
+        "Your voice helps improve the app" to "ನಿಮ್ಮ ಧ್ವನಿಯಿಂದ ಆ್ಯಪ್ ಸುಧಾರಿಸುತ್ತದೆ",
+        "Recordings of what you say to the app go to the HisaabSaathi team over Wi-Fi, so the app understands you better. Your name, phone number or Aadhaar are never sent. You can turn this off any time in Settings." to "ನೀವು ಆ್ಯಪ್‌ಗೆ ಹೇಳುವುದರ ರೆಕಾರ್ಡಿಂಗ್ Wi-Fi ಮೂಲಕ ಹಿಸಾಬ್ ಸಾಥಿ ತಂಡಕ್ಕೆ ಹೋಗುತ್ತದೆ, ಆ್ಯಪ್ ನಿಮ್ಮನ್ನು ಚೆನ್ನಾಗಿ ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು. ನಿಮ್ಮ ಹೆಸರು, ಫೋನ್ ನಂಬರ್ ಅಥವಾ ಆಧಾರ್ ಎಂದಿಗೂ ಕಳುಹಿಸುವುದಿಲ್ಲ. ಸೆಟ್ಟಿಂಗ್ಸ್‌ನಲ್ಲಿ ಯಾವಾಗ ಬೇಕಾದರೂ ನಿಲ್ಲಿಸಬಹುದು.",
+        "OK" to "ಸರಿ",
+        "Turn off" to "ನಿಲ್ಲಿಸಿ",
+        "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone. To improve the app, recordings of what you say to it go to the team over Wi-Fi; never your name, phone number or Aadhaar. You can turn this off in Settings.\n• No contractor or company can see your records.\n• You can erase everything whenever you want." to "• ನಿಮ್ಮ ಲೆಕ್ಕ ಈ ಫೋನ್‌ನಲ್ಲೇ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಆಗಿ ಇರುತ್ತದೆ.\n• ನಿಮ್ಮ ಧ್ವನಿ ಫೋನ್‌ನಲ್ಲೇ ಅರ್ಥವಾಗುತ್ತದೆ. ಆ್ಯಪ್ ಸುಧಾರಿಸಲು, ನೀವು ಆ್ಯಪ್‌ಗೆ ಹೇಳುವುದರ ರೆಕಾರ್ಡಿಂಗ್ Wi-Fi ಮೂಲಕ ತಂಡಕ್ಕೆ ಹೋಗುತ್ತದೆ; ನಿಮ್ಮ ಹೆಸರು, ಫೋನ್ ನಂಬರ್ ಅಥವಾ ಆಧಾರ್ ಎಂದಿಗೂ ಇಲ್ಲ. ಸೆಟ್ಟಿಂಗ್ಸ್‌ನಲ್ಲಿ ಇದನ್ನು ನಿಲ್ಲಿಸಬಹುದು.\n• ಗುತ್ತಿಗೆದಾರ ಅಥವಾ ಕಂಪನಿ ನಿಮ್ಮ ಲೆಕ್ಕ ನೋಡಲಾರರು.\n• ನಿಮಗೆ ಬೇಕಾದಾಗ ಎಲ್ಲವನ್ನೂ ಅಳಿಸಬಹುದು.",
+        "Your records stay locked on this phone only. No contractor or company can see them. To improve the app, recordings of what you say to it go to the HisaabSaathi team, without your name or phone number. You can turn this off in Settings." to "ನಿಮ್ಮ ಲೆಕ್ಕ ಈ ಫೋನ್‌ನಲ್ಲೇ ಬೀಗ ಹಾಕಿ ಇರುತ್ತದೆ. ಗುತ್ತಿಗೆದಾರ ಅಥವಾ ಕಂಪನಿ ನೋಡಲಾರರು. ಆ್ಯಪ್ ಸುಧಾರಿಸಲು ನೀವು ಹೇಳುವುದರ ರೆಕಾರ್ಡಿಂಗ್ ಹಿಸಾಬ್ ಸಾಥಿ ತಂಡಕ್ಕೆ ಹೋಗುತ್ತದೆ, ನಿಮ್ಮ ಹೆಸರು ಅಥವಾ ಫೋನ್ ನಂಬರ್ ಇಲ್ಲದೆ. ಸೆಟ್ಟಿಂಗ್ಸ್‌ನಲ್ಲಿ ಇದನ್ನು ನಿಲ್ಲಿಸಬಹುದು.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

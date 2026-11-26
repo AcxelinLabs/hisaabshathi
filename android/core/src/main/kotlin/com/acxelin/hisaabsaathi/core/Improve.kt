@@ -49,10 +49,11 @@ data class Sample(
 
 object Improve {
     /**
-     * The version of the "Help improve" question the worker answered. Raise it when the
-     * question's text changes what is collected or where it goes: everyone is asked again.
+     * The version of "Help improve" a sample was collected under. 1–2: the worker said yes to a
+     * question. 3: on by default from 0.9.12; the worker is told once, aloud and on a card, and
+     * can turn it off at any time in Settings.
      */
-    const val CONSENT_VERSION = 2
+    const val CONSENT_VERSION = 3
 
     /** From this consent version on, weekly counts ([Usage]) are part of what the worker agreed to. */
     const val COUNTS_FROM_CONSENT = 2
@@ -87,9 +88,14 @@ object Improve {
     /**
      * Something a worker should not have to share: a phone, Aadhaar, bank or card number
      * (10 or more digits, even spaced or in Indian scripts, or said as words), or a UPI id or
-     * email. Such exchanges are never kept, voice clip included. Wage amounts are far shorter.
+     * email, or the worker's own name ([names], from their profile). Such exchanges are never
+     * kept, voice clip included. Wage amounts are far shorter.
      */
-    fun sensitive(text: String): Boolean {
+    fun sensitive(text: String, names: Collection<String> = emptyList()): Boolean {
+        if (names.isNotEmpty()) {
+            val said = Text.tokens(text).toSet()
+            if (names.any { n -> Text.tokens(n).any { it.length >= 3 && it in said } }) return true
+        }
         val digits = buildString { text.forEach { c -> append(if (Character.isDigit(c)) Character.forDigit(Character.digit(c, 10), 10) else c) } }
         if (longNumber.containsMatchIn(digits) || handle.containsMatchIn(text)) return true
         return runCatching { NumberWords.numbersIn(text).any { it >= 1e9 } }.getOrDefault(false)

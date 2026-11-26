@@ -24,6 +24,7 @@ import com.acxelin.hisaabsaathi.core.Strings
 import com.acxelin.hisaabsaathi.data.LedgerDb
 import com.acxelin.hisaabsaathi.ui.MainActivity
 import com.github.takahirom.roborazzi.captureRoboImage
+import kotlinx.coroutines.flow.first
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -186,7 +187,13 @@ class AppFlowTest {
         shot("03c-profile")
         rule.onNodeWithContentDescription("हो गया").performClick()
 
-        // --- home
+        // --- home. "Help improve" is on from the start: the first Home says so, once, with a way to turn it off.
+        waitFor("आपकी आवाज़ से ऐप बेहतर बनता है")
+        rule.onNodeWithText("बंद करें").assertExists()
+        shot("04a-share-notice")
+        click("ठीक है")
+        rule.waitUntil(10_000) { pump(); rule.onAllNodesWithText("आपकी आवाज़ से ऐप बेहतर बनता है").fetchSemanticsNodes().isEmpty() }
+        check((rule.activity.application as HisaabApp).settings.let { kotlinx.coroutines.runBlocking { it.flow.first() } }.share == true)
         waitFor("माइक दबाइए और आज का काम या खर्च बताइए")
         shot("04-home-empty")
 
@@ -241,14 +248,6 @@ class AppFlowTest {
         waitFor("हिसाब में लिख लिया")
         rule.onNodeWithContentDescription("हो गया").performClick()
 
-        // --- "Help improve": never asked in setup; once on Home, after a few days of use.
-        check(rule.onAllNodesWithText("ऐप को अपनी बोली सिखाएंगे?").fetchSemanticsNodes().isEmpty()) { "not on the first day" }
-        kotlinx.coroutines.runBlocking { (rule.activity.application as HisaabApp).settings.setFirstUse(java.time.LocalDate.now().minusDays(5)) }
-        waitFor("ऐप को अपनी बोली सिखाएंगे?")
-        shot("06b-share-card")
-        click("हाँ")
-        rule.waitUntil(10_000) { pump(); rule.onAllNodesWithText("ऐप को अपनी बोली सिखाएंगे?").fetchSemanticsNodes().isEmpty() }
-
         // --- a question
         click("लिखकर डालें")
         rule.onNode(hasSetTextAction()).performTextInput("इस हफ्ते कितना कमाया")
@@ -293,8 +292,8 @@ class AppFlowTest {
         rule.onNodeWithContentDescription("सेटिंग").performClick()
         waitFor("ऐप को बेहतर बनाने में मदद")
         shot("11-settings")
-        // Kept only after the yes: a question, a name question and one not understood.
-        waitFor("3 भेजने बाकी")
+        // On from the start: every exchange this session waits to be sent (on Wi-Fi).
+        waitFor("भेजने बाकी")
         rule.onNodeWithText("भेजा हुआ मिटाएं").performScrollTo()
         shot("11b-settings-help-improve")
         rule.onRoot().performTouchInput { swipeDown() } // back to the top for the language buttons

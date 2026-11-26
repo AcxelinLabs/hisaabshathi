@@ -33,10 +33,13 @@ string needs all six. `core` tests fail on a missing translation.
 
 ## Privacy
 
-- **Nothing about the worker leaves the phone without a clear yes.** That yes is asked once, never
-  preselected, and can be undone in Settings.
+- **"Help improve" is on by default (team decision, 0.9.12).** Voice clips of each interaction
+  (silences cut out) and what the app understood go to the team's Azure account over Wi-Fi.
+  The worker is told once, aloud and on a card on the first Home, and can turn it off there or in
+  Settings at any time; turning it off deletes what is waiting. Nothing else leaves the phone.
 - **Setup answers (name, PIN) are heard on the phone only,** never by an online recogniser.
-- **Phone, Aadhaar, bank and UPI numbers are never kept.** What workers share stays in the
+- **The worker's name, and phone, Aadhaar, bank and UPI numbers or emails, are never kept or sent,**
+  voice clip included. What workers share stays in the
   team's Azure account in India (`server/`).
 
 ## Working in this repo

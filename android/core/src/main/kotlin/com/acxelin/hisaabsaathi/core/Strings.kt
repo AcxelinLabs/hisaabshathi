@@ -113,6 +113,15 @@ class Strings(val lang: Lang) {
         "ହଁ କହିଲେ, ଆପଣ ଆପ୍‌କୁ ଯାହା କୁହନ୍ତି ତାହା ନାମ ବିନା ଟିମ୍‌କୁ ପଠାଯିବ। ସେଟିଂସ୍‌ରେ ଯେକୌଣସି ସମୟରେ ବନ୍ଦ କରିପାରିବେ।",
         "If you say yes, what you say to the app is sent to the team without your name. You can stop it any time in Settings.",
     )
+    // "Help improve" is on by default: the worker is told once, on Home, aloud.
+    val noticeTitle get() = t("आपकी आवाज़ से ऐप बेहतर बनता है", "ଆପଣଙ୍କ ସ୍ୱରରୁ ଆପ୍ ଉନ୍ନତ ହୁଏ", "Your voice helps improve the app")
+    val noticeLine get() = t(
+        "आप ऐप से जो बोलते हैं, उसकी रिकॉर्डिंग Wi-Fi पर हिसाब साथी टीम को जाती है, ताकि ऐप बेहतर समझे। आपका नाम, फ़ोन नंबर या आधार कभी नहीं भेजा जाता। सेटिंग में कभी भी बंद कर सकते हैं।",
+        "ଆପଣ ଆପ୍‌କୁ ଯାହା କୁହନ୍ତି, ତାହାର ରେକର୍ଡିଂ Wi-Fi ରେ ହିସାବ ସାଥୀ ଟିମ୍‌କୁ ଯାଏ, ଯାହାଦ୍ୱାରା ଆପ୍ ଭଲ ବୁଝିବ। ଆପଣଙ୍କ ନାମ, ଫୋନ୍ ନମ୍ବର କିମ୍ବା ଆଧାର କେବେ ପଠାଯାଏ ନାହିଁ। ସେଟିଂସ୍‌ରେ ଯେକୌଣସି ସମୟରେ ବନ୍ଦ କରିପାରିବେ।",
+        "Recordings of what you say to the app go to the HisaabSaathi team over Wi-Fi, so the app understands you better. Your name, phone number or Aadhaar are never sent. You can turn this off any time in Settings.",
+    )
+    val noticeOk get() = t("ठीक है", "ଠିକ୍ ଅଛି", "OK")
+    val noticeOff get() = t("बंद करें", "ବନ୍ଦ କରନ୍ତୁ", "Turn off")
     val readAll get() = t("पूरी बात", "ସବୁ କଥା", "Read all")
     val useLocation get() = t("मेरी लोकेशन से भरें", "ମୋ ଲୋକେସନ୍‌ରୁ ଭରନ୍ତୁ", "Use my location")
     val findingPlace get() = t("आपकी जगह ढूँढ रहे हैं…", "ଆପଣଙ୍କ ଜାଗା ଖୋଜୁଛି…", "Finding your place…")
@@ -409,9 +418,9 @@ class Strings(val lang: Lang) {
     val addFromPhone get() = t("फोन से मॉडल फ़ाइल जोड़ें", "ଫୋନ୍‌ରୁ ମଡେଲ୍ ଫାଇଲ୍ ଯୋଡ଼ନ୍ତୁ", "Add model file from phone")
     val privacyTitle get() = t("आपका डेटा, आपके पास", "ଆପଣଙ୍କ ଡାଟା, ଆପଣଙ୍କ ପାଖରେ", "Your data stays with you")
     val privacyBody get() = t(
-        "• आपका हिसाब इसी फोन में ताले (एन्क्रिप्शन) में रहता है।\n• आवाज़ फोन में ही समझी जाती है। ऐप को बेहतर बनाने के लिए आपने हाँ कहा हो, तभी वह रखी और भेजी जाती है।\n• ठेकेदार या कंपनी आपका हिसाब नहीं देख सकते।\n• इंटरनेट पैक डाउनलोड करने के लिए लगता है, और आपने हाँ कहा हो तो भेजने के लिए।\n• आप जब चाहें सब कुछ मिटा सकते हैं।",
-        "• ଆପଣଙ୍କ ହିସାବ ଏହି ଫୋନ୍‌ରେ ତାଲା (ଏନକ୍ରିପ୍ସନ୍) ଭିତରେ ରହେ।\n• ସ୍ୱର ଫୋନ୍‌ରେ ହିଁ ବୁଝାଯାଏ। ଆପ୍ ଉନ୍ନତି ପାଇଁ ଆପଣ ହଁ କହିଥିଲେ ହିଁ ତାହା ରଖାଯାଏ ଓ ପଠାଯାଏ।\n• ଠିକାଦାର କିମ୍ବା କମ୍ପାନୀ ଆପଣଙ୍କ ହିସାବ ଦେଖିପାରିବେ ନାହିଁ।\n• ଇଣ୍ଟରନେଟ୍ ପ୍ୟାକ୍ ଡାଉନଲୋଡ୍ ପାଇଁ ଲାଗେ, ଏବଂ ଆପଣ ହଁ କହିଥିଲେ ପଠାଇବା ପାଇଁ।\n• ଆପଣ ଚାହିଁଲେ ସବୁ ଲିଭାଇ ପାରିବେ।",
-        "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone. It is kept and sent only if you agreed to help improve the app.\n• No contractor or company can see your records.\n• The internet is used to download packs and, only if you agreed, to send what helps improve the app.\n• You can erase everything whenever you want.",
+        "• आपका हिसाब इसी फोन में ताले (एन्क्रिप्शन) में रहता है।\n• आवाज़ फोन में ही समझी जाती है। ऐप को बेहतर बनाने के लिए आप ऐप से जो बोलते हैं उसकी रिकॉर्डिंग Wi-Fi पर टीम को जाती है; आपका नाम, फ़ोन नंबर या आधार कभी नहीं। इसे सेटिंग में बंद कर सकते हैं।\n• ठेकेदार या कंपनी आपका हिसाब नहीं देख सकते।\n• आप जब चाहें सब कुछ मिटा सकते हैं।",
+        "• ଆପଣଙ୍କ ହିସାବ ଏହି ଫୋନ୍‌ରେ ତାଲା (ଏନକ୍ରିପ୍ସନ୍) ଭିତରେ ରହେ।\n• ସ୍ୱର ଫୋନ୍‌ରେ ହିଁ ବୁଝାଯାଏ। ଆପ୍ ଉନ୍ନତି ପାଇଁ ଆପଣ ଆପ୍‌କୁ ଯାହା କୁହନ୍ତି ତାହାର ରେକର୍ଡିଂ Wi-Fi ରେ ଟିମ୍‌କୁ ଯାଏ; ଆପଣଙ୍କ ନାମ, ଫୋନ୍ ନମ୍ବର କିମ୍ବା ଆଧାର କେବେ ନୁହେଁ। ସେଟିଂସ୍‌ରେ ଏହା ବନ୍ଦ କରିପାରିବେ।\n• ଠିକାଦାର କିମ୍ବା କମ୍ପାନୀ ଆପଣଙ୍କ ହିସାବ ଦେଖିପାରିବେ ନାହିଁ।\n• ଆପଣ ଚାହିଁଲେ ସବୁ ଲିଭାଇ ପାରିବେ।",
+        "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone. To improve the app, recordings of what you say to it go to the team over Wi-Fi; never your name, phone number or Aadhaar. You can turn this off in Settings.\n• No contractor or company can see your records.\n• You can erase everything whenever you want.",
     )
     val eraseAll get() = t("सारा हिसाब मिटाएं", "ସବୁ ହିସାବ ଲିଭାନ୍ତୁ", "Erase all records")
     val eraseAllQ get() = t("सारा हिसाब हमेशा के लिए मिट जाएगा। पक्का?", "ସବୁ ହିସାବ ସବୁଦିନ ପାଇଁ ଲିଭିଯିବ। ନିଶ୍ଚିତ?", "All records will be erased for ever. Are you sure?")
@@ -429,9 +438,9 @@ class Strings(val lang: Lang) {
     val chatHowAreYou get() = t("मैं ठीक हूँ। आज का हिसाब लिख लें?", "ମୁଁ ଭଲ ଅଛି। ଆଜିର ହିସାବ ଲେଖିବା?", "I am fine. Shall we note today's work?")
     val chatMaker get() = t("मुझे Acxelin Labs ने मजदूर भाई-बहनों के लिए बनाया है।", "ମୋତେ Acxelin Labs ଶ୍ରମିକ ଭାଇ-ଭଉଣୀଙ୍କ ପାଇଁ ତିଆରି କରିଛି।", "Acxelin Labs made me for working people.")
     val chatPrivacy get() = t(
-        "आपका हिसाब सिर्फ़ इसी फोन में ताले में रहता है। ठेकेदार या कंपनी इसे नहीं देख सकते। आपने सेटिंग में हाँ कहा हो, तभी आपकी कही बात ऐप सुधारने के लिए हिसाब साथी टीम को भेजी जाती है, आपके नाम के बिना।",
-        "ଆପଣଙ୍କ ହିସାବ କେବଳ ଏହି ଫୋନ୍‌ରେ ତାଲା ଭିତରେ ରହେ। ଠିକାଦାର କିମ୍ବା କମ୍ପାନୀ ଦେଖିପାରିବେ ନାହିଁ। ଆପଣ ସେଟିଂସ୍‌ରେ ହଁ କହିଥିଲେ ହିଁ, ଆପଣଙ୍କ କଥା ଆପ୍ ଉନ୍ନତି ପାଇଁ ହିସାବ ସାଥୀ ଟିମ୍‌କୁ ପଠାଯାଏ, ଆପଣଙ୍କ ନାମ ବିନା।",
-        "Your records stay locked on this phone only. No contractor or company can see them. Only if you agreed in Settings, what you say to the app is sent to the HisaabSaathi team, without your name, to improve it.",
+        "आपका हिसाब सिर्फ़ इसी फोन में ताले में रहता है। ठेकेदार या कंपनी इसे नहीं देख सकते। ऐप सुधारने के लिए आपकी कही बात की रिकॉर्डिंग हिसाब साथी टीम को जाती है, आपके नाम या फ़ोन नंबर के बिना। सेटिंग में इसे बंद कर सकते हैं।",
+        "ଆପଣଙ୍କ ହିସାବ କେବଳ ଏହି ଫୋନ୍‌ରେ ତାଲା ଭିତରେ ରହେ। ଠିକାଦାର କିମ୍ବା କମ୍ପାନୀ ଦେଖିପାରିବେ ନାହିଁ। ଆପ୍ ଉନ୍ନତି ପାଇଁ ଆପଣଙ୍କ କଥାର ରେକର୍ଡିଂ ହିସାବ ସାଥୀ ଟିମ୍‌କୁ ଯାଏ, ଆପଣଙ୍କ ନାମ କିମ୍ବା ଫୋନ୍ ନମ୍ବର ବିନା। ସେଟିଂସ୍‌ରେ ଏହା ବନ୍ଦ କରିପାରିବେ।",
+        "Your records stay locked on this phone only. No contractor or company can see them. To improve the app, recordings of what you say to it go to the HisaabSaathi team, without your name or phone number. You can turn this off in Settings.",
     )
     val chatBye get() = t("ठीक है, फिर मिलेंगे।", "ଠିକ୍ ଅଛି, ପୁଣି ଦେଖା ହେବ।", "All right, see you again.")
     val chatFallback get() = t("यह मैं नहीं समझा। मैं काम, एडवांस और खर्च का हिसाब रखता हूँ। ऐसे बोलिए: 500 रुपये मजदूरी मिली।", "ଏହା ମୁଁ ବୁଝିଲି ନାହିଁ। ମୁଁ କାମ, ଆଡଭାନ୍ସ ଓ ଖର୍ଚ୍ଚର ହିସାବ ରଖେ। ଏପରି କୁହନ୍ତୁ: 500 ଟଙ୍କା ମଜୁରୀ ମିଳିଲା।", "I did not understand that. I keep track of work, advances and expenses. Say it like this: got 500 rupees wages.")

@@ -320,6 +320,12 @@ internal object Te {
         "House" to "ఇంటి",
         "Do you know your PIN code?" to "పిన్ కోడ్ తెలుసా?",
         "If not, that's fine." to "తెలియకపోతే పర్వాలేదు.",
+        "Your voice helps improve the app" to "మీ గొంతుతో యాప్ మెరుగవుతుంది",
+        "Recordings of what you say to the app go to the HisaabSaathi team over Wi-Fi, so the app understands you better. Your name, phone number or Aadhaar are never sent. You can turn this off any time in Settings." to "మీరు యాప్‌తో మాట్లాడేది రికార్డ్ అయి Wi-Fi ద్వారా హిసాబ్ సాథీ టీమ్‌కు వెళ్తుంది, యాప్ మిమ్మల్ని బాగా అర్థం చేసుకోవడానికి. మీ పేరు, ఫోన్ నంబర్ లేదా ఆధార్ ఎప్పుడూ పంపము. సెట్టింగ్స్‌లో ఎప్పుడైనా ఆపేయవచ్చు.",
+        "OK" to "సరే",
+        "Turn off" to "ఆపేయండి",
+        "• Your records are kept encrypted on this phone only.\n• Your voice is understood on the phone. To improve the app, recordings of what you say to it go to the team over Wi-Fi; never your name, phone number or Aadhaar. You can turn this off in Settings.\n• No contractor or company can see your records.\n• You can erase everything whenever you want." to "• మీ లెక్కలు ఈ ఫోన్‌లోనే ఎన్‌క్రిప్ట్ చేసి ఉంటాయి.\n• మీ గొంతు ఫోన్‌లోనే అర్థమవుతుంది. యాప్ మెరుగుపడటానికి, మీరు యాప్‌తో చెప్పేది రికార్డ్ అయి Wi-Fi ద్వారా టీమ్‌కు వెళ్తుంది; మీ పేరు, ఫోన్ నంబర్ లేదా ఆధార్ ఎప్పుడూ కాదు. సెట్టింగ్స్‌లో దీన్ని ఆపేయవచ్చు.\n• కాంట్రాక్టర్ లేదా కంపెనీ మీ లెక్కలు చూడలేరు.\n• మీకు కావాలంటే ఎప్పుడైనా అన్నీ చెరిపేయవచ్చు.",
+        "Your records stay locked on this phone only. No contractor or company can see them. To improve the app, recordings of what you say to it go to the HisaabSaathi team, without your name or phone number. You can turn this off in Settings." to "మీ లెక్కలు ఈ ఫోన్‌లోనే తాళం వేసి ఉంటాయి. కాంట్రాక్టర్ లేదా కంపెనీ చూడలేరు. యాప్ మెరుగుపడటానికి మీరు చెప్పేది రికార్డ్ అయి హిసాబ్ సాథీ టీమ్‌కు వెళ్తుంది, మీ పేరు లేదా ఫోన్ నంబర్ లేకుండా. సెట్టింగ్స్‌లో దీన్ని ఆపేయవచ్చు.",
     )
 
     /** Number words in the NumberWords table format: "value=word|variant; value=word". */

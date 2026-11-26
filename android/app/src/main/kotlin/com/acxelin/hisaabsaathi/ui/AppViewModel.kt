@@ -42,6 +42,7 @@ import com.acxelin.hisaabsaathi.work.Reminders
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -196,7 +197,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val heard = try {
             val recorded = { app.earcons.heard(); if (!onScreen) capture.value = Capture.Thinking }
             if (fake != null) fake().also { recorded() }
-            else if (usePack) app.stt.listen(l, onLevel = { level.value = it }, onRecorded = recorded)
+            else if (usePack) app.stt.listen(l, onLevel = { level.value = it }, onRecorded = recorded,
+                endSilenceSeconds = if (onScreen) com.acxelin.hisaabsaathi.speech.SHORT_END_SILENCE_SECONDS else com.acxelin.hisaabsaathi.speech.END_SILENCE_SECONDS)
             else app.systemStt.listen(l, onRecorded = recorded)
         } catch (e: Exception) {
             Heard.Failed(Heard.Kind.ENGINE, e.message ?: e.javaClass.simpleName)
@@ -285,12 +287,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     private fun keep(said: Said?, understood: String, reply: String, outcome: String, kept: String? = null) {
         val s = settings.value ?: return
         if (said == null || s.share != true || !Improve.counts(said.source)) return
-        // A phone, Aadhaar or bank number, or a UPI id: never kept, voice included.
-        if (Improve.sensitive(said.text)) return
+        // A phone, Aadhaar or bank number, a UPI id or email, or the worker's own name: never
+        // kept, voice included. (Setup answers never come here.)
+        if (Improve.sensitive(said.text, listOf(app.profile.flow.value.name).filter { it.isNotBlank() })) return
         val l = lang
         app.scope.launch {
             runCatching {
-                val pcm = said.audio?.takeIf { it.isNotEmpty() }?.let(VoiceSamples::pcm16)
+                // The clip without its silences: nothing before or after the words, and long pauses cut short.
+                val pcm = said.audio?.takeIf { it.isNotEmpty() }?.let(VoiceSamples::pcm16)?.let(VoiceSamples::trimSilence)?.takeIf { it.isNotEmpty() }
                 val sample = Sample(
                     id = Improve.newId(), createdAtMs = said.atMs, lang = l.code, source = said.source, heard = said.text,
                     understood = understood, reply = reply, outcome = outcome, kept = kept, region = s.region,
@@ -665,16 +669,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
      * old local log held. No: nothing is kept, and anything waiting is deleted.
      */
     /**
-     * "Help improve" is asked once, on Home, after the worker has used the app for a few days
-     * (and saved a few lines), never during setup. "Later" hides it for a week.
+     * "Help improve" is on from the start. The first time Home opens, a card says so (and the
+     * app reads it aloud): what is sent, what never is, and how to turn it off. Shown once.
      */
-    val askShareNow: StateFlow<Boolean> = kotlinx.coroutines.flow.combine(settings, entries) { st, list ->
-        val today = LocalDate.now().toEpochDay()
-        st != null && st.onboarded && st.share == null && list.size >= SHARE_ASK_AFTER_LINES &&
-            st.firstUseDay in 1..(today - SHARE_ASK_AFTER_DAYS) && today >= st.shareAskAfterDay
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+    val showShareNotice: StateFlow<Boolean> = settings.map { st -> st != null && st.onboarded && st.share == true && !st.shareNoticed }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
-    fun askShareLater() = viewModelScope.launch(guard) { app.settings.setShareAskAfter(LocalDate.now().plusDays(7)) }
+    /** The worker heard the notice and left it on. */
+    fun shareNoticeOk() = viewModelScope.launch(guard) { app.settings.setShareNoticed() }
 
     fun setShare(on: Boolean) = viewModelScope.launch(guard) {
         app.settings.setShare(on)
@@ -862,7 +864,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             val heard = try {
                 when {
                     fake != null -> fake().also { app.earcons.heard() }
-                    usePack -> app.stt.listen(l, maxSeconds = 10, onLevel = { level.value = it }, onRecorded = { app.earcons.heard() })
+                    usePack -> app.stt.listen(l, maxSeconds = 10, onLevel = { level.value = it }, onRecorded = { app.earcons.heard() }, endSilenceSeconds = com.acxelin.hisaabsaathi.speech.SHORT_END_SILENCE_SECONDS)
                     // Before the speech pack is in: Android's own recogniser, on-device only.
                     else -> app.systemStt.listen(l, onRecorded = { app.earcons.heard() })
                 }

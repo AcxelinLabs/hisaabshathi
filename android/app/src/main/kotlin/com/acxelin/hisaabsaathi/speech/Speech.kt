@@ -47,6 +47,12 @@ sealed interface Heard {
 }
 private const val WINDOW = 512 // Silero VAD v5 requires exactly 512 samples at 16 kHz.
 
+/** An entry or question ends after 3 s of silence: time to think of the next number. */
+const val END_SILENCE_SECONDS = 3f
+
+/** A yes or no, or a setup answer, ends sooner: it is one or two words. */
+const val SHORT_END_SILENCE_SECONDS = 1.3f
+
 /**
  * Speech-to-text that runs entirely on the phone with the downloaded IndicConformer model.
  * Audio is held in memory only for the length of one utterance and is never written to disk.
@@ -79,6 +85,8 @@ class OnDeviceStt(private val packs: PackManager) {
         maxSeconds: Int = 20,
         onLevel: (Float) -> Unit = {},
         onRecorded: () -> Unit = {},
+        /** Silence after speech that ends the recording: 3 s for an entry or question, shorter for a yes or no. */
+        endSilenceSeconds: Float = END_SILENCE_SECONDS,
     ): Heard = withContext(Dispatchers.Default) {
         lock.withLock {
             stopRequested = false
@@ -102,7 +110,7 @@ class OnDeviceStt(private val packs: PackManager) {
                 return@withLock Heard.Failed(Heard.Kind.ENGINE, "VAD: ${e.message ?: e.javaClass.simpleName}")
             }
             val samples = try {
-                record(vad, maxSeconds, onLevel)
+                record(vad, maxSeconds, onLevel, endSilenceSeconds)
             } catch (e: Exception) {
                 return@withLock Heard.Failed(Heard.Kind.MIC, e.message ?: e.javaClass.simpleName)
             } finally {
@@ -127,7 +135,7 @@ class OnDeviceStt(private val packs: PackManager) {
     }
 
     @SuppressLint("MissingPermission")
-    private fun record(vad: Vad, maxSeconds: Int, onLevel: (Float) -> Unit): FloatArray {
+    private fun record(vad: Vad, maxSeconds: Int, onLevel: (Float) -> Unit, endSilenceSeconds: Float): FloatArray {
         val minBuf = AudioRecord.getMinBufferSize(SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
         // Some phones refuse the speech-tuned source; fall back to the plain microphone.
         val recorder = listOf(MediaRecorder.AudioSource.VOICE_RECOGNITION, MediaRecorder.AudioSource.MIC).firstNotNullOfOrNull { source ->
@@ -141,8 +149,8 @@ class OnDeviceStt(private val packs: PackManager) {
         val chunk = FloatArray(WINDOW)
         var heardSpeech = false
         var quietWindows = 0
-        // Stop after ~1.3 s of silence once speech was heard, or 6 s if nobody spoke.
-        val endSilence = (1.3f * SAMPLE_RATE / WINDOW).toInt()
+        // Stop after [endSilenceSeconds] of silence once speech was heard, or 6 s if nobody spoke.
+        val endSilence = (endSilenceSeconds * SAMPLE_RATE / WINDOW).toInt()
         val noSpeechLimit = 6 * SAMPLE_RATE
         try {
             // Inside the try: if starting fails the microphone is still released for next time.
