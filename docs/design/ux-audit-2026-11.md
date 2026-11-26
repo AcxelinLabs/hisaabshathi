@@ -104,12 +104,15 @@ Typing had crept in as an equal choice. A worker who reads little should never n
   yes or press the green button, or press the red one. The photo choices are read out too. The
   guide plays on arrival and again whenever the app comes back to the front. It doesn't play
   over something already being said, or when Home is reached from the confirm screen.
-- **Five seconds with nothing happening puts the app away.** "Nothing happening" means the app
-  is silent, not listening or thinking, nobody is touching the screen and the keyboard is
-  closed. Recording and speech stop, and what is in progress is kept: lines waiting for a yes
-  (never saved unconfirmed), typed text, the setup step and its answers.
-- **It comes back where it was.** Same screen, same unconfirmed lines, same setup question,
-  asked again aloud.
+- **Five seconds of silence stops listening.** When the app is listening and nobody says anything
+  for 5 seconds, it stops listening and says it heard nothing. Once the worker has started
+  talking, a 3-second pause ends it, and what they said goes to the confirm screen. 0.9.13–0.9.14
+  read the mentor's "stop after 5 seconds" as putting the whole app away; testers found that
+  maddening, so 0.9.15 removed it. The app now stays open until the worker leaves it.
+- **It comes back where it was.** When the worker leaves the app and opens it again: the same
+  tab, the same unconfirmed lines (never saved without a yes), typed text and setup question, and
+  that screen's guide said again. Settings and the profile are never reopened: the app comes
+  back on Home, the ledger or the summary.
 
 ## Why it looked generic
 

@@ -94,15 +94,6 @@ open class HisaabApp : Application() {
     /** The welcome screen and its ting when the app opens (tests turn it off). */
     open val showWelcome: Boolean = true
 
-    /**
-     * Seconds with nothing happening (the app silent, not listening, nobody touching) before
-     * what is in progress is saved and the app is put away. 0: never (tests).
-     */
-    open val idleSeconds: Int = 5
-
-    /** The same on screens made for reading (ledger, summary, settings, profile) and in pop-ups. */
-    open val readingIdleSeconds: Int = 30
-
     /** Every PIN code with its state and district (India Post's directory), for filling in details on the phone. */
     val pins: com.acxelin.hisaabsaathi.core.PinDirectory by lazy {
         runCatching { com.acxelin.hisaabsaathi.core.PinDirectory.parse(assets.open("pin_in.txt").bufferedReader().use { it.readText() }) }

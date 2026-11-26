@@ -12,11 +12,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.isImeVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -68,32 +66,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge(statusBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT))
         if (intent?.getBooleanExtra(EXTRA_LISTEN, false) == true) vm.requestListen()
         setContent { Root(vm) }
-        // Nothing happening for a few seconds (the app silent, not listening, nobody touching):
-        // keep what is in progress and put the app away. It comes back where it was.
-        // Before it goes, it says so ("I'll close now… touch the screen to stay") and waits a moment.
-        val app = application as com.acxelin.hisaabsaathi.HisaabApp
-        val idleMs = app.idleSeconds * 1000L
-        val readingMs = app.readingIdleSeconds * 1000L
-        if (idleMs > 0) lifecycleScope.launch {
-            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.RESUMED) {
-                while (true) {
-                    kotlinx.coroutines.delay(250)
-                    if (vm.idleTick(System.currentTimeMillis(), idleMs, readingMs) == AppViewModel.IdleStep.PUT_AWAY) {
-                        vm.wentAway(); moveTaskToBack(true)
-                    }
-                }
-            }
-        }
     }
-
-    /** Any touch or key is the worker doing something. */
-    override fun dispatchTouchEvent(ev: android.view.MotionEvent?): Boolean { vm.touched(); return super.dispatchTouchEvent(ev) }
-    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean { vm.touched(); return super.dispatchKeyEvent(event) }
 
     /** Back in front: each screen says its guide again. */
     override fun onStart() { super.onStart(); vm.cameBack() }
 
-    /** Leaving the front (put away, the worker left, or the camera opened): stop talking and listening, keep progress. */
+    /** Leaving the front (the worker left, or the camera opened): stop talking and listening, keep progress. */
     override fun onStop() { super.onStop(); if (!isChangingConfigurations) vm.wentAway() }
 
     /** Tapped the reminder while the app was open: listen now. */
@@ -115,18 +93,9 @@ private fun Root(vm: AppViewModel) {
     // The welcome, each time the app opens (not again when the phone is turned).
     val app = LocalContext.current.applicationContext as com.acxelin.hisaabsaathi.HisaabApp
     var welcomed by rememberSaveable { mutableStateOf(!app.showWelcome) }
-    // While the keyboard is open the worker is typing: never put the app away then.
-    @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
-    val keyboard = androidx.compose.foundation.layout.WindowInsets.isImeVisible
-    androidx.compose.runtime.LaunchedEffect(keyboard) { vm.keyboardOpen = keyboard }
     HisaabTheme(settings.lang) {
         if (!welcomed) WelcomeScreen(remember(settings.lang) { Strings(settings.lang) }) { welcomed = true }
-        else Box(Modifier.fillMaxSize()) {
-            Screens(vm, settings)
-            // "I'll close now… touch the screen to stay", on screen too (some phones have no voice for the language).
-            val closing by vm.closingSoon.collectAsStateWithLifecycle()
-            if (closing) ClosingBanner(remember(settings.lang) { Strings(settings.lang) }, Modifier.align(androidx.compose.ui.Alignment.Center))
-        }
+        else Screens(vm, settings)
     }
 }
 
@@ -143,10 +112,11 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
     }
 
     // Back where the worker was when the app was last put away.
+    // (Never Settings or the profile: the app comes back on Home, the ledger or the summary.)
     val last = settings.lastScreen
     var tab by rememberSaveable { mutableIntStateOf(when (last) { "ledger" -> 1; "summary" -> 2; else -> 0 }) }
-    var showSettings by rememberSaveable { mutableStateOf(last == "settings") }
-    var showProfile by rememberSaveable { mutableStateOf(last == "profile") }
+    var showSettings by rememberSaveable { mutableStateOf(false) }
+    var showProfile by rememberSaveable { mutableStateOf(false) }
     var typing by rememberSaveable { mutableStateOf(last == "type") }
 
     // Microphone permission, asked the first time the mic is tapped.
@@ -219,10 +189,8 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         else -> listOf("home", "ledger", "summary")[tab]
     }
     androidx.compose.runtime.LaunchedEffect(screen) {
-        if (screen != "review") vm.rememberScreen(screen)
-        vm.readingScreen = screen in setOf("ledger", "summary", "settings", "profile")
+        if (screen != "review") vm.rememberScreen(if (screen == "settings" || screen == "profile") listOf("home", "ledger", "summary")[tab] else screen)
     }
-    androidx.compose.runtime.LaunchedEffect(choosingPhoto) { vm.dialogOpen = choosingPhoto }
     val comebacks by vm.comebacks.collectAsStateWithLifecycle()
     val guided = remember { arrayOf("", "-1") } // screen and comeback last guided
     androidx.compose.runtime.LaunchedEffect(screen, comebacks) {
@@ -325,20 +293,3 @@ private fun Screens(vm: AppViewModel, settings: com.acxelin.hisaabsaathi.data.Se
         }
     }
 }
-
-/** Shown while the app says it is about to close: a touch anywhere keeps it open. */
-@Composable
-private fun ClosingBanner(s: Strings, modifier: Modifier = Modifier) {
-    androidx.compose.foundation.layout.Column(
-        modifier.padding(24.dp).androidx_background(),
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
-    ) {
-        Text(s.closingSoon, color = Color.White, fontSize = 20.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center, lineHeight = 26.sp)
-        Text(s.touchToStay, color = Marigold, fontSize = 18.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.padding(top = 8.dp))
-    }
-}
-
-private fun Modifier.androidx_background(): Modifier =
-    this.background(Ink, androidx.compose.foundation.shape.RoundedCornerShape(14.dp)).padding(horizontal = 22.dp, vertical = 18.dp)

@@ -150,9 +150,6 @@ class Strings(val lang: Lang) {
         "ଏହା ଆପଣଙ୍କ ବିବରଣୀ। ବଦଳାଇବାକୁ ତଳେ ହଳଦିଆ ବଟନ୍ ଦବାନ୍ତୁ। ଫେରିବାକୁ ଉପରେ ବାମ ପଟେ ତୀର ଦବାନ୍ତୁ।",
         "These are your details. To change them, press the yellow button at the bottom. To go back, press the arrow at the top left.",
     )
-    /** Said (and shown) before the app puts itself away: a touch keeps it open. */
-    val closingSoon get() = t("मैं अब बंद हो रहा हूँ। फिर खोलेंगे तो यहीं से शुरू होगा।", "ମୁଁ ଏବେ ବନ୍ଦ ହେଉଛି। ପୁଣି ଖୋଲିଲେ ଏଠାରୁ ଆରମ୍ଭ ହେବ।", "I'll close now. Open me again to carry on from here.")
-    val touchToStay get() = t("रुकना हो तो स्क्रीन छुएं।", "ରହିବାକୁ ହେଲେ ସ୍କ୍ରିନ୍ ଛୁଅଁନ୍ତୁ।", "Touch the screen to stay.")
     val guideNext get() = t("आगे बढ़ने के लिए नीचे पीला बटन दबाइए।", "ଆଗକୁ ଯିବାକୁ ତଳେ ହଳଦିଆ ବଟନ୍ ଦବାନ୍ତୁ।", "To go on, press the yellow button at the bottom.")
 
     // "Help improve" is on by default: the worker is told once, on Home, aloud.

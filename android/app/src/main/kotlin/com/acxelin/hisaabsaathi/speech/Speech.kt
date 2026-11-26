@@ -53,6 +53,9 @@ const val END_SILENCE_SECONDS = 3f
 /** A yes or no, or a setup answer, ends sooner: it is one or two words. */
 const val SHORT_END_SILENCE_SECONDS = 1.3f
 
+/** Nobody has said anything for this long: stop listening (the mic is not left open). */
+const val NO_SPEECH_SECONDS = 5
+
 /**
  * Speech-to-text that runs entirely on the phone with the downloaded IndicConformer model.
  * Audio is held in memory only for the length of one utterance and is never written to disk.
@@ -149,9 +152,9 @@ class OnDeviceStt(private val packs: PackManager) {
         val chunk = FloatArray(WINDOW)
         var heardSpeech = false
         var quietWindows = 0
-        // Stop after [endSilenceSeconds] of silence once speech was heard, or 6 s if nobody spoke.
+        // Stop after [endSilenceSeconds] of silence once speech was heard, or [NO_SPEECH_SECONDS] if nobody spoke.
         val endSilence = (endSilenceSeconds * SAMPLE_RATE / WINDOW).toInt()
-        val noSpeechLimit = 6 * SAMPLE_RATE
+        val noSpeechLimit = NO_SPEECH_SECONDS * SAMPLE_RATE
         try {
             // Inside the try: if starting fails the microphone is still released for next time.
             recorder.startRecording()
@@ -233,6 +236,7 @@ class OnDeviceStt(private val packs: PackManager) {
  */
 class SystemOnDeviceStt(private val context: Context) {
     private val main = android.os.Handler(android.os.Looper.getMainLooper())
+    private var noSpeech: Runnable = Runnable {}
     private var current: SpeechRecognizer? = null
 
     fun available(): Boolean = runCatching {
@@ -256,9 +260,11 @@ class SystemOnDeviceStt(private val context: Context) {
             var destroyed = false
             fun destroy() { if (!destroyed) { destroyed = true; if (current === sr) current = null; runCatching { sr.destroy() } } }
             fun finish(result: Heard) {
+                main.removeCallbacks(noSpeech)
                 destroy()
                 if (cont.isActive) cont.resume(result)
             }
+            noSpeech = Runnable { if (cont.isActive) { runCatching { sr.cancel() }; finish(Heard.Silence) } }
             sr.setRecognitionListener(object : RecognitionListener {
                 override fun onResults(results: Bundle?) {
                     val text = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull().orEmpty()
@@ -273,8 +279,9 @@ class SystemOnDeviceStt(private val context: Context) {
                     },
                 )
                 override fun onEndOfSpeech() = onRecorded()
-                override fun onReadyForSpeech(params: Bundle?) {}
-                override fun onBeginningOfSpeech() {}
+                // Nobody speaks for [NO_SPEECH_SECONDS]: stop listening, as with the app's own recogniser.
+                override fun onReadyForSpeech(params: Bundle?) { main.postDelayed(noSpeech, NO_SPEECH_SECONDS * 1000L) }
+                override fun onBeginningOfSpeech() { main.removeCallbacks(noSpeech) }
                 override fun onRmsChanged(rmsdB: Float) {}
                 override fun onBufferReceived(buffer: ByteArray?) {}
                 override fun onPartialResults(partialResults: Bundle?) {}

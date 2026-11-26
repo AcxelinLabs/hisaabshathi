@@ -42,9 +42,6 @@ class TestApp : HisaabApp() {
     /** Tests start on the app itself; the welcome has its own test. */
     override val showWelcome: Boolean = false
 
-    /** Tests drive the screens slowly: never put the app away by itself (IdleTest checks that logic). */
-    override val idleSeconds: Int = 0
-
     /** What the worker "says", one answer per listen, while [heard] has any (else no speech engine, as before). */
     override val testListener: (suspend () -> com.acxelin.hisaabsaathi.speech.Heard)?
         get() = if (heard.isEmpty()) null else ({ heard.removeFirstOrNull()?.let { com.acxelin.hisaabsaathi.speech.Heard.Text(it) } ?: com.acxelin.hisaabsaathi.speech.Heard.Silence })
