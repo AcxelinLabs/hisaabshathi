@@ -13,8 +13,8 @@ android {
         applicationId = "com.acxelin.hisaabsaathi"
         minSdk = 29 // Android 10
         targetSdk = 35
-        versionCode = 33
-        versionName = "0.9.15"
+        versionCode = 34
+        versionName = "0.9.16"
         // Where phones download the fine-tuned model from (public, Apache-2.0), pinned to the
         // Hugging Face commit that holds it: a file at a commit never changes (models/Packs.kt, SlmModel).
         buildConfigField(
