@@ -61,6 +61,30 @@ open class HisaabApp : Application() {
                 if (settings.pendingDeletes().isNotEmpty()) Sharing.now(this@HisaabApp)
             }
         }
+        // Newer smart models, about once a week on Wi-Fi, when this build knows the team's model key.
+        if (com.acxelin.hisaabsaathi.models.Catalog.slmSupported && BuildConfig.MODEL_KEY.isNotBlank())
+            com.acxelin.hisaabsaathi.work.ModelUpdateSchedule.schedule(this)
+    }
+
+    /** Checks the team's signed list of models and switches to a newer one (work/ModelUpdates.kt). */
+    val modelUpdater by lazy {
+        com.acxelin.hisaabsaathi.work.ModelUpdater(
+            dir = packs.slmDir,
+            publicKey = BuildConfig.MODEL_KEY,
+            manifestUrl = BuildConfig.MODEL_MANIFEST_URL,
+            appVersion = BuildConfig.VERSION_CODE,
+            prefs = getSharedPreferences("model_updates", MODE_PRIVATE),
+            installed = { packs.isReady(com.acxelin.hisaabsaathi.models.Catalog.slmHisaab) },
+            fetch = com.acxelin.hisaabsaathi.work.ModelUpdater::fetchSmall,
+            download = com.acxelin.hisaabsaathi.work.ModelUpdater::downloadResuming,
+            tryModel = { f -> slm.tryModel(f.path) },
+            switched = {
+                slm.unload()
+                slm.newModel()
+                packs.refresh(com.acxelin.hisaabsaathi.models.Catalog.slmHisaab)
+            },
+            note = { problem -> android.util.Log.i("HisaabModels", problem) },
+        )
     }
 
     /** One approximate location fix (only for "Use my location"); tests give a fixed position. */

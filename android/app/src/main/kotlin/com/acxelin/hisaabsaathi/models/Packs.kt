@@ -81,12 +81,14 @@ object Catalog {
      * Converted to 8-bit LiteRT-LM with litert-torch; in the LiteRT-LM runtime 138/140 held-out
      * corpus prompts right, about 1.1 s an answer on a PC (tools/litertlm_answers.py).
      */
-    val slmHisaab = Pack(
-        id = "slm-hisaab",
-        title = "HisaabSaathi Qwen3-0.6B, fine-tuned (8-bit)",
-        licence = "Apache-2.0 (Qwen3); fine-tune by Acxelin Labs",
-        files = listOf(PackFile(BuildConfig.HISAAB_MODEL_URL, "slm/hisaabsaathi-qwen3-ft-q8.litertlm", 616_873_984)),
-    )
+    val slmHisaab: Pack get() = SlmModel.current.let { r ->
+        Pack(
+            id = SlmModel.ID,
+            title = "HisaabSaathi Qwen3-0.6B, fine-tuned (8-bit), v${r.version}",
+            licence = "Apache-2.0 (Qwen3); fine-tune by Acxelin Labs",
+            files = listOf(PackFile(r.url, "slm/${r.file}", r.bytes)),
+        )
+    }
 
     /**
      * Indic Tiny TTS voices (female and male) by Sulabh Katiyar, CC-BY-4.0, trained on
@@ -138,7 +140,7 @@ object Catalog {
         Lang.EN -> sttEnglish
     }
 
-    val all = listOf(sttHindi, sttOdia, sttTelugu, sttKannada, sttTamil, sttEnglish, slmHisaab, voiceHindi, voiceOdia, voiceTelugu, voiceKannada, voiceTamil, voiceEnglish)
+    val all get() = listOf(sttHindi, sttOdia, sttTelugu, sttKannada, sttTamil, sttEnglish, slmHisaab, voiceHindi, voiceOdia, voiceTelugu, voiceKannada, voiceTamil, voiceEnglish)
 }
 
 class PackManager(context: Context, private val scope: CoroutineScope) {
@@ -147,10 +149,11 @@ class PackManager(context: Context, private val scope: CoroutineScope) {
     private val jobs = HashMap<String, Job>()
 
     init {
-        // The model used to ship in MediaPipe's .task format (0.5.x); free that 500 MB.
-        File(root, "slm/hisaabsaathi-qwen05-ft-q8.task").delete()
-        // Qwen2.5-0.5B was replaced by Qwen3-0.6B in 0.7.0; free its 513 MB.
-        File(root, "slm/hisaabsaathi-qwen05-ft-q8.litertlm").delete()
+        // Which smart model is current (a newer one may have been fetched since the app was built),
+        // and nothing else stays in its folder: older models (0.5.x .task, Qwen2.5, a replaced
+        // version) and half-done downloads of versions no longer wanted.
+        SlmModel.load(File(root, "slm"))
+        SlmModel.cleanUp(File(root, "slm"))
         // English moved to Parakeet in 0.6.1; free the old model's 175 MB.
         File(root, "speech/en/model.int8.onnx").delete()
         File(root, "speech/en/tokens.txt").delete()
@@ -166,6 +169,12 @@ class PackManager(context: Context, private val scope: CoroutineScope) {
     fun isReady(pack: Pack): Boolean = pack.files.all { file(it).let { f -> f.exists() && f.length() == it.bytes } }
 
     private fun initial(pack: Pack): PackState = if (isReady(pack)) PackState.Ready else PackState.Missing
+
+    /** A pack's files changed under it (a new smart model was switched in): show its state afresh. */
+    fun refresh(pack: Pack) { _states.value = _states.value + (pack.id to initial(pack)) }
+
+    /** The folder the smart model lives in. */
+    val slmDir: File get() = File(root, "slm")
 
     private fun set(pack: Pack, state: PackState) = _states.update { it + (pack.id to state) }
 
@@ -402,5 +411,49 @@ class PackDownloadWorker(context: Context, params: androidx.work.WorkerParameter
             val policy = if (wifiOnly) androidx.work.ExistingWorkPolicy.KEEP else androidx.work.ExistingWorkPolicy.REPLACE
             androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(name(packId), policy, request)
         }
+    }
+}
+
+/**
+ * Which version of the smart model the phone uses. Built into the app is v1 (the model the app
+ * was tested with); a newer one, named by the team's signed manifest, replaces it on the phone
+ * (work/ModelUpdates.kt). The choice is kept in slm/current.json next to the model.
+ */
+object SlmModel {
+    const val ID = "slm-hisaab"
+
+    /** The model this build was tested with, pinned to its Hugging Face commit. */
+    val builtIn = com.acxelin.hisaabsaathi.core.ModelRelease(
+        id = ID, version = 1, file = "hisaabsaathi-qwen3-ft-q8.litertlm", url = BuildConfig.HISAAB_MODEL_URL,
+        bytes = 616_873_984, sha256 = "917030d2567e5ddee1ba53c20d95a575f9ca825aebf2a87e71363f099e2290b2",
+    )
+
+    @Volatile var current: com.acxelin.hisaabsaathi.core.ModelRelease = builtIn
+        private set
+
+    /** The version being downloaded, if any (its file is kept through clean-ups). */
+    @Volatile var pending: String? = null
+
+    const val RECORD = "current.json"
+
+    fun load(dir: File) {
+        val saved = runCatching { File(dir, RECORD).readText() }.getOrNull()?.let(com.acxelin.hisaabsaathi.core.ModelUpdates::decodeRelease)
+        current = saved?.takeIf { it.id == ID && it.version > builtIn.version && com.acxelin.hisaabsaathi.core.ModelUpdates.acceptable(it) } ?: builtIn
+    }
+
+    /** From now on the phone uses [r] (already downloaded and checked). */
+    fun switchTo(dir: File, r: com.acxelin.hisaabsaathi.core.ModelRelease) {
+        dir.mkdirs()
+        val tmp = File(dir, "$RECORD.tmp")
+        tmp.writeText(com.acxelin.hisaabsaathi.core.ModelUpdates.encode(r))
+        if (!tmp.renameTo(File(dir, RECORD))) { File(dir, RECORD).delete(); tmp.renameTo(File(dir, RECORD)) }
+        current = r
+    }
+
+    /** Deletes every file in [dir] that is not the current model, the one downloading, or the record. */
+    fun cleanUp(dir: File) {
+        val names = dir.list()?.toList() ?: return
+        for (n in com.acxelin.hisaabsaathi.core.ModelUpdates.leftovers(names, current.file, pending, setOf(RECORD)))
+            runCatching { File(dir, n).let { if (it.isDirectory) it.deleteRecursively() else it.delete() } }
     }
 }

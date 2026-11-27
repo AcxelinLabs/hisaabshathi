@@ -1,0 +1,14 @@
+{
+  "format": 1,
+  "models": [
+    {
+      "id": "slm-hisaab",
+      "version": 2,
+      "file": "hisaabsaathi-qwen3-ft-v2-q8.litertlm",
+      "url": "https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/0123456789abcdef0123456789abcdef01234567/hisaabsaathi-qwen3-ft-v2-q8.litertlm",
+      "bytes": 1000000,
+      "sha256": "e33944baa6a87d1a88a755d17f78fcf1d93f46d422b384c33abd6359b406d4d9",
+      "minAppVersion": 34
+    }
+  ]
+}

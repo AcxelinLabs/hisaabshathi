@@ -15,11 +15,19 @@ android {
         targetSdk = 35
         versionCode = 33
         versionName = "0.9.15"
-        // Where phones download the fine-tuned model from (public, Apache-2.0).
+        // Where phones download the fine-tuned model from (public, Apache-2.0), pinned to the
+        // Hugging Face commit that holds it: a file at a commit never changes (models/Packs.kt, SlmModel).
         buildConfigField(
             "String", "HISAAB_MODEL_URL",
-            "\"https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/hisaabsaathi-qwen3-ft-q8.litertlm\"",
+            "\"https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/4eea332d452d1a27a323daef1810b5e157c820e7/hisaabsaathi-qwen3-ft-q8.litertlm\"",
         )
+        // Newer models: the team's signed list (docs/models/updating-the-model.md), checked weekly on Wi-Fi.
+        buildConfigField(
+            "String", "MODEL_MANIFEST_URL",
+            "\"https://huggingface.co/AcxelinLabs/hisaabsaathi-model/resolve/main/models.json\"",
+        )
+        // The public half of the team's model key (tools/models/model_manifest.py new-key). Empty: no updates.
+        buildConfigField("String", "MODEL_KEY", "\"${providers.gradleProperty("hisaab.modelKey").getOrElse("")}\"")
         // The team's upload service for "Help improve HisaabSaathi" (server/ in this repository),
         // e.g. ./gradlew assembleRelease -Phisaab.shareUrl=https://improve.example.org
         // Empty: what workers agree to share waits on the phone until a build has one.

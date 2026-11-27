@@ -87,12 +87,37 @@ class SlmEngine(private val context: Context, private val packs: PackManager) {
         val pack = installed() ?: return@withLock null
         if (failures >= 2) return@withLock null
         if (service == null && !enoughMemory()) return@withLock null   // not loaded yet and memory is tight
-        val remote = connect() ?: return@withLock null.also { fail("model service did not start") }
+        ask(packs.file(pack.files.single()).path, prompt, countFailures = true)
+    }
+
+    /**
+     * A downloaded model, before the phone switches to it: does it load here and answer a known
+     * sentence the way the app needs? true / false; null when it could not be tried now (memory
+     * is tight): try again later. Never counts against the model in use.
+     */
+    suspend fun tryModel(path: String): Boolean? = lock.withLock {
+        if (!enoughMemory()) return@withLock null
+        val sentence = "आज आठ घंटे काम किया 600 रुपये मिले"
+        val prompt = com.acxelin.hisaabsaathi.core.Slm.prompt(sentence) ?: return@withLock null
+        val answer = ask(path, prompt, countFailures = false)
+        disconnect() // free its memory; the model in use loads again when next needed
+        answer != null && com.acxelin.hisaabsaathi.core.Slm.parse(answer, sentence) != null
+    }
+
+    /** A new model was switched in: it gets a fresh start (earlier failures were the old one's). */
+    fun newModel() {
+        prefs.edit().putInt("failures", 0).putString("problem", "").apply()
+        problem = ""
+    }
+
+    private suspend fun ask(path: String, prompt: String, countFailures: Boolean): String? {
+        fun failed(why: String): String? { if (countFailures) fail(why) else disconnect(); return null }
+        val remote = connect() ?: return failed("model service did not start")
         val answer = CompletableDeferred<Bundle>()
         val replies = Messenger(Handler(Looper.getMainLooper()) { m -> answer.complete(m.data); true })
         val msg = Message.obtain(null, LlmService.MSG_GENERATE).apply {
             data = Bundle().apply {
-                putString(LlmService.KEY_PATH, packs.file(pack.files.single()).path)
+                putString(LlmService.KEY_PATH, path)
                 putString(LlmService.KEY_PROMPT, prompt)
             }
             replyTo = replies
@@ -100,13 +125,13 @@ class SlmEngine(private val context: Context, private val packs: PackManager) {
         try {
             remote.send(msg)
         } catch (e: Exception) {
-            return@withLock null.also { fail("model process stopped: ${e.javaClass.simpleName}") }
+            return failed("model process stopped: ${e.javaClass.simpleName}")
         }
         // First use loads ~500 MB; later answers take a second or two on a mid-range phone.
         val data = withTimeoutOrNull(45_000) { answer.await() }
-        when {
-            data == null -> null.also { fail(if (service == null) "model process crashed" else "model took too long") }
-            data.getString(LlmService.KEY_ERROR) != null -> null.also { fail("model error: ${data.getString(LlmService.KEY_ERROR)}") }
+        return when {
+            data == null -> failed(if (service == null) "model process crashed" else "model took too long")
+            data.getString(LlmService.KEY_ERROR) != null -> failed("model error: ${data.getString(LlmService.KEY_ERROR)}")
             else -> data.getString(LlmService.KEY_TEXT)
         }
     }
